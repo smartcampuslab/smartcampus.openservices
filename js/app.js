@@ -1,5 +1,5 @@
 'use strict';
-var app = angular.module('opendata', ['ngRoute']);
+var app = angular.module('openservices', ['ngRoute', 'openservices.directives']);
 app.config(['$routeProvider',
   function ($routeProvider) {
     $routeProvider.
