@@ -1,7 +1,7 @@
 'use strict';
 var directives = angular.module('openservices.directives', []);
 
-directives.directive('bsHolder', [
+directives.directive('holder', [
   function () {
     return {
       link: function (scope, element) {

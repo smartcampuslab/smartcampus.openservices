@@ -9,7 +9,7 @@ app.config(['$routeProvider',
     }).
     when('/categories', {
       controller: 'homeCtrl',
-      templateUrl: '/partials/asd.html'
+      templateUrl: '/partials/categories.html'
     }).
     otherwise({
       redirectTo: '/'
