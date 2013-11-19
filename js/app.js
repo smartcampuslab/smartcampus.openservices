@@ -13,9 +13,9 @@ app.config(['$routeProvider', '$locationProvider',
       controller: 'homeCtrl',
       templateUrl: '/partials/categories.html'
     }).
-    when('/login', {
-      controller: 'loginCtrl',
-      templateUrl: '/partials/login.html'
+    when('/signin', {
+      controller: 'signinCtrl',
+      templateUrl: '/partials/signin.html'
     }).
     otherwise({
       redirectTo: '/'
