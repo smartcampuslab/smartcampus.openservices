@@ -1,5 +1,11 @@
 {
   "name": "Dawid",
   "surname": "Pogorzelski",
-  "email": "d.pogorzelski@trentorise.eu"
+  "email": "d.pogorzelski@trentorise.eu",
+  "address": "Viale Dante 107/A",
+  "city": "Pergine",
+  "postalcode": 38057,
+  "country": "Italy",
+  "taxcode": "PGRDWD86P18Z127H",
+  "mobile": "3458579215"
 }
