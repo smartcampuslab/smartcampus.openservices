@@ -3,19 +3,20 @@ app.controller('homeCtrl', ['$scope', '$http',
   function ($scope, $http) {}
 ]);
 
-app.controller('signinCtrl', ['$scope', '$http', '$location', '$cookies',
-  function ($scope, $http, $location, $cookies) {
+app.controller('signinCtrl', ['$scope', '$http', '$location',
+  function ($scope, $http, $location) {
     $scope.signin = function () {
-      $http.get('/data/user.json').success(function (user) {
-        $cookies.user = JSON.stringify(user);
-        $location.path('/user');
-      });
+      $location.path('/user');
     };
   }
 ]);
 
-app.controller('userCtrl', ['$scope', '$http', '$cookies',
-  function ($scope, $http, $cookies) {
-    $scope.user = JSON.parse($cookies.user);
+app.controller('userCtrl', ['$scope', '$http', '$location',
+  function ($scope, $http, $location) {
+    $scope.template = 'profile';
+
+    $http.get('/data/user.json').success(function (user) {
+      $scope.user = user;
+    });
   }
 ]);
