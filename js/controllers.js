@@ -20,3 +20,11 @@ app.controller('userCtrl', ['$scope', '$http', '$location',
     });
   }
 ]);
+
+app.controller('categoriesCtrl', ['$scope', '$http', '$location',
+  function ($scope, $http, $location) {
+    $http.get('/data/categories.json').success(function (categories) {
+      $scope.categories = categories;
+    });
+  }
+]);

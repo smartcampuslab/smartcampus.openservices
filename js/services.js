@@ -1,2 +1,2 @@
-"use strict";
+'use strict';
 var services = angular.module('opendata.services', []);
