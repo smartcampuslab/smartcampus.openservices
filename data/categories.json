@@ -1,0 +1,36 @@
+[{
+  "id": 0,
+  "name": "proident anim et",
+  "description": "in dolor laborum dolor excepteur amet nisi excepteur officia est nulla nostrud labore et tempor adipisicing mollit reprehenderit exercitation laborum sit ipsum mollit irure culpa amet sit veniam nostrud laboris",
+  "servicesCount": 6
+}, {
+  "id": 1,
+  "name": "irure amet consequat",
+  "description": "nisi sint labore voluptate eu ipsum voluptate aute ullamco pariatur adipisicing tempor reprehenderit occaecat esse sunt occaecat ullamco eiusmod ea duis pariatur exercitation enim cillum voluptate laborum nostrud nulla labore",
+  "servicesCount": 6
+}, {
+  "id": 2,
+  "name": "tempor qui laborum",
+  "description": "velit commodo dolor ad quis fugiat ipsum ullamco aliquip laboris do officia laborum ad ad adipisicing sint reprehenderit dolore ea Lorem elit do sunt ipsum ad cupidatat dolor anim id",
+  "servicesCount": 13
+}, {
+  "id": 3,
+  "name": "laborum eu culpa",
+  "description": "eu anim id aliqua sunt et reprehenderit ut labore eu irure ea esse ut ex labore nisi velit culpa labore proident officia quis ipsum reprehenderit aute deserunt aliqua ut anim",
+  "servicesCount": 12
+}, {
+  "id": 4,
+  "name": "deserunt voluptate Lorem",
+  "description": "ad sit quis Lorem consectetur anim incididunt labore tempor pariatur cillum quis ad elit sunt irure amet aliquip do minim laboris proident pariatur velit irure excepteur Lorem ut consectetur nisi",
+  "servicesCount": 14
+}, {
+  "id": 5,
+  "name": "eiusmod enim mollit",
+  "description": "proident proident occaecat velit dolore amet voluptate non mollit incididunt ullamco voluptate incididunt consequat do velit cillum est cillum fugiat esse adipisicing quis incididunt aliqua adipisicing qui aute nostrud proident",
+  "servicesCount": 3
+}, {
+  "id": 6,
+  "name": "anim ipsum tempor",
+  "description": "sint proident dolore nisi ad cupidatat consectetur Lorem non do esse et commodo magna enim esse ut pariatur cillum consectetur veniam sit velit ut et cillum esse cillum adipisicing et",
+  "servicesCount": 8
+}]
