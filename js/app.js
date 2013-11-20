@@ -1,5 +1,5 @@
 'use strict';
-var app = angular.module('openservices', ['ngRoute', 'openservices.directives']);
+var app = angular.module('openservices', ['ngRoute', 'ngCookies', 'openservices.directives']);
 app.config(['$routeProvider', '$locationProvider',
   function ($routeProvider, $locationProvider) {
     $locationProvider
@@ -16,6 +16,10 @@ app.config(['$routeProvider', '$locationProvider',
     when('/signin', {
       controller: 'signinCtrl',
       templateUrl: '/partials/signin.html'
+    }).
+    when('/user', {
+      controller: 'userCtrl',
+      templateUrl: '/partials/user.html'
     }).
     otherwise({
       redirectTo: '/'
