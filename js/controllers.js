@@ -4,7 +4,5 @@ app.controller('homeCtrl', ['$scope', '$http',
 ]);
 
 app.controller('loginCtrl', ['$scope', '$http',
-  function ($scope, $http) {
-
-  }
+  function ($scope, $http) {}
 ]);

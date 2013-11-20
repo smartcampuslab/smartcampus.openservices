@@ -9,6 +9,10 @@ app.config(['$routeProvider', '$locationProvider',
       controller: 'homeCtrl',
       templateUrl: '/partials/home.html'
     }).
+    when('/services', {
+      controller: 'homeCtrl',
+      templateUrl: '/partials/services.html'
+    }).
     when('/categories', {
       controller: 'homeCtrl',
       templateUrl: '/partials/categories.html'
