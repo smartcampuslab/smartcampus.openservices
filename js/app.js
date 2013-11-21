@@ -1,5 +1,5 @@
 'use strict';
-var app = angular.module('openservices', ['ngRoute', 'ngCookies', 'openservices.directives']);
+var app = angular.module('openservices', ['ngRoute', 'ngCookies', 'ngAnimate', 'openservices.directives']);
 app.config(['$routeProvider', '$locationProvider',
   function ($routeProvider, $locationProvider) {
     $locationProvider
@@ -10,7 +10,7 @@ app.config(['$routeProvider', '$locationProvider',
       templateUrl: '/partials/home.html'
     }).
     when('/services', {
-      controller: 'homeCtrl',
+      controller: 'servicesCtrl',
       templateUrl: '/partials/services.html'
     }).
     when('/categories', {
