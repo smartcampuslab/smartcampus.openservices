@@ -1,0 +1,16 @@
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <h1>Services</h1>
+    <div class="service panel panel-default" ng-repeat="service in services">
+      <div class="panel-heading" ng-click="toggleServiceActive(service)">
+        <h4 class="row">
+          <i class="col-md-1" ng-class="{'fa fa-minus-square-o': isServiceActive(service), 'fa fa-plus-square-o': !isServiceActive(service) }"></i>
+          <span class="col-md-11">{{service.name}}</span>
+        </h4>
+      </div>
+      <div class="panel-body" ng-if="isServiceActive(service)">
+        <p>{{service.description}}</p>
+      </div>
+    </div>
+  </div>
+</div>
