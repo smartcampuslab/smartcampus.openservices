@@ -12,17 +12,17 @@
         </h5>
         <br>
         <ul class="nav nav-tabs">
-          <li ng-class="{active: template=='profile'}"><a href="#" ng-click="template = 'profile'"><i class="fa fa-user"></i> Profile</a>
+          <li ng-class="{active: template==='profile'}"><a href="#" ng-click="template = 'profile'"><i class="fa fa-user"></i> Profile</a>
           </li>
-          <li ng-class="{active: template=='organizations'}"><a href="#" ng-click="template = 'organizations'"><i class="fa fa-users"></i> Organizations</a>
+          <li ng-class="{active: template==='organizations'}"><a href="#" ng-click="template = 'organizations'"><i class="fa fa-users"></i> Organizations</a>
           </li>
-          <li ng-class="{active: template=='services'}"><a href="#" ng-click="template = 'services'"><i class="fa fa-cogs"></i> Services</a>
+          <li ng-class="{active: template==='services'}"><a href="#" ng-click="template = 'services'"><i class="fa fa-cogs"></i> Services</a>
           </li>
         </ul>
         <br>
         <div class="slide-animate-container">
           <div class="slide-animate">
-            <div class="row" ng-show="template=='profile'">
+            <div class="row" ng-show="template==='profile'">
               <div class="col-md-4">
                 <p>Name:
                   <strong>{{user.name}}</strong>
@@ -59,13 +59,56 @@
               </div>
             </div>
 
-            <div class="row" ng-show="template=='organizations'">
-              <div class="col-md-4">
-                <p>organizations</p>
+            <div ng-show="template==='organizations'">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="panel panel-default">
+                    <div class="panel-body">
+                      Smart Campus
+                      <button type="button" class="pull-right btn btn-danger btn-xs">Remove</button>
+                      <button type="button" class="pull-right btn btn-default btn-xs orgbtn">Edit</button>
+                    </div>
+                  </div>
+                  <div class="panel panel-default">
+                    <div class="panel-body">
+                      Trento RISE
+                      <button type="button" class="pull-right btn btn-danger btn-xs">Remove</button>
+                      <button type="button" class="pull-right btn btn-default btn-xs orgbtn">Edit</button>
+                    </div>
+                  </div>
+                  <div class="panel panel-default">
+                    <div class="panel-body">
+                      Dark Bunnies
+                      <button type="button" class="pull-right btn btn-danger btn-xs">Remove</button>
+                      <button type="button" class="pull-right btn btn-default btn-xs orgbtn">Edit</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="panel panel-default">
+                    <div class="panel-body">
+                      Whiteheart Chaos
+                      <button type="button" class="pull-right btn btn-danger btn-xs">Remove</button>
+                      <button type="button" class="pull-right btn btn-default btn-xs orgbtn">Edit</button>
+                    </div>
+                  </div>
+                  <div class="panel panel-default">
+                    <div class="panel-body">
+                      Peck Dynamo
+                      <button type="button" class="pull-right btn btn-danger btn-xs">Remove</button>
+                      <button type="button" class="pull-right btn btn-default btn-xs orgbtn">Edit</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-2 col-md-offset-10">
+                  <button type="button" class="btn btn-info btn-block">Add</button>
+                </div>
               </div>
             </div>
 
-            <div class="row" ng-show="template=='services'">
+            <div class="row" ng-show="template==='services'">
               <div class="col-md-4">
                 <p>services</p>
               </div>
