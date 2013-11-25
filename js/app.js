@@ -21,9 +21,9 @@ app.config(['$routeProvider', '$locationProvider',
       controller: 'signinCtrl',
       templateUrl: '/partials/signin.html'
     }).
-    when('/user', {
-      controller: 'userCtrl',
-      templateUrl: '/partials/user.html'
+    when('/profile', {
+      controller: 'profileCtrl',
+      templateUrl: '/partials/profile/show.html'
     }).
     otherwise({
       redirectTo: '/'

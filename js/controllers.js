@@ -6,14 +6,14 @@ app.controller('homeCtrl', ['$scope', '$http',
 app.controller('signinCtrl', ['$scope', '$http', '$location',
   function ($scope, $http, $location) {
     $scope.signin = function () {
-      $location.path('/user');
+      $location.path('/profile');
     };
   }
 ]);
 
-app.controller('userCtrl', ['$scope', '$http', '$location',
+app.controller('profileCtrl', ['$scope', '$http', '$location',
   function ($scope, $http, $location) {
-    $scope.template = 'profile';
+    $scope.template = 'partials/profile/_details.html';
 
     $http.get('/data/user.json').success(function (user) {
       $scope.user = user;
