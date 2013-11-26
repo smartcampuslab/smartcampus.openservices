@@ -73,9 +73,14 @@
 .orgbtn {
     margin-right: 10px;
 }
-
 .userorg {
     border: 0;
+}
+.section-box hr {
+    margin-top: 0;
+    margin-bottom: 5px;
+    border: 0;
+    border-top: 1px solid rgb(199, 199, 199);
 }
 /* CUSTOMIZE THE NAVBAR
 -------------------------------------------------- */
