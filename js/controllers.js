@@ -14,9 +14,20 @@ app.controller('signinCtrl', ['$scope', '$http', '$location',
 app.controller('profileCtrl', ['$scope', '$http', '$location',
   function ($scope, $http, $location) {
     $scope.template = 'partials/profile/_details.html';
-
+    $scope.org={}
+    $scope.service={}
+    $scope.addOrganization = function(){
+      $scope.user.orgs.push($scope.org)
+    }
+    $scope.addService = function(){
+      $scope.services.push($scope.service)
+    }
     $http.get('/data/user.json').success(function (user) {
       $scope.user = user;
+    });
+
+    $http.get('/data/services.json').success(function (services) {
+      $scope.services = services;
     });
   }
 ]);
