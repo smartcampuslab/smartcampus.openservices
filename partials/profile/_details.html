@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-4">
       <p>Name:
-        <strong>{{user.det.name}}</strong>
+        <strong>{{user.name}}</strong>
       </p>
       <p>Surname:
         <strong>{{user.surname}}</strong>
@@ -38,7 +38,8 @@
   <br>
   <div class="row">
     <div class="col-md-2 col-md-offset-10">
-      <a href="/organizations/new" class="btn btn-info btn-block">Edit</a>
+      <button class="btn btn-info btn-block" ng-click="showForm = 'true'">Edit</button>
     </div>
   </div>
+
 </div>

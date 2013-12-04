@@ -1,49 +1,45 @@
 <div class="animated fadeIn">
-  <div class="row">
-    <div class="col-md-6">
-      <div class="userorg panel panel-default">
-        <div class="panel-body">
-          Smart Campus
-          <button type="button" class="pull-right btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button>
-          <button type="button" class="pull-right btn btn-default btn-xs orgbtn"><i class="fa fa-edit"></i></button>
-        </div>
-      </div>
-      <div class="userorg panel panel-default">
-        <div class="panel-body">
-          Trento RISE
-          <button type="button" class="pull-right btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button>
-          <button type="button" class="pull-right btn btn-default btn-xs orgbtn"><i class="fa fa-edit"></i></button>
-        </div>
-      </div>
-      <div class="userorg panel panel-default">
-        <div class="panel-body">
-          Dark Bunnies
-          <button type="button" class="pull-right btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button>
-          <button type="button" class="pull-right btn btn-default btn-xs orgbtn"><i class="fa fa-edit"></i></button>
-        </div>
-      </div>
+  <div ng-repeat="org in user.orgs" class="row">
+    <div class="col-xs-2 col-md-2 text-center">
+      <img class="img-rounded" data-src="holder.js/114x114" holder alt="Generic placeholder image">
     </div>
-    <div class="col-md-6">
-      <div class="userorg panel panel-default">
-        <div class="panel-body">
-          Whiteheart Chaos
-          <button type="button" class="pull-right btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button>
-          <button type="button" class="pull-right btn btn-default btn-xs orgbtn"><i class="fa fa-edit"></i></button>
-        </div>
-      </div>
-      <div class="userorg panel panel-default">
-        <div class="panel-body">
-          Peck Dynamo
-          <button type="button" class="pull-right btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button>
-          <button type="button" class="pull-right btn btn-default btn-xs orgbtn"><i class="fa fa-edit"></i></button>
-        </div>
-      </div>
+<br>
+    <div class="col-xs-10 col-md-10 section-box">
+      <h3>
+        {{org.name}}
+      </h3>
+      <p>
+        {{org.description}}
+        <button type="button" class="pull-right btn btn-danger btn-xs"><i class="fa fa-trash-o"></i>
+        </button>
+        <button type="button" class="pull-right btn btn-default btn-xs orgbtn"><i class="fa fa-edit"></i>
+        </button>
+      </p>
+      <hr />
+      <br>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-2 col-md-offset-10">
+      <button class="btn btn-info btn-block" ng-click="showForm = 'true'">Add</button>
     </div>
   </div>
   <br>
-  <div class="row">
-    <div class="col-md-2 col-md-offset-10">
-      <a href="/organizations/new" class="btn btn-info btn-block">Add</a>
+  <div class="row animated fadeInDown" ng-show="showForm">
+    <div class="col-md-6 col-md-offset-3">
+      <form role="form">
+        <div class="form-group">
+          <label for="orgname">Organization Name</label>
+          <input type="email" class="form-control" id="orgname" placeholder="Organization Name" value="{{orgname}}">
+        </div>
+        <div class="form-group">
+          <label for="orgdesc">Description</label>
+          <input type="password" class="form-control" id="orgdesc" placeholder="Description">
+        </div>
+        <button type="submit" class="btn btn-info">Save</button>
+        <button class="btn btn-default" ng-click="showForm = 'false'">Cancel</button>
+      </form>
     </div>
   </div>
 </div>

@@ -7,5 +7,18 @@
   "postalcode": 38057,
   "country": "Italy",
   "taxcode": "PGRDWD86P18Z127H",
-  "mobile": "3458579215"
+  "mobile": "3458579215",
+  "orgs": [{
+    "name": "Smart Campus",
+    "description": "Org description"
+  },{
+    "name": "Trento RISE",
+    "description": "Org description"
+  },{
+    "name": "Dark Bunnies",
+    "description": "Org description"
+  },{
+    "name": "Peck Dynamo",
+    "description": "Org description"
+  }]
 }
