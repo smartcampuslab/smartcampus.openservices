@@ -25,6 +25,10 @@ app.config(['$routeProvider', '$locationProvider',
       controller: 'profileCtrl',
       templateUrl: '/partials/profile/show.html'
     }).
+     when('/profile/edit', {
+      controller: 'profileCtrl',
+      templateUrl: '/partials/profile/edit.html'
+    }).
     when('/profile/services/new', {
       controller: 'newServiceCtrl',
       templateUrl: '/partials/profile/services/edit.html'

@@ -14,8 +14,7 @@ app.controller('signinCtrl', ['$scope', '$http', '$location',
 app.controller('profileCtrl', ['$scope', '$http', '$location',
   function ($scope, $http, $location) {
     $scope.template = 'partials/profile/_details.html';
-    $scope.org = {};
-    $scope.service = {};
+
     $scope.deleteOrg = function (i) {
       $scope.user.orgs.splice(i, 1)
     };
@@ -23,6 +22,10 @@ app.controller('profileCtrl', ['$scope', '$http', '$location',
     $scope.deleteService = function (i) {
       $scope.services.splice(i, 1)
     };
+
+    $scope.submit = function(){
+      $location.path('/profile')
+    }
 
     $http.get('/data/user.json').success(function (user) {
       $scope.user = user;
