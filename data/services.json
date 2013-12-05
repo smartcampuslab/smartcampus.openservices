@@ -1,36 +1,169 @@
 [{
   "id": 0,
   "categoriesIds": [],
+  "authority": 1,
+  "tags": ["tag1", "tag2"],
+  "category": "cat1",
+  "license": "license text",
+  "version": 11,
+  "accessinfo": {
+    "policies": "public",
+    "tendpoint": "http://tendpoint.com/api",
+    "pendpoint": "http://pendpoint.com/api",
+    "formats": ["json", "xml"]
+  },
+  "documentation": "http://doc.com",
+  "expires": "27/05/2014",
+  "implementationinfo": {
+    "env": "java",
+    "dependencies": "serviceTwo",
+    "engines": "engineThree",
+    "sourcecode": "http://sourcecode.com"
+  },
   "name": "nulla esse ad",
   "description": "mollit mollit dolore commodo ipsum do qui deserunt occaecat ipsum ea esse do ex qui sit cupidatat aliqua in non elit duis eiusmod fugiat eiusmod voluptate voluptate consequat minim adipisicing"
 }, {
   "id": 1,
   "categoriesIds": [],
+  "authority": 1,
+  "tags": ["tag3"],
+  "category": "cat1",
+  "license": "license text",
+  "version": 11,
+  "accessinfo": {
+    "policies": "public",
+    "tendpoint": "http://tendpoint.com/api",
+    "pendpoint": "http://pendpoint.com/api",
+    "formats": ["json", "xml"]
+  },
+  "documentation": "http://doc.com",
+  "expires": "27/05/2014",
+  "implementationinfo": {
+    "env": "java",
+    "dependencies": "serviceTwo",
+    "engines": "engineThree",
+    "sourcecode": "http://sourcecode.com"
+  },
   "name": "labore nostrud eiusmod",
   "description": "quis eiusmod laborum officia irure magna non ex ut anim culpa sunt enim aute in et incididunt esse ad pariatur culpa officia exercitation velit aute aliquip nulla labore esse aliquip"
 }, {
   "id": 2,
   "categoriesIds": [],
+  "authority": 1,
+  "tags": ["tag4", "tag2"],
+  "category": "cat2",
+  "license": "license text",
+  "version": 11,
+  "accessinfo": {
+    "policies": "public",
+    "tendpoint": "http://tendpoint.com/api",
+    "pendpoint": "http://pendpoint.com/api",
+    "formats": ["json", "xml"]
+  },
+  "documentation": "http://doc.com",
+  "expires": "27/05/2014",
+  "implementationinfo": {
+    "env": "java",
+    "dependencies": "serviceTwo",
+    "engines": "engineThree",
+    "sourcecode": "http://sourcecode.com"
+  },
   "name": "Lorem ullamco id",
   "description": "consequat consectetur ex cupidatat laboris ipsum in proident quis nostrud deserunt aute incididunt laborum veniam fugiat dolor culpa exercitation sint aliqua proident reprehenderit ut eu sint magna culpa dolor veniam"
 }, {
   "id": 3,
   "categoriesIds": [],
+  "authority": 2,
+  "tags": ["tag1", "tag2"],
+  "category": "cat2",
+  "license": "license text",
+  "version": 11,
+  "accessinfo": {
+    "policies": "public",
+    "tendpoint": "http://tendpoint.com/api",
+    "pendpoint": "http://pendpoint.com/api",
+    "formats": ["json", "xml"]
+  },
+  "documentation": "http://doc.com",
+  "expires": "27/05/2014",
+  "implementationinfo": {
+    "env": "java",
+    "dependencies": "serviceTwo",
+    "engines": "engineThree",
+    "sourcecode": "http://sourcecode.com"
+  },
   "name": "eiusmod esse id",
   "description": "exercitation minim mollit non laborum ad culpa laboris Lorem tempor mollit fugiat minim quis do dolor in magna laborum ut do Lorem ex id et labore duis et nisi minim"
 }, {
   "id": 4,
   "categoriesIds": [],
+  "authority": 2,
+  "tags": ["tag22", "tag7"],
+  "category": "cat3",
+  "license": "license text",
+  "version": 11,
+  "accessinfo": {
+    "policies": "public",
+    "tendpoint": "http://tendpoint.com/api",
+    "pendpoint": "http://pendpoint.com/api",
+    "formats": ["json", "xml"]
+  },
+  "documentation": "http://doc.com",
+  "expires": "27/05/2014",
+  "implementationinfo": {
+    "env": "java",
+    "dependencies": "serviceTwo",
+    "engines": "engineThree",
+    "sourcecode": "http://sourcecode.com"
+  },
   "name": "elit et consectetur",
   "description": "do veniam voluptate reprehenderit laboris excepteur incididunt consequat deserunt quis exercitation officia mollit eu et sit et eu fugiat est cillum qui non ad excepteur mollit est cillum deserunt deserunt"
 }, {
   "id": 5,
   "categoriesIds": [],
+  "authority": 2,
+  "tags": ["tag9", "tag12"],
+  "category": "cat4",
+  "license": "license text",
+  "version": 11,
+  "accessinfo": {
+    "policies": "public",
+    "tendpoint": "http://tendpoint.com/api",
+    "pendpoint": "http://pendpoint.com/api",
+    "formats": ["json", "xml"]
+  },
+  "documentation": "http://doc.com",
+  "expires": "27/05/2014",
+  "implementationinfo": {
+    "env": "java",
+    "dependencies": "serviceTwo",
+    "engines": "engineThree",
+    "sourcecode": "http://sourcecode.com"
+  },
   "name": "labore Lorem pariatur",
   "description": "dolore aliquip qui commodo eu adipisicing aliquip quis cillum exercitation sunt ad elit velit nulla minim magna ipsum nisi amet eiusmod anim in proident ea laboris commodo veniam laboris eu"
 }, {
   "id": 6,
   "categoriesIds": [],
+  "authority": 3,
+  "tags": ["tag1", "tag2"],
+  "category": "cat5",
+  "license": "license text",
+  "version": 11,
+  "accessinfo": {
+    "policies": "public",
+    "tendpoint": "http://tendpoint.com/api",
+    "pendpoint": "http://pendpoint.com/api",
+    "formats": ["json", "xml"]
+  },
+  "documentation": "http://doc.com",
+  "expires": "27/05/2014",
+  "implementationinfo": {
+    "env": "java",
+    "dependencies": "serviceTwo",
+    "engines": "engineThree",
+    "sourcecode": "http://sourcecode.com"
+  },
   "name": "cupidatat culpa elit",
   "description": "eiusmod nostrud esse deserunt nostrud Lorem laboris sit aliquip tempor aute eiusmod ullamco occaecat ipsum excepteur sint consectetur velit laborum sit nisi deserunt laboris ipsum aute eu commodo et nulla"
 }]

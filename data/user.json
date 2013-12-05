@@ -1,4 +1,5 @@
 {
+  "id": 1,
   "name": "Dawid",
   "surname": "Pogorzelski",
   "email": "d.pogorzelski@trentorise.eu",
@@ -10,15 +11,35 @@
   "mobile": "3458579215",
   "orgs": [{
     "name": "Smart Campus",
-    "description": "Org description"
+    "description": "Org description",
+    "activityarea": "Activity area",
+    "category": "Category",
+    "email":"contact@me.com",
+    "phone":"04611234567",
+    "url":"htpp://myorg.com"
   },{
     "name": "Trento RISE",
-    "description": "Org description"
+    "description": "Org description",
+    "activityarea": "Activity area",
+    "category": "Category",
+    "email":"contact@me.com",
+    "phone":"04611234567",
+    "url":"htpp://myorg.com"
   },{
     "name": "Dark Bunnies",
-    "description": "Org description"
+    "description": "Org description",
+    "activityarea": "Activity area",
+    "category": "Category",
+    "email":"contact@me.com",
+    "phone":"04611234567",
+    "url":"htpp://myorg.com"
   },{
     "name": "Peck Dynamo",
-    "description": "Org description"
+    "description": "Org description",
+    "activityarea": "Activity area",
+    "category": "Category",
+    "email":"contact@me.com",
+    "phone":"04611234567",
+    "url":"htpp://myorg.com"
   }]
 }
