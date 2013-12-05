@@ -35,6 +35,7 @@ app.controller('profileCtrl', ['$scope', '$http', '$location',
 
 app.controller('newServiceCtrl', ['$scope', '$http', '$location',
   function ($scope, $http, $location) {
+    $scope.title= "New"
     $scope.policies = ["public", "private"]
     $scope.service = {
       license: 'The MIT License (MIT)\
@@ -77,6 +78,7 @@ THE SOFTWARE.'
 
 app.controller('editServiceCtrl', ['$scope', '$http', '$location',
   function ($scope, $http, $location) {
+    $scope.title= "Edit"
     $scope.policies = ["public", "private"]
     $http.get('/data/user.json').success(function (user) {
       $scope.orgs = user.orgs;
@@ -87,13 +89,15 @@ app.controller('editServiceCtrl', ['$scope', '$http', '$location',
     $http.get('/data/categories.json').success(function (cats) {
       $scope.cats = cats;
     });
-
+    $scope.submit = function () {
+      $location.path('/profile');
+    };
   }
 ]);
 
 app.controller('newOrgCtrl', ['$scope', '$http', '$location',
   function ($scope, $http, $location) {
-
+    $scope.title= "New"
     $scope.submit = function(){
       $location.path('/profile')
     }
@@ -103,9 +107,13 @@ app.controller('newOrgCtrl', ['$scope', '$http', '$location',
 
 app.controller('editOrgCtrl', ['$scope', '$http', '$location',
   function ($scope, $http, $location) {
+    $scope.title= "Edit"
     $http.get('/data/user.json').success(function (user) {
       $scope.org = user.orgs[0];
     });
+    $scope.submit = function(){
+      $location.path('/profile')
+    }
   }
 ]);
 
