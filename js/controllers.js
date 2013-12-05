@@ -14,14 +14,15 @@ app.controller('signinCtrl', ['$scope', '$http', '$location',
 app.controller('profileCtrl', ['$scope', '$http', '$location',
   function ($scope, $http, $location) {
     $scope.template = 'partials/profile/_details.html';
-    $scope.org={}
-    $scope.service={}
-    $scope.addOrganization = function(){
-      $scope.user.orgs.push($scope.org)
-    }
-    $scope.addService = function(){
-      $scope.services.push($scope.service)
-    }
+    $scope.org = {};
+    $scope.service = {};
+    $scope.addOrganization = function () {
+      $scope.user.orgs.push($scope.org);
+    };
+    $scope.addService = function () {
+      $scope.services.push($scope.service);
+    };
+
     $http.get('/data/user.json').success(function (user) {
       $scope.user = user;
     });
@@ -29,6 +30,80 @@ app.controller('profileCtrl', ['$scope', '$http', '$location',
     $http.get('/data/services.json').success(function (services) {
       $scope.services = services;
     });
+  }
+]);
+
+app.controller('newServiceCtrl', ['$scope', '$http', '$location',
+  function ($scope, $http, $location) {
+    $scope.policies = ["public", "private"]
+    $scope.service = {
+      license: 'The MIT License (MIT)\
+\
+Copyright (c) <year> <copyright holders>\
+\
+Permission is hereby granted, free of charge, to any person obtaining a copy\
+of this software and associated documentation files (the "\
+      Software "), to deal\
+in the Software without restriction, including without limitation the rights\
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\
+copies of the Software, and to permit persons to whom the Software is\
+furnished to do so, subject to the following conditions:\
+\
+The above copyright notice and this permission notice shall be included in\
+all copies or substantial portions of the Software.\
+\
+THE SOFTWARE IS PROVIDED "\
+      AS IS ", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\
+THE SOFTWARE.'
+    };
+    $http.get('/data/user.json').success(function (user) {
+      $scope.orgs = user.orgs;
+    });
+
+    $http.get('/data/categories.json').success(function (cats) {
+      $scope.cats = cats;
+    });
+
+    $scope.submit = function () {
+      $location.path('/profile');
+    };
+  }
+]);
+
+app.controller('editServiceCtrl', ['$scope', '$http', '$location',
+  function ($scope, $http, $location) {
+    $scope.policies = ["public", "private"]
+    $http.get('/data/user.json').success(function (user) {
+      $scope.orgs = user.orgs;
+    });
+    $http.get('/data/service.json').success(function (service) {
+      $scope.service = service;
+    });
+    $http.get('/data/categories.json').success(function (cats) {
+      $scope.cats = cats;
+    });
+
+  }
+]);
+
+app.controller('newOrgCtrl', ['$scope', '$http', '$location',
+  function ($scope, $http, $location) {
+
+    $http.get('/data/user.json').success(function (user) {
+      $scope.orgs = user.orgs;
+    });
+
+  }
+]);
+
+app.controller('editOrgCtrl', ['$scope', '$http', '$location',
+  function ($scope, $http, $location) {
+
   }
 ]);
 

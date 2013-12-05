@@ -1,0 +1,34 @@
+<div class="animated fadeIn">
+    <div class="row" ng-repeat="service in services">
+        <div class="col-xs-2 col-md-2 text-center">
+            <img class="img-rounded" data-src="holder.js/114x114" holder alt="Generic placeholder image">
+        </div>
+        <div class="col-xs-10 col-md-10 section-box">
+            <h3>
+                {{service.name}}
+            </h3>
+            <p>
+                {{service.description}}
+                <button type="button" class="pull-right btn btn-danger btn-xs"><i class="fa fa-trash-o"></i>
+                </button>
+                <a href="/profile/services/1/edit" class="pull-right btn btn-default btn-xs orgbtn"><i class="fa fa-edit"></i>
+                </a>
+            </p>
+            <hr />
+            <div class="row">
+                <div class="col-md-12">
+                    <span ng-repeat="tag in service.tags" class="label label-default">{{tag}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <div class="row">
+        <div class="col-md-2 col-md-offset-10">
+            <a href="/profile/service/new" class="btn btn-info btn-block">Add</a>
+        </div>
+    </div>
+    <br>
+
+</div>
