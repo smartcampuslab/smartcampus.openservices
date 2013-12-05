@@ -16,11 +16,12 @@ app.controller('profileCtrl', ['$scope', '$http', '$location',
     $scope.template = 'partials/profile/_details.html';
     $scope.org = {};
     $scope.service = {};
-    $scope.addOrganization = function () {
-      $scope.user.orgs.push($scope.org);
+    $scope.deleteOrg = function (i) {
+      $scope.user.orgs.splice(i, 1)
     };
-    $scope.addService = function () {
-      $scope.services.push($scope.service);
+
+    $scope.deleteService = function (i) {
+      $scope.services.splice(i, 1)
     };
 
     $http.get('/data/user.json').success(function (user) {
@@ -35,7 +36,7 @@ app.controller('profileCtrl', ['$scope', '$http', '$location',
 
 app.controller('newServiceCtrl', ['$scope', '$http', '$location',
   function ($scope, $http, $location) {
-    $scope.title= "New"
+    $scope.title = "New"
     $scope.policies = ["public", "private"]
     $scope.service = {
       license: 'The MIT License (MIT)\
@@ -78,7 +79,7 @@ THE SOFTWARE.'
 
 app.controller('editServiceCtrl', ['$scope', '$http', '$location',
   function ($scope, $http, $location) {
-    $scope.title= "Edit"
+    $scope.title = "Edit"
     $scope.policies = ["public", "private"]
     $http.get('/data/user.json').success(function (user) {
       $scope.orgs = user.orgs;
@@ -97,8 +98,8 @@ app.controller('editServiceCtrl', ['$scope', '$http', '$location',
 
 app.controller('newOrgCtrl', ['$scope', '$http', '$location',
   function ($scope, $http, $location) {
-    $scope.title= "New"
-    $scope.submit = function(){
+    $scope.title = "New"
+    $scope.submit = function () {
       $location.path('/profile')
     }
 
@@ -107,11 +108,11 @@ app.controller('newOrgCtrl', ['$scope', '$http', '$location',
 
 app.controller('editOrgCtrl', ['$scope', '$http', '$location',
   function ($scope, $http, $location) {
-    $scope.title= "Edit"
+    $scope.title = "Edit"
     $http.get('/data/user.json').success(function (user) {
       $scope.org = user.orgs[0];
     });
-    $scope.submit = function(){
+    $scope.submit = function () {
       $location.path('/profile')
     }
   }
