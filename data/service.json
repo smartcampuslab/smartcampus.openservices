@@ -1,0 +1,25 @@
+{
+  "id": 0,
+  "categoriesIds": [],
+  "authority": "Smart Campus",
+  "tags": ["tag1", "tag2"],
+  "category": "idtemporamet",
+  "license": "license text",
+  "version": 11,
+  "accessinfo": {
+    "policies": "public",
+    "tendpoint": "http://tendpoint.com/api",
+    "pendpoint": "http://pendpoint.com/api",
+    "formats": ["json", "xml"]
+  },
+  "documentation": "http://doc.com",
+  "expires": "27/05/2014",
+  "implementationinfo": {
+    "env": "java",
+    "dependencies": "serviceTwo",
+    "engines": "engineThree",
+    "sourcecode": "http://sourcecode.com"
+  },
+  "name": "nulla esse ad",
+  "description": "mollit mollit dolore commodo ipsum do qui deserunt occaecat ipsum ea esse do ex qui sit cupidatat aliqua in non elit duis eiusmod fugiat eiusmod voluptate voluptate consequat minim adipisicing"
+}
