@@ -94,16 +94,18 @@ app.controller('editServiceCtrl', ['$scope', '$http', '$location',
 app.controller('newOrgCtrl', ['$scope', '$http', '$location',
   function ($scope, $http, $location) {
 
-    $http.get('/data/user.json').success(function (user) {
-      $scope.orgs = user.orgs;
-    });
+    $scope.submit = function(){
+      $location.path('/profile')
+    }
 
   }
 ]);
 
 app.controller('editOrgCtrl', ['$scope', '$http', '$location',
   function ($scope, $http, $location) {
-
+    $http.get('/data/user.json').success(function (user) {
+      $scope.org = user.orgs[0];
+    });
   }
 ]);
 
