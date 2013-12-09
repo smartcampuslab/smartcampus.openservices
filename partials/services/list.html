@@ -1,16 +1,13 @@
-<div class="row">
+<div class="row animated fadeIn">
     <div class="col-md-8 col-md-offset-2">
         <h1>Services</h1>
         <div class="service panel panel-default" ng-repeat="service in services">
             <div class="panel-heading">
-                <h5 class="row">
-                    <i ng-click="toggleServiceActive(service)" class="col-md-1" ng-class="{'fa fa-minus': isServiceActive(service), 'fa fa-plus': !isServiceActive(service) }"></i>
-                    <span class="col-md-11"><a href="/services/1">{{service.name}}</a>
-                    </span>
-                </h5>
+                <a ng-click="toggleServiceActive(service)" href=""><i ng-class="{'fa fa-minus': isServiceActive(service), 'fa fa-plus': !isServiceActive(service) }"></i> {{service.name}}</a> 
             </div>
-            <div class="panel-body" ng-if="isServiceActive(service)">
+            <div class="panel-body animated fadeInDown" ng-show="isServiceActive(service)">
                 <p>{{service.description}}</p>
+                <a class="btn btn-default btn-sm pull-right" href="/services/1">explore <i class="fa fa-angle-double-right"></i></a>
             </div>
         </div>
     </div>

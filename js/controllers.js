@@ -202,8 +202,14 @@ app.controller('serviceCtrl', ['$scope', '$http', '$location',
     //   $scope.parsedrequest = JSON.stringify(angular.copy($scope.request), null, 2)
     // }, true)
     $scope.send = function () {
-      $http.get('/data/vas.json').success(function (data) {
-        $scope.response = JSON.stringify(data, null, 2)
+      $http({
+        method: 'GET',
+        url: '/data/vas.json'
+      }).success(function (data, status, headers) {
+        var tmp = {};
+        tmp.headers = headers()
+        tmp.body = data
+        $scope.response = JSON.stringify(tmp, null, 2);
       })
     }
 
