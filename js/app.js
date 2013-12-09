@@ -11,7 +11,11 @@ app.config(['$routeProvider', '$locationProvider',
     }).
     when('/services', {
       controller: 'servicesCtrl',
-      templateUrl: '/partials/services.html'
+      templateUrl: '/partials/services/list.html'
+    }).
+    when('/services/:id', {
+      controller: 'serviceCtrl',
+      templateUrl: '/partials/services/show.html'
     }).
     when('/categories', {
       controller: 'categoriesCtrl',
@@ -25,7 +29,7 @@ app.config(['$routeProvider', '$locationProvider',
       controller: 'profileCtrl',
       templateUrl: '/partials/profile/show.html'
     }).
-     when('/profile/edit', {
+    when('/profile/edit', {
       controller: 'profileCtrl',
       templateUrl: '/partials/profile/edit.html'
     }).
@@ -49,14 +53,14 @@ app.config(['$routeProvider', '$locationProvider',
       redirectTo: '/'
     });
   }
-]).run(function($rootScope, $location){
-    var history = [];
+]).run(function ($rootScope, $location) {
+  var history = [];
 
-    $rootScope.$on('$routeChangeSuccess', function() {
-        history.push($location.$$path);
-    });
-    $rootScope.back = function () {
-        var prevUrl = history.length > 1 ? history.splice(-2)[0] : "/";
-        $location.path(prevUrl);
-    };
+  $rootScope.$on('$routeChangeSuccess', function () {
+    history.push($location.$$path);
+  });
+  $rootScope.back = function () {
+    var prevUrl = history.length > 1 ? history.splice(-2)[0] : "/";
+    $location.path(prevUrl);
+  };
 })

@@ -23,7 +23,7 @@ app.controller('profileCtrl', ['$scope', '$http', '$location',
       $scope.services.splice(i, 1)
     };
 
-    $scope.submit = function(){
+    $scope.submit = function () {
       $location.path('/profile')
     }
 
@@ -181,5 +181,44 @@ app.controller('servicesCtrl', ['$scope', '$http', '$location',
         $scope.servicesActive.splice(index, 1);
       }
     };
+  }
+]);
+
+app.controller('serviceCtrl', ['$scope', '$http', '$location',
+  function ($scope, $http, $location) {
+    $scope.service = {
+      output: JSON.stringify({
+        "name": "Mario",
+        "surname": "Rossi",
+        "socialId": "12345",
+        "userId": "6789"
+      }, null, 2)
+    }
+
+    $scope.request = {
+      method: 'GET /aac/basicprofile/me HTTPS/1.1',
+      endpoint: 'vas-dev.smartcampuslab.it',
+      headers: [{
+        type: 'Accept',
+        value: 'application/json'
+      }, {
+        type: 'Authorization',
+        value: 'Bearer {user access token}'
+      }]
+    }
+    // $scope.$watch('request', function () {
+    //   $scope.parsedrequest = JSON.stringify(angular.copy($scope.request), null, 2)
+    // }, true)
+
+    $scope.addheader = function () {
+      $scope.request.headers.push({
+        type: '',
+        value: ''
+      })
+    }
+
+    $scope.removeheader = function (index) {
+      $scope.request.headers.splice(index, 1);
+    }
   }
 ]);
