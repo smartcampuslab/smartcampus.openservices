@@ -1,5 +1,5 @@
 'use strict';
-var app = angular.module('openservices', ['ngRoute', 'ngCookies', 'ngAnimate', 'openservices.directives']);
+var app = angular.module('openservices', ['ngRoute', 'ngCookies', 'openservices.directives']);
 app.config(['$routeProvider', '$locationProvider',
   function ($routeProvider, $locationProvider) {
     $locationProvider
