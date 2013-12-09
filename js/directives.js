@@ -12,3 +12,13 @@ directives.directive('holder', [
     };
   }
 ]);
+
+directives.directive('pp', [
+  function () {
+    return {
+      link: function (scope, element) {
+        prettyPrint();
+      }
+    };
+  }
+]);
