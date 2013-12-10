@@ -13,11 +13,14 @@ directives.directive('holder', [
   }
 ]);
 
-directives.directive('pp', [
-  function () {
+directives.directive('prism', ['$timeout',
+  function ($timeout) {
     return {
       link: function (scope, element) {
-        prettyPrint();
+        $timeout(function () {
+          Prism.highlightElement(element.get(0))
+        }, 0)
+
       }
     };
   }
