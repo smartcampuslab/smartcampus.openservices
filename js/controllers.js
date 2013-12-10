@@ -82,7 +82,6 @@ THE SOFTWARE.'
 
 app.controller('editServiceCtrl', ['$scope', '$http', '$location',
   function ($scope, $http, $location) {
-    new gnMenu(document.getElementById('gn-menu'));
     $scope.title = "Edit"
     $scope.policies = ["public", "private"]
     $http.get('/data/user.json').success(function (user) {
