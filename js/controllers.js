@@ -82,6 +82,7 @@ THE SOFTWARE.'
 
 app.controller('editServiceCtrl', ['$scope', '$http', '$location',
   function ($scope, $http, $location) {
+    new gnMenu(document.getElementById('gn-menu'));
     $scope.title = "Edit"
     $scope.policies = ["public", "private"]
     $http.get('/data/user.json').success(function (user) {
@@ -186,6 +187,11 @@ app.controller('servicesCtrl', ['$scope', '$http', '$location',
 
 app.controller('serviceCtrl', ['$scope', '$http', '$location',
   function ($scope, $http, $location) {
+    function toTitleCase(str) {
+      return str.replace(/(?:^|-)\w/g, function (match) {
+        return match.toUpperCase();
+      });
+    }
 
     $scope.request = {
       method: 'GET /aac/basicprofile/me HTTPS/1.1',
@@ -206,10 +212,11 @@ app.controller('serviceCtrl', ['$scope', '$http', '$location',
         method: 'GET',
         url: '/data/vas.json'
       }).success(function (data, status, headers) {
-        var tmp = {};
-        tmp.headers = headers()
-        tmp.body = data
-        $scope.response = JSON.stringify(tmp, null, 2);
+        $scope.response = 'HTTP/1.1 ' + status + '\n';
+        for (var key in headers()) {
+          $scope.response += toTitleCase(key) + ': ' + headers()[key] + '\n'
+        }
+        $scope.response += '\n' + JSON.stringify(data, null, 2);
       })
     }
 

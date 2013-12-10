@@ -16,10 +16,12 @@ directives.directive('holder', [
 directives.directive('prism', ['$timeout',
   function ($timeout) {
     return {
-      link: function (scope, element) {
-        $timeout(function () {
-          Prism.highlightElement(element.get(0))
-        }, 0)
+      link: function (scope, element, attrs) {
+        scope.$watch('response', function (val) {
+          $timeout(function () {
+            Prism.highlightElement(element.get(0))
+          }, 0)
+        })
 
       }
     };
