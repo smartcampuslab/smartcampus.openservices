@@ -6,7 +6,8 @@
     "require": true,
     "app": true,
     "angular": true,
-    "Holder": true
+    "Holder": true,
+    "FB": true
   },
   "browser": true,
   "bitwise": true,
