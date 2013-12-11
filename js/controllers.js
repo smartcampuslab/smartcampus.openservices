@@ -3,29 +3,35 @@ app.controller('homeCtrl', ['$scope', '$http',
   function ($scope, $http) {}
 ]);
 
-app.controller('signinCtrl', ['$scope', '$http', '$location',
-  function ($scope, $http, $location) {
-    $scope.signin = function () {
+app.controller('signinCtrl', ['$scope', '$http', '$location', 'Auth', 'User',
+  function ($scope, $http, $location, User) {
+
+    $scope.signin = function (service) {
+      //Auth.login(service, function () {
       $location.path('/profile');
+      //});
+
     };
   }
 ]);
 
-app.controller('profileCtrl', ['$scope', '$http', '$location',
-  function ($scope, $http, $location) {
+app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', '$rootScope',
+  function ($scope, $http, $location, User) {
     $scope.template = 'partials/profile/_details.html';
-
+    ////User.getUserinfo({
+    //  email: $rootScope.user.email
+    //});
     $scope.deleteOrg = function (i) {
-      $scope.user.orgs.splice(i, 1)
+      $scope.user.orgs.splice(i, 1);
     };
 
     $scope.deleteService = function (i) {
-      $scope.services.splice(i, 1)
+      $scope.services.splice(i, 1);
     };
 
     $scope.submit = function () {
-      $location.path('/profile')
-    }
+      $location.path('/profile');
+    };
 
     $http.get('/data/user.json').success(function (user) {
       $scope.user = user;
@@ -39,32 +45,10 @@ app.controller('profileCtrl', ['$scope', '$http', '$location',
 
 app.controller('newServiceCtrl', ['$scope', '$http', '$location',
   function ($scope, $http, $location) {
-    $scope.title = "New"
-    $scope.policies = ["public", "private"]
+    $scope.title = 'New';
+    $scope.policies = ['public', 'private'];
     $scope.service = {
-      license: 'The MIT License (MIT)\
-\
-Copyright (c) <year> <copyright holders>\
-\
-Permission is hereby granted, free of charge, to any person obtaining a copy\
-of this software and associated documentation files (the "\
-      Software "), to deal\
-in the Software without restriction, including without limitation the rights\
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\
-copies of the Software, and to permit persons to whom the Software is\
-furnished to do so, subject to the following conditions:\
-\
-The above copyright notice and this permission notice shall be included in\
-all copies or substantial portions of the Software.\
-\
-THE SOFTWARE IS PROVIDED "\
-      AS IS ", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\
-THE SOFTWARE.'
+      license: 'somelicense'
     };
     $http.get('/data/user.json').success(function (user) {
       $scope.orgs = user.orgs;
@@ -82,8 +66,8 @@ THE SOFTWARE.'
 
 app.controller('editServiceCtrl', ['$scope', '$http', '$location',
   function ($scope, $http, $location) {
-    $scope.title = "Edit"
-    $scope.policies = ["public", "private"]
+    $scope.title = 'Edit';
+    $scope.policies = ['public', 'private'];
     $http.get('/data/user.json').success(function (user) {
       $scope.orgs = user.orgs;
     });
@@ -101,23 +85,23 @@ app.controller('editServiceCtrl', ['$scope', '$http', '$location',
 
 app.controller('newOrgCtrl', ['$scope', '$http', '$location',
   function ($scope, $http, $location) {
-    $scope.title = "New"
+    $scope.title = 'New';
     $scope.submit = function () {
-      $location.path('/profile')
-    }
+      $location.path('/profile');
+    };
 
   }
 ]);
 
 app.controller('editOrgCtrl', ['$scope', '$http', '$location',
   function ($scope, $http, $location) {
-    $scope.title = "Edit"
+    $scope.title = 'Edit';
     $http.get('/data/user.json').success(function (user) {
       $scope.org = user.orgs[0];
     });
     $scope.submit = function () {
-      $location.path('/profile')
-    }
+      $location.path('/profile');
+    };
   }
 ]);
 
@@ -155,8 +139,8 @@ app.controller('categoriesCtrl', ['$scope', '$http', '$location',
   }
 ]);
 
-app.controller('servicesCtrl', ['$scope', '$http', '$location',
-  function ($scope, $http, $location) {
+app.controller('servicesCtrl', ['$scope', '$http',
+  function ($scope, $http) {
     if ( !! $scope.categoryActive) {
       $scope.categoryActive = undefined;
     }
@@ -184,8 +168,8 @@ app.controller('servicesCtrl', ['$scope', '$http', '$location',
   }
 ]);
 
-app.controller('serviceCtrl', ['$scope', '$http', '$location',
-  function ($scope, $http, $location) {
+app.controller('serviceCtrl', ['$scope', '$http',
+  function ($scope, $http) {
     function toTitleCase(str) {
       return str.replace(/(?:^|-)\w/g, function (match) {
         return match.toUpperCase();
@@ -202,7 +186,7 @@ app.controller('serviceCtrl', ['$scope', '$http', '$location',
         type: 'Authorization',
         value: 'Bearer {user access token}'
       }]
-    }
+    };
     // $scope.$watch('request', function () {
     //   $scope.parsedrequest = JSON.stringify(angular.copy($scope.request), null, 2)
     // }, true)
@@ -213,21 +197,21 @@ app.controller('serviceCtrl', ['$scope', '$http', '$location',
       }).success(function (data, status, headers) {
         $scope.response = 'HTTP/1.1 ' + status + '\n';
         for (var key in headers()) {
-          $scope.response += toTitleCase(key) + ': ' + headers()[key] + '\n'
+          $scope.response += toTitleCase(key) + ': ' + headers()[key] + '\n';
         }
         $scope.response += '\n' + JSON.stringify(data, null, 2);
-      })
-    }
+      });
+    };
 
     $scope.addheader = function () {
       $scope.request.headers.push({
         type: '',
         value: ''
-      })
-    }
+      });
+    };
 
     $scope.removeheader = function (index) {
       $scope.request.headers.splice(index, 1);
-    }
+    };
   }
 ]);
