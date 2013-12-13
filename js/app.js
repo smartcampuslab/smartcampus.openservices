@@ -13,7 +13,7 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
         function error(response) {
 
           if (response.status === 401) {
-            $location.path('/login');
+            $location.path('/signin');
             return $q.reject(response);
           } else {
             return $q.reject(response);
@@ -94,16 +94,27 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
 
   var history = [];
 
-  $rootScope.$on('$routeChangeSuccess', function (event, next) {
+  $rootScope.$on('$routeChangeStart', function (event, next) {
+    event.preventDefault();
     history.push($location.$$path);
     $rootScope.error = null;
+    console.log(next)
+    if (Auth.isLoggedIn()) {
+      console.log('logged')
+    }
+    if (Auth.isLoggedIn() && next.originalPath === '/signin') {
+      console.log('should redirect')
+      $location.path('/profile');
+    }
     if (!Auth.authorize(next.access)) {
       if (Auth.isLoggedIn()) {
-        $location.path('/');
+        $location.path(next.originalPath);
       } else {
+        console.log('signin')
         $location.path('/signin');
       }
     }
+
   });
   $rootScope.back = function () {
     var prevUrl = history.length > 1 ? history.splice(-2)[0] : '/';

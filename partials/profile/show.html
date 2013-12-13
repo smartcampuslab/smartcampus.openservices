@@ -1,31 +1,31 @@
 <div class="row">
-  <div class="col-md-8 col-md-offset-2">
-    <div class="media">
-      <a class="pull-left" href="#">
-        <img class="media-object dp img-circle" ng-src="https://graph.facebook.com/{{user.name}}.{{user.surname}}/picture?width=120&height=120" style="width: 100px;height:100px;">
-      </a>
-      <div class="media-body">
-        <h4 class="media-heading">{{user.name}} {{user.surname}}
-          <small>Italy</small>
-        </h4>
-        <h5>SysAdmin at <a href="http://www.smartcampuslab.it">Smart Campus</a>
-        </h5>
-        <br>
-        <ul class="nav nav-tabs">
-          <li ng-class="{active: template==='partials/profile/_details.html'}"><a href="#" ng-click="template = 'partials/profile/_details.html'"><i class="fa fa-user"></i> Profile</a>
-          </li>
-          <li ng-class="{active: template==='partials/profile/organizations/show.html'}"><a href="#" ng-click="template = 'partials/profile/organizations/show.html'"><i class="fa fa-users"></i> Organizations</a>
-          </li>
-          <li ng-class="{active: template==='partials/profile/services/show.html'}"><a href="#" ng-click="template = 'partials/profile/services/show.html'"><i class="fa fa-cog"></i> Services</a>
-          </li>
-        </ul>
-        <br>
+    <div class="col-md-8 col-md-offset-2">
+        <div class="media">
+            <a class="pull-left" href="#">
+                <img class="media-object dp img-circle" ng-src="https://graph.facebook.com/{{user.name}}.{{user.surname}}/picture?width=120&height=120" style="width: 100px;height:100px;">
+            </a>
+            <div class="media-body">
+                <h4 class="media-heading">{{user.name}} {{user.surname}}
+                    <small>Italy</small>
+                </h4>
+                <h5>SysAdmin at <a href="http://www.smartcampuslab.it">Smart Campus</a>
+                </h5>
+                <br>
+                <ul class="nav nav-tabs">
+                    <li ng-class="{active: template==='partials/profile/_details.html'}"><a href="#" ng-click="template = 'partials/profile/_details.html'"><i class="fa fa-user"></i> Profile</a>
+                    </li>
+                    <li ng-class="{active: template==='partials/profile/organizations/show.html'}"><a href="#" ng-click="template = 'partials/profile/organizations/show.html'"><i class="fa fa-users"></i> Organizations</a>
+                    </li>
+                    <li ng-class="{active: template==='partials/profile/services/show.html'}"><a href="#" ng-click="template = 'partials/profile/services/show.html'"><i class="fa fa-cog"></i> Services</a>
+                    </li>
+                </ul>
+                <br>
 
-        <div ng-include="template"></div>
+                <div ng-include="template"></div>
 
-      </div>
+            </div>
 
+        </div>
     </div>
-  </div>
 
 </div>

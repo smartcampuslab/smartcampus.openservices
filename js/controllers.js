@@ -3,13 +3,13 @@ app.controller('homeCtrl', ['$scope', '$http',
   function ($scope, $http) {}
 ]);
 
-app.controller('signinCtrl', ['$scope', '$http', '$location', 'Auth', 'User',
-  function ($scope, $http, $location, User) {
+app.controller('signinCtrl', ['$scope', '$http', '$location', 'Auth',
+  function ($scope, $http, $location, Auth) {
 
     $scope.signin = function (service) {
-      //Auth.login(service, function () {
-      $location.path('/profile');
-      //});
+      Auth.login(service, function () {
+        $location.path('/profile');
+      });
 
     };
   }
