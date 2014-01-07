@@ -8,12 +8,37 @@
   "version": 11,
   "accessinfo": {
     "policies": "public",
-    "tendpoint": "http://tendpoint.com/api",
-    "pendpoint": "http://pendpoint.com/api",
+    "tendpoint": "https://vas-dev.smartcampuslab.it",
+    "pendpoint": "https://vas.smartcampuslab.it",
     "formats": ["json", "xml"]
   },
   "documentation": "http://doc.com",
   "expires": "27/05/2014",
+  "methods": [{
+    "name": "Get Profile",
+    "synopsis": "...",
+    "documentation": "http://dev.smartcampuslab.eu/doku.php?id=core:profileservice#basic_profile_rest_api",
+    "authdescriptor": {
+      "type": "oAuth 2.0",
+      "url": "https://vas-dev.smartcampuslab.it/accesstoken-provider/ac/getToken/google?redirect="
+    },
+    "url": "/aac/basicprofile/me",
+    "type": "GET",
+    "headers": {
+      "Authorization": null,
+      "Accept": "application/json"
+    },
+    "body": "",
+    "protocol": "HTTPS/1.1",
+    "samples": [{
+      "name": "get your profile info",
+      "headers": {
+        "Authorization": null,
+        "Accept": "application/json"
+      },
+      "body": null
+    }]
+  }],
   "implementationinfo": {
     "env": "java",
     "dependencies": "serviceTwo",

@@ -168,32 +168,54 @@ app.controller('servicesCtrl', ['$scope', '$http',
   }
 ]);
 
-app.controller('serviceCtrl', ['$scope', '$http',
-  function ($scope, $http) {
+app.controller('serviceCtrl', ['$scope', '$http', '$cookieStore',
+  function ($scope, $http, $cookieStore) {
+    $scope.request = {};
+    $http.get("/data/service.json").success(function (data) {
+      $scope.service = data;
+    })
+
     function toTitleCase(str) {
       return str.replace(/(?:^|-)\w/g, function (match) {
         return match.toUpperCase();
       });
     }
 
-    $scope.request = {
-      method: 'GET /aac/basicprofile/me HTTPS/1.1',
-      endpoint: 'vas-dev.smartcampuslab.it',
-      headers: [{
-        type: 'Accept',
-        value: 'application/json'
-      }, {
-        type: 'Authorization',
-        value: 'Bearer {user access token}'
-      }]
-    };
+    // if ($cookieStore.get('nomeservizio') == undefined) {
+
+    //   if (location.hash != "") {
+    //     $http({
+    //       method: 'POST',
+    //       url: 'https://vas-dev.smartcampuslab.it/accesstoken-provider/ac/validateCode/' + location.hash.match(/#(.*)/)[1]
+    //     }).
+    //     success(function (data) {
+    //       $cookieStore.put('nomeservizio', data);
+    //       $scope.nomeservizio = JSON.stringify(nomeservizio, undefined, 2);
+    //     });
+    //   }
+    // }
+
     // $scope.$watch('request', function () {
     //   $scope.parsedrequest = JSON.stringify(angular.copy($scope.request), null, 2)
     // }, true)
+    $scope.checkBeforeSend = function () {
+      //&& request.method.authdescriptor && !request.sample.headers['Authorization']
+      if ($scope.request.method && $scope.request.endpoint && $scope.request.sample && !$scope.request.method.authdescriptor.type) {
+        return true
+      } else if ($scope.request.method && $scope.request.endpoint && $scope.request.sample && $scope.request.method.authdescriptor.type && $scope.request.sample.headers['Authorization']) {
+        return true
+      } else {
+        return false
+      }
+    }
+
     $scope.send = function () {
+      console.info($scope.request);
       $http({
-        method: 'GET',
-        url: '/data/vas.json'
+        method: $scope.request.method.type,
+        url: $scope.request.endpoint + $scope.request.method.url,
+        data: $scope.request.sample.body,
+        headers: $scope.request.sample.headers
       }).success(function (data, status, headers) {
         $scope.response = 'HTTP/1.1 ' + status + '\n';
         for (var key in headers()) {
@@ -203,15 +225,5 @@ app.controller('serviceCtrl', ['$scope', '$http',
       });
     };
 
-    $scope.addheader = function () {
-      $scope.request.headers.push({
-        type: '',
-        value: ''
-      });
-    };
-
-    $scope.removeheader = function (index) {
-      $scope.request.headers.splice(index, 1);
-    };
   }
 ]);
