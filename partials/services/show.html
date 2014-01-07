@@ -1,7 +1,6 @@
 <div class="animated fadeIn">
     <div class="row">
         <div class="col-md-4 col-md-offset-2">
-            <a href="https://vas-dev.smartcampuslab.it/accesstoken-provider/ac/getToken/google?redirect=http://localhost/services/1">Get token</a>
             <h2>Test service</h2>
             <h5>Service description asd asd asd asd</h5>
         </div>
@@ -86,7 +85,7 @@
             <pre><code prism class="language-http">{{request.method.type}} {{request.method.url}} {{request.method.protocol}}
 {{request.sample.headers}}
 {{request.sample.body}}</code></pre>
-            <button ng-show="request.method.authdescriptor" ng-click="send()" type="button" class="btn btn-primary">Get Token</button>
+            <a ng-href="{{request.method.authdescriptor.url}}" ng-show="request.method.authdescriptor" ng-click="send()" type="button" class="btn btn-primary">Get Token</a>
             <button ng-click="send()" type="button" ng-class="checkBeforeSend() ? 'btn btn-success' : 'btn btn-success disabled'" class="btn btn-success">Send</button>
 
         </div>
@@ -101,3 +100,4 @@
     </div>
 
 </div>
+<a>Get token</a>
