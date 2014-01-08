@@ -85,7 +85,7 @@
             <pre><code prism class="language-http">{{request.method.type}} {{request.method.url}} {{request.method.protocol}}
 {{request.sample.headers}}
 {{request.sample.body}}</code></pre>
-            <a ng-href="{{request.method.authdescriptor.url}}" ng-show="request.method.authdescriptor" ng-click="send()" type="button" class="btn btn-primary">Get Token</a>
+            <button ng-show="request.method.authdescriptor" ng-click="getToken()" type="button" class="btn btn-primary">Get Token</button>
             <button ng-click="send()" type="button" ng-class="checkBeforeSend() ? 'btn btn-success' : 'btn btn-success disabled'" class="btn btn-success">Send</button>
 
         </div>
@@ -100,4 +100,3 @@
     </div>
 
 </div>
-<a>Get token</a>

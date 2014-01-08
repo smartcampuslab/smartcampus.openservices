@@ -36,6 +36,11 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
       templateUrl: '/partials/home.html',
       access: access.anon
     }).
+    when('/callback', {
+      controller: 'cbCtrl',
+      templateUrl: '/partials/cb.html',
+      access: access.anon
+    }).
     when('/services', {
       controller: 'servicesCtrl',
       templateUrl: '/partials/services/list.html',

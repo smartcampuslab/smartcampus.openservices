@@ -168,8 +168,45 @@ app.controller('servicesCtrl', ['$scope', '$http',
   }
 ]);
 
-app.controller('serviceCtrl', ['$scope', '$http', '$cookieStore',
-  function ($scope, $http, $cookieStore) {
+app.controller('cbCtrl', ['$location',
+  function ($location) {
+    function parseKeyValue(keyValue) {
+      var obj = {}, key_value, key;
+      angular.forEach((keyValue || "").split('&'), function (keyValue) {
+        if (keyValue) {
+          key_value = keyValue.split('=');
+          key = decodeURIComponent(key_value[0]);
+          obj[key] = angular.isDefined(key_value[1]) ? decodeURIComponent(key_value[1]) : true;
+        }
+      });
+      return obj;
+    }
+
+    var queryString = $location.url().substring(10); // preceding slash omitted
+    var params = parseKeyValue(queryString);
+    // TODO: The target origin should be set to an explicit origin.  Otherwise, a malicious site that can receive
+    //       the token if it manages to change the location of the parent. (See:
+    //       https://developer.mozilla.org/en/docs/DOM/window.postMessage#Security_concerns)
+
+    window.opener.postMessage(params, "*");
+    window.close();
+  }
+]);
+
+app.controller('serviceCtrl', ['$scope', '$http', '$cookieStore', '$location', 'oAuth',
+  function ($scope, $http, $cookieStore, $location, oAuth) {
+    oAuth.config.clientId = 'fcb1cb81-50a7-4948-8f46-05a1f14e7089';
+    oAuth.config.clientId.localStorageName = 'accessToken';
+    oAuth.config.clientId.scopes = ["smartcampus.profile.basicprofile.me"]
+
+    $scope.getToken = function () {
+      oAuth.config.authorizationEndpoint = $scope.request.endpoint + $scope.request.method.authdescriptor.authUrl;
+      oAuth.getToken(function (code) {
+        console.log(code)
+      });
+
+    }
+
     $scope.request = {};
     $http.get("/data/service.json").success(function (data) {
       $scope.service = data;
@@ -181,19 +218,17 @@ app.controller('serviceCtrl', ['$scope', '$http', '$cookieStore',
       });
     }
 
-    // if ($cookieStore.get('nomeservizio') == undefined) {
+    if ($cookieStore.get('token') == undefined) {
 
-    //   if (location.hash != "") {
-    //     $http({
-    //       method: 'POST',
-    //       url: 'https://vas-dev.smartcampuslab.it/accesstoken-provider/ac/validateCode/' + location.hash.match(/#(.*)/)[1]
-    //     }).
-    //     success(function (data) {
-    //       $cookieStore.put('nomeservizio', data);
-    //       $scope.nomeservizio = JSON.stringify(nomeservizio, undefined, 2);
-    //     });
-    //   }
-    // }
+      if ($location.hash() != "") {
+        $http.post($scope.request.method.authdescriptor.validationUrl + $location.hash().match(/#(.*)/)[1]).
+        success(function (data) {
+          console.log(data)
+          $cookieStore.put('token', data);
+          $scope.token = JSON.stringify(token, undefined, 2);
+        });
+      }
+    }
 
     // $scope.$watch('request', function () {
     //   $scope.parsedrequest = JSON.stringify(angular.copy($scope.request), null, 2)

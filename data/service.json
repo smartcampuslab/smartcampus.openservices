@@ -20,7 +20,8 @@
     "documentation": "http://dev.smartcampuslab.eu/doku.php?id=core:profileservice#basic_profile_rest_api",
     "authdescriptor": {
       "type": "oAuth 2.0",
-      "url": "https://vas-dev.smartcampuslab.it/accesstoken-provider/ac/getToken/google?redirect="
+      "authUrl": "/aac/oauth/authorize",
+      "validationUrl": "/aac/oauth/token"
     },
     "url": "/aac/basicprofile/me",
     "type": "GET",
