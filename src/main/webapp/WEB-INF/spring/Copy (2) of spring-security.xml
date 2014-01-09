@@ -23,7 +23,7 @@
 		class="org.springframework.security.web.context.SecurityContextPersistenceFilter" />
 
 	<!-- Authentication filter for login -->
-	<beans:bean id="authFilter" class="com.openserviceproject.securitymodel.MyAuthenticationFilter">
+	<beans:bean id="authFilter" class="eu.trentorise.smartcampus.openservices.securitymodel.MyAuthenticationFilter">
 		<beans:property name="authenticationManager" ref="authenticationManager" />
 		<beans:property name="authenticationSuccessHandler" ref="myAuthSuccessHandler" />
 		<beans:property name="passwordParameter" value="pssw" />
@@ -31,7 +31,7 @@
 		<beans:property name="postOnly" value="true" />
 	</beans:bean>
 	
-	<beans:bean id="myAuthSuccessHandler" class="com.openserviceproject.securitymodel.AuthenticationSuccessHandler"/>
+	<beans:bean id="myAuthSuccessHandler" class="eu.trentorise.smartcampus.openservices.securitymodel.AuthenticationSuccessHandler"/>
 	
 	 <!-- My authentication with custom db (not using ACL) -->
 	 <authentication-manager  alias="authenticationManager"> <!--  -->

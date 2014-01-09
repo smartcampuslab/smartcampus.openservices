@@ -8,9 +8,9 @@
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<import resource="spring-mysql.xml"/>
 	
-	<bean id="jdbcUserService" class="com.openserviceproject.securitymodel.CustomUserDetailsService" /> 
+	<bean id="jdbcUserService" class="eu.trentorise.smartcampus.openservices.securitymodel.CustomUserDetailsService" /> 
 	
-	<!-- <jpa:repositories base-package="com.openserviceproject.dao"></jpa:repositories>  -->
+	<!-- <jpa:repositories base-package="eu.trentorise.smartcampus.openservices.dao"></jpa:repositories>  -->
 	
 	<!--  Java mail: set default mail properties -->
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">

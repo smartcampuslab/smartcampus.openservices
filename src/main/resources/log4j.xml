@@ -11,7 +11,7 @@
 	</appender>
 	
 	<!-- Application Loggers -->
-	<logger name="com.openserviceproject.openservice">
+	<logger name="eu.trentorise.smartcampus.openservices.controllers">
 		<level value="info" />
 	</logger>
 	

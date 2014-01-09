@@ -34,7 +34,7 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="com.openserviceproject.openservice" />
+	<context:component-scan base-package="eu.trentorise.smartcampus.openservices.controllers" />
 	
 	<!-- Static resources -->
 	<!-- <resources mapping="/resources/**" location="/WEB-INF/resources/" />  -->
