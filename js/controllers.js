@@ -196,13 +196,26 @@ app.controller('cbCtrl', ['$location',
 app.controller('serviceCtrl', ['$scope', '$http', '$cookieStore', '$location', 'oAuth',
   function ($scope, $http, $cookieStore, $location, oAuth) {
     oAuth.config.clientId = 'fcb1cb81-50a7-4948-8f46-05a1f14e7089';
-    oAuth.config.clientId.localStorageName = 'accessToken';
-    oAuth.config.clientId.scopes = ["smartcampus.profile.basicprofile.me"]
+    oAuth.config.scopes = ["smartcampus.profile.basicprofile.me"]
 
     $scope.getToken = function () {
       oAuth.config.authorizationEndpoint = $scope.request.endpoint + $scope.request.method.authdescriptor.authUrl;
-      oAuth.getToken(function (code) {
-        console.log(code)
+      oAuth.getToken(function (data) {
+        console.log(data)
+        // $http({
+        //   method: 'POST',
+        //   url: $scope.request.endpoint + $scope.request.method.authdescriptor.validationUrl,
+        //   params: {
+        //     grant_type: oAuth.config.grant_type,
+        //     code: data.code,
+        //     client_id: oAuth.config.clientId,
+        //     redirect_uri: 'http://localhost/callback'
+        //   }
+        // }).success(function (data) {
+        //   console.log('token', data)
+        // }).error(function (err) {
+        //   console.log(err)
+        // })
       });
 
     }

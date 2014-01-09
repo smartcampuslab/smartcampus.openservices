@@ -20,7 +20,7 @@
     "documentation": "http://dev.smartcampuslab.eu/doku.php?id=core:profileservice#basic_profile_rest_api",
     "authdescriptor": {
       "type": "oAuth 2.0",
-      "authUrl": "/aac/oauth/authorize",
+      "authUrl": "/aac/eauth/authorize",
       "validationUrl": "/aac/oauth/token"
     },
     "url": "/aac/basicprofile/me",

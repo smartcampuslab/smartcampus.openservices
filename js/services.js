@@ -595,13 +595,14 @@ services.factory('oAuth', ['$http', '$window', '$location', '$rootScope',
         authorizationEndpoint: null,
         localStorageName: 'accessToken',
         verifyFunc: null,
-        response_type: 'code',
+        response_type: 'token',
+        grant_type: 'authorization_code',
         scopes: []
       },
       getToken: function (cb) {
         var params = angular.extend(getParams(this));
         var url = this.config.authorizationEndpoint + '?' + objectToQueryString(params)
-
+        console.log(url)
         var popup = window.open(url, popupOptions.name, formatPopupOptions(popupOptions.openParams));
 
         angular.element($window).bind('message', function (event) {
