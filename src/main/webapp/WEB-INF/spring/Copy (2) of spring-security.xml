@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+	
+	<!-- Define filters -->
+	<beans:bean id="springSecurityFilterChain" class="org.springframework.security.web.FilterChainProxy">
+		<filter-chain-map>
+			<filter-chain pattern="/api/user/login" filters="securityContextPers,authFilter"/>
+			<filter-chain pattern="/api/user/logout" filters="securityContextPers,logoutFilter"/>
+			<filter-chain pattern="/" filters="none"/>
+			<filter-chain pattern="/api/catalog/**" filters="none"/>
+			<filter-chain pattern="/**" filters="securityContextPers,accessControlFilter"/>
+		</filter-chain-map>
+	</beans:bean>
+	
+	<!-- Establish security context  -->
+	<beans:bean id="securityContextPers" 
+		class="org.springframework.security.web.context.SecurityContextPersistenceFilter" />
+
+	<!-- Authentication filter for login -->
+	<beans:bean id="authFilter" class="com.openserviceproject.securitymodel.MyAuthenticationFilter">
+		<beans:property name="authenticationManager" ref="authenticationManager" />
+		<beans:property name="authenticationSuccessHandler" ref="myAuthSuccessHandler" />
+		<beans:property name="passwordParameter" value="pssw" />
+		<beans:property name="usernameParameter" value="username" />
+		<beans:property name="postOnly" value="true" />
+	</beans:bean>
+	
+	<beans:bean id="myAuthSuccessHandler" class="com.openserviceproject.securitymodel.AuthenticationSuccessHandler"/>
+	
+	 <!-- My authentication with custom db (not using ACL) -->
+	 <authentication-manager  alias="authenticationManager"> <!--  -->
+		<authentication-provider user-service-ref="jdbcUserService"><!--  ref="customAuthenticationProvider"  user-service-ref="jdbcUserService"-->
+		</authentication-provider>
+	</authentication-manager>
+	
+	<!-- Logout filter -->
+	<beans:bean id="logoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
+		<beans:constructor-arg value="/api/user/logout" />
+		<beans:constructor-arg>
+			<beans:list>
+				<beans:bean class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" />
+			</beans:list>
+		</beans:constructor-arg>
+	</beans:bean>
+	
+	<!-- Generic stuff authentication -->
+	<beans:bean id="httpRequestAccessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased" >
+		<beans:property name="allowIfAllAbstainDecisions" value="false"></beans:property>
+		<beans:property name="decisionVoters">
+			<beans:list>
+				<beans:ref bean="roleVoter" />
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+	
+	<beans:bean id="roleVoter" class="org.springframework.security.access.vote.RoleVoter" />
+	<beans:bean id="securityContextHolderAwareRequestFilter" 
+		class="org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter" />
+	
+	<!-- Access Control Filter -->
+	<beans:bean id="accessControlFilter" class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
+		<beans:property name="authenticationManager" ref="authenticationManager" />
+		<beans:property name="accessDecisionManager" ref="httpRequestAccessDecisionManager" />
+		<beans:property name="securityMetadataSource">
+			<filter-invocation-definition-source>
+				<intercept-url pattern="/api/admin/**" access="ROLE_ADMIN" />
+				<intercept-url pattern="/api/org/**" access="ROLE_ADMIN,ROLE_ORGOWNER" />
+				<intercept-url pattern="/api/service/my/*" access="ROLE_SERVICEOWNER" />
+				<intercept-url pattern="/api/service/**" access="ROLE_ADMIN, ROLE_SERVICEOWNER"/>
+				<intercept-url pattern="/api/user/**" access="ROLE_ADMIN" />
+				<intercept-url pattern="/**" access="ROLE_WE_HAVE"/>
+			</filter-invocation-definition-source>
+		</beans:property>
+	</beans:bean>
+	
+	<!-- 
+				<intercept-url pattern="/api/admin/**" access="hasRole('ROLE_ADMIN')" />
+				<intercept-url pattern="/api/org/**" access="hasAnyRole('ROLE_ADMIN','ROLE_ORGOWNER')" />
+				<intercept-url pattern="/api/service/my/*" access="hasRole('ROLE_SERVICEOWNER')" />
+				<intercept-url pattern="/api/service/**" access="hasAnyRole('ROLE_ADMIN', 'ROLE_SERVICEOWNER')"/>
+				<intercept-url pattern="/api/user/login" access="permittAll" />
+				<intercept-url pattern="/api/user/**" access="hasRole('ROLE_ADMIN')" />
+				<intercept-url pattern="/api/catalog/**" access="permitAll" />
+				<intercept-url pattern="/**" access="isAuthenticated()"/>
+	 -->
+</beans:beans>

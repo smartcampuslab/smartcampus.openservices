@@ -33,62 +33,62 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
     $routeProvider.
     when('/', {
       controller: 'homeCtrl',
-      templateUrl: '/partials/home.html',
+      templateUrl: 'partials/home.html',
       access: access.anon
     }).
     when('/callback', {
       controller: 'cbCtrl',
-      templateUrl: '/partials/cb.html',
+      templateUrl: 'partials/cb.html',
       access: access.anon
     }).
     when('/services', {
       controller: 'servicesCtrl',
-      templateUrl: '/partials/services/list.html',
+      templateUrl: 'partials/services/list.html',
       access: access.anon
     }).
     when('/services/:id', {
       controller: 'serviceCtrl',
-      templateUrl: '/partials/services/show.html',
+      templateUrl: 'partials/services/show.html',
       access: access.anon
     }).
     when('/categories', {
       controller: 'categoriesCtrl',
-      templateUrl: '/partials/categories.html',
+      templateUrl: 'partials/categories.html',
       access: access.anon
     }).
     when('/signin', {
       controller: 'signinCtrl',
-      templateUrl: '/partials/signin.html',
+      templateUrl: 'partials/signin.html',
       access: access.anon
     }).
     when('/profile', {
       controller: 'profileCtrl',
-      templateUrl: '/partials/profile/show.html',
+      templateUrl: 'partials/profile/show.html',
       access: access.user
     }).
     when('/profile/edit', {
       controller: 'profileCtrl',
-      templateUrl: '/partials/profile/edit.html',
+      templateUrl: 'partials/profile/edit.html',
       access: access.user
     }).
     when('/profile/services/new', {
       controller: 'newServiceCtrl',
-      templateUrl: '/partials/profile/services/edit.html',
+      templateUrl: 'partials/profile/services/edit.html',
       access: access.user
     }).
     when('/profile/services/:id/edit', {
       controller: 'editServiceCtrl',
-      templateUrl: '/partials/profile/services/edit.html',
+      templateUrl: 'partials/profile/services/edit.html',
       access: access.user
     }).
     when('/profile/organizations/new', {
       controller: 'newOrgCtrl',
-      templateUrl: '/partials/profile/organizations/edit.html',
+      templateUrl: 'partials/profile/organizations/edit.html',
       access: access.user
     }).
     when('/profile/organizations/:id/edit', {
       controller: 'editOrgCtrl',
-      templateUrl: '/partials/profile/organizations/edit.html',
+      templateUrl: 'partials/profile/organizations/edit.html',
       access: access.user
     }).
     otherwise({

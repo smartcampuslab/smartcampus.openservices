@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	 http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	<import resource="spring-mysql.xml"/>
+	
+	<bean id="jdbcUserService" class="com.openserviceproject.securitymodel.CustomUserDetailsService" /> 
+	
+	<!-- <jpa:repositories base-package="com.openserviceproject.dao"></jpa:repositories>  -->
+	
+	<!--  Java mail: set default mail properties -->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.gmail.com"></property>
+		<property name="port" value="25"></property>
+		<property name="username" value="toinsert@gmail.com"></property>
+		<property name="password" value="toinsert"></property>
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.transport.protocol">smtp</prop>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.debug">true</prop>
+			</props>
+		</property>
+	</bean>
+	
+	 <!-- You can have some pre-configured messagess also which are ready to send -->
+    <bean id="preConfiguredMessage" class="org.springframework.mail.SimpleMailMessage">
+        <!--<property name="to" value="toinsert@gmail.com"></property>-->
+        <property name="from" value="toinsert@gmail.com"></property>
+        <property name="subject" value="Welcome to OpenService!!"/>
+    </bean>
+		
+</beans>

@@ -8,7 +8,7 @@ app.controller('signinCtrl', ['$scope', '$http', '$location', 'Auth',
 
     $scope.signin = function (service) {
       Auth.login(service, function () {
-        $location.path('/profile');
+        $location.path('profile');
       });
 
     };
@@ -30,14 +30,14 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', '$rootSco
     };
 
     $scope.submit = function () {
-      $location.path('/profile');
+      $location.path('profile');
     };
 
-    $http.get('/data/user.json').success(function (user) {
+    $http.get('data/user.json').success(function (user) {
       $scope.user = user;
     });
 
-    $http.get('/data/services.json').success(function (services) {
+    $http.get('data/services.json').success(function (services) {
       $scope.services = services;
     });
   }
@@ -50,16 +50,16 @@ app.controller('newServiceCtrl', ['$scope', '$http', '$location',
     $scope.service = {
       license: 'somelicense'
     };
-    $http.get('/data/user.json').success(function (user) {
+    $http.get('data/user.json').success(function (user) {
       $scope.orgs = user.orgs;
     });
 
-    $http.get('/data/categories.json').success(function (cats) {
+    $http.get('data/categories.json').success(function (cats) {
       $scope.cats = cats;
     });
 
     $scope.submit = function () {
-      $location.path('/profile');
+      $location.path('profile');
     };
   }
 ]);
@@ -68,17 +68,17 @@ app.controller('editServiceCtrl', ['$scope', '$http', '$location',
   function ($scope, $http, $location) {
     $scope.title = 'Edit';
     $scope.policies = ['public', 'private'];
-    $http.get('/data/user.json').success(function (user) {
+    $http.get('data/user.json').success(function (user) {
       $scope.orgs = user.orgs;
     });
-    $http.get('/data/service.json').success(function (service) {
+    $http.get('data/service.json').success(function (service) {
       $scope.service = service;
     });
-    $http.get('/data/categories.json').success(function (cats) {
+    $http.get('data/categories.json').success(function (cats) {
       $scope.cats = cats;
     });
     $scope.submit = function () {
-      $location.path('/profile');
+      $location.path('profile');
     };
   }
 ]);
@@ -87,7 +87,7 @@ app.controller('newOrgCtrl', ['$scope', '$http', '$location',
   function ($scope, $http, $location) {
     $scope.title = 'New';
     $scope.submit = function () {
-      $location.path('/profile');
+      $location.path('profile');
     };
 
   }
@@ -96,11 +96,11 @@ app.controller('newOrgCtrl', ['$scope', '$http', '$location',
 app.controller('editOrgCtrl', ['$scope', '$http', '$location',
   function ($scope, $http, $location) {
     $scope.title = 'Edit';
-    $http.get('/data/user.json').success(function (user) {
+    $http.get('data/user.json').success(function (user) {
       $scope.org = user.orgs[0];
     });
     $scope.submit = function () {
-      $location.path('/profile');
+      $location.path('profile');
     };
   }
 ]);
@@ -127,14 +127,14 @@ app.controller('categoriesCtrl', ['$scope', '$http', '$location',
       return rows;
     };
 
-    $http.get('/data/categories.json').success(function (categories) {
+    $http.get('data/categories.json').success(function (categories) {
       $scope.categories = categories;
       $scope.categoriesRows = $scope.getCategoriesRows(categories, 4);
     });
 
     $scope.setCategoryActive = function (category) {
       $scope.categoryActive = category;
-      $location.path('/services');
+      $location.path('services');
     };
   }
 ]);
@@ -145,8 +145,9 @@ app.controller('servicesCtrl', ['$scope', '$http',
       $scope.categoryActive = undefined;
     }
 
-    $http.get('/data/services.json').success(function (services) {
-      $scope.services = services;
+    $http.get('api/service/view').success(function (services) {
+    	console.log(services);
+      $scope.services = services.services;
     });
 
     $scope.servicesActive = [];
@@ -222,7 +223,7 @@ app.controller('serviceCtrl', ['$scope', '$http', '$cookieStore', '$location', '
     }
 
     $scope.request = {};
-    $http.get("/data/service.json").success(function (data) {
+    $http.get("data/service.json").success(function (data) {
       $scope.service = data;
     })
 
