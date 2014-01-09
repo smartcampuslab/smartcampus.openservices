@@ -202,6 +202,7 @@ app.controller('serviceCtrl', ['$scope', '$http', '$cookieStore', '$location', '
       oAuth.config.authorizationEndpoint = $scope.request.endpoint + $scope.request.method.authdescriptor.authUrl;
       oAuth.getToken(function (data) {
         console.log(data)
+        $scope.request.sample.headers.Authorization = 'Bearer ' + data.access_token
         // $http({
         //   method: 'POST',
         //   url: $scope.request.endpoint + $scope.request.method.authdescriptor.validationUrl,
@@ -256,20 +257,31 @@ app.controller('serviceCtrl', ['$scope', '$http', '$cookieStore', '$location', '
         return false
       }
     }
+    $scope.checkBeforeToken = function () {
+      //&& request.method.authdescriptor && !request.sample.headers['Authorization']
+      if ($scope.request.method && $scope.request.endpoint && $scope.request.sample && $scope.request.method.authdescriptor) {
+        return true
+      } else {
+        return false
+      }
+    }
 
     $scope.send = function () {
-      console.info($scope.request);
+      console.info($scope.request.sample.headers);
       $http({
         method: $scope.request.method.type,
         url: $scope.request.endpoint + $scope.request.method.url,
         data: $scope.request.sample.body,
-        headers: $scope.request.sample.headers
+        headers: $scope.request.sample.headers,
+        withCredentials: true
       }).success(function (data, status, headers) {
         $scope.response = 'HTTP/1.1 ' + status + '\n';
         for (var key in headers()) {
           $scope.response += toTitleCase(key) + ': ' + headers()[key] + '\n';
         }
         $scope.response += '\n' + JSON.stringify(data, null, 2);
+      }).error(function (err) {
+        console.log(err)
       });
     };
 
