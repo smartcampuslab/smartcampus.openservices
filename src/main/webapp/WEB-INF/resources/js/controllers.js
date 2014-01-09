@@ -7,10 +7,13 @@ app.controller('signinCtrl', ['$scope', '$http', '$location', 'Auth',
   function ($scope, $http, $location, Auth) {
 
     $scope.signin = function (service) {
-      Auth.login(service, function () {
+      // Auth.login(service, function () {
+      //   $location.path('profile');
+      // });
+      $http.post('/perform_login', $scope.user).success(function (data) {
+        console.log(data)
         $location.path('profile');
-      });
-
+      })
     };
   }
 ]);
@@ -146,7 +149,7 @@ app.controller('servicesCtrl', ['$scope', '$http',
     }
 
     $http.get('api/service/view').success(function (services) {
-    	console.log(services);
+      console.log(services);
       $scope.services = services.services;
     });
 
