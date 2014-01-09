@@ -24,6 +24,7 @@ import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.security.authentication.encoding.PlaintextPasswordEncoder;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import eu.trentorise.smartcampus.openservices.dao.UserDao;
 import eu.trentorise.smartcampus.openservices.entities.User;
@@ -68,5 +69,12 @@ public class RestAuthenticationProvider extends AbstractUserDetailsAuthenticatio
 			throw new BadCredentialsException("AbstractUserDetailAuthenticationProvider.badCredentials", userDetails);
 		}
 		
+	}
+	
+	public static void main(String[] args) {
+		String password = "sara";
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); 
+		String encodedPassword = ((BCryptPasswordEncoder) passwordEncoder).encode(password);
+		System.out.println(encodedPassword);
 	}
 }

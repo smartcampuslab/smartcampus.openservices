@@ -79,7 +79,7 @@ public class HomeController {
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login(){
 		logger.info("-- Login --");
-		return "login";
+		return "index";
 	}
 	
 	/**

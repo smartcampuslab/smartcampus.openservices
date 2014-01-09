@@ -9,7 +9,7 @@
 	<import resource="spring-mysql.xml"/>
 	
 	<bean id="jdbcUserService" class="eu.trentorise.smartcampus.openservices.securitymodel.CustomUserDetailsService" /> 
-	
+	<bean id="bCryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
 	<!-- <jpa:repositories base-package="eu.trentorise.smartcampus.openservices.dao"></jpa:repositories>  -->
 	
 	<!--  Java mail: set default mail properties -->
