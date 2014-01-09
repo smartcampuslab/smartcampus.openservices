@@ -50,6 +50,7 @@ public class CustomUserDetailsService implements UserDetailsService{
 			throws UsernameNotFoundException {
 		
 		final User domainUser = userDao.getUserByUsername(arg0);
+		if (domainUser == null) throw new UsernameNotFoundException(arg0);
 		
 		return new UserDetails() {
 			
