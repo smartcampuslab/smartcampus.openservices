@@ -64,32 +64,32 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
     when('/profile', {
       controller: 'profileCtrl',
       templateUrl: 'partials/profile/show.html',
-      access: access.user
+      access: access.ROLE_NORMAL
     }).
     when('/profile/edit', {
       controller: 'profileCtrl',
       templateUrl: 'partials/profile/edit.html',
-      access: access.user
+      access: access.ROLE_NORMAL
     }).
     when('/profile/services/new', {
       controller: 'newServiceCtrl',
       templateUrl: 'partials/profile/services/edit.html',
-      access: access.user
+      access: access.ROLE_NORMAL
     }).
     when('/profile/services/:id/edit', {
       controller: 'editServiceCtrl',
       templateUrl: 'partials/profile/services/edit.html',
-      access: access.user
+      access: access.ROLE_NORMAL
     }).
     when('/profile/organizations/new', {
       controller: 'newOrgCtrl',
       templateUrl: 'partials/profile/organizations/edit.html',
-      access: access.user
+      access: access.ROLE_NORMAL
     }).
     when('/profile/organizations/:id/edit', {
       controller: 'editOrgCtrl',
       templateUrl: 'partials/profile/organizations/edit.html',
-      access: access.user
+      access: access.ROLE_NORMAL
     }).
     otherwise({
       redirectTo: '/'

@@ -24,11 +24,10 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope',
         return accessLevel.bitMask & role.bitMask;
       },
       isLoggedIn: function (user) {
-    	  console.log($rootScope.currentUser)
         if (user === undefined) {
           user = $rootScope.currentUser;
         }
-        return user.role.title === userRoles.user.title || user.role.title === userRoles.ROLE_ADMIN.title;
+        return user.role.title === userRoles.ROLE_NORMAL.title || user.role.title === userRoles.ROLE_ADMIN.title;
       },
       register: function (user, success, error) {
         $http.post('/register', user).success(function (res) {
