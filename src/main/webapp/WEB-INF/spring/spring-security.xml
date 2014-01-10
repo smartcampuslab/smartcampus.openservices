@@ -28,7 +28,7 @@
 		<intercept-url pattern="/api/user/add/**" access="permitAll"/>
 		<intercept-url pattern="/api/user/**" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/api/catalog/**" access="permitAll" />
-		<intercept-url pattern="/*" access="permitAll"/>
+		<intercept-url pattern="/" access="permitAll"/>
 		<intercept-url pattern="/**" access="isAuthenticated()"/>
 		<form-login login-page="/login" 
 			default-target-url="/welcome" 
