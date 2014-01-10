@@ -13,9 +13,7 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope',
     $cookieStore.remove('user');
 
     function changeUser(user) {
-    	console.log('aaaa',$rootScope.currentUser)
       _.extend($rootScope.currentUser, user);
-      console.log('asd',$rootScope.currentUser)
     }
 
     return {
@@ -26,8 +24,8 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope',
         return accessLevel.bitMask & role.bitMask;
       },
       isLoggedIn: function (user) {
+    	  console.log($rootScope.currentUser)
         if (user === undefined) {
-          console.log('checking user login status')
           user = $rootScope.currentUser;
         }
         return user.role.title === userRoles.user.title || user.role.title === userRoles.admin.title;
@@ -44,8 +42,12 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope',
             'Content-Type': 'application/x-www-form-urlencoded'
           }
         }).success(function (data) {
-        	console.log(data)
-           var templ = {role:userRoles.user};	
+          console.log(data.role)
+          var role = data.role
+          var templ = {
+        	  username : data.username,
+            role: userRoles.admin
+          };
           changeUser(templ);
           success(user)
         });

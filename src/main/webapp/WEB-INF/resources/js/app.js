@@ -103,19 +103,17 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
     event.preventDefault();
     history.push($location.$$path);
     $rootScope.error = null;
-    console.log(next)
-    if (Auth.isLoggedIn()) {
-      console.log('logged')
-    }
+
     if (Auth.isLoggedIn() && next.originalPath === '/signin') {
-      console.log('should redirect')
+    	console.log('redirecting from signin to profile because already loggedin')
       $location.path('/profile');
     }
     if (!Auth.authorize(next.access)) {
       if (Auth.isLoggedIn()) {
+    	  console.log('user already loggedin, redirecting to next path', next.originalPath)
         $location.path(next.originalPath);
       } else {
-        console.log('signin')
+        console.log('signin');
         $location.path('/signin');
       }
     }
