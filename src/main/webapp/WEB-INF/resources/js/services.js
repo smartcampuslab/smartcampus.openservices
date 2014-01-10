@@ -2,7 +2,7 @@
 var services = angular.module('openservices.services', ['ngResource', 'ngCookies']);
 
 services.factory('Auth', ['$http', '$cookieStore', '$rootScope',
-  function ($http, $cookieStore, Facebook, $rootScope) {
+  function ($http, $cookieStore, $rootScope) {
     var accessLevels = routingConfig.accessLevels,
       userRoles = routingConfig.userRoles
       $rootScope.currentUser = $cookieStore.get('user') || {
@@ -13,7 +13,9 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope',
     $cookieStore.remove('user');
 
     function changeUser(user) {
+    	console.log('aaaa',$rootScope.currentUser)
       _.extend($rootScope.currentUser, user);
+      console.log('asd',$rootScope.currentUser)
     }
 
     return {
@@ -42,7 +44,9 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope',
             'Content-Type': 'application/x-www-form-urlencoded'
           }
         }).success(function (data) {
-          changeUser(user);
+        	console.log(data)
+           var templ = {role:userRoles.user};	
+          changeUser(templ);
           success(user)
         });
       },

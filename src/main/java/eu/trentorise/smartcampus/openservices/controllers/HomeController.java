@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,6 +28,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import eu.trentorise.smartcampus.openservices.dao.UserDao;
+import eu.trentorise.smartcampus.openservices.entities.User;
+
 /**
  * Handles requests for the application home page.
  */
@@ -34,6 +38,8 @@ import org.springframework.web.bind.annotation.*;
 public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+	@Autowired
+	private UserDao userDao;
 	
 	/**
 	 * Home view
@@ -58,8 +64,12 @@ public class HomeController {
 	 * @return
 	 */
 	@RequestMapping(value="/welcome", method = RequestMethod.GET)
-	public String printWelcome() {
-		return "index";
+	@ResponseBody
+	public User printWelcome() {
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		User user = userDao.getUserByUsername(username);
+		user.setPassword(null);
+		return user;
 	}
 	
 	/**
@@ -91,7 +101,7 @@ public class HomeController {
 	@RequestMapping(value = "/loginfailed", method = RequestMethod.GET)
 	public String loginfailed(ModelMap model){
 		model.addAttribute("error","true");
-		return "index";
+		throw new SecurityException();
 	}
 	
 	//User - logout
