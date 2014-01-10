@@ -7,11 +7,7 @@ app.controller('signinCtrl', ['$scope', '$http', '$location', 'Auth',
   function ($scope, $http, $location, Auth) {
 
     $scope.signin = function (service) {
-      // Auth.login(service, function () {
-      //   $location.path('profile');
-      // });
-      $http.post('perform_login', $.param($scope.user), {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).success(function (data) {
-        console.log(data);
+      Auth.login($scope.user, function () {
         $location.path('profile');
       });
     };

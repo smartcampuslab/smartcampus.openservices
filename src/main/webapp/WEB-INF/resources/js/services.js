@@ -1,7 +1,7 @@
 'use strict';
 var services = angular.module('openservices.services', ['ngResource', 'ngCookies']);
 
-services.factory('Auth', ['$http', '$cookieStore', 'Facebook', '$rootScope',
+services.factory('Auth', ['$http', '$cookieStore', '$rootScope',
   function ($http, $cookieStore, Facebook, $rootScope) {
     var accessLevels = routingConfig.accessLevels,
       userRoles = routingConfig.userRoles
@@ -37,16 +37,14 @@ services.factory('Auth', ['$http', '$cookieStore', 'Facebook', '$rootScope',
         }).error(error);
       },
       login: function (user, success, error) {
-        Facebook.login(function (response) {
-          $rootScope.currentUser.role = userRoles.user;
-          $rootScope.currentUser.username = response.email;
-          success('ok')
-        });
-
-        /*$http.post('/login', user).success(function (user) {
+        $http.post('perform_login', $.param(user), {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).success(function (data) {
           changeUser(user);
-          success(user);
-        }).error(error);*/
+          success(user)
+        });
       },
       logout: function (success, error) {
         $http.post('/logout').success(function () {

@@ -7,7 +7,7 @@
             </div>
             <div class="panel-body animated fadeInDown" ng-show="isServiceActive(service)">
                 <p>{{service.description}}</p>
-                <a class="btn btn-default btn-sm pull-right" href="/services/1">explore <i class="fa fa-angle-double-right"></i></a>
+                <a class="btn btn-default btn-sm pull-right" ng-href="services/{{service.id}}">explore <i class="fa fa-angle-double-right"></i></a>
             </div>
         </div>
     </div>
