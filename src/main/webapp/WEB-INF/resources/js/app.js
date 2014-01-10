@@ -64,7 +64,7 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
     when('/profile', {
       controller: 'profileCtrl',
       templateUrl: 'partials/profile/show.html',
-      access: access.anon
+      access: access.user
     }).
     when('/profile/edit', {
       controller: 'profileCtrl',
