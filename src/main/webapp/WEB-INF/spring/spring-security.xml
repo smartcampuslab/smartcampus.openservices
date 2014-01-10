@@ -42,7 +42,7 @@
 	 <!-- My authentication with custom db (not using ACL) -->
 	 <authentication-manager  alias="authenticationManager"> <!--  -->
 		<authentication-provider user-service-ref="jdbcUserService">
-			<password-encoder hash="sha">
+			<password-encoder ref="bCryptPasswordEncoder">
 				<!-- Insert here salt -->
 			</password-encoder>
 		</authentication-provider>

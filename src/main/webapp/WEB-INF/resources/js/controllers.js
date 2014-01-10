@@ -10,10 +10,10 @@ app.controller('signinCtrl', ['$scope', '$http', '$location', 'Auth',
       // Auth.login(service, function () {
       //   $location.path('profile');
       // });
-      $http.post('perform_login', $scope.user).success(function (data) {
-        console.log(data)
+      $http.post('perform_login', $.param($scope.user), {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).success(function (data) {
+        console.log(data);
         $location.path('profile');
-      })
+      });
     };
   }
 ]);

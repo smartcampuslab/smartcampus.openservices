@@ -65,11 +65,11 @@ public class HomeController {
 	/**
 	 * If url is wrong, then return index page.
 	 */
-	/*@RequestMapping()
+	@RequestMapping()
 	public String error(HttpServletRequest request) {
 		logger.info("-- Error mapping! --"+ request.getContextPath());
 		return "index";
-	}*/
+	}
 	
 	//try for a strange behavior of spring security
 	/**
@@ -79,7 +79,7 @@ public class HomeController {
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login(){
 		logger.info("-- Login --");
-		return "login";
+		return "index";
 	}
 	
 	/**
