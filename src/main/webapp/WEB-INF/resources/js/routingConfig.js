@@ -9,7 +9,7 @@
     roles: [
       'public',
       'user',
-      'admin'
+      'ROLE_ADMIN'
     ],
 
     /*
@@ -19,8 +19,8 @@
     accessLevels: {
       'public': "*",
       'anon': ['public'],
-      'user': ['user', 'admin'],
-      'admin': ['admin']
+      'user': ['user', 'ROLE_ADMIN'],
+      'ROLE_ADMIN': ['ROLE_ADMIN']
     }
 
   }

@@ -28,7 +28,7 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope',
         if (user === undefined) {
           user = $rootScope.currentUser;
         }
-        return user.role.title === userRoles.user.title || user.role.title === userRoles.admin.title;
+        return user.role.title === userRoles.user.title || user.role.title === userRoles.ROLE_ADMIN.title;
       },
       register: function (user, success, error) {
         $http.post('/register', user).success(function (res) {
@@ -42,11 +42,10 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope',
             'Content-Type': 'application/x-www-form-urlencoded'
           }
         }).success(function (data) {
-          console.log(data.role)
           var role = data.role
           var templ = {
         	  username : data.username,
-            role: userRoles.admin
+            role: userRoles[role]
           };
           changeUser(templ);
           success(user)

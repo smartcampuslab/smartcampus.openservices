@@ -100,7 +100,6 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
   var history = [];
 
   $rootScope.$on('$routeChangeStart', function (event, next) {
-    event.preventDefault();
     history.push($location.$$path);
     $rootScope.error = null;
 
