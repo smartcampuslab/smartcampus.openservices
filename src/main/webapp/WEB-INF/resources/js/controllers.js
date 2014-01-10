@@ -4,7 +4,7 @@ app.controller('homeCtrl', ['$scope', '$http',
 ]);
 
 app.controller('signinCtrl', ['$scope', '$http', '$location', 'Auth',
-  function ($scope, $http, $location, Auth) {
+  function ($scope, $location, Auth) {
 
     $scope.signin = function (service) {
       Auth.login($scope.user, function () {
