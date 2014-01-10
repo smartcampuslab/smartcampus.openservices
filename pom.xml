@@ -251,5 +251,6 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>openservice</finalName>
 	</build>
 </project>
