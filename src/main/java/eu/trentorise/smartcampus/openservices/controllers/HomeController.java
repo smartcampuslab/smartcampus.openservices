@@ -128,6 +128,7 @@ public class HomeController {
 		logger.info("-- Logout "+username+" --"+SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
 		String sessionId = ((WebAuthenticationDetails)SecurityContextHolder.getContext().getAuthentication().getDetails()).getSessionId();
 		logger.info("-- JSessionID: --"+sessionId);
+		SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
 		return "index";
 	}
 	
