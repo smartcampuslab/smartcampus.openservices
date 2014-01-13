@@ -15,7 +15,7 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.controllers;
 
-import java.util.*;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,8 +29,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import eu.trentorise.smartcampus.openservices.dao.*;
-import eu.trentorise.smartcampus.openservices.entities.*;
+import eu.trentorise.smartcampus.openservices.dao.OrganizationDao;
+import eu.trentorise.smartcampus.openservices.dao.ServiceHistoryDao;
+import eu.trentorise.smartcampus.openservices.dao.TemporaryLinkDao;
+import eu.trentorise.smartcampus.openservices.dao.UserDao;
+import eu.trentorise.smartcampus.openservices.dao.UserRoleDao;
+import eu.trentorise.smartcampus.openservices.entities.Organization;
+import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
+import eu.trentorise.smartcampus.openservices.entities.TemporaryLink;
+import eu.trentorise.smartcampus.openservices.entities.User;
+import eu.trentorise.smartcampus.openservices.entities.UserRole;
+import eu.trentorise.smartcampus.openservices.managers.OrganizationManager;
 import eu.trentorise.smartcampus.openservices.support.ApplicationMailer;
 import eu.trentorise.smartcampus.openservices.support.GenerateKey;
 import eu.trentorise.smartcampus.openservices.support.ListOrganization;
@@ -52,6 +61,9 @@ public class OrganizationController {
 	private ServiceHistoryDao shDao;
 	@Autowired
 	private TemporaryLinkDao tlDao;
+	
+	@Autowired
+	private OrganizationManager organizationManager;
 	
 	/*
 	 * Rest web service for Organization
@@ -131,13 +143,7 @@ public class OrganizationController {
 	public HttpStatus createOrganization(@RequestBody Organization org){
 		logger.info("-- Create organization --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		User user = userDao.getUserByUsername(username);
-		org.setCreatorId(user.getId());
-		orgDao.createOrganization(org);
-		//get org id
-		Organization orgSaved = orgDao.getOrganizationByName(org.getName());
-		//add UserRole
-		urDao.createUserRole(orgSaved.getCreatorId(), orgSaved.getId(), "ROLE_ORGOWNER");
+		organizationManager.createOrganization(username, org);
 		return HttpStatus.CREATED;
 	}
 	
@@ -148,23 +154,14 @@ public class OrganizationController {
 	 * @param org
 	 * @return
 	 */
-	@RequestMapping(value = "/delete", method = RequestMethod.POST, consumes="application/json") 
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE) 
 	@ResponseBody
-	public HttpStatus deleteOrganization(@RequestBody Organization org){
+	public HttpStatus deleteOrganization(@PathVariable int id){
 		logger.info("-- Delete organization --");
 		//get user data
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		User user = userDao.getUserByUsername(username);
-		//check user role
-		UserRole ur = urDao.getRoleOfUser(user.getId(), org.getId());
-		if(ur.getRole().equalsIgnoreCase("ROLE_ORGOWNER")){
-			// delete org
-			orgDao.deleteOrganization(org);
-			// TODO delete service
-			// TODO delete user role for organization
-			return HttpStatus.OK;
-		}
-		else return HttpStatus.UNAUTHORIZED;
+		organizationManager.deleteOrganization(username, id);
+		return HttpStatus.OK;
 	}
 	
 	//Organization - Manage organization data: modify organization
@@ -173,25 +170,14 @@ public class OrganizationController {
 	 * @param org
 	 * @return
 	 */
-	@RequestMapping(value = "/modify", method = RequestMethod.POST, consumes="application/json") 
+	@RequestMapping(value = "/modify", method = RequestMethod.PUT, consumes="application/json") 
 	@ResponseBody
 	public HttpStatus modifyOrganization(@RequestBody Organization org){
 		logger.info("-- Modify organization --");
-		Organization o = orgDao.getOrganizationById(org.getId());
 		//get user data
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		User user = userDao.getUserByUsername(username);
-		//check user role
-		UserRole ur = urDao.getRoleOfUser(user.getId(), org.getId());
-		if(ur.getRole().equalsIgnoreCase("ROLE_ORGOWNER")){
-			//TODO which values can be modified by user?
-			o.setDescription(org.getDescription());
-			o.setCategory(org.getCategory());
-			o.setContacts(org.getContacts());
-			orgDao.modifyOrganization(o);
-			return HttpStatus.OK;
-		}
-		else return HttpStatus.UNAUTHORIZED;
+		organizationManager.updateOrganization(username, org);
+		return HttpStatus.OK;
 	}
 	
 	//Organization - Manage organization data: add/remove organization owner (send a link)

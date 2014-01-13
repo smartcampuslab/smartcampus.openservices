@@ -312,11 +312,11 @@ services.factory('Org', ['$resource',
         url: 'api/org/add'
       },
       delete: {
-        method: 'POST',
-        url: 'api/org/delete'
+        method: 'DELETE',
+        url: 'api/org/delete/:id'
       },
       update: {
-        method: 'POST',
+        method: 'PUT',
         url: 'api/org/modify'
       },
       addOwner: {

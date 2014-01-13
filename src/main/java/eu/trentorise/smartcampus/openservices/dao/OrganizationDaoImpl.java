@@ -83,10 +83,6 @@ public class OrganizationDaoImpl implements OrganizationDao{
 	@Override
 	public void createOrganization(Organization org) throws DataAccessException {
 		getEntityManager().persist(org);
-		UserRole ur = new UserRole();
-		ur.setId_org(org.getId());
-		ur.setId_user(org.getCreatorId());
-		getEntityManager().persist(ur);
 	}
 
 	@Transactional
@@ -99,9 +95,9 @@ public class OrganizationDaoImpl implements OrganizationDao{
 
 	@Transactional
 	@Override
-	public void deleteOrganization(Organization org)
+	public void deleteOrganization(int org)
 			throws DataAccessException {
-		getEntityManager().remove(getEntityManager().merge(org));
+		getEntityManager().remove(getEntityManager().find(Organization.class, org));
 		
 	}
 

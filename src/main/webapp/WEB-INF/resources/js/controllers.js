@@ -31,8 +31,18 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
     $scope.template = 'partials/profile/_details.html';
 
     $scope.deleteOrg = function (i) {
-      $scope.user.orgs.splice(i, 1);
+      Org.delete({id:$scope.user.orgs[i].id}, function() {
+    	  console.log('org deleted');
+    	  $scope.user.orgs.splice(i, 1);
+    	  $location.path('profile')
+      });
     };
+    $scope.modifyOrg = function (i) {
+        Org.update($scope.user.orgs[i], function() {
+      	  console.log('org updated');
+      	  $location.path('profile')
+        });
+      };
 
     $scope.deleteService = function (i) {
       $scope.services.splice(i, 1);
@@ -112,8 +122,8 @@ app.controller('newOrgCtrl', ['$scope', '$http', '$location', 'Org',
   }
 ]);
 
-app.controller('editOrgCtrl', ['$scope', '$http', '$location',
-  function ($scope, $http, $location) {
+app.controller('editOrgCtrl', ['$scope', '$http', '$location', '$routeParams', 'Org',
+  function ($scope, $http, $location, $routeParams, Org) {
     $scope.title = 'Edit';
     $http.get('data/user.json').success(function (user) {
       $scope.org = user.orgs[0];

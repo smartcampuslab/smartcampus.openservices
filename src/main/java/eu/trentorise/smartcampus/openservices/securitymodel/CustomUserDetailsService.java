@@ -15,7 +15,9 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.securitymodel;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -26,9 +28,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import eu.trentorise.smartcampus.openservices.dao.*;
-import eu.trentorise.smartcampus.openservices.entities.*;
-import eu.trentorise.smartcampus.openservices.support.EmailValidator;
+import eu.trentorise.smartcampus.openservices.dao.UserDao;
+import eu.trentorise.smartcampus.openservices.dao.UserRoleDao;
+import eu.trentorise.smartcampus.openservices.entities.User;
 
 /**
  * Custom User Details Service
@@ -98,13 +100,6 @@ public class CustomUserDetailsService implements UserDetailsService{
 				
 				//roles: ADMIN or NORMAL user
 				roles.add(new SimpleGrantedAuthority(domainUser.getRole()));
-				
-				//roles: ORGOWNER or SERVICEOWNER
-				//TODO find a way to know for which org
-				List<UserRole> user_role = usDao.getUserRoleByIdUser(userid);
-				for(int i=0; i<user_role.size();i++){
-					roles.add(new SimpleGrantedAuthority(user_role.get(i).getRole()));
-					}
 				
 				return roles;
 			}

@@ -10,9 +10,8 @@
       </h3>
       <p>
         {{org.description}}
-        <button type="button" class="pull-right btn btn-danger btn-xs" ng-click="deleteOrg($index)"><i class="fa fa-trash-o"></i>
-        </button>
-        <a href="/profile/organizations/1/edit" type="button" class="pull-right btn btn-default btn-xs orgbtn"><i class="fa fa-edit"></i>
+        <button type="button" class="pull-right btn btn-danger btn-xs" ng-click="deleteOrg($index)"><i class="fa fa-trash-o"></i></button>
+        <a ng-href="profile/organizations/{{$index}}/edit" type="button" class="pull-right btn btn-default btn-xs orgbtn"><i class="fa fa-edit"></i>
         </a>
       </p>
       <hr />

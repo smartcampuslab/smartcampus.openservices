@@ -71,7 +71,7 @@ public interface OrganizationDao {
 	 * @param username
 	 * @param org_name
 	 */
-	public void deleteOrganization(Organization org) throws DataAccessException;
+	public void deleteOrganization(int org) throws DataAccessException;
 	
 	
 	/**
