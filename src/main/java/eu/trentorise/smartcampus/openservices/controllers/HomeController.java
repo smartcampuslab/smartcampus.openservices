@@ -87,9 +87,12 @@ public class HomeController {
 	 * @return
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login(){
-		logger.info("-- Login --");
-		return "index";
+	@ResponseBody
+	public User login(){
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		User user = userDao.getUserByUsername(username);
+		user.setPassword(null);
+		return user;
 	}
 	
 	/**
