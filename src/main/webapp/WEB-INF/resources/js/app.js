@@ -9,7 +9,7 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
     $httpProvider.interceptors.push(function($q, $location) {
         return {
             'responseError': function(response) {
-                if(response.status === 401 || response.status === 403) {
+                if(response.status === 401) {
                     $location.path('signin');
                     return $q.reject(response);
                 }
@@ -52,6 +52,11 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
     when('/signin', {
       controller: 'signinCtrl',
       templateUrl: 'partials/signin.html',
+      access: access.anon
+    }).
+    when('/signup', {
+      controller: 'signUpCtrl',
+      templateUrl: 'partials/signup.html',
       access: access.anon
     }).
     when('/profile', {

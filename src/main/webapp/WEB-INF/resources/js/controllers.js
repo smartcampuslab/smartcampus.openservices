@@ -7,6 +7,7 @@ app.controller('signinCtrl', ['$scope', '$location', 'Auth',
   function ($scope, $location, Auth) {
 
     $scope.signin = function (service) {
+    	console.log('trying to login')
       Auth.login($scope.user, function () {
         $location.path('profile');
       });
@@ -14,8 +15,19 @@ app.controller('signinCtrl', ['$scope', '$location', 'Auth',
   }
 ]);
 
-app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', '$rootScope',
-  function ($scope, $http, $location, User) {
+app.controller('signUpCtrl', ['$scope', '$location', 'User',
+   function ($scope, $location, User) {
+	$scope.user = new User();
+    $scope.submit = function () {
+    	$scope.user.$save($scope.user,function(){
+    		$location.path('signin')
+    	})
+    };
+}
+]);
+
+app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service', 
+  function ($scope, $http, $location, User, Service) {
     $scope.template = 'partials/profile/_details.html';
 
     $scope.deleteOrg = function (i) {
@@ -34,10 +46,9 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', '$rootSco
     };
 
     $scope.user = User.getInfo();
-
-    $http.get('data/services.json').success(function (services) {
-      $scope.services = services;
-    });
+    $scope.services = Service.get();
+    console.log($scope.services)
+    
   }
 ]);
 

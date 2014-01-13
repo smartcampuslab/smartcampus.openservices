@@ -92,6 +92,7 @@ public class HomeController {
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	@ResponseBody
 	public User login(HttpServletResponse response) throws IOException{
+		logger.info("-- Perform Login --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userDao.getUserByUsername(username);
 		if(user!=null){
@@ -113,6 +114,7 @@ public class HomeController {
 	 */
 	@RequestMapping(value = "/loginfailed", method = RequestMethod.GET)
 	public String loginfailed(HttpServletResponse response) throws IOException{
+		logger.info("-- Login failed --");
 		response.sendError(401);
 		return "index";
 	}
