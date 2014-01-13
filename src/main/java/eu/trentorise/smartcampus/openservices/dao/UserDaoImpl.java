@@ -77,9 +77,9 @@ public class UserDaoImpl implements UserDao{
 	@Transactional
 	@Override
 	public void modifyUser(User user) throws DataAccessException{
-		ShaPasswordEncoder passw = new ShaPasswordEncoder();
-		String newPassw = passw.encodePassword(user.getPassword(), null);
-		user.setPassword(newPassw);
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); 
+		String encodedPassword = ((BCryptPasswordEncoder) passwordEncoder).encode(user.getPassword());
+		user.setPassword(encodedPassword);
 		getEntityManager().merge(user);
 	}
 
