@@ -109,11 +109,12 @@ public class HomeController {
 	 * Show login with error true
 	 * @param model
 	 * @return
+	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/loginfailed", method = RequestMethod.GET)
-	public String loginfailed(ModelMap model){
-		model.addAttribute("error","true");
-		throw new SecurityException();
+	public String loginfailed(HttpServletResponse response) throws IOException{
+		response.sendError(401);
+		return "index";
 	}
 	
 	//User - logout
