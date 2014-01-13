@@ -125,14 +125,14 @@ services.factory('Facebook', ['$resource', '$cookies', '$rootScope',
 
 services.factory('User', ['$resource',
   function ($resource) {
-    return $resource('/openservice/api/user/:id', {}, {
+    return $resource('api/user/:id', {}, {
       update: {
         method: 'POST',
-        url: '/openservice/api/user/modify'
+        url: 'api/user/modify'
       },
       getInfo: {
         method: 'GET',
-        url: '/openservice/api/user/my'
+        url: 'api/user/my'
       },
       create: {
         method: 'POST',
@@ -152,7 +152,11 @@ services.factory('User', ['$resource',
       disable: {
         method: 'GET',
         url: '/api/user/disable/:email'
-      }
+      },
+      save: {
+          method: 'POST',
+          url: 'api/user/add'
+        }
     });
   }
 ]);
@@ -276,7 +280,12 @@ services.factory('Service', ['$resource',
         params: {
           service: {}
         }
-      }
+      },
+      get: {
+          method: 'GET',
+          url: 'api/service/my',
+          isArray: true
+        }
 
     });
   }
