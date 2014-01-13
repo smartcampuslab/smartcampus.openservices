@@ -24,6 +24,7 @@ import javax.persistence.*;
 public class Service {
 
 	@Id
+	@GeneratedValue
 	private int id;
 	@Column(name="name")
 	private String name;

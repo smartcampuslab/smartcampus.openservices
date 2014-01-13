@@ -55,7 +55,6 @@ public class OrganizationDaoImpl implements OrganizationDao{
 		Query q = getEntityManager().createQuery("FROM Organization O WHERE O.id IN " +
 				"( SELECT UR.id_org FROM UserRole UR WHERE UR.id_user=:id_user AND UR.role='ROLE_ORGOWNER')")
 				.setParameter("id_user", id_user);
-		System.out.println("------------");
 		List<Organization> os = q.getResultList();
 		return os;
 	}
@@ -84,6 +83,10 @@ public class OrganizationDaoImpl implements OrganizationDao{
 	@Override
 	public void createOrganization(Organization org) throws DataAccessException {
 		getEntityManager().persist(org);
+		UserRole ur = new UserRole();
+		ur.setId_org(org.getId());
+		ur.setId_user(org.getCreatorId());
+		getEntityManager().persist(ur);
 	}
 
 	@Transactional

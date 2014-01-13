@@ -3,8 +3,8 @@
         <h2>{{title}} Organization</h2>
         <form novalidate role="form" ng-submit="submit()">
             <div class="form-group">
-                <label for="orgname">Service Name</label>
-                <input type="text" class="form-control" id="orgname" placeholder="Service Name" ng-model="org.name">
+                <label for="orgname">Organization Name</label>
+                <input type="text" class="form-control" id="orgname" placeholder="Organization Name" ng-model="org.name">
             </div>
             <div class="form-group">
                 <label for="orgdesc">Description</label>
@@ -12,23 +12,27 @@
             </div>
             <div class="form-group">
                 <label for="activityarea">Activity Area</label>
-                <input type="text" class="form-control" id="activityarea" placeholder="activity area of the organization" ng-model="org.activityarea">
+                <input type="text" class="form-control" id="activityarea" placeholder="activity area of the organization" ng-model="org.activityArea">
             </div>
             <div class="form-group">
-                <label for="category">Categorya</label>
+                <label for="category">Category</label>
                 <input type="text" class="form-control" id="category" placeholder="" ng-model="org.category">
             </div>
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" placeholder="" ng-model="org.email">
+                <input type="email" class="form-control" id="email" placeholder="" ng-model="org.contacts.email">
             </div>
             <div class="form-group">
                 <label for="phone">Phone</label>
-                <input type="text" class="form-control" id="phone" placeholder="" ng-model="org.phone">
+                <input type="text" class="form-control" id="phone" placeholder="" ng-model="org.contacts.phone">
             </div>
             <div class="form-group">
-                <label for="url">Url</label>
-                <input type="text" class="form-control" id="url" placeholder="" ng-model="org.url">
+                <label for="fax">Fax</label>
+                <input type="text" class="form-control" id="fax" placeholder="" ng-model="org.contacts.fax">
+            </div>
+            <div class="form-group">
+                <label for="url">Web page</label>
+                <input type="text" class="form-control" id="web" placeholder="" ng-model="org.contacts.web">
             </div>
             <button type="submit" class="btn btn-info">Save</button>
             <button ng-click="back()" class="pull-right btn btn-default">Go back</button>

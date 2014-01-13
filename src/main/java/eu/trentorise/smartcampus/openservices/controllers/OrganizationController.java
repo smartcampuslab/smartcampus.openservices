@@ -130,11 +130,14 @@ public class OrganizationController {
 	@ResponseBody
 	public HttpStatus createOrganization(@RequestBody Organization org){
 		logger.info("-- Create organization --");
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		User user = userDao.getUserByUsername(username);
+		org.setCreatorId(user.getId());
 		orgDao.createOrganization(org);
 		//get org id
 		Organization orgSaved = orgDao.getOrganizationByName(org.getName());
 		//add UserRole
-		urDao.createUserRole(orgSaved.getId_owner(), orgSaved.getId(), "ROLE_ORGOWNER");
+		urDao.createUserRole(orgSaved.getCreatorId(), orgSaved.getId(), "ROLE_ORGOWNER");
 		return HttpStatus.CREATED;
 	}
 	
@@ -182,7 +185,7 @@ public class OrganizationController {
 		UserRole ur = urDao.getRoleOfUser(user.getId(), org.getId());
 		if(ur.getRole().equalsIgnoreCase("ROLE_ORGOWNER")){
 			//TODO which values can be modified by user?
-			o.setDescriptor(org.getDescriptor());
+			o.setDescription(org.getDescription());
 			o.setCategory(org.getCategory());
 			o.setContacts(org.getContacts());
 			orgDao.modifyOrganization(o);

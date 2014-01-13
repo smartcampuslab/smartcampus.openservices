@@ -17,10 +17,10 @@
 	<http auto-config="true" use-expressions="true"  >
 		<!-- Permission. Note order: general at the end, more specific at the top -->
 		<intercept-url pattern="/api/admin/**" access="hasRole('ROLE_ADMIN')" />
-		<intercept-url pattern="/api/org/my/**" access="hasRole('ROLE_ORGOWNER')"/>
+		<intercept-url pattern="/api/org/my/**" access="isAuthenticated()"/>
 		<intercept-url pattern="/api/org/manage/**" access="isAuthenticated()"/>
 		<intercept-url pattern="/api/org/**" access="hasAnyRole('ROLE_ADMIN','ROLE_ORGOWNER')" />
-		<intercept-url pattern="/api/service/my/**" access="hasRole('ROLE_SERVICEOWNER')" />
+		<intercept-url pattern="/api/service/my/**" access="isAuthenticated()" />
 		<intercept-url pattern="/api/service/view*" access="permitAll"/>
 		<intercept-url pattern="/api/service/**" access="hasAnyRole('ROLE_ADMIN', 'ROLE_SERVICEOWNER')"/>
 		<intercept-url pattern="/login" access="permitAll" />

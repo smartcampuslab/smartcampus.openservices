@@ -26,8 +26,8 @@ app.controller('signUpCtrl', ['$scope', '$location', 'User',
 }
 ]);
 
-app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service', 
-  function ($scope, $http, $location, User, Service) {
+app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service', 'Org', 
+  function ($scope, $http, $location, User, Service, Org) {
     $scope.template = 'partials/profile/_details.html';
 
     $scope.deleteOrg = function (i) {
@@ -45,15 +45,22 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
             });
     };
 
-    $scope.user = User.getInfo();
-    $scope.services = Service.get();
-    console.log($scope.services)
+    User.getInfo({}, function(data) {
+    	$scope.user = data;
+    });
+    
+    Org.get({}, function(data) {
+        $scope.user.orgs = data.orgs;
+    });
+    Service.get({}, function(data) {
+        $scope.user.services = data.services;
+    });
     
   }
 ]);
 
-app.controller('newServiceCtrl', ['$scope', '$http', '$location',
-  function ($scope, $http, $location) {
+app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service',
+  function ($scope, $http, $location, Service) {
     $scope.title = 'New';
     $scope.policies = ['public', 'private'];
     $scope.service = {
@@ -73,7 +80,7 @@ app.controller('newServiceCtrl', ['$scope', '$http', '$location',
   }
 ]);
 
-app.controller('editServiceCtrl', ['$scope', '$http', '$location',
+app.controller('editServiceCtrl', ['$scope', '$http', '$location', 
   function ($scope, $http, $location) {
     $scope.title = 'Edit';
     $scope.policies = ['public', 'private'];
@@ -92,11 +99,14 @@ app.controller('editServiceCtrl', ['$scope', '$http', '$location',
   }
 ]);
 
-app.controller('newOrgCtrl', ['$scope', '$http', '$location',
-  function ($scope, $http, $location) {
+app.controller('newOrgCtrl', ['$scope', '$http', '$location', 'Org',
+  function ($scope, $http, $location, Org) {
     $scope.title = 'New';
     $scope.submit = function () {
-      $location.path('profile');
+        Org.create($scope.org, function() {
+        	console.log('org created')
+            $location.path('profile')
+        });
     };
 
   }

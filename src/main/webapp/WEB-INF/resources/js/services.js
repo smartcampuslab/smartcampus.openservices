@@ -27,7 +27,7 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope',
         if (user === undefined) {
           user = $rootScope.currentUser;
         }
-        return user.role.title === userRoles.ROLE_NORMAL.title || user.role.title === userRoles.ROLE_ADMIN.title;
+        return user && user.role && (user.role.title === userRoles.ROLE_NORMAL.title || user.role.title === userRoles.ROLE_ADMIN.title);
       },
       register: function (user, success, error) {
         $http.post('/register', user).success(function (res) {
@@ -283,8 +283,7 @@ services.factory('Service', ['$resource',
       },
       get: {
           method: 'GET',
-          url: 'api/service/my',
-          isArray: true
+          url: 'api/service/my'
         }
 
     });
@@ -293,41 +292,40 @@ services.factory('Service', ['$resource',
 
 services.factory('Org', ['$resource',
   function ($resource) {
-    return $resource('/api/org/:name', {}, {
-      getMyOrgs: {
+    return $resource('api/org/:name', {}, {
+      get: {
         method: 'GET',
-        url: '/api/org/my/:userId',
-        isArray: true
+        url: 'api/org/my',
       },
       list: {
         method: 'GET',
-        url: '/api/org/list',
+        url: 'api/org/list',
         isArray: true
       },
       getOrgHistory: {
         method: 'GET',
-        url: '/api/org/activity/history/:id',
+        url: 'api/org/activity/history/:id',
         isArray: true
       },
       create: {
         method: 'POST',
-        url: '/api/org/add'
+        url: 'api/org/add'
       },
       delete: {
         method: 'POST',
-        url: '/api/org/delete'
+        url: 'api/org/delete'
       },
       update: {
         method: 'POST',
-        url: '/api/org/modify'
+        url: 'api/org/modify'
       },
       addOwner: {
         method: 'POST',
-        url: '/api/org/manage/owner/add/:key'
+        url: 'api/org/manage/owner/add/:key'
       },
       deleteOwner: {
         method: 'POST',
-        url: '/api/org/manage/owner/delete'
+        url: 'api/org/manage/owner/delete'
       }
     });
   }

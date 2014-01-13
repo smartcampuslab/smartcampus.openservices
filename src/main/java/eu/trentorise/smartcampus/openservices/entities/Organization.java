@@ -15,20 +15,24 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.entities;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.Table;
 
 @Entity
 @Table(name="Organization")
 public class Organization{
 	
 	@Id
+	@GeneratedValue
 	private int id;
 	@Column(name="name")
 	private String name;
-	@Column(name="namespace")
-	private String namespace;
-	@Column(name="descriptor")
-	private String descriptor;
+	@Column(name="description")
+	private String description;
 	@Column(name="activityArea")
 	private String activityArea;
 	@Column(name="category")
@@ -36,8 +40,11 @@ public class Organization{
 	@Column(name="contacts")
 	@Lob
 	private Contact contacts;
-	@Column(name="id_owner")
-	private int id_owner;
+	@Column(name="creator_id")
+	private int creatorId;
+
+	@Column(name="logo")
+	private String logo;
 	
 	public Organization(){
 		
@@ -57,22 +64,6 @@ public class Organization{
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getNamespace() {
-		return namespace;
-	}
-
-	public void setNamespace(String namespace) {
-		this.namespace = namespace;
-	}
-
-	public String getDescriptor() {
-		return descriptor;
-	}
-
-	public void setDescriptor(String descriptor) {
-		this.descriptor = descriptor;
 	}
 
 	public String getActivityArea() {
@@ -99,12 +90,45 @@ public class Organization{
 		this.contacts = contacts;
 	}
 
-	public int getId_owner() {
-		return id_owner;
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
 	}
 
-	public void setId_owner(int id_owner) {
-		this.id_owner = id_owner;
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
 	}
-	
+
+	/**
+	 * @return the creatorId
+	 */
+	public int getCreatorId() {
+		return creatorId;
+	}
+
+	/**
+	 * @param creatorId the creatorId to set
+	 */
+	public void setCreatorId(int creatorId) {
+		this.creatorId = creatorId;
+	}
+
+	/**
+	 * @return the logo
+	 */
+	public String getLogo() {
+		return logo;
+	}
+
+	/**
+	 * @param logo the logo to set
+	 */
+	public void setLogo(String logo) {
+		this.logo = logo;
+	}
 }

@@ -22,6 +22,7 @@ import javax.persistence.*;
 public class User {
 	
 	@Id
+	@GeneratedValue
 	private int id;
 	@Column(name="username")
 	private String username;

@@ -17,6 +17,7 @@ package eu.trentorise.smartcampus.openservices.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
@@ -26,6 +27,7 @@ import javax.persistence.Table;
 public class Method {
 	
 	@Id
+	@GeneratedValue
 	private int id;
 	@Column(name="name")
 	private String name;
