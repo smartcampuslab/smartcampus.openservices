@@ -23,6 +23,7 @@ import javax.persistence.Query;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -85,9 +86,9 @@ public class UserDaoImpl implements UserDao{
 	@Transactional
 	@Override
 	public void addUser(User user) throws DataAccessException{
-		ShaPasswordEncoder passw = new ShaPasswordEncoder();
-		String newPassw = passw.encodePassword(user.getPassword(), null);
-		user.setPassword(newPassw);
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); 
+		String encodedPassword = ((BCryptPasswordEncoder) passwordEncoder).encode(user.getPassword());
+		user.setPassword(encodedPassword);
 		getEntityManager().persist(user);
 	}
 
