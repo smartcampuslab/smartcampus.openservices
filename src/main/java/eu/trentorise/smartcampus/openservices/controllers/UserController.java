@@ -92,12 +92,14 @@ public class UserController {
 		//Check username
 		User userDB = userDao.getUserByUsername(user.getUsername());
 		if(userDB!=null){
-			response.sendError(403, "Username already use");
+			response.setHeader("403", "Username already use");
+			return null;
 		}
 		//Check email
 		EmailValidator ev = new EmailValidator();
 		if(!ev.validate(user.getEmail())){
-			response.sendError(403, "Email is not valid");
+			response.setHeader("403", "Username already use");
+			return null;
 		}
 		user.setEnabled(0);
 		user.setRole("ROLE_NORMAL");
