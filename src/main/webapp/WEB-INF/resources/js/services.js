@@ -10,7 +10,7 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope',
         role: userRoles.public
       };
 
-    $cookieStore.remove('user');
+    //$cookieStore.remove('user');
 
     function changeUser(user) {
       _.extend($rootScope.currentUser, user);
@@ -41,12 +41,16 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope',
             'Content-Type': 'application/x-www-form-urlencoded'
           }
         }).success(function (data) {
+        	console.log('user data: ', data)
           var role = data.role
           var templ = {
         	  username : data.username,
             role: userRoles[role]
           };
+          
           changeUser(templ);
+          $cookieStore.remove('user');
+          $cookieStore.put('user',$rootScope.currentUser);
           success(user)
         });
       },
