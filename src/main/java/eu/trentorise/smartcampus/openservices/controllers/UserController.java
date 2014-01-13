@@ -49,7 +49,9 @@ public class UserController {
 	@ResponseBody
 	public User getUserById(@PathVariable int id){
 		logger.info("-- User Data by Id --");
-		return userDao.getUserById(id);
+		User user = userDao.getUserById(id);
+		user.setPassword(null);
+		return user;
 	}
 	
 	/**
@@ -63,7 +65,9 @@ public class UserController {
 	public User getUserByUsername(){
 		logger.info("-- My User Data--");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		return userDao.getUserByUsername(username);
+		User user = userDao.getUserByUsername(username);
+		user.setPassword(null);
+		return user;
 	}
 	
 	/**
@@ -116,7 +120,10 @@ public class UserController {
 	public User modifyUserData(@RequestBody User user){
 		logger.info("-- User modify --");
 		userDao.modifyUser(user);
-		return userDao.getUserByUsername(user.getUsername());
+		User userN = userDao.getUserByUsername(user.getUsername());
+		userN.setPassword(null);
+		return userN;
+		
 	}
 	
 	/**
@@ -132,7 +139,10 @@ public class UserController {
 		logger.info("-- User disable --");
 		User user = userDao.getUserByUsername(username);
 		userDao.disableUser(user);
-		return userDao.getUserById(user.getId());
+		
+		User userN = userDao.getUserById(user.getId());
+		userN.setPassword(null);
+		return userN;
 	}
 	
 }
