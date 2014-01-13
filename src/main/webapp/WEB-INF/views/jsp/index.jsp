@@ -49,7 +49,7 @@
           </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li><a gravatar href="./signin">Sign in</a> 
+          <li gravatar><a href="signin">Sign in</a> 
           </li>
         </ul>
       </div>

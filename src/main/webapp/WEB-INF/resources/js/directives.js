@@ -34,7 +34,20 @@ directives.directive('gravatar', ['$timeout', 'Gravatar',
       link: function (scope, element, attrs) {
         scope.$watch('currentUser.username', function (val) {
           if (val) {
-            element[0].outerHTML = '<a href="profile">Profile <img class="media-object" src="' + Gravatar.picture(40) + '" /></a>';
+        	  $timeout(function(){
+        		  scope.$apply(function(){
+        	        	element[0].outerHTML = '<li class="dropdown">\
+        	    	        <a ng-href="" class="dropdown-toggle" data-toggle="dropdown">Menu <b class="caret"></b></a>\
+        	    	        <ul class="dropdown-menu">\
+        	    	          <li><a href="profile">Profile</a></li>\
+        	    	          <li class="divider"></li>\
+        	    	          <li><a ng-click="logout()" ng-href="">Logout</a></li>\
+        	    	        </ul>\
+        	    	      </li>';
+        	        	// <img class="media-object" src="' + Gravatar.picture(40) + '" />
+        	          });
+        	  })
+        	  
           }
         })
 

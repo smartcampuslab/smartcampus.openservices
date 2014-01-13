@@ -56,10 +56,12 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope',
       },
       logout: function (success, error) {
         $http.post('/logout').success(function () {
+          
           changeUser({
             username: '',
             role: userRoles.public
           });
+          $cookieStore.remove('user');
           success();
         }).error(error);
       },
@@ -123,13 +125,14 @@ services.factory('Facebook', ['$resource', '$cookies', '$rootScope',
 
 services.factory('User', ['$resource',
   function ($resource) {
-    return $resource('/api/user/:id', {}, {
+    return $resource('/openservice/api/user/:id', {}, {
       update: {
-        method: 'PUT'
+        method: 'POST',
+        url: '/openservice/api/user/modify'
       },
       getInfo: {
         method: 'GET',
-        url: '/api/user/username/:email'
+        url: '/openservice/api/user/my'
       },
       create: {
         method: 'POST',

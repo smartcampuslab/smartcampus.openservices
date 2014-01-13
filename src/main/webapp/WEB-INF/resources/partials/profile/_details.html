@@ -2,43 +2,34 @@
   <div class="row">
     <div class="col-md-4">
       <p>Name:
-        <strong>{{user.name}}</strong>
+        <strong>{{user.profile.name}}</strong>
       </p>
       <p>Surname:
-        <strong>{{user.surname}}</strong>
+        <strong>{{user.profile.surname}}</strong>
       </p>
       <p>Address:
-        <strong>{{user.address}}</strong>
-      </p>
-      <p>City:
-        <strong>{{user.city}}</strong>
-      </p>
-      <p>Postal code:
-        <strong>{{user.postalcode}}</strong>
+        <strong>{{user.profile.address}}</strong>
       </p>
       <p>Country:
-        <strong>{{user.country}}</strong>
+        <strong>{{user.profile.country}}</strong>
       </p>
     </div>
     <div class="col-md-4">
-      <p>Tax Code:
-        <strong>{{user.taxcode}}</strong>
-      </p>
       <p>E-mail:
         <strong>{{user.email}}</strong>
       </p>
       <p>Phone:
-        <strong>{{user.phone}}</strong>
+        <strong>{{user.profile.phone}}</strong>
       </p>
       <p>Mobile:
-        <strong>{{user.mobile}}</strong>
+        <strong>{{user.profile.mobile}}</strong>
       </p>
     </div>
   </div>
   <br>
   <div class="row">
     <div class="col-md-2 col-md-offset-10">
-      <a href="/profile/edit" class="btn btn-info btn-block">Edit</a>
+      <a href="profile/edit" class="btn btn-info btn-block">Edit</a>
     </div>
   </div>
 

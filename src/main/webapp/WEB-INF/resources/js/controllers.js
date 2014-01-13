@@ -17,9 +17,7 @@ app.controller('signinCtrl', ['$scope', '$location', 'Auth',
 app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', '$rootScope',
   function ($scope, $http, $location, User) {
     $scope.template = 'partials/profile/_details.html';
-    ////User.getUserinfo({
-    //  email: $rootScope.user.email
-    //});
+
     $scope.deleteOrg = function (i) {
       $scope.user.orgs.splice(i, 1);
     };
@@ -29,12 +27,13 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', '$rootSco
     };
 
     $scope.submit = function () {
-      $location.path('profile');
+            $scope.user.$update($scope.user, function() {
+            	console.log('user updated')
+                $location.path('profile')
+            });
     };
 
-    $http.get('data/user.json').success(function (user) {
-      $scope.user = user;
-    });
+    $scope.user = User.getInfo();
 
     $http.get('data/services.json').success(function (services) {
       $scope.services = services;
