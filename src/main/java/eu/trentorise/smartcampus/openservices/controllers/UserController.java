@@ -15,6 +15,10 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.controllers;
 
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +26,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import com.sun.mail.iap.Response;
+
 import eu.trentorise.smartcampus.openservices.dao.UserDao;
 import eu.trentorise.smartcampus.openservices.entities.User;
 import eu.trentorise.smartcampus.openservices.support.ApplicationMailer;
+import eu.trentorise.smartcampus.openservices.support.EmailValidator;
 
 @Controller
 @RequestMapping(value="/api/user")
@@ -72,14 +79,26 @@ public class UserController {
 	
 	/**
 	 * Get in input a User data and add it to User table.
+	 * First check if username is already in use.
 	 * Return saved user.
 	 * @param user
 	 * @return
+	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
-	public User createUser(@RequestBody User user){
+	public User createUser(@RequestBody User user, HttpServletResponse response) throws IOException{
 		logger.info("-- Add user data --");
+		//Check username
+		User userDB = userDao.getUserByUsername(user.getUsername());
+		if(userDB!=null){
+			response.sendError(403, "Username already use");
+		}
+		//Check email
+		EmailValidator ev = new EmailValidator();
+		if(!ev.validate(user.getEmail())){
+			response.sendError(403, "Email is not valid");
+		}
 		user.setEnabled(0);
 		user.setRole("ROLE_NORMAL");
 		userDao.addUser(user);
