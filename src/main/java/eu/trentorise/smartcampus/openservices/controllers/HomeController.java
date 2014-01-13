@@ -15,6 +15,8 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.controllers;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -85,14 +87,21 @@ public class HomeController {
 	/**
 	 * Login page
 	 * @return
+	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	@ResponseBody
-	public User login(){
+	public User login(HttpServletResponse response) throws IOException{
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userDao.getUserByUsername(username);
-		user.setPassword(null);
-		return user;
+		if(user!=null){
+			user.setPassword(null);
+			return user;
+		}
+		else{
+			response.sendError(401);
+			return null;
+		}
 	}
 	
 	/**
