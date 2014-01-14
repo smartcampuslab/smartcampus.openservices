@@ -62,7 +62,6 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope',
             role: userRoles.public
           });
           $cookieStore.remove('user');
-          $location.path('/')
           success();
         }).error(error);
       },
