@@ -90,28 +90,15 @@ app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service',
     $scope.submitService = function(){
     	console.log('saving service')
     	Service.create($scope.service,function(){
-    		console.log('service added')
+    		$location.path('profile');
     	});
     }
   }
 ]);
 
-app.controller('editServiceCtrl', ['$scope', '$http', '$location', 
-  function ($scope, $http, $location) {
-    $scope.title = 'Edit';
-    $scope.policies = ['public', 'private'];
-    $http.get('data/user.json').success(function (user) {
-      $scope.orgs = user.orgs;
-    });
-    $http.get('data/service.json').success(function (service) {
-      $scope.service = service;
-    });
-    $http.get('data/categories.json').success(function (cats) {
-      $scope.cats = cats;
-    });
-    $scope.submit = function () {
-      $location.path('profile');
-    };
+app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Service',
+  function ($scope, $routeParams, $location, Service) {
+	$scope.service = Service.getDescription({id: $routeParams.id})
   }
 ]);
 

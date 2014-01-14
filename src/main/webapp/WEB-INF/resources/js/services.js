@@ -207,7 +207,7 @@ services.factory('Service', ['$resource',
       },
       getDescription: {
         method: 'GET',
-        url: '/api/service/view/description/:id'
+        url: 'api/service/view/description/:id'
       },
       getMethods: {
         method: 'GET',
