@@ -85,7 +85,6 @@ public class HomeController {
 	public void error(HttpServletResponse response) {
 		logger.info("-- Error mapping! --");
 		response.setStatus(404);
-		//return "index";
 	}
 	
 	//try for a strange behavior of spring security
