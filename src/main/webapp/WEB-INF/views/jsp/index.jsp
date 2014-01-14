@@ -37,7 +37,7 @@
         <a class="navbar-brand" href="#">Open Services</a>
       </div>
 
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <div ng-controller="navCtrl" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
           <li class="active"><a href="#">Whishlist</a>
           </li>
@@ -70,7 +70,6 @@
   <script src="js/vendor/bootstrap.min.js"></script>
   <script src="js/vendor/holder.js"></script>
   <script src="js/vendor/prism.js"></script>
-  <script src="http://connect.facebook.net/en_US/all.js"></script>
 
   <script src="js/vendor/angular.min.js"></script>
   <script src="js/vendor/angular-route.min.js"></script>

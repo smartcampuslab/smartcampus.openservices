@@ -26,14 +26,12 @@ public class Service {
 	@Id
 	@GeneratedValue
 	private int id;
-	@Column(name="name")
+	@Column(name="name", unique=true, nullable=false)
 	private String name;
-	@Column(name="namespace")
-	private String namespace;
-	@Column(name="id_owner")
-	private int id_owner;
-	@Column(name="id_org")
-	private int id_org;
+	@Column(name="creator_id")
+	private int creatorId;
+	@Column(name="organization_id")
+	private int organizationId;
 	@Column(name="description")
 	private String description;
 	@Column(name="tags")
@@ -44,18 +42,19 @@ public class Service {
 	private String license;
 	@Column(name="version")
 	private String version;
+	@Column(name="expiration")
+	private long expiration;
+	@Column(name="documentation")
+	private String documentation;
+	@Column(name="state")
+	private String state;
+	
 	@Column(name="accessInformation")
 	@Lob
 	private AccessInformation accessInformation;
-	@Column(name="documentation")
-	private String documentation;
-	@Column(name="expiration")
-	private Date expiration;
-	@Column(name="implementationInfo")
+	@Column(name="implementation")
 	@Lob
-	private ImplementationInfo implementationInfo;
-	@Column(name="state")
-	private String state;
+	private ImplementationInfo implementation;
 	
 	public Service(){
 		
@@ -75,30 +74,6 @@ public class Service {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getNamespace() {
-		return namespace;
-	}
-
-	public void setNamespace(String namespace) {
-		this.namespace = namespace;
-	}
-
-	public int getId_owner() {
-		return id_owner;
-	}
-
-	public void setId_owner(int id_owner) {
-		this.id_owner = id_owner;
-	}
-
-	public int getId_org() {
-		return id_org;
-	}
-
-	public void setId_org(int id_org) {
-		this.id_org = id_org;
 	}
 
 	public String getDescription() {
@@ -157,20 +132,12 @@ public class Service {
 		this.documentation = documentation;
 	}
 
-	public Date getExpiration() {
+	public long getExpiration() {
 		return expiration;
 	}
 
-	public void setExpiration(Date expiration) {
+	public void setExpiration(long expiration) {
 		this.expiration = expiration;
-	}
-
-	public ImplementationInfo getImplementationInfo() {
-		return implementationInfo;
-	}
-
-	public void setImplementationInfo(ImplementationInfo implementationInfo) {
-		this.implementationInfo = implementationInfo;
 	}
 
 	public String getState() {
@@ -181,4 +148,27 @@ public class Service {
 		this.state = state;
 	}
 
+	public int getCreatorId() {
+		return creatorId;
+	}
+
+	public void setCreatorId(int creatorId) {
+		this.creatorId = creatorId;
+	}
+
+	public int getOrganizationId() {
+		return organizationId;
+	}
+
+	public void setOrganizationId(int organizationId) {
+		this.organizationId = organizationId;
+	}
+
+	public ImplementationInfo getImplementation() {
+		return implementation;
+	}
+
+	public void setImplementation(ImplementationInfo implementation) {
+		this.implementation = implementation;
+	}
 }

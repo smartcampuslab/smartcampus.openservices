@@ -28,26 +28,24 @@ directives.directive('prism', ['$timeout',
   }
 ]);
 
-directives.directive('gravatar', ['$timeout', 'Gravatar',
-  function ($timeout, Gravatar) {
+directives.directive('gravatar', ['$timeout', 'Gravatar','$compile',
+  function ($timeout, Gravatar, $compile) {
     return {
-      link: function (scope, element, attrs) {
+    	
+      link: function (scope, element, attrs, navCtrl) {
         scope.$watch('currentUser.username', function (val) {
           if (val) {
-        	  $timeout(function(){
-        		  scope.$apply(function(){
-        	        	element[0].outerHTML = '<li class="dropdown">\
-        	    	        <a ng-href="" class="dropdown-toggle" data-toggle="dropdown">Menu <b class="caret"></b></a>\
-        	    	        <ul class="dropdown-menu">\
-        	    	          <li><a href="profile">Profile</a></li>\
-        	    	          <li class="divider"></li>\
-        	    	          <li><a ng-click="logout()" ng-href="">Logout</a></li>\
-        	    	        </ul>\
-        	    	      </li>';
-        	        	// <img class="media-object" src="' + Gravatar.picture(40) + '" />
-        	          });
-        	  })
-        	  
+        	  var html ='<li class="dropdown">\
+	    	        <a ng-href="" class="dropdown-toggle" data-toggle="dropdown">Menu <b class="caret"></b></a>\
+	    	        <ul class="dropdown-menu">\
+	    	          <li><a href="profile">Profile</a></li>\
+	    	          <li class="divider"></li>\
+	    	          <li><a ng-click="logout()" href="#">Logout</a></li>\
+	    	        </ul>\
+	    	      </li>';
+        	  var e = $compile(html)(scope);
+              element.replaceWith(e);
+        	  // <img class="media-object" src="' + Gravatar.picture(40) + '" />
           }
         })
 

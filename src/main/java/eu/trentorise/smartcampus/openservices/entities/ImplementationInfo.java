@@ -16,13 +16,14 @@
 package eu.trentorise.smartcampus.openservices.entities;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.List;
 
 public class ImplementationInfo implements Serializable{
-	
+	private static final long serialVersionUID = 1L;
+
 	private String executionEnvironment;
-	private List<String> serviceDependencies;
-	private List<String> engine;
+	private List<Integer> serviceDependencies;
+	private String hosting;
 	private String sourceCode;
 	
 	public ImplementationInfo(){
@@ -37,22 +38,6 @@ public class ImplementationInfo implements Serializable{
 		this.executionEnvironment = executionEnvironment;
 	}
 
-	public List<String> getServiceDependencies() {
-		return serviceDependencies;
-	}
-
-	public void setServiceDependencies(List<String> serviceDependencies) {
-		this.serviceDependencies = serviceDependencies;
-	}
-
-	public List<String> getEngine() {
-		return engine;
-	}
-
-	public void setEngine(List<String> engine) {
-		this.engine = engine;
-	}
-
 	public String getSourceCode() {
 		return sourceCode;
 	}
@@ -60,7 +45,20 @@ public class ImplementationInfo implements Serializable{
 	public void setSourceCode(String sourceCode) {
 		this.sourceCode = sourceCode;
 	}
-	
-	
 
+	public List<Integer> getServiceDependencies() {
+		return serviceDependencies;
+	}
+
+	public void setServiceDependencies(List<Integer> serviceDependencies) {
+		this.serviceDependencies = serviceDependencies;
+	}
+
+	public String getHosting() {
+		return hosting;
+	}
+
+	public void setHosting(String hosting) {
+		this.hosting = hosting;
+	}
 }

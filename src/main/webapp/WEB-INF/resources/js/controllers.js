@@ -3,11 +3,23 @@ app.controller('homeCtrl', ['$scope', '$http',
   function ($scope, $http) {}
 ]);
 
+app.controller('navCtrl', ['$scope', '$http','Auth',
+                            function ($scope, $http, Auth) {
+	$scope.logout = function(){
+		console.log('loggingout')
+		Auth.logout(function(){
+			console.log('logged out')
+			$location.path('/')
+		});
+	}
+}
+                          ]);
+
 app.controller('signinCtrl', ['$scope', '$location', 'Auth',
   function ($scope, $location, Auth) {
 
     $scope.signin = function (service) {
-    	console.log('trying to login');
+    	console.log('trying to login')
       Auth.login($scope.user, function () {
         $location.path('profile');
       });
@@ -20,8 +32,8 @@ app.controller('signUpCtrl', ['$scope', '$location', 'User',
 	$scope.user = new User();
     $scope.submit = function () {
     	$scope.user.$save($scope.user,function(){
-    		$location.path('signin');
-    	});
+    		$location.path('signin')
+    	})
     };
 }
 ]);
@@ -31,16 +43,16 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
     $scope.template = 'partials/profile/_details.html';
 
     $scope.deleteOrg = function (i) {
-      Org.delete({id:$scope.user.orgs[i].id}, function() {
+      Org.delete({id:$scope.orgs[i].id}, function() {
     	  console.log('org deleted');
-    	  $scope.user.orgs.splice(i, 1);
-    	  $location.path('profile');
+    	  $scope.orgs.splice(i, 1);
+    	  $location.path('profile')
       });
     };
     $scope.modifyOrg = function (i) {
-        Org.update($scope.user.orgs[i], function() {
+        Org.update($scope.orgs[i], function() {
       	  console.log('org updated');
-      	  $location.path('profile');
+      	  $location.path('profile')
         });
       };
 
@@ -50,78 +62,72 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
 
     $scope.submit = function () {
             $scope.user.$update($scope.user, function() {
-            	console.log('user updated');
-                $location.path('profile');
+            	console.log('user updated')
+                $location.path('profile')
             });
     };
+    
+
 
     User.getInfo({}, function(data) {
     	$scope.user = data;
     });
     
     Org.get({}, function(data) {
-        $scope.user.orgs = data.orgs;
+    	console.log('getting orgs',data)
+        $scope.orgs = data.orgs;
     });
     Service.get({}, function(data) {
-        $scope.user.services = data.services;
+    	console.log('getting services',data)
+        $scope.services = data.services;
     });
     
-  }]);
+    
+  }
+]);
 
-app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service',
-  function ($scope, $http, $location, Service) {
-    $scope.title = 'New';
-    $scope.policies = ['public', 'private'];
-    $scope.service = {
-      license: 'somelicense'
-    };
-    $http.get('data/user.json').success(function (user) {
-      $scope.orgs = user.orgs;
-    });
+app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service', 'Org',
+  function ($scope, $http, $location, Service, Org) {
 
-    $http.get('data/categories.json').success(function (cats) {
-      $scope.cats = cats;
+    Org.get({}, function(data) {
+    	console.log('getting orgs',data)
+        $scope.orgs = data.orgs;
     });
 
-    $scope.submit = function () {
-      $location.path('profile');
-    };
-  }]);
+    $scope.submit = function(){
+    	console.log('saving service');
+    	if ($scope.service.expiration) {
+    		$scope.service.expiration = new Date($scope.service.expiration).getTime();
+    	}
+    	Service.create($scope.service,function(){
+    		$location.path('profile');
+    	});
+    }
+  }
+]);
 
-app.controller('editServiceCtrl', ['$scope', '$http', '$location', 
-  function ($scope, $http, $location) {
-    $scope.title = 'Edit';
-    $scope.policies = ['public', 'private'];
-    $http.get('data/user.json').success(function (user) {
-      $scope.orgs = user.orgs;
-    });
-    $http.get('data/service.json').success(function (service) {
-      $scope.service = service;
-    });
-    $http.get('data/categories.json').success(function (cats) {
-      $scope.cats = cats;
-    });
-    $scope.submit = function () {
-      $location.path('profile');
-    };
-  }]);
+app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Service',
+  function ($scope, $routeParams, $location, Service) {
+	$scope.service = Service.getDescription({id: $routeParams.id})
+  }
+]);
 
 app.controller('newOrgCtrl', ['$scope', '$http', '$location', 'Org',
   function ($scope, $http, $location, Org) {
     $scope.title = 'New';
     $scope.submit = function () {
         Org.create($scope.org, function() {
-        	console.log('org created');
-            $location.path('profile');
+        	console.log('org created')
+            $location.path('profile')
         });
     };
 
-  }]);
+  }
+]);
 
 app.controller('editOrgCtrl', ['$scope', '$http', '$location', '$routeParams', 'Org',
   function ($scope, $http, $location, $routeParams, Org) {
     $scope.title = 'Edit';
-    
     Org.getById({id:$routeParams.id}, function (org) {
       $scope.org = org;
     });
@@ -131,7 +137,8 @@ app.controller('editOrgCtrl', ['$scope', '$http', '$location', '$routeParams', '
     	    $location.path('profile');
     	});
     };
-  }]);
+  }
+]);
 
 app.controller('categoriesCtrl', ['$scope', '$http', '$location',
   function ($scope, $http, $location) {
@@ -164,7 +171,8 @@ app.controller('categoriesCtrl', ['$scope', '$http', '$location',
       $scope.categoryActive = category;
       $location.path('services');
     };
-  }]);
+  }
+]);
 
 app.controller('servicesCtrl', ['$scope', '$http',
   function ($scope, $http) {
@@ -193,7 +201,8 @@ app.controller('servicesCtrl', ['$scope', '$http',
         $scope.servicesActive.splice(index, 1);
       }
     };
-  }]);
+  }
+]);
 
 app.controller('cbCtrl', ['$location',
   function ($location) {
@@ -217,18 +226,19 @@ app.controller('cbCtrl', ['$location',
 
     window.opener.postMessage(params, "*");
     window.close();
-  }]);
+  }
+]);
 
 app.controller('serviceCtrl', ['$scope', '$http', '$cookieStore', '$location', 'oAuth',
   function ($scope, $http, $cookieStore, $location, oAuth) {
     oAuth.config.clientId = 'fcb1cb81-50a7-4948-8f46-05a1f14e7089';
-    oAuth.config.scopes = ["smartcampus.profile.basicprofile.me"];
+    oAuth.config.scopes = ["smartcampus.profile.basicprofile.me"]
 
     $scope.getToken = function () {
       oAuth.config.authorizationEndpoint = $scope.request.endpoint + $scope.request.method.authdescriptor.authUrl;
       oAuth.getToken(function (data) {
-        console.log(data);
-        $scope.request.sample.headers.Authorization = 'Bearer ' + data.access_token;
+        console.log(data)
+        $scope.request.sample.headers.Authorization = 'Bearer ' + data.access_token
         // $http({
         //   method: 'POST',
         //   url: $scope.request.endpoint + $scope.request.method.authdescriptor.validationUrl,
@@ -263,7 +273,7 @@ app.controller('serviceCtrl', ['$scope', '$http', '$cookieStore', '$location', '
       if ($location.hash() != "") {
         $http.post($scope.request.method.authdescriptor.validationUrl + $location.hash().match(/#(.*)/)[1]).
         success(function (data) {
-          console.log(data);
+          console.log(data)
           $cookieStore.put('token', data);
           $scope.token = JSON.stringify(token, undefined, 2);
         });
@@ -276,21 +286,21 @@ app.controller('serviceCtrl', ['$scope', '$http', '$cookieStore', '$location', '
     $scope.checkBeforeSend = function () {
       //&& request.method.authdescriptor && !request.sample.headers['Authorization']
       if ($scope.request.method && $scope.request.endpoint && $scope.request.sample && !$scope.request.method.authdescriptor.type) {
-        return true;
+        return true
       } else if ($scope.request.method && $scope.request.endpoint && $scope.request.sample && $scope.request.method.authdescriptor.type && $scope.request.sample.headers['Authorization']) {
-        return true;
+        return true
       } else {
-        return false;
+        return false
       }
-    };
+    }
     $scope.checkBeforeToken = function () {
       //&& request.method.authdescriptor && !request.sample.headers['Authorization']
       if ($scope.request.method && $scope.request.endpoint && $scope.request.sample && $scope.request.method.authdescriptor) {
-        return true;
+        return true
       } else {
-        return false;
+        return false
       }
-    };
+    }
 
     $scope.send = function () {
       console.info($scope.request.sample.headers);
@@ -307,7 +317,9 @@ app.controller('serviceCtrl', ['$scope', '$http', '$cookieStore', '$location', '
         }
         $scope.response += '\n' + JSON.stringify(data, null, 2);
       }).error(function (err) {
-        console.log(err);
+        console.log(err)
       });
     };
-  }]);
+
+  }
+]);
