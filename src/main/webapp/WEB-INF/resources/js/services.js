@@ -41,10 +41,17 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope',
             'Content-Type': 'application/x-www-form-urlencoded'
           }
         }).success(function (data) {
+<<<<<<< HEAD
         	console.log('user data: ', data)
           var role = data.role
           var templ = {
         	  username : data.username,
+=======
+                console.log('user data: ', data)
+          var role = data.role
+          var templ = {
+                  username : data.username,
+>>>>>>> 5c661b8919f517977613bcced509796b2db63879
             role: userRoles[role]
           };
           
@@ -603,4 +610,8 @@ services.factory('oAuth', ['$http', '$window', '$location', '$rootScope',
       }
     }
   }
+<<<<<<< HEAD
 ]);
+=======
+]);
+>>>>>>> 5c661b8919f517977613bcced509796b2db63879
