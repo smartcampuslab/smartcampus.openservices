@@ -81,11 +81,12 @@ public class HomeController {
 	/**
 	 * If url is wrong, then return index page.
 	 */
-	/*@RequestMapping()
-	public String error(HttpServletRequest request) {
-		logger.info("-- Error mapping! --"+ request.getContextPath());
-		return "index";
-	}*/
+	@RequestMapping()
+	public void error(HttpServletResponse response) {
+		logger.info("-- Error mapping! --");
+		response.setStatus(404);
+		//return "index";
+	}
 	
 	//try for a strange behavior of spring security
 	/**
