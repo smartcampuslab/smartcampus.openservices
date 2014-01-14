@@ -35,9 +35,7 @@
 			default-target-url="/welcome" 
 			authentication-failure-url="/loginfailed"
 			login-processing-url="/perform_login" /><!-- j_spring_security_check default value -->
-		<logout logout-success-url="/logout" 
-			invalidate-session="true" 
-				delete-cookies="true"/>		
+		<logout logout-success-url="/logout" invalidate-session="true" delete-cookies="JSESSIONID"/>		
 	</http>
 	
 	 <!-- My authentication with custom db (not using ACL) -->

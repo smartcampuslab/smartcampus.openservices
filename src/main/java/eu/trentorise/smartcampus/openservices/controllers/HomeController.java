@@ -17,9 +17,11 @@ package eu.trentorise.smartcampus.openservices.controllers;
 
 import java.io.IOException;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.junit.runner.Request;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
@@ -68,9 +70,11 @@ public class HomeController {
 	@RequestMapping(value="/welcome", method = RequestMethod.GET)
 	@ResponseBody
 	public User printWelcome() {
+		logger.info("-- Welcome after login --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userDao.getUserByUsername(username);
 		user.setPassword(null);
+		logger.info("-- User "+username+" --");
 		return user;
 	}
 	
@@ -90,19 +94,20 @@ public class HomeController {
 	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	@ResponseBody
-	public User login(HttpServletResponse response) throws IOException{
+	//@ResponseBody
+	public String login(HttpServletResponse response) throws IOException{
 		logger.info("-- Perform Login --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userDao.getUserByUsername(username);
 		if(user!=null){
 			user.setPassword(null);
-			return user;
+			//return user;
 		}
 		else{
-			response.sendError(401);
-			return null;
+			//response.sendError(401);
+			//return null;
 		}
+		return "index";
 	}
 	
 	/**
@@ -125,12 +130,21 @@ public class HomeController {
 	 * @return
 	 */
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logout(){
+	public String logout(HttpServletRequest request, HttpServletResponse response){
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		logger.info("-- Logout "+username+" --"+SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
 		String sessionId = ((WebAuthenticationDetails)SecurityContextHolder.getContext().getAuthentication().getDetails()).getSessionId();
 		logger.info("-- JSessionID: --"+sessionId);
-		SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
+		/*SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
+		Cookie[] cookies = request.getCookies();
+		if(cookies!=null){
+			for (int i = 0; i < cookies.length; i++) {
+				cookies[i].setValue("");
+				cookies[i].setPath("/");
+				cookies[i].setMaxAge(0);
+				response.addCookie(cookies[i]);
+			}
+		}*/
 		return "index";
 	}
 	
