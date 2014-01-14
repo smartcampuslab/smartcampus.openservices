@@ -36,7 +36,7 @@ directives.directive('gravatar', ['$timeout', 'Gravatar','$compile',
         scope.$watch('currentUser.username', function (val) {
           if (val) {
         	  var html ='<li class="dropdown">\
-	    	        <a ng-href="" class="dropdown-toggle" data-toggle="dropdown">Menu <b class="caret"></b></a>\
+	    	        <a ng-href="#" class="dropdown-toggle" data-toggle="dropdown">Menu <b class="caret"></b></a>\
 	    	        <ul class="dropdown-menu">\
 	    	          <li><a href="profile">Profile</a></li>\
 	    	          <li class="divider"></li>\

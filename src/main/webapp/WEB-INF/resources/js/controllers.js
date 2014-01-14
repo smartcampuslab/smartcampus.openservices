@@ -6,9 +6,7 @@ app.controller('homeCtrl', ['$scope', '$http',
 app.controller('navCtrl', ['$scope', '$http','Auth', '$location',
                             function ($scope, $http, Auth, $location) {
 	$scope.logout = function(){
-		console.log('loggingout')
 		Auth.logout(function(){
-			console.log('logged out')
 			$location.path('/')
 		});
 	}
