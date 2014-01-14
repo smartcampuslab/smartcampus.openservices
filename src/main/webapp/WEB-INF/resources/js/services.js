@@ -218,11 +218,7 @@ services.factory('Service', ['$resource',
       },
       create: {
         method: 'POST',
-<<<<<<< HEAD
         url: 'api/service/add'
-=======
-        url: 'api/service/add',
->>>>>>> Data alignment, servicemanager
       },
       update: {
         method: 'POST',
