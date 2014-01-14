@@ -4,11 +4,11 @@
         <form novalidate role="form" ng-submit="submit()">
             <div class="form-group">
                 <label for="servicename">Service Name</label>
-                <input type="text" class="form-control" id="servicename" placeholder="Service Name" ng-model="service.name">
+                <input ng-disabled="service.id != null" type="text" class="form-control" id="servicename" placeholder="Service Name" ng-model="service.name">
             </div>
             <div class="form-group">
                 <label for="authority">Organization</label>
-                <select ng-options="org.id as org.name for org in orgs" id="org" class="form-control" ng-model="service.organizationId">
+                <select ng-disabled="service.id != null" ng-options="org.id as org.name for org in orgs" id="org" class="form-control" ng-model="service.organizationId">
                 </select>
             </div>
             <div class="form-group">

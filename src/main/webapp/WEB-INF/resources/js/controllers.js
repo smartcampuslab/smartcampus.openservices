@@ -104,9 +104,27 @@ app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service', 'Or
   }
 ]);
 
-app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Service',
-  function ($scope, $routeParams, $location, Service) {
-	$scope.service = Service.getDescription({id: $routeParams.id})
+app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Service', 'Org',
+  function ($scope, $routeParams, $location, Service, Org) {
+	
+	Service.getDescription({id: $routeParams.id},function(data){
+		$scope.service = data;	
+	    console.log($scope.service.expiration);
+	    console.log(new Date($scope.service.expiration));
+	    if ($scope.service.expiration && $scope.service.expiration > 0) {
+	    	$scope.service.expiration = new Date($scope.service.expiration).toISOString().slice(0,10);
+	    }
+	});
+    Org.get({}, function(data) {
+    	console.log('getting orgs',data)
+        $scope.orgs = data.orgs;
+    });
+    $scope.submit = function () {
+    	Service.update($scope.service, function() {
+    		console.log('service updated');
+    	    $location.path('profile');
+    	});
+    };
   }
 ]);
 

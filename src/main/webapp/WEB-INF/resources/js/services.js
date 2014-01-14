@@ -220,7 +220,7 @@ services.factory('Service', ['$resource',
         url: 'api/service/add'
       },
       update: {
-        method: 'POST',
+        method: 'PUT',
         url: 'api/service/modify',
       },
       publish: {
