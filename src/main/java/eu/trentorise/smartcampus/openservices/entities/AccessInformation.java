@@ -34,6 +34,8 @@ public class AccessInformation implements Serializable{
 	private String testingEndpoint;
 	private String productionEndpoint;
 	private List<String> protocols;
+	private List<String> formats;
+	private Authentication authentication;
 
 	public AccessInformation(){
 		
@@ -70,4 +72,21 @@ public class AccessInformation implements Serializable{
 	public void setProtocols(List<String> protocols) {
 		this.protocols = protocols;
 	}
+
+	public List<String> getFormats() {
+		return formats;
+	}
+
+	public void setFormats(List<String> formats) {
+		this.formats = formats;
+	}
+
+	public Authentication getAuthentication() {
+		return authentication;
+	}
+
+	public void setAuthentication(Authentication authentication) {
+		this.authentication = authentication;
+	}
+	
 }

@@ -31,6 +31,8 @@ public class TemporaryLink {
 	private String key;
 	@Column(name="email")
 	private String email;
+	@Column(name="role")
+	private String role;
 	
 	public TemporaryLink(){
 	}
@@ -73,6 +75,14 @@ public class TemporaryLink {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 }
