@@ -62,7 +62,6 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope',
             role: userRoles.public
           });
           $cookieStore.remove('user');
-          $location.path('/')
           success();
         }).error(error);
       },
@@ -199,10 +198,11 @@ services.factory('Catalog', ['$resource',
 
 services.factory('Service', ['$resource',
   function ($resource) {
-    return $resource('api/service/my/:userId', {}, {
+    return $resource('/api/service/my/:userId', {}, {
       list: {
         method: 'GET',
-        url: 'api/service/view',
+        url: '/api/service/view',
+        isArray: true
       },
       getDescription: {
         method: 'GET',
@@ -210,11 +210,13 @@ services.factory('Service', ['$resource',
       },
       getMethods: {
         method: 'GET',
-        url: 'api/service/view/method/:id',
+        url: '/api/service/view/method/:id',
+        isArray: true
       },
       getHistory: {
         method: 'GET',
-        url: 'api/service/view/history/:id',
+        url: '/api/service/view/history/:id',
+        isArray: true
       },
       create: {
         method: 'POST',
@@ -222,31 +224,59 @@ services.factory('Service', ['$resource',
       },
       update: {
         method: 'POST',
-        url: 'api/service/modify',
+        url: '/api/service/modify',
+        params: {
+          service: {}
+        }
       },
       publish: {
-        method: 'PUT',
-        url: 'api/service/publish/:id',
+        method: 'POST',
+        url: '/api/service/publish',
+        params: {
+          service: {}
+        }
       },
       unpublish: {
-        method: 'PUT',
-        url: 'api/service/unpublish/:id',
+        method: 'POST',
+        url: '/api/service/unpublish',
+        params: {
+          service: {}
+        }
       },
       deprecate: {
-        method: 'PUT',
-        url: 'api/service/deprecate/:id',
+        method: 'POST',
+        url: '/api/service/deprecate',
+        params: {
+          service: {}
+        }
       },
       createMethod: {
         method: 'POST',
-        url: 'api/service/method/add',
+        url: '/api/service/method/add',
+        params: {
+          service: {}
+        }
       },
       updateMethod: {
-        method: 'PUT',
-        url: 'api/service/method/modify',
+        method: 'POST',
+        url: '/api/service/method/modify',
+        params: {
+          service: {}
+        }
       },
       deleteMethod: {
-        method: 'DELETE',
-        url: 'api/service/method/delete/:id',
+        method: 'POST',
+        url: '/api/service/method/delete',
+        params: {
+          service: {}
+        }
+      },
+      copyMethod: {
+        method: 'POST',
+        url: '/api/service/method/copy',
+        params: {
+          service: {}
+        }
       },
       get: {
           method: 'GET',

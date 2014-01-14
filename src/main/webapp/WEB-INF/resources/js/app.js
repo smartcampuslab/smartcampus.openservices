@@ -94,13 +94,6 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
     });
   }
 ]).run(function ($rootScope, $location, Auth) {
-$rootScope.logout = function(){
-	console.log('logout')
-	Auth.logout(function(){
-		$location.path("/")
-	});
-	
-}
   var history = [];
 
   $rootScope.$on('$routeChangeStart', function (event, next) {
@@ -108,12 +101,10 @@ $rootScope.logout = function(){
     $rootScope.error = null;
 
     if (Auth.isLoggedIn() && next.originalPath === '/signin') {
-    	console.log('redirecting from signin to profile because already loggedin')
       $location.path('/profile');
     }
     if (!Auth.authorize(next.access)) {
       if (Auth.isLoggedIn()) {
-    	  console.log('user already loggedin, redirecting to next path', next.originalPath)
         $location.path(next.originalPath);
       } else {
         console.log('signin');

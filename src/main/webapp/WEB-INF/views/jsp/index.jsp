@@ -70,7 +70,6 @@
   <script src="js/vendor/bootstrap.min.js"></script>
   <script src="js/vendor/holder.js"></script>
   <script src="js/vendor/prism.js"></script>
-  <script src="http://connect.facebook.net/en_US/all.js"></script>
 
   <script src="js/vendor/angular.min.js"></script>
   <script src="js/vendor/angular-route.min.js"></script>

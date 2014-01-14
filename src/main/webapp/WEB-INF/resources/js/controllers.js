@@ -6,8 +6,10 @@ app.controller('homeCtrl', ['$scope', '$http',
 app.controller('navCtrl', ['$scope', '$http','Auth',
                             function ($scope, $http, Auth) {
 	$scope.logout = function(){
+		console.log('loggingout')
 		Auth.logout(function(){
 			console.log('logged out')
+			$location.path('/')
 		});
 	}
 }
@@ -41,14 +43,14 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
     $scope.template = 'partials/profile/_details.html';
 
     $scope.deleteOrg = function (i) {
-      Org.delete({id:$scope.orgs[i].id}, function() {
+      Org.delete({id:$scope.user.orgs[i].id}, function() {
     	  console.log('org deleted');
-    	  $scope.orgs.splice(i, 1);
+    	  $scope.user.orgs.splice(i, 1);
     	  $location.path('profile')
       });
     };
     $scope.modifyOrg = function (i) {
-        Org.update($scope.orgs[i], function() {
+        Org.update($scope.user.orgs[i], function() {
       	  console.log('org updated');
       	  $location.path('profile')
         });
@@ -87,7 +89,7 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
 app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service',
   function ($scope, $http, $location, Service) {
 
-    $scope.submit = function(){
+    $scope.submitService = function(){
     	console.log('saving service')
     	Service.create($scope.service,function(){
     		$location.path('profile');
@@ -118,14 +120,11 @@ app.controller('newOrgCtrl', ['$scope', '$http', '$location', 'Org',
 app.controller('editOrgCtrl', ['$scope', '$http', '$location', '$routeParams', 'Org',
   function ($scope, $http, $location, $routeParams, Org) {
     $scope.title = 'Edit';
-    Org.getById({id:$routeParams.id}, function (org) {
-      $scope.org = org;
+    $http.get('data/user.json').success(function (user) {
+      $scope.org = user.orgs[0];
     });
     $scope.submit = function () {
-    	Org.update($scope.org, function() {
-    		console.log('org updated');
-    	    $location.path('profile');
-    	});
+      $location.path('profile');
     };
   }
 ]);
