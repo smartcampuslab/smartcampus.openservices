@@ -297,6 +297,10 @@ services.factory('Org', ['$resource',
         method: 'GET',
         url: 'api/org/my',
       },
+      getById: {
+          method: 'GET',
+          url: 'api/org/:id',
+        },
       list: {
         method: 'GET',
         url: 'api/org/list',
