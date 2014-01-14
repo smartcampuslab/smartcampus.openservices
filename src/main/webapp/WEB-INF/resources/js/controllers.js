@@ -4,7 +4,7 @@ app.controller('homeCtrl', ['$scope', '$http',
 ]);
 
 app.controller('navCtrl', ['$scope', '$http','Auth',
-                            function ($scope, $http, Auth) {
+                           function ($scope, $http, Auth) {
 	$scope.logout = function(){
 		console.log('loggingout')
 		Auth.logout(function(){
@@ -19,7 +19,7 @@ app.controller('signinCtrl', ['$scope', '$location', 'Auth',
   function ($scope, $location, Auth) {
 
     $scope.signin = function (service) {
-    	console.log('trying to login')
+            console.log('trying to login')
       Auth.login($scope.user, function () {
         $location.path('profile');
       });
@@ -29,11 +29,11 @@ app.controller('signinCtrl', ['$scope', '$location', 'Auth',
 
 app.controller('signUpCtrl', ['$scope', '$location', 'User',
    function ($scope, $location, User) {
-	$scope.user = new User();
+        $scope.user = new User();
     $scope.submit = function () {
-    	$scope.user.$save($scope.user,function(){
-    		$location.path('signin')
-    	})
+            $scope.user.$save($scope.user,function(){
+                    $location.path('signin')
+            })
     };
 }
 ]);
@@ -43,16 +43,16 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
     $scope.template = 'partials/profile/_details.html';
 
     $scope.deleteOrg = function (i) {
-      Org.delete({id:$scope.user.orgs[i].id}, function() {
-    	  console.log('org deleted');
-    	  $scope.user.orgs.splice(i, 1);
-    	  $location.path('profile')
+      Org.delete({id:$scope.orgs[i].id}, function() {
+              console.log('org deleted');
+              $scope.orgs.splice(i, 1);
+              $location.path('profile')
       });
     };
     $scope.modifyOrg = function (i) {
-        Org.update($scope.user.orgs[i], function() {
-      	  console.log('org updated');
-      	  $location.path('profile')
+        Org.update($scope.orgs[i], function() {
+                console.log('org updated');
+                $location.path('profile')
         });
       };
 
@@ -62,7 +62,7 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
 
     $scope.submit = function () {
             $scope.user.$update($scope.user, function() {
-            	console.log('user updated')
+                    console.log('user updated')
                 $location.path('profile')
             });
     };
@@ -70,15 +70,15 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
 
 
     User.getInfo({}, function(data) {
-    	$scope.user = data;
+            $scope.user = data;
     });
     
     Org.get({}, function(data) {
-    	console.log('getting orgs',data)
+            console.log('getting orgs',data)
         $scope.orgs = data.orgs;
     });
     Service.get({}, function(data) {
-    	console.log('getting services',data)
+            console.log('getting services',data)
         $scope.services = data.services;
     });
     
@@ -89,18 +89,18 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
 app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service',
   function ($scope, $http, $location, Service) {
 
-    $scope.submitService = function(){
-    	console.log('saving service')
-    	Service.create($scope.service,function(){
-    		$location.path('profile');
-    	});
+    $scope.submit = function(){
+            console.log('saving service')
+            Service.create($scope.service,function(){
+                    $location.path('profile');
+            });
     }
   }
 ]);
 
 app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Service',
   function ($scope, $routeParams, $location, Service) {
-	$scope.service = Service.getDescription({id: $routeParams.id})
+        $scope.service = Service.getDescription({id: $routeParams.id})
   }
 ]);
 
@@ -109,7 +109,7 @@ app.controller('newOrgCtrl', ['$scope', '$http', '$location', 'Org',
     $scope.title = 'New';
     $scope.submit = function () {
         Org.create($scope.org, function() {
-        	console.log('org created')
+                console.log('org created')
             $location.path('profile')
         });
     };
@@ -120,11 +120,14 @@ app.controller('newOrgCtrl', ['$scope', '$http', '$location', 'Org',
 app.controller('editOrgCtrl', ['$scope', '$http', '$location', '$routeParams', 'Org',
   function ($scope, $http, $location, $routeParams, Org) {
     $scope.title = 'Edit';
-    $http.get('data/user.json').success(function (user) {
-      $scope.org = user.orgs[0];
+    Org.getById({id:$routeParams.id}, function (org) {
+      $scope.org = org;
     });
     $scope.submit = function () {
-      $location.path('profile');
+            Org.update($scope.org, function() {
+                    console.log('org updated');
+                $location.path('profile');
+            });
     };
   }
 ]);
