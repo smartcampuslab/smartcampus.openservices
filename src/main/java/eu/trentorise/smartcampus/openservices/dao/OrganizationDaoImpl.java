@@ -53,7 +53,7 @@ public class OrganizationDaoImpl implements OrganizationDao{
 	public List<Organization> showMyOrganizations(int id_user)
 			throws DataAccessException {
 		Query q = getEntityManager().createQuery("FROM Organization O WHERE O.id IN " +
-				"( SELECT UR.id_org FROM UserRole UR WHERE UR.id_user=:id_user AND UR.role='ROLE_ORGOWNER')")
+				"( SELECT UR.id_org FROM UserRole UR WHERE UR.id_user=:id_user)")
 				.setParameter("id_user", id_user);
 		List<Organization> os = q.getResultList();
 		return os;

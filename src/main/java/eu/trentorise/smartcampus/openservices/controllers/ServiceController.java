@@ -317,7 +317,7 @@ public class ServiceController {
 	public ListMethod copyMethod(@RequestBody Method method, @RequestBody Service service){
 		logger.info("-- Copy a service method --");
 		//copy a service-method in another service
-		method.setId_service(service.getId());
+		method.setServiceId(service.getId());
 		//TODO remember to change method name, because in DB it is a unique index
 		methodDao.addMethod(method);
 		List<Method> methods = methodDao.getMethodByServiceId(service.getId());

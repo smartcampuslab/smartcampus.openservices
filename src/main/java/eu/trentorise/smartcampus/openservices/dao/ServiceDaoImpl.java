@@ -15,17 +15,20 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import eu.trentorise.smartcampus.openservices.entities.*;
+import eu.trentorise.smartcampus.openservices.entities.Organization;
+import eu.trentorise.smartcampus.openservices.entities.Service;
+import eu.trentorise.smartcampus.openservices.entities.User;
 
 @Repository
 public class ServiceDaoImpl implements ServiceDao{
@@ -61,7 +64,7 @@ public class ServiceDaoImpl implements ServiceDao{
 	public List<Service> showMyService(String username)
 			throws DataAccessException {
 		Query q = getEntityManager().createQuery("FROM Service S " +
-				"WHERE S.id_owner = (" +
+				"WHERE S.creator_id = (" +
 				"SELECT U.id FROM User U WHERE U.username=:username " +
 				")")
 				.setParameter("username",username);
@@ -104,14 +107,14 @@ public class ServiceDaoImpl implements ServiceDao{
 	@Override
 	public Organization getOrganizationofService(int service_id) throws DataAccessException{
 		Service service = getEntityManager().find(Service.class, service_id);
-		return getEntityManager().find(Organization.class, service.getId_org());
+		return getEntityManager().find(Organization.class, service.getOrganizationId());
 	}
 
 	@Transactional
 	@Override
 	public User getOwnerOfService(int service_id) throws DataAccessException{
 		Service service = getEntityManager().find(Service.class, service_id);
-		return getEntityManager().find(User.class, service.getId_owner());
+		return getEntityManager().find(User.class, service.getCreatorId());
 	}
 
 	@Transactional
@@ -123,7 +126,7 @@ public class ServiceDaoImpl implements ServiceDao{
 	@Transactional
 	@Override
 	public List<Service> getServiceByIdOwner(int id_owner) throws DataAccessException{
-		Query q = getEntityManager().createQuery("FROM Service S WHERE S.id_owner=:id_owner")
+		Query q = getEntityManager().createQuery("FROM Service S WHERE S.creator_id=:id_owner")
 				.setParameter("id_owner", id_owner);
 		List<Service> s = q.getResultList();
 		return s;
@@ -132,7 +135,7 @@ public class ServiceDaoImpl implements ServiceDao{
 	@Transactional
 	@Override
 	public List<Service> getServiceByIdOrg(int id_org) throws DataAccessException{
-		Query q = getEntityManager().createQuery("FROM Service S WHERE S.id_org=:id_org")
+		Query q = getEntityManager().createQuery("FROM Service S WHERE S.organization_id=:id_org")
 				.setParameter("id_org", id_org);
 		List<Service> s = q.getResultList();
 		return s;

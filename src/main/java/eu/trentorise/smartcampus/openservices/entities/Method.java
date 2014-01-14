@@ -35,10 +35,10 @@ public class Method {
 	private String synopsis;
 	@Column(name="documentation")
 	private String documentation;
-	@Column(name="id_service")
-	private int id_service;
-	@Column(name="testboxProperties")
-	@Lob//TODO check if it is better having a JSON and if mysql can cast a JSON without problem
+	@Column(name="service_id")
+	private int serviceId;
+	@Column(name="testbox_properties")
+	@Lob
 	private TestBoxProperties testboxProperties;
 	
 	public Method(){
@@ -77,12 +77,12 @@ public class Method {
 		this.documentation = documentation;
 	}
 
-	public int getId_service() {
-		return id_service;
+	public int getServiceId() {
+		return serviceId;
 	}
 
-	public void setId_service(int id_service) {
-		this.id_service = id_service;
+	public void setServiceId(int serviceId) {
+		this.serviceId = serviceId;
 	}
 
 	public TestBoxProperties getTestboxProperties() {

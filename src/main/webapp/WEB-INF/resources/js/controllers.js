@@ -68,15 +68,12 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
     
   }]);
 
-app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service',
-  function ($scope, $http, $location, Service) {
+app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service', 'Org',
+  function ($scope, $http, $location, Service, Org) {
     $scope.title = 'New';
-    $scope.policies = ['public', 'private'];
-    $scope.service = {
-      license: 'somelicense'
-    };
-    $http.get('data/user.json').success(function (user) {
-      $scope.orgs = user.orgs;
+
+    Org.get({},function(data) {
+    	$scope.orgs = data.orgs;
     });
 
     $http.get('data/categories.json').success(function (cats) {

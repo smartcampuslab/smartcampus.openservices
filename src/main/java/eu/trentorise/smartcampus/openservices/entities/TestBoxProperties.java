@@ -28,45 +28,27 @@ import java.util.*;
  *
  */
 public class TestBoxProperties implements Serializable{
-	
-	private String authenticationDescriptor;
-	private List<String> InOutPairs;//request string, input, output
-	private List<String> fixedRequests;//request string, input
-	private List<String> parametricRequest;//example request string, example input
+	private static final long serialVersionUID = 1L;
+
+	private Authentication authenticationDescriptor;
+	private List<TestInfo> tests;//request string, input, output
 	
 	public TestBoxProperties() {
 	}
 
-	public String getAuthenticationDescriptor() {
+	public Authentication getAuthenticationDescriptor() {
 		return authenticationDescriptor;
 	}
 
-	public void setAuthenticationDescriptor(String authenticationDescriptor) {
+	public void setAuthenticationDescriptor(Authentication authenticationDescriptor) {
 		this.authenticationDescriptor = authenticationDescriptor;
 	}
 
-	public List<String> getInOutPairs() {
-		return InOutPairs;
+	public List<TestInfo> getTests() {
+		return tests;
 	}
 
-	public void setInOutPairs(List<String> inOutPairs) {
-		InOutPairs = inOutPairs;
+	public void setTests(List<TestInfo> tests) {
+		this.tests = tests;
 	}
-
-	public List<String> getFixedRequests() {
-		return fixedRequests;
-	}
-
-	public void setFixedRequests(List<String> fixedRequests) {
-		this.fixedRequests = fixedRequests;
-	}
-
-	public List<String> getParametricRequest() {
-		return parametricRequest;
-	}
-
-	public void setParametricRequest(List<String> parametricRequest) {
-		this.parametricRequest = parametricRequest;
-	}
-
 }

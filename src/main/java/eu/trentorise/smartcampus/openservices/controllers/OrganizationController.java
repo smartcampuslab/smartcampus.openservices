@@ -17,6 +17,8 @@ package eu.trentorise.smartcampus.openservices.controllers;
 
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,19 +31,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import eu.trentorise.smartcampus.openservices.dao.OrganizationDao;
-import eu.trentorise.smartcampus.openservices.dao.ServiceHistoryDao;
-import eu.trentorise.smartcampus.openservices.dao.TemporaryLinkDao;
-import eu.trentorise.smartcampus.openservices.dao.UserDao;
-import eu.trentorise.smartcampus.openservices.dao.UserRoleDao;
 import eu.trentorise.smartcampus.openservices.entities.Organization;
-import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
-import eu.trentorise.smartcampus.openservices.entities.TemporaryLink;
-import eu.trentorise.smartcampus.openservices.entities.User;
-import eu.trentorise.smartcampus.openservices.entities.UserRole;
 import eu.trentorise.smartcampus.openservices.managers.OrganizationManager;
 import eu.trentorise.smartcampus.openservices.support.ApplicationMailer;
-import eu.trentorise.smartcampus.openservices.support.GenerateKey;
 import eu.trentorise.smartcampus.openservices.support.ListOrganization;
 import eu.trentorise.smartcampus.openservices.support.ListServiceHistory;
 
@@ -50,17 +42,6 @@ import eu.trentorise.smartcampus.openservices.support.ListServiceHistory;
 public class OrganizationController {
 
 	private static final Logger logger = LoggerFactory.getLogger(OrganizationController.class);
-	
-	@Autowired
-	private OrganizationDao orgDao;
-	@Autowired
-	private UserRoleDao urDao;
-	@Autowired
-	private UserDao userDao;
-	@Autowired
-	private ServiceHistoryDao shDao;
-	@Autowired
-	private TemporaryLinkDao tlDao;
 	
 	@Autowired
 	private OrganizationManager organizationManager;
@@ -76,8 +57,8 @@ public class OrganizationController {
 	 */
 	@RequestMapping(value = "/{org_id}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
-	public Organization orgByName(@PathVariable int org_id) {
-		Organization org = orgDao.getOrganizationById(org_id);
+	public Organization orgById(@PathVariable int org_id) {
+		Organization org = organizationManager.getOrganizationById(org_id);
 		logger.info("-- Retrieved organization -- name: "+org.getName());
 		return org;
 	}
@@ -93,10 +74,8 @@ public class OrganizationController {
 	public ListOrganization orgUser(){
 		logger.info("-- View my organization --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		User user = userDao.getUserByUsername(username);
 		ListOrganization lorg = new ListOrganization();
-		List<Organization> orgs = orgDao.showMyOrganizations(user.getId());
-		lorg.setOrgs(orgs);
+		lorg.setOrgs(organizationManager.getUserOrganizations(username));
 		return lorg;
 	}
 	
@@ -110,7 +89,7 @@ public class OrganizationController {
 	public ListOrganization getOrganizations(){
 		logger.info("-- View organization list --");
 		ListOrganization lorgs = new ListOrganization();
-		List<Organization> orgs = orgDao.showOrganizations();
+		List<Organization> orgs = organizationManager.getOrganizations();
 		lorgs.setOrgs(orgs);
 		return lorgs;
 	}
@@ -126,9 +105,8 @@ public class OrganizationController {
 	public ListServiceHistory getOrgActivityHistory(@PathVariable int org_id){
 		logger.info("-- View organization activity history --");
 		//history of service in this organization
-		List<ServiceHistory> histories =  shDao.getServiceHistoryByOrgId(org_id);
 		ListServiceHistory lsh = new ListServiceHistory();
-		lsh.setLserviceh(histories);
+		lsh.setLserviceh(organizationManager.getHistory(org_id));
 		return lsh;
 	}
 	
@@ -189,43 +167,25 @@ public class OrganizationController {
 	 * @param email
 	 * @return
 	 */
-	@RequestMapping(value = "/manage/owner/{org_id},{email}", method = RequestMethod.POST)
+	@RequestMapping(value = "/manage/owner/{org_id}/{role}/{email}", method = RequestMethod.POST)
 	@ResponseBody
-	public String orgManageOwnerData(@PathVariable int org_id, @PathVariable String email){
+	public String orgManageOwnerData(@PathVariable int org_id, @PathVariable String role, @PathVariable String email){
 		logger.info("-- Manage Organization Owner --");
 		//Get username
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		User user = userDao.getUserByUsername(username);
-		//check user role
-		Organization org = orgDao.getOrganizationById(org_id);
-		UserRole ur = urDao.getRoleOfUser(user.getId(), org.getId());
-		if(ur.getRole().equalsIgnoreCase("ROLE_ORGOWNER")){
-		
-		//Generate a key
-		GenerateKey g = new GenerateKey();
-		String s = g.getPriv().toString().split("@")[1];
-		
-		//saved in a temporary table
-		TemporaryLink entity = new TemporaryLink();	
-		entity.setKey(s);
-		entity.setId_org(org_id);
-		entity.setEmail(email);
-		tlDao.save(entity);
-		
+		String s = organizationManager.createInvitation(username, org_id, role, email);
 		//return link
 		String link = "<host>/org/manage/owner/add/"+s;
-		System.out.println("Link: "+link);
-		
+
+		// TODO: generalize template
 		//send it via email to user
 		ApplicationMailer mailer = new ApplicationMailer();
 		mailer.sendMail(email, "[OpenService] Invitation to organization", 
 				username+" has invited you to become an organization owner of "+
-				org.getName()+". If you are not a user of OpenService, please sign up and become part of " +
+				organizationManager.getOrganizationById(org_id).getName()+". If you are not a user of OpenService, please sign up and become part of " +
 				"our community. Please check the following link to accept, if you are already a user: "+link);
 		
 		return link;
-		}
-		else return "not allowed";
 	}
 	
 	/**
@@ -237,22 +197,12 @@ public class OrganizationController {
 	@ResponseBody
 	public HttpStatus orgManageAddOwnerData(@PathVariable String key){
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		User user = userDao.getUserByUsername(username);
-		//Check in table TemporaryLink if this key is saved and if user is correct
-		TemporaryLink tl = tlDao.getTLByKey(key);
-		if (tl != null) {
-			// delete it if it is all ok
-			if (tl.getEmail() == user.getEmail()) {
-				// add a UserRole data in table: user_id, org_id, role ORG_OWNER
-				urDao.createUserRole(user.getId(), tl.getId_org(),
-						"ROLE_ORGOWNER");
-				// delete temporary link
-				tlDao.delete(key);
-				return HttpStatus.OK;
-			} else
-				return HttpStatus.UNAUTHORIZED;
+		try {
+			organizationManager.addOwner(username, key);
+			return HttpStatus.OK;
+		} catch (EntityNotFoundException e) {
+			return HttpStatus.SERVICE_UNAVAILABLE;
 		}
-		else return HttpStatus.SERVICE_UNAVAILABLE;
 	}
 	
 	/**
@@ -266,9 +216,7 @@ public class OrganizationController {
 	@ResponseBody
 	public HttpStatus orgManageDeleteOwnerData(@PathVariable int org_id, @PathVariable int user_id){
 		//Delete connection between user and organization, where user has role ROLE_ORGOWNER
-		UserRole ur = new UserRole(user_id, org_id, "ROLE_ORGOWNER");
-		urDao.deleteUserRole(ur);
+		organizationManager.deleteOrgUser(org_id, user_id);
 		return HttpStatus.OK;
 	}
-	
 }

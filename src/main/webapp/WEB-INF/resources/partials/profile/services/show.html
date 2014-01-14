@@ -1,9 +1,6 @@
 <div class="animated fadeIn">
     <div class="row" ng-repeat="service in services">
-        <div class="col-xs-2 col-md-2 text-center">
-            <img class="img-rounded" data-src="holder.js/114x114" holder alt="Generic placeholder image">
-        </div>
-        <div class="col-xs-10 col-md-10 section-box">
+        <div class="col-xs-12 col-md-12 section-box">
             <h3>
                 {{service.name}}
             </h3>
@@ -11,7 +8,7 @@
                 {{service.description}}
                 <button type="button" class="pull-right btn btn-danger btn-xs" ng-click="deleteService($index)"><i class="fa fa-trash-o"></i>
                 </button>
-                <a href="/profile/services/1/edit" class="pull-right btn btn-default btn-xs orgbtn"><i class="fa fa-edit"></i>
+                <a ng-href="profile/services/{{service.id}}/edit" class="pull-right btn btn-default btn-xs orgbtn"><i class="fa fa-edit"></i>
                 </a>
             </p>
             <hr />
