@@ -3,8 +3,8 @@ app.controller('homeCtrl', ['$scope', '$http',
   function ($scope, $http) {}
 ]);
 
-app.controller('navCtrl', ['$scope', '$http','Auth',
-                            function ($scope, $http, Auth) {
+app.controller('navCtrl', ['$scope', '$http','Auth', '$location',
+                            function ($scope, $http, Auth, $location) {
 	$scope.logout = function(){
 		console.log('loggingout')
 		Auth.logout(function(){
