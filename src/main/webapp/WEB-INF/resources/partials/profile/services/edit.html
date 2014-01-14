@@ -8,7 +8,7 @@
             </div>
             <div class="form-group">
                 <label for="authority">Organization</label>
-                <select ng-options="org.name for org in orgs" id="org" class="form-control" ng-model="service.organizationId">
+                <select ng-options="org.id as org.name for org in orgs" id="org" class="form-control" ng-model="service.organizationId">
                 </select>
             </div>
             <div class="form-group">
@@ -46,7 +46,7 @@
               <div class="panel-body">
 		            <div class="form-group">
 		                <label for="policy">Access policies</label>
-                    <input type="text" class="form-control" id="policy" placeholder="Access policies..." ng-model="service.accessInformation.policies">
+                    <input type="text" class="form-control" id="policy" placeholder="Access policies..." ng-model="service.accessInformation.accessPolicies">
 		            </div>
 		            <div class="form-group">
 		                <label for="tendpoint">Testing Endpoint</label>

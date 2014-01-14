@@ -84,11 +84,19 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
   }
 ]);
 
-app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service',
-  function ($scope, $http, $location, Service) {
+app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service', 'Org',
+  function ($scope, $http, $location, Service, Org) {
+
+    Org.get({}, function(data) {
+    	console.log('getting orgs',data)
+        $scope.orgs = data.orgs;
+    });
 
     $scope.submit = function(){
-    	console.log('saving service')
+    	console.log('saving service');
+    	if ($scope.service.expiration) {
+    		$scope.service.expiration = new Date($scope.service.expiration).getTime();
+    	}
     	Service.create($scope.service,function(){
     		$location.path('profile');
     	});

@@ -43,7 +43,7 @@ public class Service {
 	@Column(name="version")
 	private String version;
 	@Column(name="expiration")
-	private Date expiration;
+	private long expiration;
 	@Column(name="documentation")
 	private String documentation;
 	@Column(name="state")
@@ -132,11 +132,11 @@ public class Service {
 		this.documentation = documentation;
 	}
 
-	public Date getExpiration() {
+	public long getExpiration() {
 		return expiration;
 	}
 
-	public void setExpiration(Date expiration) {
+	public void setExpiration(long expiration) {
 		this.expiration = expiration;
 	}
 
