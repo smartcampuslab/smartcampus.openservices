@@ -34,6 +34,7 @@ directives.directive('gravatar', ['$timeout', 'Gravatar',
       link: function (scope, element, attrs) {
         scope.$watch('currentUser.username', function (val) {
           if (val) {
+        	  console.log(val)
         	  $timeout(function(){
         		  scope.$apply(function(){
         	        	element[0].outerHTML = '<li class="dropdown">\

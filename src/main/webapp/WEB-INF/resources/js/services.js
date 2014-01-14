@@ -55,13 +55,14 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope',
         });
       },
       logout: function (success, error) {
-        $http.post('/logout').success(function () {
+        $http.get('logout').success(function () {
           
           changeUser({
             username: '',
             role: userRoles.public
           });
           $cookieStore.remove('user');
+          $location.path('/')
           success();
         }).error(error);
       },
@@ -220,10 +221,7 @@ services.factory('Service', ['$resource',
       },
       create: {
         method: 'POST',
-        url: '/api/service/add',
-        params: {
-          service: {}
-        }
+        url: 'api/service/add'
       },
       update: {
         method: 'POST',

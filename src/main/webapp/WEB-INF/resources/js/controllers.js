@@ -3,6 +3,16 @@ app.controller('homeCtrl', ['$scope', '$http',
   function ($scope, $http) {}
 ]);
 
+app.controller('navCtrl', ['$scope', '$http','Auth',
+                            function ($scope, $http, Auth) {
+	$scope.logout = function(){
+		Auth.logout(function(){
+			console.log('logged out')
+		});
+	}
+}
+                          ]);
+
 app.controller('signinCtrl', ['$scope', '$location', 'Auth',
   function ($scope, $location, Auth) {
 
@@ -54,39 +64,35 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
                 $location.path('profile')
             });
     };
+    
+
 
     User.getInfo({}, function(data) {
     	$scope.user = data;
     });
     
     Org.get({}, function(data) {
-        $scope.user.orgs = data.orgs;
+    	console.log('getting orgs',data)
+        $scope.orgs = data.orgs;
     });
     Service.get({}, function(data) {
-        $scope.user.services = data.services;
+    	console.log('getting services',data)
+        $scope.services = data.services;
     });
+    
     
   }
 ]);
 
 app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service',
   function ($scope, $http, $location, Service) {
-    $scope.title = 'New';
-    $scope.policies = ['public', 'private'];
-    $scope.service = {
-      license: 'somelicense'
-    };
-    $http.get('data/user.json').success(function (user) {
-      $scope.orgs = user.orgs;
-    });
 
-    $http.get('data/categories.json').success(function (cats) {
-      $scope.cats = cats;
-    });
-
-    $scope.submit = function () {
-      $location.path('profile');
-    };
+    $scope.submitService = function(){
+    	console.log('saving service')
+    	Service.create($scope.service,function(){
+    		console.log('service added')
+    	});
+    }
   }
 ]);
 
