@@ -143,6 +143,10 @@ public class ServiceController {
 	@ResponseBody
 	public HttpStatus createService(@RequestBody Service service){
 		logger.info("-- Create new service entry --");
+		//id user
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		User user = userDao.getUserByUsername(username);
+		service.setId_owner(user.getId());
 		service.setState("UNPUBLISH");
 		serviceDao.createService(service);
 		//get service id from db
