@@ -100,10 +100,8 @@ public class OrganizationManager {
 		User user = userDao.getUserByUsername(username);
 		org.setCreatorId(user.getId());
 		orgDao.createOrganization(org);
-		//get org id
-		Organization orgSaved = orgDao.getOrganizationByName(org.getName());
 		//add UserRole
-		urDao.createUserRole(orgSaved.getCreatorId(), orgSaved.getId(), "ROLE_ORGOWNER");
+		urDao.createUserRole(org.getCreatorId(), org.getId(), "ROLE_ORGOWNER");
 		// TODO history
 	}
 

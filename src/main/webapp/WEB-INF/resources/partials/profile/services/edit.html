@@ -1,14 +1,15 @@
 <div class="row animated fadeIn">
     <div class="col-md-6 col-md-offset-3">
         <h2>{{title}} Service</h2>
-        <form novalidate role="form" ng-submit="submitService()">
+        <form novalidate role="form" ng-submit="submit()">
             <div class="form-group">
-                <label for="orgname">Service Name</label>
-                <input type="text" class="form-control" id="orgname" placeholder="Service Name" ng-model="service.name">
+                <label for="servicename">Service Name</label>
+                <input type="text" class="form-control" id="servicename" placeholder="Service Name" ng-model="service.name">
             </div>
             <div class="form-group">
-                <label for="namespace">Namespace</label>
-                <input type="text" class="form-control" id="namespace" placeholder="Namespace" ng-model="service.namespace">
+                <label for="authority">Organization</label>
+                <select ng-options="org.name for org in orgs" id="org" class="form-control" ng-model="service.organizationId">
+                </select>
             </div>
             <div class="form-group">
                 <label for="orgdesc">Description</label>
@@ -20,7 +21,7 @@
             </div>
             <div class="form-group">
                 <label for="category">Category</label>
-                <select ng-options="cat.name for cat in cats" id="category" class="form-control" ng-model="service.category">
+                <select ng-options="cat.name for cat in cats" ng- id="category" class="form-control" ng-model="service.category">
                 </select>
             </div>
             <div class="form-group">
@@ -28,25 +29,8 @@
                 <input type="text" class="form-control" id="license" ng-model="service.license">
             </div>
             <div class="form-group">
-                <label for="version">Version</label>
+                <label for="license">Version</label>
                 <input type="text" class="form-control" id="version" ng-model="service.version">
-            </div>
-            <div class="form-group">
-                <label for="policy">Policy</label>
-                <select ng-options="policy for policy in policies" id="policy" class="form-control" ng-model="service.accessinfo.policies">
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="tendpoint">Testing Endpoint</label>
-                <input type="text" class="form-control" id="tendpoint" placeholder="http://tendpoint.com/api" ng-model="service.accessinfo.tendpoint">
-            </div>
-            <div class="form-group">
-                <label for="pendpoint">Production Endpoint</label>
-                <input type="text" class="form-control" id="pendpoint" placeholder="http://pendpoint.com/api" ng-model="service.accessinfo.pendpoint">
-            </div>
-            <div class="form-group">
-                <label for="formats">Formats</label>
-                <input type="text" class="form-control" id="formats" placeholder="json, xml" ng-model="service.accessinfo.formats">
             </div>
             <div class="form-group">
                 <label for="documentation">Documentation</label>
@@ -54,23 +38,55 @@
             </div>
             <div class="form-group">
                 <label for="expires">Expiration date</label>
-                <input type="date" class="form-control" id="expires" ng-model="service.expires">
+                <input type="date" class="form-control" id="expiration" ng-model="service.expiration">
             </div>
-            <div class="form-group">
-                <label for="env">Environment</label>
-                <input type="text" class="form-control" id="env" placeholder="example: java" ng-model="service.implementationinfo.env">
+            
+            <div class="panel panel-default">
+              <div class="panel-heading">Access Information</div>
+              <div class="panel-body">
+		            <div class="form-group">
+		                <label for="policy">Access policies</label>
+                    <input type="text" class="form-control" id="policy" placeholder="Access policies..." ng-model="service.accessInformation.policies">
+		            </div>
+		            <div class="form-group">
+		                <label for="tendpoint">Testing Endpoint</label>
+		                <input type="text" class="form-control" id="tendpoint" placeholder="http://tendpoint.com/api" ng-model="service.accessInformation.testingEndpoint">
+		            </div>
+		            <div class="form-group">
+		                <label for="pendpoint">Production Endpoint</label>
+		                <input type="text" class="form-control" id="pendpoint" placeholder="http://pendpoint.com/api" ng-model="service.accessInformation.productionEndpoint">
+		            </div>
+		            <div class="form-group">
+		                <label for="formats">Formats</label>
+		                <input type="text" class="form-control" id="formats" placeholder="json, xml" ng-model="service.accessInformation.formats">
+		            </div>
+                <div class="form-group">
+                    <label for="protocols">Protocols</label>
+                    <input type="text" class="form-control" id="protocols" placeholder="rest, soap" ng-model="service.accessInformation.protocols">
+                </div>
+		          </div>  
             </div>
-            <div class="form-group">
-                <label for="dependencies">Service Dependencies</label>
-                <input type="text" class="form-control" id="dependencies" placeholder="my service" ng-model="service.implementationinfo.dependencies">
-            </div>
-            <div class="form-group">
-                <label for="engines">Engines</label>
-                <input type="text" class="form-control" id="engines" placeholder="my engine" ng-model="service.implementationinfo.engines">
-            </div>
-            <div class="form-group">
-                <label for="sourcecode">Source Code</label>
-                <input type="text" class="form-control" id="sourcecode" placeholder="http://mysource.com" ng-model="service.implementationinfo.sourcecode">
+            
+            <div class="panel panel-default">
+              <div class="panel-heading">Implementation Information</div>
+              <div class="panel-body">
+		            <div class="form-group">
+		                <label for="env">Execution Environment</label>
+		                <input type="text" class="form-control" id="env" placeholder="example: java" ng-model="service.implementation.executionEnvironment">
+		            </div>
+<!-- 		            <div class="form-group"> -->
+<!-- 		                <label for="dependencies">Service Dependencies</label> -->
+<!-- 		                <input type="text" class="form-control" id="dependencies" placeholder="my service" ng-model="service.implementation.serviceDependencies"> -->
+<!-- 		            </div> -->
+		            <div class="form-group">
+		                <label for="hosting">Hosting</label>
+		                <input type="text" class="form-control" id="hosting" placeholder="SmartCampus" ng-model="service.implementation.hosting">
+		            </div>
+		            <div class="form-group">
+		                <label for="sourcecode">Source Code</label>
+		                <input type="text" class="form-control" id="sourcecode" placeholder="http://mysource.com" ng-model="service.implementation.sourceCode">
+                </div>
+              </div>
             </div>
             <button type="submit" class="btn btn-info">Save</button>
             <button ng-click="back()" class="pull-right btn btn-default">Go back</button>

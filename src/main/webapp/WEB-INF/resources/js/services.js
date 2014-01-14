@@ -199,11 +199,10 @@ services.factory('Catalog', ['$resource',
 
 services.factory('Service', ['$resource',
   function ($resource) {
-    return $resource('/api/service/my/:userId', {}, {
+    return $resource('api/service/my/:userId', {}, {
       list: {
         method: 'GET',
-        url: '/api/service/view',
-        isArray: true
+        url: 'api/service/view',
       },
       getDescription: {
         method: 'GET',
@@ -211,73 +210,47 @@ services.factory('Service', ['$resource',
       },
       getMethods: {
         method: 'GET',
-        url: '/api/service/view/method/:id',
-        isArray: true
+        url: 'api/service/view/method/:id',
       },
       getHistory: {
         method: 'GET',
-        url: '/api/service/view/history/:id',
-        isArray: true
+        url: 'api/service/view/history/:id',
       },
       create: {
         method: 'POST',
+<<<<<<< HEAD
         url: 'api/service/add'
+=======
+        url: 'api/service/add',
+>>>>>>> Data alignment, servicemanager
       },
       update: {
         method: 'POST',
-        url: '/api/service/modify',
-        params: {
-          service: {}
-        }
+        url: 'api/service/modify',
       },
       publish: {
-        method: 'POST',
-        url: '/api/service/publish',
-        params: {
-          service: {}
-        }
+        method: 'PUT',
+        url: 'api/service/publish/:id',
       },
       unpublish: {
-        method: 'POST',
-        url: '/api/service/unpublish',
-        params: {
-          service: {}
-        }
+        method: 'PUT',
+        url: 'api/service/unpublish/:id',
       },
       deprecate: {
-        method: 'POST',
-        url: '/api/service/deprecate',
-        params: {
-          service: {}
-        }
+        method: 'PUT',
+        url: 'api/service/deprecate/:id',
       },
       createMethod: {
         method: 'POST',
-        url: '/api/service/method/add',
-        params: {
-          service: {}
-        }
+        url: 'api/service/method/add',
       },
       updateMethod: {
-        method: 'POST',
-        url: '/api/service/method/modify',
-        params: {
-          service: {}
-        }
+        method: 'PUT',
+        url: 'api/service/method/modify',
       },
       deleteMethod: {
-        method: 'POST',
-        url: '/api/service/method/delete',
-        params: {
-          service: {}
-        }
-      },
-      copyMethod: {
-        method: 'POST',
-        url: '/api/service/method/copy',
-        params: {
-          service: {}
-        }
+        method: 'DELETE',
+        url: 'api/service/method/delete/:id',
       },
       get: {
           method: 'GET',

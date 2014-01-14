@@ -15,7 +15,7 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.controllers;
 
-import java.util.*;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,10 +23,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import eu.trentorise.smartcampus.openservices.dao.*;
-import eu.trentorise.smartcampus.openservices.entities.*;
+import eu.trentorise.smartcampus.openservices.entities.ListMethod;
+import eu.trentorise.smartcampus.openservices.entities.Method;
+import eu.trentorise.smartcampus.openservices.entities.Service;
+import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
+import eu.trentorise.smartcampus.openservices.managers.ServiceManager;
 import eu.trentorise.smartcampus.openservices.support.ListService;
 import eu.trentorise.smartcampus.openservices.support.ListServiceHistory;
 
@@ -38,17 +45,7 @@ public class ServiceController {
 			.getLogger(ServiceController.class);
 
 	@Autowired
-	private ServiceDao serviceDao;
-	@Autowired
-	private UserRoleDao urDao;
-	@Autowired
-	private UserDao userDao;
-	@Autowired
-	private OrganizationDao orgDao;
-	@Autowired
-	private MethodDao methodDao;
-	@Autowired
-	private ServiceHistoryDao shDao;
+	private ServiceManager serviceManager;
 	
 	/*
 	 * REST WEB SERVICE
@@ -65,10 +62,8 @@ public class ServiceController {
 	public ListService myServices(){
 		logger.info("-- User: Access my data service --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		User user = userDao.getUserByUsername(username);
 		ListService lserv = new ListService();
-		List<Service> s = serviceDao.getServiceByIdOwner(user.getId());
-		lserv.setServices(s);
+		lserv.setServices(serviceManager.getUserServices(username));
 		return lserv;
 	}
 	
@@ -82,8 +77,7 @@ public class ServiceController {
 	public ListService viewServices(){
 		logger.info("-- View Services --");
 		ListService lserv = new ListService();
-		List<Service> s = serviceDao.showService();
-		lserv.setServices(s);
+		lserv.setServices(serviceManager.getServices());
 		return lserv;
 	}
 	
@@ -97,7 +91,7 @@ public class ServiceController {
 	@ResponseBody
 	public Service viewServiceDescription(@PathVariable int service_id){
 		logger.info("-- View service description --");
-		Service service = serviceDao.getServiceById(service_id);
+		Service service = serviceManager.getServiceById(service_id);
 		return service;
 	}
 	
@@ -112,7 +106,7 @@ public class ServiceController {
 	public ListMethod viewServiceMethod(@PathVariable int service_id){
 		logger.info("-- View service method --");
 		ListMethod lmethod = new ListMethod();
-		List<Method> m = methodDao.getMethodByServiceId(service_id);
+		List<Method> m = serviceManager.getServiceMethodsByServiceId(service_id);
 		lmethod.setMethods(m);
 		return lmethod;
 	}
@@ -128,7 +122,7 @@ public class ServiceController {
 	public ListServiceHistory viewServiceHistory(@PathVariable int service_id){
 		logger.info("-- View service history --");
 		ListServiceHistory lsh = new ListServiceHistory();
-		List<ServiceHistory> sh = shDao.getServiceHistoryByServiceId(service_id);
+		List<ServiceHistory> sh = serviceManager.getServiceHistoryByServiceId(service_id);
 		lsh.setLserviceh(sh);
 		return lsh;
 	}
@@ -143,21 +137,8 @@ public class ServiceController {
 	@ResponseBody
 	public HttpStatus createService(@RequestBody Service service){
 		logger.info("-- Create new service entry --");
-		//id user
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		User user = userDao.getUserByUsername(username);
-		service.setId_owner(user.getId());
-		service.setState("UNPUBLISH");
-		serviceDao.createService(service);
-		//get service id from db
-		Service newservice = serviceDao.useService(service.getName());
-		//add UserRole ROLE_SERVICEOWNER if user has not ROLE_ORGOWNER TODO
-		//create ServiceHistory
-		ServiceHistory sh = new ServiceHistory();
-		sh.setOperation("service added");
-		sh.setId_service(newservice.getId());
-		sh.setDate(new Date());
-		shDao.addServiceHistory(sh);
+		serviceManager.createService(username, service);
 		return HttpStatus.CREATED;
 	}
 	//Service - Manage Service - modify Service
@@ -167,23 +148,12 @@ public class ServiceController {
 	 * @param service
 	 * @return
 	 */
-	@RequestMapping(value = "/modify", method = RequestMethod.POST, consumes="application/json") 
+	@RequestMapping(value = "/modify", method = RequestMethod.PUT, consumes="application/json") 
 	@ResponseBody
 	public HttpStatus modService(@RequestBody Service service){
 		logger.info("-- Modify service --");
-		//check UserRole ROLE_SERVICEOWNER if user has not ROLE_ORGOWNER TODO
-		Service s = serviceDao.getServiceById(service.getId());
-		s.setDescription(service.getDescription());
-		s.setTags(service.getTags());
-		s.setCategory(service.getCategory());
-		s.setDocumentation(service.getDocumentation());
-		serviceDao.modifyService(s);
-		//Add a new ServiceHistory
-		ServiceHistory sh = new ServiceHistory();
-		sh.setOperation("Modify service");
-		sh.setId_service(s.getId());
-		sh.setDate(new Date());
-		shDao.addServiceHistory(sh);
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		serviceManager.updateService(username,service);
 		return HttpStatus.OK;
 	}
 	
@@ -194,19 +164,12 @@ public class ServiceController {
 	 * @param service
 	 * @return
 	 */
-	@RequestMapping(value = "/publish", method = RequestMethod.POST, consumes="application/json") 
+	@RequestMapping(value = "/publish/{id}", method = RequestMethod.PUT, consumes="application/json") 
 	@ResponseBody
-	public HttpStatus publishService(@RequestBody Service service){
+	public HttpStatus publishService(@PathVariable int id){
 		logger.info("-- Publish service --");
-		//Change service state
-		service.setState("PUBLISH");
-		serviceDao.modifyService(service);
-		//add service history
-		ServiceHistory sh = new ServiceHistory();
-		sh.setOperation("Publish service");
-		sh.setId_service(service.getId());
-		sh.setDate(new Date());
-		shDao.addServiceHistory(sh);
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		serviceManager.changeState(username, id, "PUBLISH");
 		return HttpStatus.OK;
 	}
 	
@@ -217,19 +180,13 @@ public class ServiceController {
 	 * @param service
 	 * @return
 	 */
-	@RequestMapping(value = "/unpublish", method = RequestMethod.POST, consumes="application/json") 
+	@RequestMapping(value = "/unpublish/{id}", method = RequestMethod.PUT, consumes="application/json") 
 	@ResponseBody
-	public HttpStatus unpublishService(@RequestBody Service service){
+	public HttpStatus unpublishService(@PathVariable int id){
 		logger.info("-- Unpublish service --");
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		serviceManager.changeState(username, id,"UNPUBLISH");
 		//Change service state
-		service.setState("UNPUBLISH");
-		serviceDao.modifyService(service);
-		// Add a new ServiceHistory
-		ServiceHistory sh = new ServiceHistory();
-		sh.setOperation("Unpublish service");
-		sh.setId_service(service.getId());
-		sh.setDate(new Date());
-		shDao.addServiceHistory(sh);
 		return HttpStatus.OK;
 	}
 	
@@ -240,19 +197,12 @@ public class ServiceController {
 	 * @param service
 	 * @return
 	 */
-	@RequestMapping(value = "/deprecate", method = RequestMethod.POST, consumes="application/json") 
+	@RequestMapping(value = "/deprecate/{id}", method = RequestMethod.PUT, consumes="application/json") 
 	@ResponseBody
-	public HttpStatus deprecateService(@RequestBody Service service){
+	public HttpStatus deprecateService(@PathVariable int id){
 		logger.info("-- Deprecate service --");
-		//Change service state
-		service.setState("DEPRECATE");
-		serviceDao.modifyService(service);
-		// Add a new ServiceHistory
-		ServiceHistory sh = new ServiceHistory();
-		sh.setOperation("Deprecate service");
-		sh.setId_service(service.getId());
-		sh.setDate(new Date());
-		shDao.addServiceHistory(sh);
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		serviceManager.changeState(username, id,"DEPRECATE");
 		return HttpStatus.OK;
 	}
 	
@@ -267,7 +217,8 @@ public class ServiceController {
 	@ResponseBody
 	public HttpStatus createMethod(@RequestBody Method method){
 		logger.info("-- Create new service method --");
-		methodDao.addMethod(method);
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		serviceManager.addMethod(username, method);
 		return HttpStatus.CREATED;
 	}
 	
@@ -278,16 +229,12 @@ public class ServiceController {
 	 * @param method
 	 * @return
 	 */
-	@RequestMapping(value = "/method/modify", method = RequestMethod.POST, consumes="application/json") 
+	@RequestMapping(value = "/method/modify", method = RequestMethod.PUT, consumes="application/json") 
 	@ResponseBody
 	public HttpStatus modifyMethod(@RequestBody Method method){
 		logger.info("-- Modify a service method --");
-		Method m = methodDao.getMethodById(method.getId());
-		m.setName(method.getName());
-		m.setSynopsis(method.getSynopsis());
-		m.setDocumentation(method.getDocumentation());
-		m.setTestboxProprieties(method.getTestboxProperties());
-		methodDao.modifyMethod(m);
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		serviceManager.updateMethod(username, method);
 		return HttpStatus.OK;
 	}
 	
@@ -298,31 +245,12 @@ public class ServiceController {
 	 * @param method
 	 * @return
 	 */
-	@RequestMapping(value = "/method/delete", method = RequestMethod.POST, consumes="application/json") 
+	@RequestMapping(value = "/method/delete/{id}", method = RequestMethod.DELETE, consumes="application/json") 
 	@ResponseBody
-	public HttpStatus deleteMethod(@RequestBody Method method){
+	public HttpStatus deleteMethod(@PathVariable int id){
 		logger.info("-- Delete a service method --");
-		methodDao.deleteMethod(method);
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		serviceManager.deleteMethod(username, id);
 		return HttpStatus.OK;
-	}
-	//Service - Manage Service method - copy method(s) (create ServiceHistory.operation)
-	/**
-	 * Copy a service method to another service
-	 * @param method
-	 * @param service
-	 * @return
-	 */
-	@RequestMapping(value = "/method/copy", method = RequestMethod.POST, consumes="application/json") 
-	@ResponseBody
-	public ListMethod copyMethod(@RequestBody Method method, @RequestBody Service service){
-		logger.info("-- Copy a service method --");
-		//copy a service-method in another service
-		method.setServiceId(service.getId());
-		//TODO remember to change method name, because in DB it is a unique index
-		methodDao.addMethod(method);
-		List<Method> methods = methodDao.getMethodByServiceId(service.getId());
-		ListMethod lmethod = new ListMethod();
-		lmethod.setMethods(methods);
-		return lmethod;
 	}
 }

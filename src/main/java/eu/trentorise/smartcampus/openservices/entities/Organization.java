@@ -29,7 +29,7 @@ public class Organization{
 	@Id
 	@GeneratedValue
 	private int id;
-	@Column(name="name")
+	@Column(name="name", unique=true, nullable=false)
 	private String name;
 	@Column(name="description")
 	private String description;

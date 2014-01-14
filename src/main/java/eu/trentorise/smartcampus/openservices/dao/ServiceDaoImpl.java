@@ -64,7 +64,7 @@ public class ServiceDaoImpl implements ServiceDao{
 	public List<Service> showMyService(String username)
 			throws DataAccessException {
 		Query q = getEntityManager().createQuery("FROM Service S " +
-				"WHERE S.creator_id = (" +
+				"WHERE S.creatorId = (" +
 				"SELECT U.id FROM User U WHERE U.username=:username " +
 				")")
 				.setParameter("username",username);
@@ -126,7 +126,7 @@ public class ServiceDaoImpl implements ServiceDao{
 	@Transactional
 	@Override
 	public List<Service> getServiceByIdOwner(int id_owner) throws DataAccessException{
-		Query q = getEntityManager().createQuery("FROM Service S WHERE S.creator_id=:id_owner")
+		Query q = getEntityManager().createQuery("FROM Service S WHERE S.creatorId=:id_owner")
 				.setParameter("id_owner", id_owner);
 		List<Service> s = q.getResultList();
 		return s;
@@ -135,7 +135,7 @@ public class ServiceDaoImpl implements ServiceDao{
 	@Transactional
 	@Override
 	public List<Service> getServiceByIdOrg(int id_org) throws DataAccessException{
-		Query q = getEntityManager().createQuery("FROM Service S WHERE S.organization_id=:id_org")
+		Query q = getEntityManager().createQuery("FROM Service S WHERE S.organizationId=:id_org")
 				.setParameter("id_org", id_org);
 		List<Service> s = q.getResultList();
 		return s;
