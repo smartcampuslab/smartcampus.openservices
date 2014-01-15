@@ -62,7 +62,7 @@ public class ServiceDaoImpl implements ServiceDao{
 	@Transactional
 	@Override
 	public List<Service> showPublishedService() throws DataAccessException {
-		Query q = getEntityManager().createQuery("FROM Service S WHERE S.state='PUBLISH'");
+		Query q = getEntityManager().createQuery("FROM Service S WHERE S.state='PUBLISH' OR S.state='DEPRECATE'");
 		List<Service> s = q.getResultList();
 		return s;
 	}
