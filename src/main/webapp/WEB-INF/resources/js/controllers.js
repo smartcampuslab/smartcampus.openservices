@@ -181,6 +181,33 @@ app.controller('newMethodCtrl', ['$scope', '$http', '$location', '$routeParams',
   }
 ]);
 
+app.controller('viewMethodCtrl', ['$scope', '$http', '$location', '$routeParams', 'Service', 
+  function ($scope, $http, $location, $routeParams, Service) {
+
+    Service.getMethods({id: $routeParams.id},function(data){
+  		$scope.methods = data.methods;
+  		for (var i = 0; i < $scope.methods.length; i++) {
+  			if ($routeParams.method == $scope.methods[i].id) {
+  				$scope.method = $scope.methods[i];
+  			}
+  		}
+     });
+  }
+]);
+
+app.controller('editMethodCtrl', ['$scope', '$http', '$location', '$routeParams', 'Service', 
+  function ($scope, $http, $location, $routeParams, Service) {
+
+    Service.getMethods({id: $routeParams.id},function(data){
+  		$scope.methods = data.methods;
+  		for (var i = 0; i < $scope.methods.length; i++) {
+  			if ($routeParams.method == $scope.methods[i].id) {
+  				$scope.method = $scope.methods[i];
+  			}
+  		}
+     });
+  }
+]);
 
 app.controller('newOrgCtrl', ['$scope', '$http', '$location', 'Org',
   function ($scope, $http, $location, Org) {
