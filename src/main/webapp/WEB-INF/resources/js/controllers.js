@@ -148,11 +148,11 @@ app.controller('viewServiceCtrl', ['$scope', '$routeParams', '$location', 'Servi
  	    if ($scope.service.expiration && $scope.service.expiration > 0) {
  	    	$scope.service.expiration = new Date($scope.service.expiration).toISOString().slice(0,10);
  	    }
+ 	     Org.getById({id:data.organizationId}, function(data) {
+ 	     	console.log('getting orgs',data)
+ 	         $scope.org = data;
+ 	     });
  	});
-     Org.get({}, function(data) {
-     	console.log('getting orgs',data)
-         $scope.orgs = data.orgs;
-     });
      Service.getMethods({id: $routeParams.id},function(data){
   		$scope.methods = data.methods;
      });
@@ -189,6 +189,7 @@ app.controller('viewMethodCtrl', ['$scope', '$http', '$location', '$routeParams'
   		for (var i = 0; i < $scope.methods.length; i++) {
   			if ($routeParams.method == $scope.methods[i].id) {
   				$scope.method = $scope.methods[i];
+  				$scope.service = {id:$scope.method.serviceId};
   			}
   		}
      });
@@ -206,6 +207,13 @@ app.controller('editMethodCtrl', ['$scope', '$http', '$location', '$routeParams'
   			}
   		}
      });
+    $scope.submit = function(){
+    	console.log('saving method');
+    	Service.updateMethod($scope.method,function(){
+    		$location.path('profile/services/'+$scope.method.serviceId+'/view');
+    	});
+    }
+
   }
 ]);
 
