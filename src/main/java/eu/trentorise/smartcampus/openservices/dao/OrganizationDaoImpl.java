@@ -117,7 +117,7 @@ public class OrganizationDaoImpl implements OrganizationDao{
 	@Override
 	public List<Organization> searchOrganization(String token)
 			throws DataAccessException {
-		Query q = getEntityManager().createQuery("SELECT Org.id, Org.name, Org.description, Org.category, Org.contacts FROM Organization Org WHERE Org.name LIKE :token")
+		Query q = getEntityManager().createQuery("FROM Organization Org WHERE Org.name LIKE :token")
 				.setParameter("token", "%"+token+"%");
 		List<Organization> orgs = q.getResultList();
 		return orgs;
@@ -130,14 +130,14 @@ public class OrganizationDaoImpl implements OrganizationDao{
 		//TODO check what geography is
 		Query q = null;
 		if(category!=null && geography==null){
-			q = getEntityManager().createQuery("SELECT Org.id, Org.name, Org.description, Org.category, Org.contacts FROM Organization Org WHERE Org.category LIKE :category")
+			q = getEntityManager().createQuery("FROM Organization Org WHERE Org.category LIKE :category")
 					.setParameter("category", "%"+category+"%");
 		}
 		else if(category==null && geography!=null){
 			
 		}
 		else if(category!=null && geography!=null){
-			q = getEntityManager().createQuery("SELECT Org.id, Org.name, Org.description, Org.category, Org.contacts FROM Organization Org WHERE Org.category LIKE :category")
+			q = getEntityManager().createQuery("FROM Organization Org WHERE Org.category LIKE :category")
 					.setParameter("category", "%"+category+"%");
 		}
 		List<Organization> orgs = q.getResultList();
