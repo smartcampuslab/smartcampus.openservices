@@ -21,8 +21,8 @@
 		<intercept-url pattern="/api/org/manage/**" access="isAuthenticated()"/>
 		<intercept-url pattern="/api/org/**" access="hasAnyRole('ROLE_ADMIN','ROLE_ORGOWNER')" />
 		<intercept-url pattern="/api/service/my/**" access="isAuthenticated()" />
-		<intercept-url pattern="/api/service/view*" access="permitAll"/>
-		<intercept-url pattern="/api/service/**" access="hasAnyRole('ROLE_ADMIN', 'ROLE_SERVICEOWNER')"/>
+    <intercept-url pattern="/api/service/**" method="GET" access="permitAll"/>
+		<intercept-url pattern="/api/service/**" access="hasAnyRole('ROLE_ADMIN', 'ROLE_SERVICEOWNER', 'ROLE_ORGOWNER')"/>
 		<intercept-url pattern="/login" access="permitAll" />
 		<intercept-url pattern="/api/user/modify" access="isAuthenticated()" />
 		<intercept-url pattern="/api/user/my" access="isAuthenticated()" />

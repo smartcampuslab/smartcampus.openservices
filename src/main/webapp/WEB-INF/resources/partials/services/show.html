@@ -1,8 +1,8 @@
 <div class="animated fadeIn">
     <div class="row">
         <div class="col-md-4 col-md-offset-2">
-            <h2>Test service</h2>
-            <h5>Service description asd asd asd asd</h5>
+            <h2>{{service.name}}</h2>
+            <h5>{{service.description}}</h5>
         </div>
     </div>
     <div class="row">
@@ -10,32 +10,36 @@
             <h4>Info</h4>
             <hr>
             <ul>
-                <li>organization: test</li>
+                <li>organization: {{orgName}}</li>
                 <li>tags:
-                    <span class="label label-default">Default</span>
+                    <span class="label">{{service.tags}}</span>
                 </li>
-                <li>category: mycategory
-                </li>
-                <li>formats: json, xml</li>
+                <li>category: mycategory </li>
+                <li>documentation: <a ng-href="{{service.documentation}}">{{service.documentation}}</a><li>
+                <li>license: {{service.license}}</li>
+                <li>version: {{service.version}}</li>
+                <li>expiration: {{service.expiration}}</li>
             </ul>
         </div>
         <div class="col-md-2 col-md-offset-1">
             <h4>Implementation</h4>
             <hr>
             <ul>
-                <li>execution environment: java</li>
-                <li>service dependencies: some service</li>
-                <li>engines: ultra engine</li>
-                <li>source: <a href="https://github.com">https://github.com</a>
-                </li>
+                <li>execution environment: {{service.implementation.executionEnvironment}}</li>
+                <li>hosting: {{service.implementation.hosting}}</li>
+                <li>source: <a ng-href="{{service.implementation.sourceCode}}">{{service.implementation.sourceCode}}</a></li>
             </ul>
         </div>
         <div class="col-md-2 col-md-offset-1">
-            <h4>Documentation</h4>
+            <h4>Access information</h4>
             <hr>
             <ul>
-                <li>wiki: <a href="http://dev.smartcampuslab.eu/doku.php">http://dev.smartcampuslab.eu</a>
-                </li>
+                <li>access policies: {{service.accessInformation.accessPolicies}}</li>
+                <li>testing endpoint: {{service.accessInformation.productionEndpoint}}</li>
+                <li>production endpoint: {{service.accessInformation.productionEndpoint}}</li>
+                <li>formats: {{service.accessInformation.formats}}</li>
+                <li>protocols: {{service.accessInformation.protocols}}</li>
+                <li>authentication: {{service.accessInformation.authentication.accessProtocol}}</li>
             </ul>
 
         </div>
@@ -46,17 +50,8 @@
         <div class="col-md-4 col-md-offset-2">
             <p>
                 <div class="input-group">
-                    <span class="input-group-addon">endpoint</span>
-                    <select class="form-control" ng-model="request.endpoint">
-                        <option>{{service.accessinfo.tendpoint}}</option>
-                        <option>{{service.accessinfo.pendpoint}}</option>
-                    </select>
-                </div>
-            </p>
-            <p>
-                <div class="input-group">
                     <span class="input-group-addon">method</span>
-                    <select ng-options="method as method.type +' '+ method.url +' '+ method.protocol for method in service.methods" ng-model="request.method" class="form-control" />
+                    <select ng-options="method as method.name for method in service.methods" ng-model="request.method" class="form-control" />
                 </div>
             </p>
             <p>
@@ -69,10 +64,10 @@
         </div>
         <div class="col-md-4">
             <ul ng-show="request.method">
-                <li>{{request.method.name}}</li>
                 <li>{{request.method.synopsis}}</li>
+                <li>{{request.method.type}} {{request.method.url}} {{request.method.protocol}}</li>
                 <li>
-                    <a ng-href="request.method.documentation">Docs</a>
+                    <a ng-href="{{request.method.documentation}}">Docs</a>
                 </li>
             </ul>
 

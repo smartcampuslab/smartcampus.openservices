@@ -245,8 +245,18 @@ app.controller('cbCtrl', ['$location',
   }
 ]);
 
-app.controller('serviceCtrl', ['$scope', '$http', '$cookieStore', '$location', 'oAuth',
-  function ($scope, $http, $cookieStore, $location, oAuth) {
+app.controller('serviceCtrl', ['$scope', '$routeParams', 'Service', 'Org', '$http', '$cookieStore', '$location', 'oAuth',
+  function ($scope, $routeParams, Service, Org, $http, $cookieStore, $location, oAuth) {
+	Service.getDescription({id:$routeParams.id}, function (data) {
+        $scope.service = data;
+    	Org.getById({id:data.organizationId}, function (data) {
+    		$scope.orgName = data.name;
+    	});
+    });
+
+
+	
+	// OAUTH TEST
     oAuth.config.clientId = 'fcb1cb81-50a7-4948-8f46-05a1f14e7089';
     oAuth.config.scopes = ["smartcampus.profile.basicprofile.me"]
 
@@ -274,10 +284,6 @@ app.controller('serviceCtrl', ['$scope', '$http', '$cookieStore', '$location', '
     }
 
     $scope.request = {};
-    $http.get("data/service.json").success(function (data) {
-      $scope.service = data;
-    })
-
     function toTitleCase(str) {
       return str.replace(/(?:^|-)\w/g, function (match) {
         return match.toUpperCase();
