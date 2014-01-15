@@ -30,6 +30,13 @@ public interface ServiceDao {
 	public List<Service> showService() throws DataAccessException;
 	
 	/**
+	 * Show only published services
+	 * @return
+	 * @throws DataAccessException
+	 */
+	public List<Service> showPublishedService() throws DataAccessException;
+	
+	/**
 	 * Show all service of a given user
 	 * @param username
 	 * @return

@@ -30,6 +30,7 @@ import eu.trentorise.smartcampus.openservices.dao.*;
 import eu.trentorise.smartcampus.openservices.entities.*;
 import eu.trentorise.smartcampus.openservices.support.ListOrganization;
 import eu.trentorise.smartcampus.openservices.support.ListService;
+import eu.trentorise.smartcampus.openservices.support.ListServiceHistory;
 
 @Controller
 @RequestMapping(value="/api/catalog")
@@ -40,10 +41,52 @@ public class CatalogController {
 	private ServiceDao serviceDao;
 	@Autowired
 	private OrganizationDao orgDao;
+	@Autowired
+	private MethodDao methodDao;
+	@Autowired
+	private ServiceHistoryDao shDao;
 	
 	/*
 	 * ACCESS SERVICE CATALOG 
 	 */
+	
+	//accessing published services
+	/**
+	 * Show all services in catalog which are published.
+	 * @return
+	 */
+	@RequestMapping(value="/service", method = RequestMethod.GET, produces="application/json")
+	@ResponseBody
+	public ListService catalogServices(){
+		logger.info("-- Service Catalog Publish Service --");
+		ListService lserv = new ListService();
+		List<Service> s = serviceDao.showPublishedService();
+		lserv.setServices(s);
+		return lserv;
+	}
+	
+	//accessing service data of publish service
+	//Method
+	@RequestMapping(value="/service/methods/{service_id}", method = RequestMethod.GET, produces="application/json")
+	@ResponseBody
+	public ListMethod cataogServiceMethods(@PathVariable int service_id){
+		logger.info("-- Service Catalog Show Methods --");
+		ListMethod lmeth = new ListMethod();
+		List<Method> meth = methodDao.getMethodByServiceId(service_id);
+		lmeth.setMethods(meth);
+		return lmeth;
+	}
+	
+	//Service History
+	@RequestMapping(value="/service/history/{service_id}", method = RequestMethod.GET, produces="application/json")
+	@ResponseBody
+	public ListServiceHistory cataogServiceHistory(@PathVariable int service_id){
+		logger.info("-- Service Catalog Show Methods --");
+		ListServiceHistory lsh = new ListServiceHistory();
+		List<ServiceHistory> sh = shDao.getServiceHistoryByServiceId(service_id);
+		lsh.setLserviceh(sh);
+		return lsh;
+	}
 	
 	//simple search
 	/**
@@ -104,6 +147,17 @@ public class CatalogController {
 	/*
 	 * ACCESS ORGANIZATION CATALOG
 	 */
+	
+	//Get All Organization
+	@RequestMapping(value="/org", method = RequestMethod.GET, produces="application/json")
+	@ResponseBody
+	public ListOrganization catalogOrg(){
+		logger.info("-- Organization Catalog data --");
+		ListOrganization lorg = new ListOrganization();
+		List<Organization> orgs = orgDao.showOrganizations();
+		lorg.setOrgs(orgs);
+		return lorg;
+	}
 	
 	//simple search
 	/**
