@@ -66,7 +66,26 @@ public class CatalogController {
 	}
 	
 	//accessing service data of publish service
+	/**
+	 * Get data of a service
+	 * @param service_id
+	 * @return
+	 */
+	@RequestMapping(value="/service/{service_id}", method = RequestMethod.GET, produces="application/json")
+	@ResponseBody
+	public Service cataogServiceById(@PathVariable int service_id){
+		logger.info("-- Service Catalog Service By Id--");
+		Service s = serviceDao.getServiceById(service_id);
+		return s;
+	}
+	
 	//Method
+	/**
+	 * Return methods of a service.
+	 * Search by service id
+	 * @param service_id
+	 * @return
+	 */
 	@RequestMapping(value="/service/methods/{service_id}", method = RequestMethod.GET, produces="application/json")
 	@ResponseBody
 	public ListMethod cataogServiceMethods(@PathVariable int service_id){
@@ -78,6 +97,12 @@ public class CatalogController {
 	}
 	
 	//Service History
+	/**
+	 * Return history of a service.
+	 * Search by service id
+	 * @param service_id
+	 * @return
+	 */
 	@RequestMapping(value="/service/history/{service_id}", method = RequestMethod.GET, produces="application/json")
 	@ResponseBody
 	public ListServiceHistory cataogServiceHistory(@PathVariable int service_id){
@@ -149,6 +174,10 @@ public class CatalogController {
 	 */
 	
 	//Get All Organization
+	/**
+	 * Get all organization
+	 * @return
+	 */
 	@RequestMapping(value="/org", method = RequestMethod.GET, produces="application/json")
 	@ResponseBody
 	public ListOrganization catalogOrg(){
