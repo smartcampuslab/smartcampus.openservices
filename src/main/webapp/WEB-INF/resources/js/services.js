@@ -198,7 +198,7 @@ services.factory('Catalog', ['$resource',
 
 services.factory('Service', ['$resource',
   function ($resource) {
-    return $resource('api/service/my/:userId', {}, {
+    return $resource('api/service/my/:id', {}, {
       list: {
         method: 'GET',
         url: 'api/service/view',
@@ -222,6 +222,7 @@ services.factory('Service', ['$resource',
       update: {
         method: 'PUT',
         url: 'api/service/modify',
+        params : {}
       },
       publish: {
         method: 'PUT',

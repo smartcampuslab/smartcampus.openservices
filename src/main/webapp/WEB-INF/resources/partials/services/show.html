@@ -15,19 +15,10 @@
                     <span class="label">{{service.tags}}</span>
                 </li>
                 <li>category: mycategory </li>
-                <li>documentation: <a ng-href="{{service.documentation}}">{{service.documentation}}</a><li>
+                <li>documentation: <a ng-href="{{service.documentation}}">{{service.documentation}}</a></li>
                 <li>license: {{service.license}}</li>
                 <li>version: {{service.version}}</li>
                 <li>expiration: {{service.expiration}}</li>
-            </ul>
-        </div>
-        <div class="col-md-2 col-md-offset-1">
-            <h4>Implementation</h4>
-            <hr>
-            <ul>
-                <li>execution environment: {{service.implementation.executionEnvironment}}</li>
-                <li>hosting: {{service.implementation.hosting}}</li>
-                <li>source: <a ng-href="{{service.implementation.sourceCode}}">{{service.implementation.sourceCode}}</a></li>
             </ul>
         </div>
         <div class="col-md-2 col-md-offset-1">
@@ -41,7 +32,15 @@
                 <li>protocols: {{service.accessInformation.protocols}}</li>
                 <li>authentication: {{service.accessInformation.authentication.accessProtocol}}</li>
             </ul>
-
+        </div>
+        <div class="col-md-2 col-md-offset-1">
+            <h4>Implementation</h4>
+            <hr>
+            <ul>
+                <li>execution environment: {{service.implementation.executionEnvironment}}</li>
+                <li>hosting: {{service.implementation.hosting}}</li>
+                <li>source: <a ng-href="{{service.implementation.sourceCode}}">{{service.implementation.sourceCode}}</a></li>
+            </ul>
         </div>
     </div>
     <hr>

@@ -245,7 +245,7 @@ public class ServiceController {
 	 * @param method
 	 * @return
 	 */
-	@RequestMapping(value = "/method/delete/{id}", method = RequestMethod.DELETE, consumes="application/json") 
+	@RequestMapping(value = "/method/delete/{id}", method = RequestMethod.DELETE) 
 	@ResponseBody
 	public HttpStatus deleteMethod(@PathVariable int id){
 		logger.info("-- Delete a service method --");
