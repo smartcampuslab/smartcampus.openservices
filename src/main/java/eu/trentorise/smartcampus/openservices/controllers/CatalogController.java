@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import eu.trentorise.smartcampus.openservices.dao.*;
 import eu.trentorise.smartcampus.openservices.entities.*;
+import eu.trentorise.smartcampus.openservices.support.ListMethod;
 import eu.trentorise.smartcampus.openservices.support.ListOrganization;
 import eu.trentorise.smartcampus.openservices.support.ListService;
 import eu.trentorise.smartcampus.openservices.support.ListServiceHistory;
