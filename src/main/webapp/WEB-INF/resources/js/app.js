@@ -93,20 +93,19 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
       redirectTo: '/'
     });
   }
-]).run(function ($rootScope, $location, Auth) {
-  var history = [];
-
+]).run(function ($rootScope, $location, Auth, $routeParams) {
+	  var history = [];
+	  
   $rootScope.$on('$routeChangeStart', function (event, next) {
     history.push($location.$$path);
     $rootScope.error = null;
-
-    if (Auth.isLoggedIn() && next.originalPath === '/signin') {
-      $location.path('/profile');
-    }
+    console.log('routeParams', $routeParams)
+    console.log('next',next)
     if (!Auth.authorize(next.access)) {
-      if (Auth.isLoggedIn()) {
-        $location.path(next.originalPath);
-      } else {
+    	console.log('restricted access')
+      if (!Auth.isLoggedIn()) {
+        
+      
         console.log('signin');
         $location.path('/signin');
       }

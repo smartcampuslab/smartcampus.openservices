@@ -236,17 +236,14 @@ app.controller('cbCtrl', ['$location',
 
     var queryString = $location.url().substring(10); // preceding slash omitted
     var params = parseKeyValue(queryString);
-    // TODO: The target origin should be set to an explicit origin.  Otherwise, a malicious site that can receive
-    //       the token if it manages to change the location of the parent. (See:
-    //       https://developer.mozilla.org/en/docs/DOM/window.postMessage#Security_concerns)
 
     window.opener.postMessage(params, "*");
     window.close();
   }
 ]);
 
-app.controller('serviceCtrl', ['$scope', '$routeParams', 'Service', 'Org', '$http', '$cookieStore', '$location', 'oAuth',
-  function ($scope, $routeParams, Service, Org, $http, $cookieStore, $location, oAuth) {
+app.controller('serviceCtrl', ['$scope', '$routeParams', 'Service', 'Org', '$http', '$location', 'oAuth',
+  function ($scope, $routeParams, Service, Org, $http, $location, oAuth) {
 	Service.getDescription({id:$routeParams.id}, function (data) {
         $scope.service = data;
     	Org.getById({id:data.organizationId}, function (data) {
@@ -258,27 +255,13 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Service', 'Org', '$htt
 	
 	// OAUTH TEST
     oAuth.config.clientId = 'fcb1cb81-50a7-4948-8f46-05a1f14e7089';
-    oAuth.config.scopes = ["smartcampus.profile.basicprofile.me"]
+    oAuth.config.scopes = ["smartcampus.profile.basicprofile.me"];
 
     $scope.getToken = function () {
       oAuth.config.authorizationEndpoint = $scope.request.endpoint + $scope.request.method.authdescriptor.authUrl;
       oAuth.getToken(function (data) {
-        console.log(data)
-        $scope.request.sample.headers.Authorization = 'Bearer ' + data.access_token
-        // $http({
-        //   method: 'POST',
-        //   url: $scope.request.endpoint + $scope.request.method.authdescriptor.validationUrl,
-        //   params: {
-        //     grant_type: oAuth.config.grant_type,
-        //     code: data.code,
-        //     client_id: oAuth.config.clientId,
-        //     redirect_uri: 'http://localhost/callback'
-        //   }
-        // }).success(function (data) {
-        //   console.log('token', data)
-        // }).error(function (err) {
-        //   console.log(err)
-        // })
+        console.log(data);
+        $scope.request.sample.headers.Authorization = 'Bearer ' + data.access_token;
       });
 
     }
@@ -290,37 +273,22 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Service', 'Org', '$htt
       });
     }
 
-    if ($cookieStore.get('token') == undefined) {
-
-      if ($location.hash() != "") {
-        $http.post($scope.request.method.authdescriptor.validationUrl + $location.hash().match(/#(.*)/)[1]).
-        success(function (data) {
-          console.log(data)
-          $cookieStore.put('token', data);
-          $scope.token = JSON.stringify(token, undefined, 2);
-        });
-      }
-    }
-
-    // $scope.$watch('request', function () {
-    //   $scope.parsedrequest = JSON.stringify(angular.copy($scope.request), null, 2)
-    // }, true)
     $scope.checkBeforeSend = function () {
       //&& request.method.authdescriptor && !request.sample.headers['Authorization']
       if ($scope.request.method && $scope.request.endpoint && $scope.request.sample && !$scope.request.method.authdescriptor.type) {
-        return true
+        return true;
       } else if ($scope.request.method && $scope.request.endpoint && $scope.request.sample && $scope.request.method.authdescriptor.type && $scope.request.sample.headers['Authorization']) {
-        return true
+        return true;
       } else {
-        return false
+        return false;
       }
     }
     $scope.checkBeforeToken = function () {
       //&& request.method.authdescriptor && !request.sample.headers['Authorization']
       if ($scope.request.method && $scope.request.endpoint && $scope.request.sample && $scope.request.method.authdescriptor) {
-        return true
+        return true;
       } else {
-        return false
+        return false;
       }
     }
 
@@ -339,7 +307,7 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Service', 'Org', '$htt
         }
         $scope.response += '\n' + JSON.stringify(data, null, 2);
       }).error(function (err) {
-        console.log(err)
+        console.log(err);
       });
     };
 

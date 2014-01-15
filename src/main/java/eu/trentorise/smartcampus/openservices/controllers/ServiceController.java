@@ -90,7 +90,7 @@ public class ServiceController {
 	@RequestMapping(value = "/view/description/{service_id}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
 	public Service viewServiceDescription(@PathVariable int service_id){
-		logger.info("-- View service description --" + service_id);
+		logger.info("-- View service description --");
 		Service service = serviceManager.getServiceById(service_id);
 		return service;
 	}
@@ -245,7 +245,7 @@ public class ServiceController {
 	 * @param method
 	 * @return
 	 */
-	@RequestMapping(value = "/method/delete/{id}", method = RequestMethod.DELETE, consumes="application/json") 
+	@RequestMapping(value = "/method/delete/{id}", method = RequestMethod.DELETE) 
 	@ResponseBody
 	public HttpStatus deleteMethod(@PathVariable int id){
 		logger.info("-- Delete a service method --");
