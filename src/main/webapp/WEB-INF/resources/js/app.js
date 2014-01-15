@@ -99,11 +99,16 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
   $rootScope.$on('$routeChangeStart', function (event, next) {
     history.push($location.$$path);
     $rootScope.error = null;
-
+    if (typeof next.access === "undefined"){
+    	console.log('undeeeeeeeeeef')
+    	next.access={bitMask: 1, title: "public"} 
+    }
     if (Auth.isLoggedIn() && next.originalPath === '/signin') {
       $location.path('/profile');
     }
+    console.log('next', next.access)
     if (!Auth.authorize(next.access)) {
+    	console.log('restricted access')
       if (Auth.isLoggedIn()) {
         $location.path(next.originalPath);
       } else {
