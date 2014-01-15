@@ -90,7 +90,7 @@ public class ServiceController {
 	@RequestMapping(value = "/view/description/{service_id}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
 	public Service viewServiceDescription(@PathVariable int service_id){
-		logger.info("-- View service description --");
+		logger.info("-- View service description --" + service_id);
 		Service service = serviceManager.getServiceById(service_id);
 		return service;
 	}
