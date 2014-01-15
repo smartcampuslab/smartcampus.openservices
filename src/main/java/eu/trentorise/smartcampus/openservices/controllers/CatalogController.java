@@ -115,10 +115,10 @@ public class CatalogController {
 	@ResponseBody
 	public ListOrganization catalogOrgSimpleSearch(@PathVariable String token){
 		logger.info("-- Organization Catalog simple search --");
-		ListOrganization lserv = new ListOrganization();
 		List<Organization> orgs = orgDao.searchOrganization(token);
-		lserv.setOrgs(orgs);
-		return lserv;
+		ListOrganization lorg = new ListOrganization();
+		lorg.setOrgs(orgs);
+		return lorg;
 	}
 	
 	//browse catalog using filters(by category, geography)
@@ -132,10 +132,10 @@ public class CatalogController {
 	public ListOrganization catalogOrgBrowse(@PathVariable String category){
 		//TODO for now by category
 		logger.info("-- Organization Catalog browse --");
-		ListOrganization lserv = new ListOrganization();
 		List<Organization> orgs = orgDao.browseOrganization(category,null);
-		lserv.setOrgs(orgs);
-		return lserv;
+		ListOrganization lorg = new ListOrganization();
+		lorg.setOrgs(orgs);
+		return lorg;
 	}
 	//browse catalog using filters (by geography) - when add address of organization - TODO
 	
