@@ -577,7 +577,7 @@ services.factory('oAuth', ['$http', '$window', '$location', '$rootScope',
     return {
       config: {
         clientId: null,
-        redirectUri: $location.protocol() + '://' + $location.host() + ':8080/callback',
+        redirectUri: $location.protocol() + '://' + $location.host() + ':8080/openservice/callback',
         authorizationEndpoint: null,
         localStorageName: 'accessToken',
         verifyFunc: null,
