@@ -93,25 +93,19 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
       redirectTo: '/'
     });
   }
-]).run(function ($rootScope, $location, Auth) {
+]).run(function ($rootScope, $location, Auth, $routeParams) {
   var history = [];
 
   $rootScope.$on('$routeChangeStart', function (event, next) {
     history.push($location.$$path);
     $rootScope.error = null;
-    if (typeof next.access === "undefined"){
-    	console.log('undeeeeeeeeeef')
-    	next.access={bitMask: 1, title: "public"} 
-    }
-    if (Auth.isLoggedIn() && next.originalPath === '/signin') {
-      $location.path('/profile');
-    }
-    console.log('next', next.access)
+    console.log('routeParams', $routeParams)
+    console.log('next',next)
     if (!Auth.authorize(next.access)) {
     	console.log('restricted access')
-      if (Auth.isLoggedIn()) {
-        $location.path(next.originalPath);
-      } else {
+      if (!Auth.isLoggedIn()) {
+        
+      
         console.log('signin');
         $location.path('/signin');
       }
