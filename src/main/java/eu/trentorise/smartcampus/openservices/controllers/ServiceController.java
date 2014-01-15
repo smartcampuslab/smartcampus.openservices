@@ -29,11 +29,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import eu.trentorise.smartcampus.openservices.entities.ListMethod;
 import eu.trentorise.smartcampus.openservices.entities.Method;
 import eu.trentorise.smartcampus.openservices.entities.Service;
 import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
 import eu.trentorise.smartcampus.openservices.managers.ServiceManager;
+import eu.trentorise.smartcampus.openservices.support.ListMethod;
 import eu.trentorise.smartcampus.openservices.support.ListService;
 import eu.trentorise.smartcampus.openservices.support.ListServiceHistory;
 
