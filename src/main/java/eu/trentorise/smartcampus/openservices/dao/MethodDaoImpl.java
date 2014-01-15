@@ -63,7 +63,7 @@ public class MethodDaoImpl implements MethodDao{
 	@Override
 	public List<Method> getMethodByServiceId(int service_id)
 			throws DataAccessException {
-		Query q = getEntityManager().createQuery("FROM Method M WHERE M.id_service=:id_service")
+		Query q = getEntityManager().createQuery("FROM Method M WHERE M.serviceId=:id_service")
 				.setParameter("id_service", service_id);
 		List<Method> ms = q.getResultList();
 		return ms;
@@ -86,6 +86,6 @@ public class MethodDaoImpl implements MethodDao{
 	@Transactional
 	@Override
 	public void deleteMethod(Method method) throws DataAccessException {
-		getEntityManager().remove(getEntityManager().merge(method));
+		getEntityManager().remove(method);
 	}
 }

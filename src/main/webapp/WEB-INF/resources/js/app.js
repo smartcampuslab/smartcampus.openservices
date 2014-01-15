@@ -74,11 +74,31 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
       templateUrl: 'partials/profile/services/edit.html',
       access: access.ROLE_NORMAL
     }).
+    when('/profile/services/:id/view', {
+        controller: 'viewServiceCtrl',
+        templateUrl: 'partials/profile/services/view.html',
+        access: access.ROLE_NORMAL
+      }).
     when('/profile/services/:id/edit', {
       controller: 'editServiceCtrl',
       templateUrl: 'partials/profile/services/edit.html',
       access: access.ROLE_NORMAL
     }).
+    when('/profile/services/:id/methods/new', {
+        controller: 'newMethodCtrl',
+        templateUrl: 'partials/profile/methods/edit.html',
+        access: access.ROLE_NORMAL
+      }).
+    when('/profile/services/:id/methods/:method/edit', {
+        controller: 'editMethodCtrl',
+        templateUrl: 'partials/profile/methods/edit.html',
+        access: access.ROLE_NORMAL
+      }).
+      when('/profile/services/:id/methods/:method/view', {
+          controller: 'viewMethodCtrl',
+          templateUrl: 'partials/profile/methods/view.html',
+          access: access.ROLE_NORMAL
+        }).
     when('/profile/organizations/new', {
       controller: 'newOrgCtrl',
       templateUrl: 'partials/profile/organizations/edit.html',

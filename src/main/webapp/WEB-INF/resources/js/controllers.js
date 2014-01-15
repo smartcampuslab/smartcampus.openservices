@@ -47,15 +47,27 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
     	  $location.path('profile')
       });
     };
-    $scope.modifyOrg = function (i) {
-        Org.update($scope.orgs[i], function() {
-      	  console.log('org updated');
+
+    $scope.deprecateService = function (i) {
+        Service.deprecate({id:$scope.services[i].id},{}, function() {
+      	  console.log('service deprecated');
+      	  $scope.services[i].state='DEPRECATE';
       	  $location.path('profile')
         });
-      };
-
-    $scope.deleteService = function (i) {
-      $scope.services.splice(i, 1);
+    };
+    $scope.publishService = function (i) {
+        Service.publish({id:$scope.services[i].id},{}, function() {
+      	  console.log('service published');
+      	  $scope.services[i].state='PUBLISH';
+      	  $location.path('profile')
+        });
+    };
+    $scope.unpublishService = function (i) {
+        Service.unpublish({id:$scope.services[i].id},{}, function() {
+      	  console.log('service unpublished');
+      	  $scope.services[i].state='UNPUBLISH';
+      	  $location.path('profile')
+        });
     };
 
     $scope.submit = function () {
@@ -125,6 +137,75 @@ app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Servi
     	    $location.path('profile');
     	});
     };
+  }
+]);
+
+app.controller('viewServiceCtrl', ['$scope', '$routeParams', '$location', 'Service', 'Org',
+   function ($scope, $routeParams, $location, Service, Org) {
+ 	
+ 	Service.getDescription({id: $routeParams.id},function(data){
+ 		$scope.service = data;	
+ 	    if ($scope.service.expiration && $scope.service.expiration > 0) {
+ 	    	$scope.service.expiration = new Date($scope.service.expiration).toISOString().slice(0,10);
+ 	    }
+ 	});
+     Org.get({}, function(data) {
+     	console.log('getting orgs',data)
+         $scope.orgs = data.orgs;
+     });
+     Service.getMethods({id: $routeParams.id},function(data){
+  		$scope.methods = data.methods;
+     });
+
+     $scope.deleteMethod = function (i) {
+         Service.deleteMethod({id:$scope.methods[i].id}, function() {
+          	  console.log('org deleted');
+          	  $scope.methods.splice(i, 1);
+        	  $location.path('profile/services/'+$scope.service.id+'/view');
+            });
+     };
+   }
+]);
+
+app.controller('newMethodCtrl', ['$scope', '$http', '$location', '$routeParams', 'Service', 
+  function ($scope, $http, $location, $routeParams, Service) {
+    $scope.title = 'New';
+    $scope.method = {serviceId : $routeParams.id};
+    
+    $scope.submit = function(){
+    	console.log('saving method');
+    	Service.createMethod($scope.method,function(){
+    		$location.path('profile/services/'+$scope.method.serviceId+'/view');
+    	});
+    }
+  }
+]);
+
+app.controller('viewMethodCtrl', ['$scope', '$http', '$location', '$routeParams', 'Service', 
+  function ($scope, $http, $location, $routeParams, Service) {
+
+    Service.getMethods({id: $routeParams.id},function(data){
+  		$scope.methods = data.methods;
+  		for (var i = 0; i < $scope.methods.length; i++) {
+  			if ($routeParams.method == $scope.methods[i].id) {
+  				$scope.method = $scope.methods[i];
+  			}
+  		}
+     });
+  }
+]);
+
+app.controller('editMethodCtrl', ['$scope', '$http', '$location', '$routeParams', 'Service', 
+  function ($scope, $http, $location, $routeParams, Service) {
+
+    Service.getMethods({id: $routeParams.id},function(data){
+  		$scope.methods = data.methods;
+  		for (var i = 0; i < $scope.methods.length; i++) {
+  			if ($routeParams.method == $scope.methods[i].id) {
+  				$scope.method = $scope.methods[i];
+  			}
+  		}
+     });
   }
 ]);
 

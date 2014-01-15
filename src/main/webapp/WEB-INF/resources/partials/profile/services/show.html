@@ -1,18 +1,15 @@
 <div class="animated fadeIn">
     <div class="row" ng-repeat="service in services">
-        <div class="col-xs-2 col-md-2 text-center">
-            <img class="img-rounded" data-src="holder.js/114x114" holder alt="Generic placeholder image">
-        </div>
         <div class="col-xs-10 col-md-10 section-box">
             <h3>
                 {{service.name}}
             </h3>
             <p>
                 {{service.description}}
-                <button type="button" class="pull-right btn btn-danger btn-xs" ng-click="deleteService($index)"><i class="fa fa-trash-o"></i>
-                </button>
-                <a href="profile/services/{{service.id}}/edit" class="pull-right btn btn-default btn-xs orgbtn"><i class="fa fa-edit"></i>
-                </a>
+                <button ng-show="service.state=='UNPUBLISH'" type="button" class="pull-right btn btn-success btn-xs" ng-click="publishService($index)"><i class="fa fa-thumbs-o-up"></i></button>
+                <button ng-show="service.state=='PUBLISH'" type="button" class="pull-right btn btn-warning btn-xs" ng-click="unpublishService($index)"><i class="fa fa-thumbs-o-down"></i></button>
+                <button type="button" class="pull-right btn btn-danger btn-xs" ng-click="deprecateService($index)"><i class="fa fa-trash-o"></i></button>
+                <a href="profile/services/{{service.id}}/view" class="pull-right btn btn-default btn-xs orgbtn"><i class="fa fa-edit"></i></a>
             </p>
             <hr />
             <div class="row">

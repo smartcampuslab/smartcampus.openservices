@@ -1,0 +1,81 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-2">
+            <h2>{{service.name}}</h2>
+            <h5>{{service.description}}</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 col-md-offset-2">
+            <h4>Info</h4>
+            <hr>
+            <ul>
+                <li>organization: {{orgName}}</li>
+                <li>tags:
+                    <span class="label">{{service.tags}}</span>
+                </li>
+                <li>category: mycategory </li>
+                <li>documentation: <a ng-href="{{service.documentation}}">{{service.documentation}}</a></li>
+                <li>license: {{service.license}}</li>
+                <li>version: {{service.version}}</li>
+                <li>expiration: {{service.expiration}}</li>
+            </ul>
+        </div>
+        <div class="col-md-2 col-md-offset-1">
+            <h4>Access information</h4>
+            <hr>
+            <ul>
+                <li>access policies: {{service.accessInformation.accessPolicies}}</li>
+                <li>testing endpoint: {{service.accessInformation.productionEndpoint}}</li>
+                <li>production endpoint: {{service.accessInformation.productionEndpoint}}</li>
+                <li>formats: {{service.accessInformation.formats}}</li>
+                <li>protocols: {{service.accessInformation.protocols}}</li>
+                <li>authentication: {{service.accessInformation.authentication.accessProtocol}}</li>
+            </ul>
+        </div>
+        <div class="col-md-2 col-md-offset-1">
+            <h4>Implementation</h4>
+            <hr>
+            <ul>
+                <li>execution environment: {{service.implementation.executionEnvironment}}</li>
+                <li>hosting: {{service.implementation.hosting}}</li>
+                <li>source: <a ng-href="{{service.implementation.sourceCode}}">{{service.implementation.sourceCode}}</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+      <div class="col-md-1 col-md-offset-9">
+        <a href="profile/services/{{service.id}}/edit" class="btn btn-info btn-block">Edit</a>
+      </div>
+    </div>
+    <hr/>
+
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <h4>Methods</h4>
+						<div class="animated fadeIn">
+						    <div class="row" ng-repeat="method in methods">
+						        <div class="col-md-12 section-box">
+						            <h3>
+						                {{method.name}}
+						            </h3>
+						            <p>
+						                {{method.description}}
+						                <button type="button" class="pull-right btn btn-danger btn-xs" ng-click="deleteMethod($index)"><i class="fa fa-trash-o"></i></button>
+						                <a href="profile/services/{{service.id}}/methods/{{method.id}}/edit" class="pull-right btn btn-default btn-xs orgbtn"><i class="fa fa-edit"></i></a>
+						            </p>
+						            <hr />
+						        </div>
+						    </div>
+						    <br>
+						    <div class="row">
+						        <div class="col-md-1 col-md-offset-11">
+						            <a href="profile/services/{{service.id}}/methods/new" class="btn btn-info btn-block">Add</a>
+						        </div>
+						    </div>
+						    <br>
+						
+						</div>
+        </div>
+    </div>
+</div>

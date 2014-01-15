@@ -1,0 +1,21 @@
+<div class="row animated fadeIn">
+    <div class="col-md-4 col-md-offset-4">
+        <h2>{{title}} Method</h2>
+        <form novalidate role="form" ng-submit="submit()">
+            <div class="form-group">
+                <label for="methodname">Method Name</label>
+                <input type="text" class="form-control" id="methodname" placeholder="Method Name" ng-model="method.name">
+            </div>
+            <div class="form-group">
+                <label for="methoddesc">Description</label>
+                <input type="text" class="form-control" id="methoddesc" placeholder="Description" ng-model="method.synopsis">
+            </div>
+            <div class="form-group">
+                <label for="documentation">Documentation</label>
+                <input type="text" class="form-control" id="documentation" placeholder="http://yourdocs.com/doc" ng-model="method.documentation">
+            </div>
+            <button type="submit" class="btn btn-info">Save</button>
+            <button ng-click="back()" class="pull-right btn btn-default">Go back</button>
+        </form>
+    </div>
+</div>
