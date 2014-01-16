@@ -153,6 +153,18 @@ public class CatalogController {
 	}
 	
 	/**
+	 * Get organization
+	 * @return
+	 */
+	@RequestMapping(value="/org/{id}", method = RequestMethod.GET, produces="application/json")
+	@ResponseBody
+	public Organization catalogOrg(@PathVariable int id){
+		logger.info("-- Organization Catalog data --");
+		return catalogManager.catalogOrgById(id);
+	}
+	
+	
+	/**
 	 * Simple search in organization catalog
 	 * @param token
 	 * @return

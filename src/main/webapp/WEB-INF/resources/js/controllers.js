@@ -395,27 +395,41 @@ app.controller('cbCtrl', ['$location',
   }
 ]);
 
-app.controller('serviceCtrl', ['$scope', '$routeParams', 'Service', 'Org', 'Category', '$http', '$location', 'oAuth','RemoteApi',
-   function ($scope, $routeParams, Service, Org, Category, $http, $location, oAuth, RemoteApi) {
+app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', '$http', '$location', 'oAuth','RemoteApi',
+   function ($scope, $routeParams, Catalog, Category, $http, $location, oAuth, RemoteApi) {
  	var remoteapi;
  	$scope.request = {};
- 	Service.getDescription({id:$routeParams.id}, function (data) {
+ 	Catalog.getServiceById({id:$routeParams.id}, function (data) {
          $scope.service = data;
-         $scope.service.accessInformation.authentication = {accessProtocol:'oauth'};
-         $scope.service.accessInformation.authentication.accessAttributes = {
-         		clientId:'fcb1cb81-50a7-4948-8f46-05a1f14e7089',
-             	scopes:["smartcampus.profile.basicprofile.me"],
-             	authorizationUrl: "https://vas-dev.smartcampuslab.it/aac/eauth/authorize",
-             	response_type: 'token',
-             	grant_type: 'implicit'
-         	}
+         $scope.service.accessInformation.authentication = {
+        		 accessProtocol : 'oauth',
+        		 accessAttributes : {
+	         		clientId:'fcb1cb81-50a7-4948-8f46-05a1f14e7089',
+	             	scopes:["smartcampus.profile.basicprofile.me"],
+	             	authorizationUrl: "https://vas-dev.smartcampuslab.it/aac/eauth/authorize",
+	             	response_type: 'token',
+	             	grant_type: 'implicit'
+        		 }
+         };
+         var testprops = {
+        		 authentication : $scope.service.accessInformation.authentication,
+        		 tests: [{
+        			name : 'personal profile',
+        			description: 'request personal profile',
+        			requestPath: 'https://vas-dev.smartcampuslab.it/aac/basicprofile/me',
+        			requestPathEditable: false,
+        			requestMethod: 'GET',
+        			headers: {'Accept':'application/json'}
+        		 }]
+         };
+         
          var config = $scope.service.accessInformation.authentication.accessAttributes;
          remoteapi = new RemoteApi($scope.service.accessInformation.authentication.accessProtocol);
          remoteapi.authorize(config).then(function(result){
              $scope.request.headers = result;
              console.log($scope.request)
          })
-     	Org.getById({id:data.organizationId}, function (data) {
+     	Catalog.getOrgById({id:data.organizationId}, function (data) {
      		$scope.org = data;
      	});
          if ($scope.service.category) {
@@ -423,8 +437,12 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Service', 'Org', 'Cate
   	 	        $scope.category = data;
   	 	    });
   	    } 
-        Service.getMethods({id: $routeParams.id},function(data){
+         Catalog.getServiceMethods({id: $routeParams.id},function(data){
       		$scope.methods = data.methods;
+      		// TODO method sample data
+      		for (var i = 0; i < $scope.methods.length; i++) {
+      			$scope.methods[i].testboxProperties = testprops;
+      		}
         });
 
      });
@@ -443,28 +461,21 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Service', 'Org', 'Cate
 
      $scope.checkBeforeSend = function () {
        //remoteapi.ready ? true : false
-       if ($scope.request.method && $scope.request.endpoint && $scope.request.sample && !$scope.request.method.authdescriptor.type) {
-         return true;
-       } else if ($scope.request.method && $scope.request.endpoint && $scope.request.sample && $scope.request.method.authdescriptor.type && $scope.request.sample.headers['Authorization']) {
+       if ($scope.request.method && $scope.request.sample && $scope.request.sample.requestPath && $scope.request.sample.requestMethod) {
          return true;
        } else {
          return false;
        }
      }
      $scope.checkBeforeToken = function () {
-       //&& request.method.authdescriptor && !request.sample.headers['Authorization']
-       if ($scope.request.method && $scope.request.endpoint && $scope.request.sample && $scope.request.method.authdescriptor) {
-         return true;
-       } else {
-         return false;
-       }
+    	 return checkBeforeSend() && $scope.request.method.testboxProperties.authentication.accessProtocol != 'public';
      }
 
      $scope.send = function () {
        console.info($scope.request.sample.headers);
        $http({
-         method: $scope.request.method.type,
-         url: $scope.request.endpoint + $scope.request.method.url,
+         method: $scope.request.sample.requestMethod,
+         url: $scope.request.sample.requestPath,
          data: $scope.request.sample.body,
          headers: $scope.request.sample.headers,
          withCredentials: true
