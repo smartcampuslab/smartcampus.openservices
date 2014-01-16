@@ -15,23 +15,15 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.controllers;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import eu.trentorise.smartcampus.openservices.dao.*;
 import eu.trentorise.smartcampus.openservices.entities.*;
-import eu.trentorise.smartcampus.openservices.support.ListMethod;
-import eu.trentorise.smartcampus.openservices.support.ListOrganization;
-import eu.trentorise.smartcampus.openservices.support.ListService;
-import eu.trentorise.smartcampus.openservices.support.ListServiceHistory;
+import eu.trentorise.smartcampus.openservices.managers.CatalogManager;
+import eu.trentorise.smartcampus.openservices.support.*;
 
 @Controller
 @RequestMapping(value="/api/catalog")
@@ -39,19 +31,9 @@ public class CatalogController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ServiceController.class);
 	@Autowired
-	private ServiceDao serviceDao;
-	@Autowired
-	private OrganizationDao orgDao;
-	@Autowired
-	private MethodDao methodDao;
-	@Autowired
-	private ServiceHistoryDao shDao;
+	private CatalogManager catalogManager;
 	
-	/*
-	 * ACCESS SERVICE CATALOG 
-	 */
 	
-	//accessing published services
 	/**
 	 * Show all services in catalog which are published.
 	 * @return
@@ -61,12 +43,10 @@ public class CatalogController {
 	public ListService catalogServices(){
 		logger.info("-- Service Catalog Publish Service --");
 		ListService lserv = new ListService();
-		List<Service> s = serviceDao.showPublishedService();
-		lserv.setServices(s);
+		lserv.setServices(catalogManager.catalogServices());
 		return lserv;
 	}
 	
-	//accessing service data of publish service
 	/**
 	 * Get data of a service
 	 * @param service_id
@@ -76,11 +56,9 @@ public class CatalogController {
 	@ResponseBody
 	public Service cataogServiceById(@PathVariable int service_id){
 		logger.info("-- Service Catalog Service By Id--");
-		Service s = serviceDao.getServiceById(service_id);
-		return s;
+		return catalogManager.catalogServiceById(service_id);
 	}
 	
-	//Method
 	/**
 	 * Return methods of a service.
 	 * Search by service id
@@ -92,12 +70,10 @@ public class CatalogController {
 	public ListMethod cataogServiceMethods(@PathVariable int service_id){
 		logger.info("-- Service Catalog Show Methods --");
 		ListMethod lmeth = new ListMethod();
-		List<Method> meth = methodDao.getMethodByServiceId(service_id);
-		lmeth.setMethods(meth);
+		lmeth.setMethods(catalogManager.catalogServiceMethods(service_id));
 		return lmeth;
 	}
 	
-	//Service History
 	/**
 	 * Return history of a service.
 	 * Search by service id
@@ -109,12 +85,10 @@ public class CatalogController {
 	public ListServiceHistory cataogServiceHistory(@PathVariable int service_id){
 		logger.info("-- Service Catalog Show Methods --");
 		ListServiceHistory lsh = new ListServiceHistory();
-		List<ServiceHistory> sh = shDao.getServiceHistoryByServiceId(service_id);
-		lsh.setLserviceh(sh);
+		lsh.setLserviceh(catalogManager.catalogServiceHistory(service_id));
 		return lsh;
 	}
 	
-	//simple search
 	/**
 	 * Simple search in service catalog
 	 * Catalog shows publish services
@@ -126,12 +100,10 @@ public class CatalogController {
 	public ListService catalogServiceSimpleSearch(@PathVariable String token){
 		logger.info("-- Service Catalog simple search --");
 		ListService lserv = new ListService();
-		List<Service> s = serviceDao.searchService(token);
-		lserv.setServices(s);
+		lserv.setServices(catalogManager.catalogServiceSimpleSearch(token));
 		return lserv;
 	}
 	
-	//browse catalog using filters (by category, tag, protocols/formats, using apps)
 	/**
 	 * Browse service in catalog by category
 	 * @param category
@@ -141,13 +113,11 @@ public class CatalogController {
 	@ResponseBody
 	public ListService catalogServiceBrowseByCategory(@PathVariable String category){
 		logger.info("-- Service Catalog browse (category) --");
-		List<Service> s = serviceDao.browseService(category, null);
 		ListService lserv = new ListService();
-		lserv.setServices(s);
+		lserv.setServices(catalogManager.catalogServiceBrowseByCategory(category));
 		return lserv;
 	}
 	
-	// browse catalog using filters (by category, tag, protocols/formats, using apps)
 	/**
 	 * Browse service in catalog by tags
 	 * @param tags
@@ -157,9 +127,8 @@ public class CatalogController {
 	@ResponseBody
 	public ListService catalogServiceBrowseByTags(@PathVariable String tags) {
 		logger.info("-- Service Catalog browse (category) --");
-		List<Service> s = serviceDao.browseService(null, tags);
 		ListService lserv = new ListService();
-		lserv.setServices(s);
+		lserv.setServices(catalogManager.catalogServiceBrowseByTags(tags));
 		return lserv;
 	}
 	//browse catalog using filter (by protocols) - TO DEFINE - TODO
@@ -170,11 +139,6 @@ public class CatalogController {
 		return null;
 	}
 	
-	/*
-	 * ACCESS ORGANIZATION CATALOG
-	 */
-	
-	//Get All Organization
 	/**
 	 * Get all organization
 	 * @return
@@ -184,12 +148,10 @@ public class CatalogController {
 	public ListOrganization catalogOrg(){
 		logger.info("-- Organization Catalog data --");
 		ListOrganization lorg = new ListOrganization();
-		List<Organization> orgs = orgDao.showOrganizations();
-		lorg.setOrgs(orgs);
+		lorg.setOrgs(catalogManager.catalogOrg());
 		return lorg;
 	}
 	
-	//simple search
 	/**
 	 * Simple search in organization catalog
 	 * @param token
@@ -200,12 +162,10 @@ public class CatalogController {
 	public ListOrganization catalogOrgSimpleSearch(@PathVariable String token){
 		logger.info("-- Organization Catalog simple search --");
 		ListOrganization lserv = new ListOrganization();
-		List<Organization> orgs = orgDao.searchOrganization(token);
-		lserv.setOrgs(orgs);
+		lserv.setOrgs(catalogManager.catalogOrgSimpleSearch(token));
 		return lserv;
 	}
 	
-	//browse catalog using filters(by category, geography)
 	/**
 	 * Browse organization by category
 	 * @param category
@@ -217,8 +177,7 @@ public class CatalogController {
 		//TODO for now by category
 		logger.info("-- Organization Catalog browse --");
 		ListOrganization lserv = new ListOrganization();
-		List<Organization> orgs = orgDao.browseOrganization(category,null);
-		lserv.setOrgs(orgs);
+		lserv.setOrgs(catalogManager.catalogOrgBrowse(category));
 		return lserv;
 	}
 	//browse catalog using filters (by geography) - when add address of organization - TODO
