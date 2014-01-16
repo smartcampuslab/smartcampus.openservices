@@ -359,80 +359,83 @@ app.controller('cbCtrl', ['$location',
   }
 ]);
 
-app.controller('serviceCtrl', ['$scope', '$routeParams', 'Service', 'Org', 'Category', '$http', '$location', 'oAuth',
-  function ($scope, $routeParams, Service, Org, Category, $http, $location, oAuth) {
-	Service.getDescription({id:$routeParams.id}, function (data) {
-        $scope.service = data;
-    	Org.getById({id:data.organizationId}, function (data) {
-    		$scope.orgName = data.name;
-    	});
- 	    if ($scope.service.category) {
- 	 	    Category.getById({id:$scope.service.category},function (data) {
- 	 	        $scope.category = data;
- 	 	      });
- 	    } 
+app.controller('serviceCtrl', ['$scope', '$routeParams', 'Service', 'Org', '$http', '$location', 'oAuth','RemoteApi',
+   function ($scope, $routeParams, Service, Org, $http, $location, oAuth, RemoteApi) {
+ 	var remoteapi;
+ 	$scope.request = {};
+ 	Service.getDescription({id:$routeParams.id}, function (data) {
+         $scope.service = data;
+         $scope.service.accessInformation.config = {
+         		clientId:'fcb1cb81-50a7-4948-8f46-05a1f14e7089',
+             	scopes:["smartcampus.profile.basicprofile.me"],
+             	authorizationUrl: "https://vas-dev.smartcampuslab.it/aac/eauth/authorize",
+             	response_type: 'token',
+             	grant_type: 'implicit'
+         	}
+         remoteapi = new RemoteApi(data.accessInformation.accessPolicies);
+         remoteapi.authorize($scope.service.accessInformation.config).then(function(result){
+             $scope.request.headers = result;
+             console.log($scope.request)
+         })
+     	Org.getById({id:data.organizationId}, function (data) {
+     		$scope.orgName = data.name;
+     	});
+         if ($scope.service.category) {
+  	 	    Category.getById({id:$scope.service.category},function (data) {
+  	 	        $scope.category = data;
+  	 	      });
+  	    } 
+     });
+     
+     $scope.authorize = function () {
+       var result = remoteapi.authorize($scope.service.accessInformation.config);
+       _.extend($scope.request.sample.headers, result);
+     }
 
-    });
+     
+     function toTitleCase(str) {
+       return str.replace(/(?:^|-)\w/g, function (match) {
+         return match.toUpperCase();
+       });
+     }
 
+     $scope.checkBeforeSend = function () {
+       //remoteapi.ready ? true : false
+       if ($scope.request.method && $scope.request.endpoint && $scope.request.sample && !$scope.request.method.authdescriptor.type) {
+         return true;
+       } else if ($scope.request.method && $scope.request.endpoint && $scope.request.sample && $scope.request.method.authdescriptor.type && $scope.request.sample.headers['Authorization']) {
+         return true;
+       } else {
+         return false;
+       }
+     }
+     $scope.checkBeforeToken = function () {
+       //&& request.method.authdescriptor && !request.sample.headers['Authorization']
+       if ($scope.request.method && $scope.request.endpoint && $scope.request.sample && $scope.request.method.authdescriptor) {
+         return true;
+       } else {
+         return false;
+       }
+     }
 
-	
-	// OAUTH TEST
-    oAuth.config.clientId = 'fcb1cb81-50a7-4948-8f46-05a1f14e7089';
-    oAuth.config.scopes = ["smartcampus.profile.basicprofile.me"];
+     $scope.send = function () {
+       console.info($scope.request.sample.headers);
+       $http({
+         method: $scope.request.method.type,
+         url: $scope.request.endpoint + $scope.request.method.url,
+         data: $scope.request.sample.body,
+         headers: $scope.request.sample.headers,
+         withCredentials: true
+       }).success(function (data, status, headers) {
+         $scope.response = 'HTTP/1.1 ' + status + '\n';
+         for (var key in headers()) {
+           $scope.response += toTitleCase(key) + ': ' + headers()[key] + '\n';
+         }
+         $scope.response += '\n' + JSON.stringify(data, null, 2);
+       }).error(function (err) {
+         console.log(err);
+       });
+     };
 
-    $scope.getToken = function () {
-      oAuth.config.authorizationEndpoint = $scope.request.endpoint + $scope.request.method.authdescriptor.authUrl;
-      oAuth.getToken(function (data) {
-        console.log(data);
-        $scope.request.sample.headers.Authorization = 'Bearer ' + data.access_token;
-      });
-
-    }
-
-    $scope.request = {};
-    function toTitleCase(str) {
-      return str.replace(/(?:^|-)\w/g, function (match) {
-        return match.toUpperCase();
-      });
-    }
-
-    $scope.checkBeforeSend = function () {
-      //&& request.method.authdescriptor && !request.sample.headers['Authorization']
-      if ($scope.request.method && $scope.request.endpoint && $scope.request.sample && !$scope.request.method.authdescriptor.type) {
-        return true;
-      } else if ($scope.request.method && $scope.request.endpoint && $scope.request.sample && $scope.request.method.authdescriptor.type && $scope.request.sample.headers['Authorization']) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-    $scope.checkBeforeToken = function () {
-      //&& request.method.authdescriptor && !request.sample.headers['Authorization']
-      if ($scope.request.method && $scope.request.endpoint && $scope.request.sample && $scope.request.method.authdescriptor) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-
-    $scope.send = function () {
-      console.info($scope.request.sample.headers);
-      $http({
-        method: $scope.request.method.type,
-        url: $scope.request.endpoint + $scope.request.method.url,
-        data: $scope.request.sample.body,
-        headers: $scope.request.sample.headers,
-        withCredentials: true
-      }).success(function (data, status, headers) {
-        $scope.response = 'HTTP/1.1 ' + status + '\n';
-        for (var key in headers()) {
-          $scope.response += toTitleCase(key) + ': ' + headers()[key] + '\n';
-        }
-        $scope.response += '\n' + JSON.stringify(data, null, 2);
-      }).error(function (err) {
-        console.log(err);
-      });
-    };
-
-  }
-]);
+   }
+ ]);
