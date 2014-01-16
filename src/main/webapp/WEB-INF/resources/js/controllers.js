@@ -145,6 +145,9 @@ app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Servi
         $scope.orgs = data.orgs;
     });
     $scope.submit = function () {
+	    if ($scope.service.expiration) {
+    		$scope.service.expiration = new Date($scope.service.expiration).getTime();
+	    }
     	Service.update($scope.service, function() {
     		console.log('service updated');
     	    $location.path('profile');
@@ -153,8 +156,8 @@ app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Servi
   }
 ]);
 
-app.controller('viewServiceCtrl', ['$scope', '$routeParams', '$location', 'Service', 'Org',
-   function ($scope, $routeParams, $location, Service, Org) {
+app.controller('viewServiceCtrl', ['$scope', '$routeParams', '$location', 'Service', 'Org', 'Category',
+   function ($scope, $routeParams, $location, Service, Org, Category) {
  	
  	Service.getDescription({id: $routeParams.id},function(data){
  		$scope.service = data;	
@@ -365,20 +368,22 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Service', 'Org', '$htt
  	$scope.request = {};
  	Service.getDescription({id:$routeParams.id}, function (data) {
          $scope.service = data;
-         $scope.service.accessInformation.config = {
+         $scope.service.accessInformation.authentication = {accessProtocol:'oauth'};
+         $scope.service.accessInformation.authentication.accessAttributes = {
          		clientId:'fcb1cb81-50a7-4948-8f46-05a1f14e7089',
              	scopes:["smartcampus.profile.basicprofile.me"],
              	authorizationUrl: "https://vas-dev.smartcampuslab.it/aac/eauth/authorize",
              	response_type: 'token',
              	grant_type: 'implicit'
          	}
-         remoteapi = new RemoteApi(data.accessInformation.accessPolicies);
-         remoteapi.authorize($scope.service.accessInformation.config).then(function(result){
+         var config = $scope.service.accessInformation.authentication.accessAttributes;
+         remoteapi = new RemoteApi($scope.service.accessInformation.authentication.accessProtocol);
+         remoteapi.authorize(config).then(function(result){
              $scope.request.headers = result;
              console.log($scope.request)
          })
      	Org.getById({id:data.organizationId}, function (data) {
-     		$scope.orgName = data.name;
+     		$scope.org = data;
      	});
          if ($scope.service.category) {
   	 	    Category.getById({id:$scope.service.category},function (data) {
@@ -388,7 +393,7 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Service', 'Org', '$htt
      });
      
      $scope.authorize = function () {
-       var result = remoteapi.authorize($scope.service.accessInformation.config);
+       var result = remoteapi.authorize(config);
        _.extend($scope.request.sample.headers, result);
      }
 
