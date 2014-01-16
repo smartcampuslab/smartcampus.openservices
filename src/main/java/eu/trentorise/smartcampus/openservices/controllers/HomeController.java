@@ -136,8 +136,8 @@ public class HomeController {
 		logger.info("-- Logout "+username+" --"+SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
 		String sessionId = ((WebAuthenticationDetails)SecurityContextHolder.getContext().getAuthentication().getDetails()).getSessionId();
 		logger.info("-- JSessionID: --"+sessionId);
-		/*SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
-		Cookie[] cookies = request.getCookies();
+		SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
+		/*Cookie[] cookies = request.getCookies();
 		if(cookies!=null){
 			for (int i = 0; i < cookies.length; i++) {
 				cookies[i].setValue("");
