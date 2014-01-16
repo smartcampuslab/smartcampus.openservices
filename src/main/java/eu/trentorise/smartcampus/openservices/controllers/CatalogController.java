@@ -174,7 +174,6 @@ public class CatalogController {
 	@RequestMapping(value = "/org/browse/category/{category}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
 	public ListOrganization catalogOrgBrowse(@PathVariable int category){
-		//TODO for now by category
 		logger.info("-- Organization Catalog browse --");
 		ListOrganization lserv = new ListOrganization();
 		lserv.setOrgs(catalogManager.catalogOrgBrowse(category));

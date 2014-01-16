@@ -43,6 +43,9 @@ public class CatalogManager {
 	@Autowired
 	private ServiceHistoryDao shDao;
 	
+	@Autowired
+	private CategoryManager categoryManager;
+	
 	/**
 	 * Get list of published and deprecated services
 	 * @return all {@link Service} instances
@@ -100,7 +103,7 @@ public class CatalogManager {
 	 * @param category
 	 * @return all {@link Service} instances
 	 */
-	public List<Service> catalogServiceBrowseByCategory(String category){
+	public List<Service> catalogServiceBrowseByCategory(int category){
 		List<Service> s = serviceDao.browseService(category, null);
 		return s;
 	}
@@ -140,7 +143,7 @@ public class CatalogManager {
 	 * @param category
 	 * @return all {@link Organization} instances
 	 */
-	public List<Organization> catalogOrgBrowse(@PathVariable String category){
+	public List<Organization> catalogOrgBrowse(@PathVariable int category){
 		List<Organization> orgs = orgDao.browseOrganization(category,null);
 		return orgs;
 	}
