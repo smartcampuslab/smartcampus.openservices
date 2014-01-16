@@ -83,8 +83,6 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
                 $location.path('profile')
             });
     };
-    
-
 
     User.getInfo({}, function(data) {
     	$scope.user = data;
