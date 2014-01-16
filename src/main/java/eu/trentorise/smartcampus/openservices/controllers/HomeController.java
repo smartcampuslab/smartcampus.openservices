@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.*;
 
 import eu.trentorise.smartcampus.openservices.dao.UserDao;
 import eu.trentorise.smartcampus.openservices.entities.User;
+import eu.trentorise.smartcampus.openservices.managers.UserManager;
 
 /**
  * Handles requests for the application home page.
@@ -43,7 +44,7 @@ public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	@Autowired
-	private UserDao userDao;
+	private UserManager userManager;
 	
 	/**
 	 * Home view
@@ -72,7 +73,7 @@ public class HomeController {
 	public User printWelcome() {
 		logger.info("-- Welcome after login --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		User user = userDao.getUserByUsername(username);
+		User user = userManager.getUserByUsername(username);
 		user.setPassword(null);
 		logger.info("-- User "+username+" --");
 		return user;
@@ -98,7 +99,7 @@ public class HomeController {
 	public String login(HttpServletResponse response) throws IOException{
 		logger.info("-- Perform Login --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		User user = userDao.getUserByUsername(username);
+		User user = userManager.getUserByUsername(username);
 		if(user!=null){
 			user.setPassword(null);
 			//return user;
