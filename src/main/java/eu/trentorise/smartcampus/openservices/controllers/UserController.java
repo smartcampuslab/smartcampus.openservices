@@ -30,6 +30,7 @@ import com.sun.mail.iap.Response;
 
 import eu.trentorise.smartcampus.openservices.dao.UserDao;
 import eu.trentorise.smartcampus.openservices.entities.User;
+import eu.trentorise.smartcampus.openservices.managers.UserManager;
 import eu.trentorise.smartcampus.openservices.support.ApplicationMailer;
 import eu.trentorise.smartcampus.openservices.support.EmailValidator;
 
@@ -40,7 +41,7 @@ public class UserController {
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 	
 	@Autowired
-	private UserDao userDao;
+	private UserManager userManager;
 	
 	/*
 	 * USER REST WEB SERVICE
@@ -56,7 +57,7 @@ public class UserController {
 	@ResponseBody
 	public User getUserById(@PathVariable int id){
 		logger.info("-- User Data by Id --");
-		User user = userDao.getUserById(id);
+		User user = userManager.getUserById(id);
 		user.setPassword(null);
 		return user;
 	}
@@ -72,7 +73,7 @@ public class UserController {
 	public User getUserByUsername(){
 		logger.info("-- My User Data--");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		User user = userDao.getUserByUsername(username);
+		User user = userManager.getUserByUsername(username);
 		user.setPassword(null);
 		return user;
 	}
@@ -90,7 +91,7 @@ public class UserController {
 	public User createUser(@RequestBody User user, HttpServletResponse response) throws IOException{
 		logger.info("-- Add user data --");
 		//Check username
-		User userDB = userDao.getUserByUsername(user.getUsername());
+		User userDB = userManager.getUserByUsername(user.getUsername());
 		if(userDB!=null){
 			response.setHeader("403", "Username already use");
 			response.setStatus(403);
@@ -103,10 +104,7 @@ public class UserController {
 			response.setStatus(403);
 			return null;
 		}
-		user.setEnabled(0);
-		user.setRole("ROLE_NORMAL");
-		userDao.addUser(user);
-		return userDao.getUserByUsername(user.getUsername());
+		return userManager.createUser(userDB);
 	}
 	
 	/**
@@ -142,10 +140,8 @@ public class UserController {
 	@ResponseBody
 	public User modifyUserData(@RequestBody User user){
 		logger.info("-- User modify --");
-		userDao.modifyUser(user);
-		User userN = userDao.getUserByUsername(user.getUsername());
-		userN.setPassword(null);
-		return userN;
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		return userManager.modifyUserData(username, user);
 		
 	}
 	
@@ -160,12 +156,7 @@ public class UserController {
 	@ResponseBody
 	public User disabledUser(@PathVariable String username){
 		logger.info("-- User disable --");
-		User user = userDao.getUserByUsername(username);
-		userDao.disableUser(user);
-		
-		User userN = userDao.getUserById(user.getId());
-		userN.setPassword(null);
-		return userN;
+		return userManager.disabledUser(username);
 	}
 	
 }
