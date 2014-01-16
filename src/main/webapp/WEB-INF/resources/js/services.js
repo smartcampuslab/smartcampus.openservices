@@ -283,6 +283,10 @@ services.factory('Service', ['$resource',
         method: 'PUT',
         url: 'api/service/deprecate/:id',
       },
+      delete: {
+          method: 'DELETE',
+          url: 'api/service/delete/:id',
+        },
       createMethod: {
         method: 'POST',
         url: 'api/service/method/add',

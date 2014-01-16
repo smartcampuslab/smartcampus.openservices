@@ -135,6 +135,25 @@ public class ServiceManager {
 	}
 
 	/**
+	 * @param username
+	 * @param id
+	 */
+	public void deleteService(String username, int id) {
+		User user = userDao.getUserByUsername(username);
+		Service service = serviceDao.getServiceById(id);
+		UserRole ur = urDao.getRoleOfUser(user.getId(), service.getOrganizationId());
+		if (ur == null) throw new SecurityException();
+		serviceDao.deleteService(service);
+		//add service history
+		ServiceHistory sh = new ServiceHistory();
+		sh.setOperation("delete service");
+		sh.setId_service(service.getId());
+		sh.setDate(new Date());
+		shDao.addServiceHistory(sh);
+		
+	}
+
+	/**
 	 * @return all {@link Service} instances
 	 */
 	@Transactional

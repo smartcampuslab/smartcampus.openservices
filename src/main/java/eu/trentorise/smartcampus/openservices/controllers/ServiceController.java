@@ -206,6 +206,23 @@ public class ServiceController {
 		return HttpStatus.OK;
 	}
 	
+	//Service - Manage Service - deprecate Service (create ServiceHistory.operation)
+	/**
+	 * Deprecate a service
+	 * User must be service owner
+	 * @param service
+	 * @return
+	 */
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE) 
+	@ResponseBody
+	public HttpStatus deleteService(@PathVariable int id){
+		logger.info("-- Delete service --");
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		serviceManager.deleteService(username, id);
+		return HttpStatus.OK;
+	}
+	
+	
 	//Service - Manage Service method - create Method (create ServiceHistory.operation)
 	/**
 	 * Add service method to a service

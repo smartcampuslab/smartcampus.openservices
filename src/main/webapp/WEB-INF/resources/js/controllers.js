@@ -69,6 +69,13 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
       	  $location.path('profile')
         });
     };
+    $scope.deleteService = function (i) {
+        Service.delete({id:$scope.services[i].id}, function() {
+      	  console.log('service deleted');
+      	  $scope.services.splice(i,1);
+      	  $location.path('profile')
+        });
+    };
 
     $scope.submit = function () {
             $scope.user.$update($scope.user, function() {
