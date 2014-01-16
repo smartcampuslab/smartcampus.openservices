@@ -14,7 +14,7 @@
                 <li>tags:
                     <span class="label">{{service.tags}}</span>
                 </li>
-                <li>category: {{category.name}} </li>
+                <li>category: mycategory </li>
                 <li>documentation: <a ng-href="{{service.documentation}}">{{service.documentation}}</a></li>
                 <li>license: {{service.license}}</li>
                 <li>version: {{service.version}}</li>
@@ -79,7 +79,7 @@
             <pre><code prism class="language-http">{{request.method.type}} {{request.method.url}} {{request.method.protocol}}
 {{request.sample.headers}}
 {{request.sample.body}}</code></pre>
-            <button ng-click="getToken()" type="button" ng-class="checkBeforeToken() ? 'btn btn-primary' : 'btn btn-primary disabled'">Get Token</button>
+            <button ng-click="authorize()" type="button" ng-class="checkBeforeToken() ? 'btn btn-primary' : 'btn btn-primary disabled'">Get Token</button>
             <button ng-click="send()" type="button" ng-class="checkBeforeSend() ? 'btn btn-success' : 'btn btn-success disabled'" class="btn btn-success">Send</button>
 
         </div>

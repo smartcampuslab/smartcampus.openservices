@@ -5,16 +5,21 @@ services.factory('RemoteApi', ['oAuth',
     function RemoteApi (type){
         switch (type) { 
         case 'oauth': 
-          this.
+          this.api = oAuth;
         break; 
 
         case 'openid': 
-          altezzaCella=100; 
+          this.api = null; 
         break; 
       }
     }
-    RemoteApi.prototype.ptype = function(){
-    	console.log(this.type);
+    RemoteApi.prototype.authorize = function(config){
+    	for (var key in config){
+    		this.api.config[key] = config[key];
+    	}
+    	this.api.authorize(function (result) {
+             return result;
+          });
     };
     return RemoteApi;
   }
@@ -65,24 +70,23 @@ services.factory('oAuth', ['$http', '$window', '$location', '$rootScope',
       config: {
         clientId: null,
         redirectUri: $location.protocol() + '://' + $location.host() + ':8080/openservice/callback',
-        authorizationEndpoint: null,
-        localStorageName: 'accessToken',
+        authorizationUrl: null,
         verifyFunc: null,
-        response_type: 'token',
-        grant_type: 'authorization_code',
+        response_type: null,
+        grant_type: null,
         scopes: []
       },
-      getToken: function (cb) {
+      authorize: function (cb) {
         var params = angular.extend(getParams(this));
-        var url = this.config.authorizationEndpoint + '?' + objectToQueryString(params)
+        var url = this.config.authorizationUrl + '?' + objectToQueryString(params)
         console.log(url)
         var popup = window.open(url, popupOptions.name, formatPopupOptions(popupOptions.openParams));
-
+        console.log(popup)
         angular.element($window).bind('message', function (event) {
           if (event.originalEvent.origin == $window.location.origin) {
             $rootScope.$apply(function () {
               if (event.originalEvent.data) {
-                cb(event.originalEvent.data)
+                cb({Authorization: 'Bearer ' + event.originalEvent.data.access_token})
               }
             })
           }

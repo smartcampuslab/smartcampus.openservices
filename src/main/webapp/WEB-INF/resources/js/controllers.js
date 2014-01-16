@@ -354,10 +354,22 @@ app.controller('cbCtrl', ['$location',
   }
 ]);
 
-app.controller('serviceCtrl', ['$scope', '$routeParams', 'Service', 'Org', 'Category', '$http', '$location', 'oAuth',
-  function ($scope, $routeParams, Service, Org, Category, $http, $location, oAuth) {
+app.controller('serviceCtrl', ['$scope', '$routeParams', 'Service', 'Org', '$http', '$location', 'oAuth','RemoteApi',
+  function ($scope, $routeParams, Service, Org, $http, $location, oAuth, RemoteApi) {
+	var remoteapi;
 	Service.getDescription({id:$routeParams.id}, function (data) {
         $scope.service = data;
+        $scope.service.accessInformation.config = {
+        		clientId:'fcb1cb81-50a7-4948-8f46-05a1f14e7089',
+            	scopes:["smartcampus.profile.basicprofile.me"],
+            	authorizationUrl: "https://vas-dev.smartcampuslab.it/aac/eauth/authorize",
+            	response_type: 'token',
+            	grant_type: 'implicit'
+        	}
+        remoteapi = new RemoteApi(data.accessInformation.accessPolicies);
+        var result = remoteapi.authorize($scope.service.accessInformation.config);
+        console.log(result)
+        _.extend($scope.request.sample.headers, result);
     	Org.getById({id:data.organizationId}, function (data) {
     		$scope.orgName = data.name;
     	});
@@ -368,20 +380,11 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Service', 'Org', 'Cate
  	    } 
 
     });
-
-
-	
-	// OAUTH TEST
-    oAuth.config.clientId = 'fcb1cb81-50a7-4948-8f46-05a1f14e7089';
-    oAuth.config.scopes = ["smartcampus.profile.basicprofile.me"];
-
-    $scope.getToken = function () {
-      oAuth.config.authorizationEndpoint = $scope.request.endpoint + $scope.request.method.authdescriptor.authUrl;
-      oAuth.getToken(function (data) {
-        console.log(data);
-        $scope.request.sample.headers.Authorization = 'Bearer ' + data.access_token;
-      });
-
+    
+    $scope.authorize = function () {
+      var result = remoteapi.authorize($scope.service.accessInformation.config);
+      console.log(result)
+      _.extend($scope.request.sample.headers, result);
     }
 
     $scope.request = {};
@@ -392,7 +395,7 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Service', 'Org', 'Cate
     }
 
     $scope.checkBeforeSend = function () {
-      //&& request.method.authdescriptor && !request.sample.headers['Authorization']
+      //remoteapi.ready ? true : false
       if ($scope.request.method && $scope.request.endpoint && $scope.request.sample && !$scope.request.method.authdescriptor.type) {
         return true;
       } else if ($scope.request.method && $scope.request.endpoint && $scope.request.sample && $scope.request.method.authdescriptor.type && $scope.request.sample.headers['Authorization']) {
