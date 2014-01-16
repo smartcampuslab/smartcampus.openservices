@@ -353,6 +353,11 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Service', 'Org', '$htt
     	Org.getById({id:data.organizationId}, function (data) {
     		$scope.orgName = data.name;
     	});
+        if ($scope.service.category) {
+ 	 	    Category.getById({id:$scope.service.category},function (data) {
+ 	 	        $scope.category = data;
+ 	 	      });
+ 	    } 
     });
     
     $scope.authorize = function () {

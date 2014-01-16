@@ -48,7 +48,7 @@ public interface UserDao {
 	 * @param user
 	 * @throws DataAccessException
 	 */
-	public void modifyUser(User user) throws DataAccessException;
+	public void modifyUser(int user_id, User user) throws DataAccessException;
 	
 	/**
 	 * Add a new user
