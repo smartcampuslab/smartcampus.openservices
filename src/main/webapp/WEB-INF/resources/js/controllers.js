@@ -69,6 +69,13 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
       	  $location.path('profile')
         });
     };
+    $scope.deleteService = function (i) {
+        Service.delete({id:$scope.services[i].id}, function() {
+      	  console.log('service deleted');
+      	  $scope.services.splice(i,1);
+      	  $location.path('profile')
+        });
+    };
 
     $scope.submit = function () {
             $scope.user.$update($scope.user, function() {
@@ -76,8 +83,6 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
                 $location.path('profile')
             });
     };
-    
-
 
     User.getInfo({}, function(data) {
     	$scope.user = data;
@@ -96,8 +101,12 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
   }
 ]);
 
-app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service', 'Org',
-  function ($scope, $http, $location, Service, Org) {
+app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service', 'Org', 'Category',
+  function ($scope, $http, $location, Service, Org, Category) {
+
+    Category.list({},function (data) {
+        $scope.categories = data.categories;
+      });
 
     Org.get({}, function(data) {
     	console.log('getting orgs',data)
@@ -116,9 +125,13 @@ app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service', 'Or
   }
 ]);
 
-app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Service', 'Org',
-  function ($scope, $routeParams, $location, Service, Org) {
+app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Service', 'Org', 'Category',
+  function ($scope, $routeParams, $location, Service, Org, Category) {
 	
+    Category.list({},function (data) {
+        $scope.categories = data.categories;
+      });
+
 	Service.getDescription({id: $routeParams.id},function(data){
 		$scope.service = data;	
 	    console.log($scope.service.expiration);
@@ -148,10 +161,17 @@ app.controller('viewServiceCtrl', ['$scope', '$routeParams', '$location', 'Servi
  	    if ($scope.service.expiration && $scope.service.expiration > 0) {
  	    	$scope.service.expiration = new Date($scope.service.expiration).toISOString().slice(0,10);
  	    }
- 	     Org.getById({id:data.organizationId}, function(data) {
+ 	    Org.getById({id:data.organizationId}, function(data) {
  	     	console.log('getting orgs',data)
- 	         $scope.org = data;
- 	     });
+ 	        $scope.org = data;
+ 	    });
+ 	     
+ 	    if ($scope.service.category) {
+ 	 	    Category.getById({id:$scope.service.category},function (data) {
+ 	 	        $scope.category = data;
+ 	 	      });
+ 	    } 
+
  	});
      Service.getMethods({id: $routeParams.id},function(data){
   		$scope.methods = data.methods;
@@ -217,9 +237,15 @@ app.controller('editMethodCtrl', ['$scope', '$http', '$location', '$routeParams'
   }
 ]);
 
-app.controller('newOrgCtrl', ['$scope', '$http', '$location', 'Org',
-  function ($scope, $http, $location, Org) {
+app.controller('newOrgCtrl', ['$scope', '$http', '$location', 'Org', 'Category',
+  function ($scope, $http, $location, Org, Category) {
     $scope.title = 'New';
+    
+    Category.list({},function (data) {
+        $scope.categories = data.categories;
+      });
+
+    
     $scope.submit = function () {
         Org.create($scope.org, function() {
         	console.log('org created')
@@ -230,12 +256,15 @@ app.controller('newOrgCtrl', ['$scope', '$http', '$location', 'Org',
   }
 ]);
 
-app.controller('editOrgCtrl', ['$scope', '$http', '$location', '$routeParams', 'Org',
-  function ($scope, $http, $location, $routeParams, Org) {
+app.controller('editOrgCtrl', ['$scope', '$http', '$location', '$routeParams', 'Org', 'Category', 
+  function ($scope, $http, $location, $routeParams, Org, Category) {
     $scope.title = 'Edit';
     Org.getById({id:$routeParams.id}, function (org) {
       $scope.org = org;
     });
+    Category.list({},function (data) {
+        $scope.categories = data.categories;
+      });
     $scope.submit = function () {
     	Org.update($scope.org, function() {
     		console.log('org updated');
@@ -245,8 +274,8 @@ app.controller('editOrgCtrl', ['$scope', '$http', '$location', '$routeParams', '
   }
 ]);
 
-app.controller('categoriesCtrl', ['$scope', '$http', '$location',
-  function ($scope, $http, $location) {
+app.controller('categoriesCtrl', ['$scope', '$http', '$location', 'Category',
+  function ($scope, $http, $location, Category) {
     $scope.getCategoriesRows = function (categories, size) {
       var rows = [];
 
@@ -267,9 +296,8 @@ app.controller('categoriesCtrl', ['$scope', '$http', '$location',
       return rows;
     };
 
-    $http.get('data/categories.json').success(function (categories) {
+    Category.list({},function (categories) {
       $scope.categories = categories;
-      $scope.categoriesRows = $scope.getCategoriesRows(categories, 4);
     });
 
     $scope.setCategoryActive = function (category) {
@@ -285,7 +313,7 @@ app.controller('servicesCtrl', ['$scope', '$http',
       $scope.categoryActive = undefined;
     }
 
-    $http.get('api/service/view').success(function (services) {
+    $http.get('api/catalog/service').success(function (services) {
       console.log(services);
       $scope.services = services.services;
     });
@@ -311,7 +339,6 @@ app.controller('servicesCtrl', ['$scope', '$http',
 
 app.controller('cbCtrl', ['$location',
   function ($location) {
-	console.log('cbctrl')
     function parseKeyValue(keyValue) {
       var obj = {}, key_value, key;
       angular.forEach((keyValue || "").split('&'), function (keyValue) {
@@ -332,40 +359,37 @@ app.controller('cbCtrl', ['$location',
   }
 ]);
 
-app.controller('serviceCtrl', ['$scope', '$routeParams', 'Service', 'Org', '$http', '$location', 'oAuth','RemoteApi',
-  function ($scope, $routeParams, Service, Org, $http, $location, oAuth, RemoteApi) {
-	var remoteapi;
-	$scope.request = {};
+app.controller('serviceCtrl', ['$scope', '$routeParams', 'Service', 'Org', 'Category', '$http', '$location', 'oAuth',
+  function ($scope, $routeParams, Service, Org, Category, $http, $location, oAuth) {
 	Service.getDescription({id:$routeParams.id}, function (data) {
         $scope.service = data;
-        $scope.service.accessInformation.config = {
-        		clientId:'fcb1cb81-50a7-4948-8f46-05a1f14e7089',
-            	scopes:["smartcampus.profile.basicprofile.me"],
-            	authorizationUrl: "https://vas-dev.smartcampuslab.it/aac/eauth/authorize",
-            	response_type: 'token',
-            	grant_type: 'implicit'
-        	}
-        remoteapi = new RemoteApi(data.accessInformation.accessPolicies);
-        remoteapi.authorize($scope.service.accessInformation.config).then(function(result){
-            $scope.request.headers = result;
-            console.log($scope.request)
-        })
     	Org.getById({id:data.organizationId}, function (data) {
     		$scope.orgName = data.name;
     	});
-        if ($scope.service.category) {
+ 	    if ($scope.service.category) {
  	 	    Category.getById({id:$scope.service.category},function (data) {
  	 	        $scope.category = data;
  	 	      });
  	    } 
+
     });
-    
-    $scope.authorize = function () {
-      var result = remoteapi.authorize($scope.service.accessInformation.config);
-      _.extend($scope.request.sample.headers, result);
+
+
+	
+	// OAUTH TEST
+    oAuth.config.clientId = 'fcb1cb81-50a7-4948-8f46-05a1f14e7089';
+    oAuth.config.scopes = ["smartcampus.profile.basicprofile.me"];
+
+    $scope.getToken = function () {
+      oAuth.config.authorizationEndpoint = $scope.request.endpoint + $scope.request.method.authdescriptor.authUrl;
+      oAuth.getToken(function (data) {
+        console.log(data);
+        $scope.request.sample.headers.Authorization = 'Bearer ' + data.access_token;
+      });
+
     }
 
-    
+    $scope.request = {};
     function toTitleCase(str) {
       return str.replace(/(?:^|-)\w/g, function (match) {
         return match.toUpperCase();
@@ -373,7 +397,7 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Service', 'Org', '$htt
     }
 
     $scope.checkBeforeSend = function () {
-      //remoteapi.ready ? true : false
+      //&& request.method.authdescriptor && !request.sample.headers['Authorization']
       if ($scope.request.method && $scope.request.endpoint && $scope.request.sample && !$scope.request.method.authdescriptor.type) {
         return true;
       } else if ($scope.request.method && $scope.request.endpoint && $scope.request.sample && $scope.request.method.authdescriptor.type && $scope.request.sample.headers['Authorization']) {
