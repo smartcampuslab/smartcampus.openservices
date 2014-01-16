@@ -473,11 +473,14 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
 
      $scope.send = function () {
        console.info($scope.request.sample.headers);
+       var nheaders = $scope.request.sample.headers;
+       nheaders.targeturl = $scope.request.sample.requestPath;
+       nheaders.Authorization = 'Bearer 54359034-110a-453d-951f-a83d4d93bb29';
        $http({
          method: $scope.request.sample.requestMethod,
-         url: $scope.request.sample.requestPath,
+         url: 'api/testbox',
          data: $scope.request.sample.body,
-         headers: $scope.request.sample.headers,
+         headers: nheaders,
          withCredentials: true
        }).success(function (data, status, headers) {
          $scope.response = 'HTTP/1.1 ' + status + '\n';
