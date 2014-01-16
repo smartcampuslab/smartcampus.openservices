@@ -127,13 +127,17 @@ app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service', 'Or
 
 app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Service', 'Org', 'Category',
   function ($scope, $routeParams, $location, Service, Org, Category) {
-	
+	$scope.protocols = ["OAuth", "openID"]
+	$scope.accessInformation = {authentication:{accessProtocol:null, accessAttributes:{client_id: null,response_type: null, authorizationUrl: null,grant_type: null}}};
     Category.list({},function (data) {
         $scope.categories = data.categories;
       });
 
 	Service.getDescription({id: $routeParams.id},function(data){
 		$scope.service = data;	
+		if ($scope.service.accessInformation != null){
+			$scope.accessInformation = $scope.service.accessInformation;
+		}
 	    console.log($scope.service.expiration);
 	    console.log(new Date($scope.service.expiration));
 	    if ($scope.service.expiration && $scope.service.expiration > 0) {
@@ -144,6 +148,21 @@ app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Servi
     	console.log('getting orgs',data)
         $scope.orgs = data.orgs;
     });
+    
+    $scope.keep = function(){
+    	$scope.service.accessInformation=$scope.accessInformation;
+    	console.log($scope.service)
+    };
+    
+    $scope.check = function(){
+    	for (var key in $scope.accessInformation.accessAttributes){
+    		if ($scope.accessInformation.accessAttributes[key] === null){
+    			return true;
+    		}
+    	} 
+    	return false;
+    }
+    
     $scope.submit = function () {
 	    if ($scope.service.expiration) {
     		$scope.service.expiration = new Date($scope.service.expiration).getTime();

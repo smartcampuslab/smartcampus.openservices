@@ -101,36 +101,40 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+        <h4 class="modal-title" id="myModalLabel">Access Policies</h4>
       </div>
 			<div class="modal-body">
 				<div class="form-group">
 					<label for="protocol">Protocol</label> 
-					<select ng-options="protocol for protocol in protocols" id="protocol" class="form-control" ng-model="service.accessInformation.protocol" />
+					<select ng-options="protocol for protocol in protocols" id="protocol" class="form-control" ng-model="accessInformation.authentication.accessProtocol" />
 				</div>
-				<div ng-show="service.accessInformation.protocol == 'OAuth'">
+				<div ng-show="accessInformation.authentication.accessProtocol === 'OAuth'">
 					<div class="form-group">
 						<label for="clientid">Client ID</label> 
-						<input type="text" class="form-control" id="clientid" placeholder="fcb1cb23-12a3-1234-1f23-12a3f45e6789" ng-model="service.accessInformation.client_id">
+						<input type="text" class="form-control" id="clientid" placeholder="fcb1cb23-12a3-1234-1f23-12a3f45e6789" ng-model="accessInformation.authentication.accessAttributes.client_id">
 					</div>
 					<div class="form-group">
 						<label for="scope">Scope (comma separated)</label> 
-						<input type="text" class="form-control" id="scope" placeholder="profile.email, profile.photo" ng-model="service.accessInformation.scope">
+						<input type="text" class="form-control" id="scope" placeholder="profile.email, profile.photo" ng-model="accessInformation.authentication.accessAttributes.scope">
 					</div>
 					<div class="form-group">
 						<label for="responsetype">Response Type</label> 
-						<input type="text" class="form-control" id="responsetype" placeholder="token" ng-model="service.accessInformation.response_type">
+						<input type="text" class="form-control" id="responsetype" placeholder="token" ng-model="accessInformation.authentication.accessAttributes.response_type">
 					</div>
 					<div class="form-group">
 						<label for="authurl">Authorization URL</label> 
-						<input type="text" class="form-control" id="authurl" placeholder="https://vas-dev.smartcampuslab.it/aac/eauth/authorize" ng-model="service.accessInformation.authorizationUrl">
+						<input type="text" class="form-control" id="authurl" placeholder="https://vas-dev.smartcampuslab.it/aac/eauth/authorize" ng-model="accessInformation.authentication.accessAttributes.authorizationUrl">
+					</div>
+					<div class="form-group">
+						<label for="granttype">Grant Type</label> 
+						<input type="text" class="form-control" id="granttype" placeholder="implicit" ng-model="accessInformation.authentication.accessAttributes.grant_type">
 					</div>
 				</div>
 				
 			</div>
 			<div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" ng-click="cancel()" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" ng-click="keep()" ng-class="check() ? 'btn btn-primary disabled' : 'btn btn-primary'" data-dismiss="modal">Save changes</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
