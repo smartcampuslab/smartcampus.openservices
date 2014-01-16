@@ -58,7 +58,6 @@ public class UserController {
 	public User getUserById(@PathVariable int id){
 		logger.info("-- User Data by Id --");
 		User user = userManager.getUserById(id);
-		user.setPassword(null);
 		return user;
 	}
 	
@@ -74,7 +73,6 @@ public class UserController {
 		logger.info("-- My User Data--");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userManager.getUserByUsername(username);
-		user.setPassword(null);
 		return user;
 	}
 	

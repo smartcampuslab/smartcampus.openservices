@@ -41,7 +41,6 @@ public class UserManager {
 	 */
 	public User getUserById( int id){
 		User user = userDao.getUserById(id);
-		user.setPassword(null);
 		return user;
 	}
 	
@@ -52,7 +51,6 @@ public class UserManager {
 	 */
 	public User getUserByUsername(String username){
 		User user = userDao.getUserByUsername(username);
-		user.setPassword(null);
 		return user;
 	}
 	
@@ -84,7 +82,6 @@ public class UserManager {
 		User sessionU = userDao.getUserByUsername(username);
 		userDao.modifyUser(sessionU.getId(), user);
 		User userN = userDao.getUserById(sessionU.getId());
-		userN.setPassword(null);
 		return userN;
 		
 	}
@@ -100,7 +97,6 @@ public class UserManager {
 		userDao.disableUser(user);
 		
 		User userN = userDao.getUserById(user.getId());
-		userN.setPassword(null);
 		return userN;
 	}
 }
