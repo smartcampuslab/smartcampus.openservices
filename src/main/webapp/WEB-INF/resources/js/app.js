@@ -119,14 +119,8 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
   $rootScope.$on('$routeChangeStart', function (event, next) {
     history.push($location.$$path);
     $rootScope.error = null;
-    console.log('routeParams', $routeParams)
-    console.log('next',next)
     if (!Auth.authorize(next.access)) {
-    	console.log('restricted access')
       if (!Auth.isLoggedIn()) {
-        
-      
-        console.log('signin');
         $location.path('/signin');
       }
     }
