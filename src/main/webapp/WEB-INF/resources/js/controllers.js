@@ -362,8 +362,8 @@ app.controller('cbCtrl', ['$location',
   }
 ]);
 
-app.controller('serviceCtrl', ['$scope', '$routeParams', 'Service', 'Org', '$http', '$location', 'oAuth','RemoteApi',
-   function ($scope, $routeParams, Service, Org, $http, $location, oAuth, RemoteApi) {
+app.controller('serviceCtrl', ['$scope', '$routeParams', 'Service', 'Org', 'Category', '$http', '$location', 'oAuth','RemoteApi',
+   function ($scope, $routeParams, Service, Org, Category, $http, $location, oAuth, RemoteApi) {
  	var remoteapi;
  	$scope.request = {};
  	Service.getDescription({id:$routeParams.id}, function (data) {
@@ -388,8 +388,12 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Service', 'Org', '$htt
          if ($scope.service.category) {
   	 	    Category.getById({id:$scope.service.category},function (data) {
   	 	        $scope.category = data;
-  	 	      });
+  	 	    });
   	    } 
+        Service.getMethods({id: $routeParams.id},function(data){
+      		$scope.methods = data.methods;
+        });
+
      });
      
      $scope.authorize = function () {
