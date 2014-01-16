@@ -48,7 +48,7 @@
             <p>
                 <div class="input-group">
                     <span class="input-group-addon">method</span>
-                    <select ng-options="method as method.name for method in service.methods" ng-model="request.method" class="form-control" />
+                    <select ng-options="method as method.name for method in methods" ng-model="request.method" class="form-control" />
                 </div>
             </p>
             <p>
@@ -61,10 +61,9 @@
         </div>
         <div class="col-md-4">
             <ul ng-show="request.method">
-                <li>{{request.method.synopsis}}</li>
-                <li>{{request.method.type}} {{request.method.url}} {{request.method.protocol}}</li>
+                <li>description: {{request.method.synopsis}}</li>
                 <li>
-                    <a ng-href="{{request.method.documentation}}">Docs</a>
+                    documentation: <a ng-href="{{request.method.documentation}}">{{request.method.documentation}}</a>
                 </li>
             </ul>
 

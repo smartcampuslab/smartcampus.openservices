@@ -6,7 +6,7 @@
 
 <head>
   <title>Open Services</title>
-  <base href="/openservice/" />
+  <base href="<%=request.getContextPath() %>/" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- 
   <link rel="stylesheet" href="resources/css/bootstrap.min.css" />

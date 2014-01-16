@@ -60,6 +60,16 @@ services.factory('oAuth', ['$http', '$window', '$location', '$rootScope',
       return pairs.join(',');
     };
 
+    var getRootPath = function() {
+    	var abs = $location.absUrl();
+    	var path = $location.path();
+    	if (path != '' && path != '/') {
+    		return abs.substring(0,abs.indexOf(path));
+    	} else {
+    		return abs;
+    	}
+    }
+    
     var getParams = function (self) {
       return {
         response_type: self.config.response_type,
@@ -72,7 +82,7 @@ services.factory('oAuth', ['$http', '$window', '$location', '$rootScope',
     return {
       config: {
         clientId: null,
-        redirectUri: $location.protocol() + '://' + $location.host() + ':8080/openservice/callback',
+        redirectUri: getRootPath()+'/callback',//$location.protocol() + '://' + $location.host() + ':8080/openservice/callback',
         authorizationUrl: null,
         verifyFunc: null,
         response_type: null,
