@@ -285,7 +285,7 @@ app.controller('servicesCtrl', ['$scope', '$http',
       $scope.categoryActive = undefined;
     }
 
-    $http.get('api/service/view').success(function (services) {
+    $http.get('api/catalog/service').success(function (services) {
       console.log(services);
       $scope.services = services.services;
     });
