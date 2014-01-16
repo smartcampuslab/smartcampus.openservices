@@ -148,4 +148,12 @@ public class CatalogManager {
 		return orgs;
 	}
 
+	/**
+	 * @param id
+	 * @return
+	 */
+	public Organization catalogOrgById(int id) {
+		return orgDao.getOrganizationById(id);
+	}
+
 }

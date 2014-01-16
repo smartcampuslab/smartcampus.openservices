@@ -192,52 +192,49 @@ services.factory('Category', ['$resource',
 services.factory('Catalog', ['$resource',
   function ($resource) {
     return $resource('/api/catalog', {}, {
-      update: {
-        method: 'PUT'
-      },
-      listPublishDeprecateService:{
+      listServices:{
     	method: 'GET',
     	url: 'api/catalog/service',
-    	isArray: true
       },
-      getListMethod:{
+      getServiceById:{
+      	method: 'GET',
+      	url: 'api/catalog/service/:id',
+        },
+      getServiceMethods:{
     	method: 'GET',
     	url: 'api/catalog/service/methods/:id',
-    	isArray: true
       },
       getListServiceHistory:{
     	method: 'GET',
     	url: 'api/catalog/service/history/:id',
-    	isArray: true
       },
       searchService: {
         method: 'GET',
         url: '/api/catalog/service/search/:token',
-        isArray: true
       },
       browseServiceCat: {
         method: 'GET',
         url: '/api/catalog/service/browse/category/:category',
-        isArray: true
       },
       browseServiceTags: {
         method: 'GET',
         url: '/api/catalog/service/browse/tags/:tag',
-        isArray: true
       },
-      getListOrg:{
+      listOrgs:{
+      	method: 'GET',
+      	url: 'api/catalog/org'
+        },
+      getOrgById:{
     	method: 'GET',
-    	url: 'api/catalog/org'
+    	url: 'api/catalog/org/:id'
       },
       searchOrg: {
         method: 'GET',
         url: '/api/catalog/org/search/:org',
-        isArray: true
       },
       browseOrgCat: {
         method: 'GET',
         url: '/api/catalog/org/browse/category/:category',
-        isArray: true
       }
     });
   }

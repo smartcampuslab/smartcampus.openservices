@@ -54,7 +54,7 @@
             <p>
                 <div class="input-group">
                     <span class="input-group-addon">sample request</span>
-                    <select ng-options="sample as sample.name for sample in request.method.samples" ng-model="request.sample" class="form-control" />
+                    <select ng-options="sample as sample.name for sample in request.method.testboxProperties.tests" ng-model="request.sample" class="form-control" />
                 </div>
             </p>
 
@@ -73,17 +73,17 @@
     <div class="row">
         <div class="col-md-4 col-md-offset-2">
             <h4>Request:</h4>
-            <pre><code prism class="language-http">{{request.method.type}} {{request.method.url}} {{request.method.protocol}}
+            <pre><code class="language-http">{{request.sample.requestMethod}} {{request.sample.requestPath}}
 {{request.sample.headers}}
 {{request.sample.body}}</code></pre>
-            <button ng-click="authorize()" type="button" ng-class="checkBeforeToken() ? 'btn btn-primary' : 'btn btn-primary disabled'">Get Token</button>
-            <button ng-click="send()" type="button" ng-class="checkBeforeSend() ? 'btn btn-success' : 'btn btn-success disabled'" class="btn btn-success">Send</button>
+            <button ng-click="authorize()" type="button" class="btn btn-primary">Get Token</button>
+            <button ng-click="send()" type="button" class="btn btn-success">Send</button>
 
         </div>
         <div class="col-md-4">
             <div>
                 <h4>Response:</h4>
-                <pre><code prism class="language-http">{{response}}
+                <pre><code class="language-http">{{response}}
 
 </code></pre>
             </div>
