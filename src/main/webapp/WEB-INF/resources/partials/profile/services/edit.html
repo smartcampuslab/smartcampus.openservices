@@ -21,7 +21,7 @@
             </div>
             <div class="form-group">
                 <label for="category">Category</label>
-                <select ng-options="cat.name for cat in cats" ng- id="category" class="form-control" ng-model="service.category">
+                <select ng-options="cat.id as cat.name for cat in categories" id="category" class="form-control" ng-model="service.category">
                 </select>
             </div>
             <div class="form-group">

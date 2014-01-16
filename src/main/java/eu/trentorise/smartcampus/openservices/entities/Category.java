@@ -19,34 +19,21 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="Organization")
-public class Organization{
+@Table(name="Category")
+public class Category {
 	
 	@Id
 	@GeneratedValue
 	private int id;
-	@Column(name="name", unique=true, nullable=false)
+	@Column(name="name", unique=true)
 	private String name;
 	@Column(name="description")
 	private String description;
-	@Column(name="activityArea")
-	private String activityArea;
-	@Column(name="category")
-	private int category;
-	@Column(name="contacts")
-	@Lob
-	private Contact contacts;
-	@Column(name="creator_id")
-	private int creatorId;
-
-	@Column(name="logo")
-	private String logo;
 	
-	public Organization(){
+	public Category(){
 		
 	}
 
@@ -66,69 +53,11 @@ public class Organization{
 		this.name = name;
 	}
 
-	public String getActivityArea() {
-		return activityArea;
-	}
-
-	public void setActivityArea(String activityArea) {
-		this.activityArea = activityArea;
-	}
-
-	public int getCategory() {
-		return category;
-	}
-
-	public void setCategory(int category) {
-		this.category = category;
-	}
-
-	public Contact getContacts() {
-		return contacts;
-	}
-
-	public void setContacts(Contact contacts) {
-		this.contacts = contacts;
-	}
-
-	/**
-	 * @return the description
-	 */
 	public String getDescription() {
 		return description;
 	}
 
-	/**
-	 * @param description the description to set
-	 */
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	/**
-	 * @return the creatorId
-	 */
-	public int getCreatorId() {
-		return creatorId;
-	}
-
-	/**
-	 * @param creatorId the creatorId to set
-	 */
-	public void setCreatorId(int creatorId) {
-		this.creatorId = creatorId;
-	}
-
-	/**
-	 * @return the logo
-	 */
-	public String getLogo() {
-		return logo;
-	}
-
-	/**
-	 * @param logo the logo to set
-	 */
-	public void setLogo(String logo) {
-		this.logo = logo;
 	}
 }

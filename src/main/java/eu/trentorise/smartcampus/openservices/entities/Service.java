@@ -15,9 +15,12 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.entities;
 
-import java.util.Date;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.Table;
 
 @Entity
 @Table(name="Service")
@@ -37,7 +40,7 @@ public class Service {
 	@Column(name="tags")
 	private String tags;
 	@Column(name="category")
-	private String category;
+	private int category;
 	@Column(name="license")
 	private String license;
 	@Column(name="version")
@@ -92,11 +95,11 @@ public class Service {
 		this.tags = tags;
 	}
 
-	public String getCategory() {
+	public int getCategory() {
 		return category;
 	}
 
-	public void setCategory(String category) {
+	public void setCategory(int category) {
 		this.category = category;
 	}
 

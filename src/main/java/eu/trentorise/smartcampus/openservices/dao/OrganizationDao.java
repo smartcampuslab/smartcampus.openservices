@@ -122,6 +122,12 @@ public interface OrganizationDao {
 	 * @return
 	 * @throws DataAccessException
 	 */
-	public List<Organization> browseOrganization(String category, String geography) throws DataAccessException;
+	public List<Organization> browseOrganization(Integer category, String geography) throws DataAccessException;
+
+	/**
+	 * @param id
+	 * @return all the organization of the specific category
+	 */
+	public List<Organization> findByCategory(int id) throws DataAccessException;
 	
 }

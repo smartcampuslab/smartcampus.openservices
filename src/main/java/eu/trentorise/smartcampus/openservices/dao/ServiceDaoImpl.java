@@ -160,13 +160,12 @@ public class ServiceDaoImpl implements ServiceDao{
 
 	@Transactional
 	@Override
-	public List<Service> browseService(String category, String tags)
-			throws DataAccessException {
+	public List<Service> browseService(Integer category, String tags) throws DataAccessException {
 		Query q = null;
 		if(category!=null && tags!=null){
-			q = getEntityManager().createQuery("FROM Service S WHERE S.category LIKE :category AND " +
+			q = getEntityManager().createQuery("FROM Service S WHERE S.category=:category AND " +
 				"S.tags LIKE :tags AND S.state='PUBLISH'")
-				.setParameter("category", "%"+category+"%")
+				.setParameter("category", category)
 				.setParameter("tags", "%"+tags+"%");
 		}
 		else if(category==null && tags!=null){
@@ -174,9 +173,17 @@ public class ServiceDaoImpl implements ServiceDao{
 					.setParameter("tags", "%"+tags+"%");
 		}
 		else if(category!=null && tags==null){
-			q = getEntityManager().createQuery("FROM Service S WHERE S.category LIKE :category AND S.state='PUBLISH'")
+			q = getEntityManager().createQuery("FROM Service S WHERE S.category=:category AND S.state='PUBLISH'")
 					.setParameter("category", "%"+category+"%");
 		}
+		List<Service> s = q.getResultList();
+		return s;
+	}
+
+	@Override
+	public List<Service> findByCategory(int id) {
+		Query q = getEntityManager().createQuery("FROM Service S WHERE S.category=:category")
+				.setParameter("category", id);
 		List<Service> s = q.getResultList();
 		return s;
 	}

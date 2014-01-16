@@ -16,7 +16,8 @@
             </div>
             <div class="form-group">
                 <label for="category">Category</label>
-                <input type="text" class="form-control" id="category" placeholder="" ng-model="org.category">
+                <select ng-options="cat.id as cat.name for cat in categories" id="category" class="form-control" ng-model="org.category">
+                </select>
             </div>
             <div class="form-group">
                 <label for="email">Email</label>

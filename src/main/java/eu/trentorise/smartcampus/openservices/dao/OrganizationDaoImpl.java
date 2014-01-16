@@ -17,14 +17,15 @@ package eu.trentorise.smartcampus.openservices.dao;
 
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import eu.trentorise.smartcampus.openservices.entities.*;
+import eu.trentorise.smartcampus.openservices.entities.Organization;
 
 @Repository
 public class OrganizationDaoImpl implements OrganizationDao{
@@ -125,22 +126,31 @@ public class OrganizationDaoImpl implements OrganizationDao{
 
 	@Transactional
 	@Override
-	public List<Organization> browseOrganization(String category,
-			String geography) throws DataAccessException {
+	public List<Organization> browseOrganization(Integer category, String geography) throws DataAccessException {
 		//TODO check what geography is
 		Query q = null;
 		if(category!=null && geography==null){
-			q = getEntityManager().createQuery("FROM Organization Org WHERE Org.category LIKE :category")
-					.setParameter("category", "%"+category+"%");
+			q = getEntityManager().createQuery("FROM Organization Org WHERE Org.category=:category")
+					.setParameter("category", category);
 		}
 		else if(category==null && geography!=null){
 			
 		}
 		else if(category!=null && geography!=null){
-			q = getEntityManager().createQuery("FROM Organization Org WHERE Org.category LIKE :category")
-					.setParameter("category", "%"+category+"%");
+			q = getEntityManager().createQuery("FROM Organization Org WHERE Org.category=:category")
+					.setParameter("category", category);
 		}
 		List<Organization> orgs = q.getResultList();
 		return orgs;
 	}
+
+	@Override
+	public List<Organization> findByCategory(int id) throws DataAccessException {
+		Query q = getEntityManager().createQuery("FROM Organization Org WHERE Org.category=:category")
+					.setParameter("category", id);
+		List<Organization> orgs = q.getResultList();
+		return orgs;
+	}
+	
+	
 }
