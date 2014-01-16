@@ -167,6 +167,21 @@ services.factory('Catalog', ['$resource',
       update: {
         method: 'PUT'
       },
+      listPublishDeprecateService:{
+    	method: 'GET',
+    	url: 'api/catalog/service',
+    	isArray: true
+      },
+      getListMethod:{
+    	method: 'GET',
+    	url: 'api/catalog/service/methods/:id',
+    	isArray: true
+      },
+      getListServiceHistory:{
+    	method: 'GET',
+    	url: 'api/catalog/service/history/:id',
+    	isArray: true
+      },
       searchService: {
         method: 'GET',
         url: '/api/catalog/service/search/:token',
@@ -181,6 +196,10 @@ services.factory('Catalog', ['$resource',
         method: 'GET',
         url: '/api/catalog/service/browse/tags/:tag',
         isArray: true
+      },
+      getListOrg:{
+    	method: 'GET',
+    	url: 'api/catalog/org'
       },
       searchOrg: {
         method: 'GET',
