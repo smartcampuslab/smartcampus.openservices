@@ -103,7 +103,7 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
 
 app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service', 'Org', 'Category',
   function ($scope, $http, $location, Service, Org, Category) {
-
+	$scope.protocols = ["OAuth", "openID"]
     Category.list({},function (data) {
         $scope.categories = data.categories;
       });
