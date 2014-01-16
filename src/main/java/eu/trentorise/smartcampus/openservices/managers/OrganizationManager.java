@@ -71,7 +71,7 @@ public class OrganizationManager {
 		User user = userDao.getUserByUsername(username);
 		//check user role
 		UserRole ur = urDao.getRoleOfUser(user.getId(), orgId);
-		if(ur.getRole().equalsIgnoreCase("ROLE_ORGOWNER")){
+		if(ur != null && ur.getRole().equalsIgnoreCase("ROLE_ORGOWNER")){
 			// delete user roles
 			List<UserRole> list = urDao.getUserRoleByIdOrg(orgId);
 			for (UserRole urElem : list) {
@@ -116,7 +116,7 @@ public class OrganizationManager {
 		Organization o = orgDao.getOrganizationById(org.getId());
 		//check user role
 		UserRole ur = urDao.getRoleOfUser(user.getId(), org.getId());
-		if(ur.getRole().equalsIgnoreCase("ROLE_ORGOWNER")){
+		if(ur != null && ur.getRole().equalsIgnoreCase("ROLE_ORGOWNER")){
 			//TODO which values can be modified by user?
 			o.setDescription(org.getDescription());
 			o.setCategory(org.getCategory());
@@ -143,7 +143,7 @@ public class OrganizationManager {
 		//check user role
 		Organization org = orgDao.getOrganizationById(org_id);
 		UserRole ur = urDao.getRoleOfUser(user.getId(), org.getId());
-		if(ur.getRole().equalsIgnoreCase("ROLE_ORGOWNER")){
+		if(ur != null && ur.getRole().equalsIgnoreCase("ROLE_ORGOWNER")){
 			
 			//Generate a key
 			GenerateKey g = new GenerateKey();

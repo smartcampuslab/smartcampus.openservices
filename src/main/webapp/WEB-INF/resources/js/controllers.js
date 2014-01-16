@@ -69,6 +69,13 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
       	  $location.path('profile')
         });
     };
+    $scope.deleteService = function (i) {
+        Service.delete({id:$scope.services[i].id}, function() {
+      	  console.log('service deleted');
+      	  $scope.services.splice(i,1);
+      	  $location.path('profile')
+        });
+    };
 
     $scope.submit = function () {
             $scope.user.$update($scope.user, function() {
@@ -96,8 +103,12 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
   }
 ]);
 
-app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service', 'Org',
-  function ($scope, $http, $location, Service, Org) {
+app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service', 'Org', 'Category',
+  function ($scope, $http, $location, Service, Org, Category) {
+
+    Category.list({},function (data) {
+        $scope.categories = data.categories;
+      });
 
     Org.get({}, function(data) {
     	console.log('getting orgs',data)
@@ -116,9 +127,13 @@ app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service', 'Or
   }
 ]);
 
-app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Service', 'Org',
-  function ($scope, $routeParams, $location, Service, Org) {
+app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Service', 'Org', 'Category',
+  function ($scope, $routeParams, $location, Service, Org, Category) {
 	
+    Category.list({},function (data) {
+        $scope.categories = data.categories;
+      });
+
 	Service.getDescription({id: $routeParams.id},function(data){
 		$scope.service = data;	
 	    console.log($scope.service.expiration);
@@ -148,10 +163,17 @@ app.controller('viewServiceCtrl', ['$scope', '$routeParams', '$location', 'Servi
  	    if ($scope.service.expiration && $scope.service.expiration > 0) {
  	    	$scope.service.expiration = new Date($scope.service.expiration).toISOString().slice(0,10);
  	    }
- 	     Org.getById({id:data.organizationId}, function(data) {
+ 	    Org.getById({id:data.organizationId}, function(data) {
  	     	console.log('getting orgs',data)
- 	         $scope.org = data;
- 	     });
+ 	        $scope.org = data;
+ 	    });
+ 	     
+ 	    if ($scope.service.category) {
+ 	 	    Category.getById({id:$scope.service.category},function (data) {
+ 	 	        $scope.category = data;
+ 	 	      });
+ 	    } 
+
  	});
      Service.getMethods({id: $routeParams.id},function(data){
   		$scope.methods = data.methods;
@@ -217,9 +239,15 @@ app.controller('editMethodCtrl', ['$scope', '$http', '$location', '$routeParams'
   }
 ]);
 
-app.controller('newOrgCtrl', ['$scope', '$http', '$location', 'Org',
-  function ($scope, $http, $location, Org) {
+app.controller('newOrgCtrl', ['$scope', '$http', '$location', 'Org', 'Category',
+  function ($scope, $http, $location, Org, Category) {
     $scope.title = 'New';
+    
+    Category.list({},function (data) {
+        $scope.categories = data.categories;
+      });
+
+    
     $scope.submit = function () {
         Org.create($scope.org, function() {
         	console.log('org created')
@@ -230,12 +258,15 @@ app.controller('newOrgCtrl', ['$scope', '$http', '$location', 'Org',
   }
 ]);
 
-app.controller('editOrgCtrl', ['$scope', '$http', '$location', '$routeParams', 'Org',
-  function ($scope, $http, $location, $routeParams, Org) {
+app.controller('editOrgCtrl', ['$scope', '$http', '$location', '$routeParams', 'Org', 'Category', 
+  function ($scope, $http, $location, $routeParams, Org, Category) {
     $scope.title = 'Edit';
     Org.getById({id:$routeParams.id}, function (org) {
       $scope.org = org;
     });
+    Category.list({},function (data) {
+        $scope.categories = data.categories;
+      });
     $scope.submit = function () {
     	Org.update($scope.org, function() {
     		console.log('org updated');
@@ -245,8 +276,8 @@ app.controller('editOrgCtrl', ['$scope', '$http', '$location', '$routeParams', '
   }
 ]);
 
-app.controller('categoriesCtrl', ['$scope', '$http', '$location',
-  function ($scope, $http, $location) {
+app.controller('categoriesCtrl', ['$scope', '$http', '$location', 'Category',
+  function ($scope, $http, $location, Category) {
     $scope.getCategoriesRows = function (categories, size) {
       var rows = [];
 
@@ -267,9 +298,8 @@ app.controller('categoriesCtrl', ['$scope', '$http', '$location',
       return rows;
     };
 
-    $http.get('data/categories.json').success(function (categories) {
+    Category.list({},function (categories) {
       $scope.categories = categories;
-      $scope.categoriesRows = $scope.getCategoriesRows(categories, 4);
     });
 
     $scope.setCategoryActive = function (category) {
@@ -331,13 +361,19 @@ app.controller('cbCtrl', ['$location',
   }
 ]);
 
-app.controller('serviceCtrl', ['$scope', '$routeParams', 'Service', 'Org', '$http', '$location', 'oAuth',
-  function ($scope, $routeParams, Service, Org, $http, $location, oAuth) {
+app.controller('serviceCtrl', ['$scope', '$routeParams', 'Service', 'Org', 'Category', '$http', '$location', 'oAuth',
+  function ($scope, $routeParams, Service, Org, Category, $http, $location, oAuth) {
 	Service.getDescription({id:$routeParams.id}, function (data) {
         $scope.service = data;
     	Org.getById({id:data.organizationId}, function (data) {
     		$scope.orgName = data.name;
     	});
+ 	    if ($scope.service.category) {
+ 	 	    Category.getById({id:$scope.service.category},function (data) {
+ 	 	        $scope.category = data;
+ 	 	      });
+ 	    } 
+
     });
 
 

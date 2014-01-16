@@ -114,6 +114,12 @@ public interface ServiceDao {
 	 * @return
 	 * @throws DataAccessException
 	 */
-	public List<Service> browseService(String category, String tags) throws DataAccessException;
+	public List<Service> browseService(Integer category, String tags) throws DataAccessException;
+
+	/**
+	 * @param id
+	 * @return services of the specific category
+	 */
+	public List<Service> findByCategory(int id);
 	
 }

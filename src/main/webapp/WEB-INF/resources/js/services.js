@@ -161,6 +161,34 @@ services.factory('User', ['$resource',
   }
 ]);
 
+services.factory('Category', ['$resource',
+ function ($resource) {
+   return $resource('api/category', {}, {
+     getById: {
+       method: 'GET',
+       url: 'api/category/:id',
+     },
+     list: {
+         method: 'GET',
+         url: 'api/category/',
+       },
+     create: {
+         method: 'POST',
+         url: 'api/category/add',
+       },
+     update: {
+           method: 'PUT',
+           url: 'api/category/modify',
+         },
+	 delete: {
+	     method: 'DELETE',
+	     url: 'api/category/delete/:id',
+	   }
+
+   });
+ }
+]);
+
 services.factory('Catalog', ['$resource',
   function ($resource) {
     return $resource('/api/catalog', {}, {
@@ -255,6 +283,10 @@ services.factory('Service', ['$resource',
         method: 'PUT',
         url: 'api/service/deprecate/:id',
       },
+      delete: {
+          method: 'DELETE',
+          url: 'api/service/delete/:id',
+        },
       createMethod: {
         method: 'POST',
         url: 'api/service/method/add',
