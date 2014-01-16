@@ -111,7 +111,7 @@ public class CatalogController {
 	 */
 	@RequestMapping(value = "/service/browse/category/{category}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
-	public ListService catalogServiceBrowseByCategory(@PathVariable String category){
+	public ListService catalogServiceBrowseByCategory(@PathVariable int category){
 		logger.info("-- Service Catalog browse (category) --");
 		ListService lserv = new ListService();
 		lserv.setServices(catalogManager.catalogServiceBrowseByCategory(category));
@@ -173,7 +173,7 @@ public class CatalogController {
 	 */
 	@RequestMapping(value = "/org/browse/category/{category}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
-	public ListOrganization catalogOrgBrowse(@PathVariable String category){
+	public ListOrganization catalogOrgBrowse(@PathVariable int category){
 		//TODO for now by category
 		logger.info("-- Organization Catalog browse --");
 		ListOrganization lserv = new ListOrganization();
