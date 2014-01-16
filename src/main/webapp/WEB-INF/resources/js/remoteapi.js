@@ -1,7 +1,7 @@
 'use strict';
 
-services.factory('RemoteApi', ['oAuth',
-  function (oAuth) {
+services.factory('RemoteApi', ['oAuth','$q',
+  function (oAuth, $q) {
     function RemoteApi (type){
         switch (type) { 
         case 'oauth': 
@@ -14,12 +14,15 @@ services.factory('RemoteApi', ['oAuth',
       }
     }
     RemoteApi.prototype.authorize = function(config){
+    	var deferred = $q.defer();
+    	var self = this;
     	for (var key in config){
     		this.api.config[key] = config[key];
     	}
     	this.api.authorize(function (result) {
-             return result;
+    		deferred.resolve(result);
           });
+    	return deferred.promise;
     };
     return RemoteApi;
   }
@@ -79,9 +82,7 @@ services.factory('oAuth', ['$http', '$window', '$location', '$rootScope',
       authorize: function (cb) {
         var params = angular.extend(getParams(this));
         var url = this.config.authorizationUrl + '?' + objectToQueryString(params)
-        console.log(url)
         var popup = window.open(url, popupOptions.name, formatPopupOptions(popupOptions.openParams));
-        console.log(popup)
         angular.element($window).bind('message', function (event) {
           if (event.originalEvent.origin == $window.location.origin) {
             $rootScope.$apply(function () {

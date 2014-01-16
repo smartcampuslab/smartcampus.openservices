@@ -96,12 +96,8 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
   }
 ]);
 
-app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service', 'Org', 'Category',
-  function ($scope, $http, $location, Service, Org, Category) {
-
-    Category.list({},function (data) {
-        $scope.categories = data.categories;
-      });
+app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service', 'Org',
+  function ($scope, $http, $location, Service, Org) {
 
     Org.get({}, function(data) {
     	console.log('getting orgs',data)
@@ -120,13 +116,9 @@ app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service', 'Or
   }
 ]);
 
-app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Service', 'Org', 'Category',
-  function ($scope, $routeParams, $location, Service, Org, Category) {
+app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Service', 'Org',
+  function ($scope, $routeParams, $location, Service, Org) {
 	
-    Category.list({},function (data) {
-        $scope.categories = data.categories;
-      });
-
 	Service.getDescription({id: $routeParams.id},function(data){
 		$scope.service = data;	
 	    console.log($scope.service.expiration);
@@ -156,17 +148,10 @@ app.controller('viewServiceCtrl', ['$scope', '$routeParams', '$location', 'Servi
  	    if ($scope.service.expiration && $scope.service.expiration > 0) {
  	    	$scope.service.expiration = new Date($scope.service.expiration).toISOString().slice(0,10);
  	    }
- 	    Org.getById({id:data.organizationId}, function(data) {
+ 	     Org.getById({id:data.organizationId}, function(data) {
  	     	console.log('getting orgs',data)
- 	        $scope.org = data;
- 	    });
- 	     
- 	    if ($scope.service.category) {
- 	 	    Category.getById({id:$scope.service.category},function (data) {
- 	 	        $scope.category = data;
- 	 	      });
- 	    } 
-
+ 	         $scope.org = data;
+ 	     });
  	});
      Service.getMethods({id: $routeParams.id},function(data){
   		$scope.methods = data.methods;
@@ -232,15 +217,9 @@ app.controller('editMethodCtrl', ['$scope', '$http', '$location', '$routeParams'
   }
 ]);
 
-app.controller('newOrgCtrl', ['$scope', '$http', '$location', 'Org', 'Category',
-  function ($scope, $http, $location, Org, Category) {
+app.controller('newOrgCtrl', ['$scope', '$http', '$location', 'Org',
+  function ($scope, $http, $location, Org) {
     $scope.title = 'New';
-    
-    Category.list({},function (data) {
-        $scope.categories = data.categories;
-      });
-
-    
     $scope.submit = function () {
         Org.create($scope.org, function() {
         	console.log('org created')
@@ -251,15 +230,12 @@ app.controller('newOrgCtrl', ['$scope', '$http', '$location', 'Org', 'Category',
   }
 ]);
 
-app.controller('editOrgCtrl', ['$scope', '$http', '$location', '$routeParams', 'Org', 'Category', 
-  function ($scope, $http, $location, $routeParams, Org, Category) {
+app.controller('editOrgCtrl', ['$scope', '$http', '$location', '$routeParams', 'Org',
+  function ($scope, $http, $location, $routeParams, Org) {
     $scope.title = 'Edit';
     Org.getById({id:$routeParams.id}, function (org) {
       $scope.org = org;
     });
-    Category.list({},function (data) {
-        $scope.categories = data.categories;
-      });
     $scope.submit = function () {
     	Org.update($scope.org, function() {
     		console.log('org updated');
@@ -269,8 +245,8 @@ app.controller('editOrgCtrl', ['$scope', '$http', '$location', '$routeParams', '
   }
 ]);
 
-app.controller('categoriesCtrl', ['$scope', '$http', '$location', 'Category',
-  function ($scope, $http, $location, Category) {
+app.controller('categoriesCtrl', ['$scope', '$http', '$location',
+  function ($scope, $http, $location) {
     $scope.getCategoriesRows = function (categories, size) {
       var rows = [];
 
@@ -291,8 +267,9 @@ app.controller('categoriesCtrl', ['$scope', '$http', '$location', 'Category',
       return rows;
     };
 
-    Category.list({},function (categories) {
+    $http.get('data/categories.json').success(function (categories) {
       $scope.categories = categories;
+      $scope.categoriesRows = $scope.getCategoriesRows(categories, 4);
     });
 
     $scope.setCategoryActive = function (category) {
@@ -308,7 +285,7 @@ app.controller('servicesCtrl', ['$scope', '$http',
       $scope.categoryActive = undefined;
     }
 
-    $http.get('api/catalog/service').success(function (services) {
+    $http.get('api/service/view').success(function (services) {
       console.log(services);
       $scope.services = services.services;
     });
@@ -334,6 +311,7 @@ app.controller('servicesCtrl', ['$scope', '$http',
 
 app.controller('cbCtrl', ['$location',
   function ($location) {
+	console.log('cbctrl')
     function parseKeyValue(keyValue) {
       var obj = {}, key_value, key;
       angular.forEach((keyValue || "").split('&'), function (keyValue) {
@@ -357,6 +335,7 @@ app.controller('cbCtrl', ['$location',
 app.controller('serviceCtrl', ['$scope', '$routeParams', 'Service', 'Org', '$http', '$location', 'oAuth','RemoteApi',
   function ($scope, $routeParams, Service, Org, $http, $location, oAuth, RemoteApi) {
 	var remoteapi;
+	$scope.request = {};
 	Service.getDescription({id:$routeParams.id}, function (data) {
         $scope.service = data;
         $scope.service.accessInformation.config = {
@@ -367,27 +346,21 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Service', 'Org', '$htt
             	grant_type: 'implicit'
         	}
         remoteapi = new RemoteApi(data.accessInformation.accessPolicies);
-        var result = remoteapi.authorize($scope.service.accessInformation.config);
-        console.log(result)
-        _.extend($scope.request.sample.headers, result);
+        remoteapi.authorize($scope.service.accessInformation.config).then(function(result){
+            $scope.request.headers = result;
+            console.log($scope.request)
+        })
     	Org.getById({id:data.organizationId}, function (data) {
     		$scope.orgName = data.name;
     	});
- 	    if ($scope.service.category) {
- 	 	    Category.getById({id:$scope.service.category},function (data) {
- 	 	        $scope.category = data;
- 	 	      });
- 	    } 
-
     });
     
     $scope.authorize = function () {
       var result = remoteapi.authorize($scope.service.accessInformation.config);
-      console.log(result)
       _.extend($scope.request.sample.headers, result);
     }
 
-    $scope.request = {};
+    
     function toTitleCase(str) {
       return str.replace(/(?:^|-)\w/g, function (match) {
         return match.toUpperCase();
