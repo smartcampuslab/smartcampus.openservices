@@ -116,20 +116,31 @@ public class HomeController {
 	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	//@ResponseBody
-	public String login(HttpServletRequest request, HttpServletResponse response) throws IOException{
+	@ResponseBody
+	public User login(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		logger.info("-- Perform Login --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userManager.getUserByUsername(username);
 		if(user!=null){
 			user.setPassword(null);
-			//return user;
+			Cookie[] cookies = request.getCookies();
+			String name;
+			if(cookies!=null){
+				for (int i = 0; i < cookies.length; i++) {
+					name = cookies[i].getName();
+					if(name.equalsIgnoreCase("value")){
+					cookies[i].setValue("true");
+					}
+					response.addCookie(cookies[i]);
+				}
+			}
+			return user;
 		}
 		else{
 			//response.sendError(401);
-			//return null;
+			return null;
 		}
-		return "index";
+		//return "index";
 	}
 	
 	/**
