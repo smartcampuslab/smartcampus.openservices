@@ -28,15 +28,16 @@ directives.directive('prism', ['$timeout',
   }
 ]);
 
-directives.directive('gravatar', ['$timeout', 'Gravatar','$compile',
+directives.directive('signin', ['$timeout', 'Gravatar','$compile',
   function ($timeout, Gravatar, $compile) {
     return {
     	
       link: function (scope, element, attrs, navCtrl) {
         scope.$watch('currentUser.username', function (val) {
+        	console.log('directive changed',val)
           if (val) {
         	  var html ='<li class="dropdown">\
-	    	        <a ng-href="#" class="dropdown-toggle" data-toggle="dropdown">Menu <b class="caret"></b></a>\
+	    	        <a class="dropdown-toggle" data-toggle="dropdown">Menu <b class="caret"></b></a>\
 	    	        <ul class="dropdown-menu">\
 	    	          <li><a href="profile">Profile</a></li>\
 	    	          <li class="divider"></li>\
@@ -45,7 +46,11 @@ directives.directive('gravatar', ['$timeout', 'Gravatar','$compile',
 	    	      </li>';
         	  var e = $compile(html)(scope);
               element.replaceWith(e);
-        	  // <img class="media-object" src="' + Gravatar.picture(40) + '" />
+          }else{
+        	  console.log('should be signin')
+        	  var html ='<li><a href="signin">Sign in</a></li>';
+        	  var e = $compile(html)(scope);
+              element.replaceWith(e);
           }
         })
 
@@ -53,3 +58,22 @@ directives.directive('gravatar', ['$timeout', 'Gravatar','$compile',
     };
   }
 ]);
+
+directives.directive('gravatar', ['Gravatar','$compile',
+                                function (Gravatar, $compile) {
+                                  return {
+                                  	
+                                    link: function (scope, element, attrs, navCtrl) {
+                                      scope.$watch('currentUser.username', function (val) {
+                                        if (val) {
+                                      	  var html ='<img class="media-object dp img-circle" style="width: 100px;height:100px;" src="' + Gravatar.picture(120) + '" />';
+                                      	  var e = $compile(html)(scope);
+                                            element.replaceWith(e);
+                                        }
+                                      })
+
+                                    }
+                                  };
+                                }
+                              ]);
+

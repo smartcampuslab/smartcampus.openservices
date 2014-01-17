@@ -189,3 +189,7 @@
 input.ng-invalid.ng-dirty {
         border-color: #FA787E;
       }
+      
+a{
+    cursor: pointer;
+}
