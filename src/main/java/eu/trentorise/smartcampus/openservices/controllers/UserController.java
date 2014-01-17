@@ -102,7 +102,7 @@ public class UserController {
 			response.setStatus(403);
 			return null;
 		}
-		return userManager.createUser(userDB);
+		return userManager.createUser(user);
 	}
 	
 	/**
