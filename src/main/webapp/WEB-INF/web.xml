@@ -43,7 +43,7 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	
-	<!-- Cookie filter  -->
+	<!-- Cookie filter  
 	<filter>
 		<filter-name>cookieFilter</filter-name>
 		<filter-class>eu.trentorise.smartcampus.openservices.support.CookieFilter</filter-class>
@@ -53,6 +53,7 @@
 		<filter-name>cookieFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+	-->
 	
 	<!-- Set timeout session: unlimited -->
 	<session-config>
