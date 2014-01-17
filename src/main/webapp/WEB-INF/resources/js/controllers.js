@@ -427,15 +427,9 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
         		 }]
          };
          
-         var config = $scope.service.accessInformation.authentication.accessAttributes;
-         remoteapi = new RemoteApi($scope.service.accessInformation.authentication.accessProtocol);
-         remoteapi.authorize(config).then(function(result){
-             $scope.request.headers = result;
-             console.log($scope.request)
-         })
-     	Catalog.getOrgById({id:data.organizationId}, function (data) {
+     	 Catalog.getOrgById({id:data.organizationId}, function (data) {
      		$scope.org = data;
-     	});
+     	 });
          if ($scope.service.category) {
   	 	    Category.getById({id:$scope.service.category},function (data) {
   	 	        $scope.category = data;
@@ -450,12 +444,6 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
         });
 
      });
-     
-     $scope.authorize = function () {
-       var result = remoteapi.authorize(config);
-       _.extend($scope.request.sample.headers, result);
-     }
-
      
      function toTitleCase(str) {
        return str.replace(/(?:^|-)\w/g, function (match) {
@@ -475,23 +463,36 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
     	 return checkBeforeSend() && $scope.request.method.testboxProperties.authentication.accessProtocol != 'public';
      }
 
+     
+     
      $scope.send = function () {
-       console.info($scope.request.sample.headers);
-       $http({
-         method: $scope.request.sample.requestMethod,
-         url: $scope.request.sample.requestPath,
-         data: $scope.request.sample.body,
-         headers: $scope.request.sample.headers,
-         withCredentials: true
-       }).success(function (data, status, headers) {
-         $scope.response = 'HTTP/1.1 ' + status + '\n';
-         for (var key in headers()) {
-           $scope.response += toTitleCase(key) + ': ' + headers()[key] + '\n';
-         }
-         $scope.response += '\n' + JSON.stringify(data, null, 2);
-       }).error(function (err) {
-         console.log(err);
-       });
+         var config = $scope.service.accessInformation.authentication.accessAttributes;
+         remoteapi = new RemoteApi($scope.service.accessInformation.authentication.accessProtocol);
+         remoteapi.authorize(config).then(function(result){
+             console.info($scope.request.sample.headers);
+             var nheaders = result;
+             _.extend(nheaders, $scope.request.sample.headers);
+             nheaders.targeturl = $scope.request.sample.requestPath;
+             $http({
+               method: $scope.request.sample.requestMethod,
+               url: 'api/testbox',
+               data: $scope.request.sample.body,
+               headers: nheaders,
+               withCredentials: true
+             }).success(function (data, status, headers) {
+               $scope.response = 'HTTP/1.1 ' + status + '\n';
+               for (var key in headers()) {
+                 $scope.response += toTitleCase(key) + ': ' + headers()[key] + '\n';
+               }
+               $scope.response += '\n' + JSON.stringify(data, null, 2);
+             }).error(function (err) {
+               console.log(err);
+             });
+
+        	 
+        	 $scope.request.headers = result;
+             console.log($scope.request)
+         });
      };
 
    }

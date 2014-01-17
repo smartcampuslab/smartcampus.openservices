@@ -19,7 +19,8 @@
 		<intercept-url pattern="/api/admin/**" access="hasRole('ROLE_ADMIN')" />
 	
 	 	 <intercept-url pattern="/api/catalog/**" access="permitAll" />
-  
+     <intercept-url pattern="/api/testbox/**" access="permitAll" />
+	 	 
 		<intercept-url pattern="/api/org/my/**" access="isAuthenticated()"/>
 		<intercept-url pattern="/api/org/manage/**" access="isAuthenticated()"/>
     	<intercept-url pattern="/api/org/**" access="hasAnyRole('ROLE_ADMIN','ROLE_ORGOWNER')" />
