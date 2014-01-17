@@ -70,12 +70,18 @@ public class HomeController {
 	 */
 	@RequestMapping(value="/welcome", method = RequestMethod.GET)
 	@ResponseBody
-	public User printWelcome() {
+	public User printWelcome(HttpServletResponse response) {
 		logger.info("-- Welcome after login --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userManager.getUserByUsername(username);
 		user.setPassword(null);
 		logger.info("-- User "+username+" --");
+		
+		//return cookie not Http Only with value true if user is authenticated o.w. false
+		String value = SecurityContextHolder.getContext().getAuthentication().isAuthenticated()+"";
+		Cookie cookies = new Cookie("value", value);
+		response.addCookie(cookies);
+		
 		return user;
 	}
 	
