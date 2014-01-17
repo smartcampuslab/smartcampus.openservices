@@ -62,6 +62,9 @@ public class CatalogManager {
 	 */
 	public Service catalogServiceById(int service_id){
 		Service s = serviceDao.getServiceById(service_id);
+		if(s.getState().equalsIgnoreCase("UNPUBLISH")){
+			s = null;
+		}
 		return s;
 	}
 	
