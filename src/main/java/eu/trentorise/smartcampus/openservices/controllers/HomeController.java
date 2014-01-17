@@ -60,6 +60,12 @@ public class HomeController {
 		String roles = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString();
 		response.setHeader("Roles", roles);
 		logger.info("-- Welcome home! Roles: "+roles+" --");
+		
+		//return cookie not Http Only with value true if user is authenticated o.w. false
+		/*String value = SecurityContextHolder.getContext().getAuthentication().isAuthenticated()+"";
+		Cookie cookies = new Cookie("value", value);
+		response.addCookie(cookies);
+		*/
 		return "index";
 	}
 	
@@ -70,18 +76,27 @@ public class HomeController {
 	 */
 	@RequestMapping(value="/welcome", method = RequestMethod.GET)
 	@ResponseBody
-	public User printWelcome(HttpServletResponse response) {
+	public User printWelcome(HttpServletRequest request, HttpServletResponse response) {
 		logger.info("-- Welcome after login --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userManager.getUserByUsername(username);
 		user.setPassword(null);
 		logger.info("-- User "+username+" --");
 		
-		//return cookie not Http Only with value true if user is authenticated o.w. false
+		//check if cookie value exists and set it
 		String value = SecurityContextHolder.getContext().getAuthentication().isAuthenticated()+"";
-		Cookie cookies = new Cookie("value", value);
-		response.addCookie(cookies);
-		
+		Cookie[] cookies = request.getCookies();
+		String name;
+		if(cookies!=null){
+			for (int i = 0; i < cookies.length; i++) {
+				name = cookies[i].getName();
+				if(name.equalsIgnoreCase("value")){
+				cookies[i].setValue(value+"");
+				}
+				response.addCookie(cookies[i]);
+			}
+		}
+
 		return user;
 	}
 	
@@ -89,7 +104,7 @@ public class HomeController {
 	 * If url is wrong, then return index page.
 	 */
 	@RequestMapping()
-	public String error(HttpServletResponse response) {
+	public String error(HttpServletRequest request, HttpServletResponse response) {
 		logger.info("-- Error mapping! --");
 		return home(response);
 	}
@@ -102,7 +117,7 @@ public class HomeController {
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	//@ResponseBody
-	public String login(HttpServletResponse response) throws IOException{
+	public String login(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		logger.info("-- Perform Login --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userManager.getUserByUsername(username);
@@ -125,9 +140,8 @@ public class HomeController {
 	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/loginfailed", method = RequestMethod.GET)
-	public String loginfailed(HttpServletResponse response) throws IOException{
+	public String loginfailed(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		logger.info("-- Login failed --");
-		response.sendError(401);
 		return "index";
 	}
 	
@@ -143,19 +157,20 @@ public class HomeController {
 		String sessionId = ((WebAuthenticationDetails)SecurityContextHolder.getContext().getAuthentication().getDetails()).getSessionId();
 		logger.info("-- JSessionID: --"+sessionId);
 		SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
-		boolean authValue = SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
 		
+		//check if cookie value exists and set it
+		/*String value = SecurityContextHolder.getContext().getAuthentication().isAuthenticated()+"";
 		Cookie[] cookies = request.getCookies();
 		String name;
 		if(cookies!=null){
 			for (int i = 0; i < cookies.length; i++) {
 				name = cookies[i].getName();
 				if(name.equalsIgnoreCase("value")){
-				cookies[i].setValue(authValue+"");
+					cookies[i].setValue(value+"");
 				}
 				response.addCookie(cookies[i]);
 			}
-		}
+		}*/
 		return "index";
 	}
 	
