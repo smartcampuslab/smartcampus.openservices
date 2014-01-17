@@ -68,6 +68,7 @@ public class HomeController {
 		}
 		logger.info("-- Welcome home! Authenticated: "+value+" --");
 		Cookie cookies = new Cookie("value", value);
+		cookies.setPath("/openservice/");
 		response.addCookie(cookies);
 		
 		return "index";
