@@ -43,6 +43,7 @@ public class CookieFilter implements Filter{
 		}
 		else{
 			Cookie cookie = new Cookie("value", "false");
+			cookie.setPath("/openservice/");
 			response.addCookie(cookie);
 		}
 		arg2.doFilter(arg0, arg1);
