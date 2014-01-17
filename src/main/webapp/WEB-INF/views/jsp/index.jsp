@@ -49,8 +49,16 @@
           </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li signin><a href="signin">Sign in</a> 
+          <li ng-show="currentUser.role.title === 'public'"><a href="signin">Sign in</a> 
           </li>
+          <li ng-show="currentUser.role.title === 'ROLE_NORMAL' || currentUser.role.title === 'ROLE_ADMIN'" class="dropdown">
+	    	        <a class="dropdown-toggle" data-toggle="dropdown">Menu <b class="caret"></b></a>
+	    	        <ul class="dropdown-menu">
+	    	          <li><a href="profile">Profile</a></li>
+	    	          <li class="divider"></li>
+	    	          <li><a ng-click="logout()" href="#">Logout</a></li>
+	    	        </ul>
+	    	      </li>
         </ul>
       </div>
       <!-- /.navbar-collapse -->
