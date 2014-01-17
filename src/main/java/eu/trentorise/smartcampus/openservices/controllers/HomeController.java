@@ -62,10 +62,14 @@ public class HomeController {
 		logger.info("-- Welcome home! Roles: "+roles+" --");
 		
 		//return cookie not Http Only with value true if user is authenticated o.w. false
-		/*String value = SecurityContextHolder.getContext().getAuthentication().isAuthenticated()+"";
+		String value = "false";
+		if(!username.equalsIgnoreCase("anonymousUser")){
+			value = SecurityContextHolder.getContext().getAuthentication().isAuthenticated()+"";
+		}
+		logger.info("-- Welcome home! Authenticated: "+value+" --");
 		Cookie cookies = new Cookie("value", value);
 		response.addCookie(cookies);
-		*/
+		
 		return "index";
 	}
 	
@@ -170,7 +174,7 @@ public class HomeController {
 		SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
 		
 		//check if cookie value exists and set it
-		/*String value = SecurityContextHolder.getContext().getAuthentication().isAuthenticated()+"";
+		String value = SecurityContextHolder.getContext().getAuthentication().isAuthenticated()+"";
 		Cookie[] cookies = request.getCookies();
 		String name;
 		if(cookies!=null){
@@ -181,7 +185,7 @@ public class HomeController {
 				}
 				response.addCookie(cookies[i]);
 			}
-		}*/
+		}
 		return "index";
 	}
 	
