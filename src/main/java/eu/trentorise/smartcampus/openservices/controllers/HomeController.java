@@ -143,9 +143,10 @@ public class HomeController {
 		String sessionId = ((WebAuthenticationDetails)SecurityContextHolder.getContext().getAuthentication().getDetails()).getSessionId();
 		logger.info("-- JSessionID: --"+sessionId);
 		SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
+		boolean authValue = SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
+		
 		Cookie[] cookies = request.getCookies();
 		String name;
-		boolean authValue = SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
 		if(cookies!=null){
 			for (int i = 0; i < cookies.length; i++) {
 				name = cookies[i].getName();
