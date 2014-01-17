@@ -143,15 +143,18 @@ public class HomeController {
 		String sessionId = ((WebAuthenticationDetails)SecurityContextHolder.getContext().getAuthentication().getDetails()).getSessionId();
 		logger.info("-- JSessionID: --"+sessionId);
 		SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
-		/*Cookie[] cookies = request.getCookies();
+		Cookie[] cookies = request.getCookies();
+		String name;
+		boolean authValue = SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
 		if(cookies!=null){
 			for (int i = 0; i < cookies.length; i++) {
-				cookies[i].setValue("");
-				cookies[i].setPath("/");
-				cookies[i].setMaxAge(0);
+				name = cookies[i].getName();
+				if(name.equalsIgnoreCase("value")){
+				cookies[i].setValue(authValue+"");
+				}
 				response.addCookie(cookies[i]);
 			}
-		}*/
+		}
 		return "index";
 	}
 	
