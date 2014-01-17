@@ -116,10 +116,10 @@ public class HomeController {
 	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	@ResponseBody
-	public User login(HttpServletRequest request, HttpServletResponse response) throws IOException{
+	//@ResponseBody
+	public String login(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		logger.info("-- Perform Login --");
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		/*String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userManager.getUserByUsername(username);
 		if(user!=null){
 			user.setPassword(null);
@@ -139,8 +139,8 @@ public class HomeController {
 		else{
 			//response.sendError(401);
 			return null;
-		}
-		//return "index";
+		}*/
+		return "index";
 	}
 	
 	/**
