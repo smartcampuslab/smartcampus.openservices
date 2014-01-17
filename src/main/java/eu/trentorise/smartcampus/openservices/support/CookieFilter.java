@@ -35,6 +35,7 @@ public class CookieFilter implements Filter{
 		if(cookies!=null){
 			for (int i = 0; i < cookies.length; i++) {
 				name = cookies[i].getName();
+				cookies[i].setPath("/openservice/");
 				if(name.equalsIgnoreCase("value")){
 					cookies[i].setValue("false");
 				}
