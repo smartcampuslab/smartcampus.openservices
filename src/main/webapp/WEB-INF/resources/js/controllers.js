@@ -208,10 +208,14 @@ app.controller('viewServiceCtrl', ['$scope', '$routeParams', '$location', 'Servi
 app.controller('newMethodCtrl', ['$scope', '$http', '$location', '$routeParams', 'Service', 
   function ($scope, $http, $location, $routeParams, Service) {
     $scope.title = 'New';
-    $scope.method = {serviceId : $routeParams.id,tests:[]};
+    $scope.method = {serviceId : $routeParams.id, testboxProperties: {tests:[]}};
     
     $scope.addTest=function(){
-    	$scope.method.tests.push({})
+    	$scope.method.testboxProperties.tests.push({headers:[]})
+    }
+    $scope.addHeader=function(i){
+    	$scope.method.testboxProperties.tests[i].headers.push({})
+    	console.log($scope.method)
     }
     
     $scope.submit = function(){
