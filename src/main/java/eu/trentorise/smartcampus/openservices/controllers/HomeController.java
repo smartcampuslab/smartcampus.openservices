@@ -68,7 +68,7 @@ public class HomeController {
 		}
 		logger.info("-- Welcome home! Authenticated: "+value+" --");
 		Cookie cookies = new Cookie("value", value);
-		cookies.setPath("/openservice/");
+		cookies.setPath("/openservice");
 		response.addCookie(cookies);
 		
 		return "index";
@@ -97,6 +97,7 @@ public class HomeController {
 				name = cookies[i].getName();
 				if(name.equalsIgnoreCase("value")){
 				cookies[i].setValue(value+"");
+				cookies[i].setPath("/openservice");
 				}
 				response.addCookie(cookies[i]);
 			}
@@ -183,6 +184,7 @@ public class HomeController {
 				name = cookies[i].getName();
 				if(name.equalsIgnoreCase("value")){
 					cookies[i].setValue(value+"");
+					cookies[i].setPath("/openservice");
 				}
 				response.addCookie(cookies[i]);
 			}
