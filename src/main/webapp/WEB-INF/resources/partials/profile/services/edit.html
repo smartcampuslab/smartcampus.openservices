@@ -46,8 +46,12 @@
               <div class="panel-body">
               		<div class="form-group">
 		                <button class="btn btn-primary btn-block" data-toggle="modal" data-target="#myModal">
-						  Access policies
+						  Authentication
 						</button>
+		            </div>
+		            <div class="form-group">
+		                <label for="accesspolicies">Access Policies</label>
+		                <input type="text" class="form-control" id="accesspolicies" placeholder="" ng-model="service.accessInformation.accessPolicies">
 		            </div>
 		            <div class="form-group">
 		                <label for="tendpoint">Testing Endpoint</label>
@@ -101,7 +105,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Access Policies</h4>
+        <h4 class="modal-title" id="myModalLabel">Authentication</h4>
       </div>
 			<div class="modal-body">
 				<div class="form-group">
@@ -109,9 +113,10 @@
 					<select ng-options="protocol for protocol in protocols" id="protocol" class="form-control" ng-model="accessInformation.authentication.accessProtocol" />
 				</div>
 				<div ng-show="accessInformation.authentication.accessProtocol === 'OAuth'">
+				<form name="form" class="css-form" novalidate>
 					<div class="form-group">
 						<label for="clientid">Client ID</label> 
-						<input type="text" class="form-control" id="clientid" placeholder="fcb1cb23-12a3-1234-1f23-12a3f45e6789" ng-model="accessInformation.authentication.accessAttributes.client_id">
+						<input type="text" class="form-control" id="clientid" placeholder="fcb1cb23-12a3-1234-1f23-12a3f45e6789" ng-model="accessInformation.authentication.accessAttributes.client_id" required>
 					</div>
 					<div class="form-group">
 						<label for="scope">Scope (comma separated)</label> 
@@ -119,22 +124,23 @@
 					</div>
 					<div class="form-group">
 						<label for="responsetype">Response Type</label> 
-						<input type="text" class="form-control" id="responsetype" placeholder="token" ng-model="accessInformation.authentication.accessAttributes.response_type">
+						<input type="text" class="form-control" id="responsetype" placeholder="token" ng-model="accessInformation.authentication.accessAttributes.response_type" required>
 					</div>
 					<div class="form-group">
 						<label for="authurl">Authorization URL</label> 
-						<input type="text" class="form-control" id="authurl" placeholder="https://vas-dev.smartcampuslab.it/aac/eauth/authorize" ng-model="accessInformation.authentication.accessAttributes.authorizationUrl">
+						<input type="text" class="form-control" id="authurl" placeholder="https://vas-dev.smartcampuslab.it/aac/eauth/authorize" ng-model="accessInformation.authentication.accessAttributes.authorizationUrl" required>
 					</div>
 					<div class="form-group">
 						<label for="granttype">Grant Type</label> 
-						<input type="text" class="form-control" id="granttype" placeholder="implicit" ng-model="accessInformation.authentication.accessAttributes.grant_type">
+						<input type="text" class="form-control" id="granttype" placeholder="implicit" ng-model="accessInformation.authentication.accessAttributes.grant_type" required>
 					</div>
+					</form>
 				</div>
 				
 			</div>
 			<div class="modal-footer">
         <button type="button" ng-click="cancel()" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" ng-click="keep()" ng-class="check() ? 'btn btn-primary disabled' : 'btn btn-primary'" data-dismiss="modal">Save changes</button>
+        <button type="button" ng-click="keep()" ng-disabled="form.$invalid" class="btn btn-primary" data-dismiss="modal">Save changes</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
