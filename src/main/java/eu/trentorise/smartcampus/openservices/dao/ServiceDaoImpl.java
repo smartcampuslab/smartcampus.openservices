@@ -174,7 +174,7 @@ public class ServiceDaoImpl implements ServiceDao{
 		}
 		else if(category!=null && tags==null){
 			q = getEntityManager().createQuery("FROM Service S WHERE S.category=:category AND S.state='PUBLISH'")
-					.setParameter("category", "%"+category+"%");
+					.setParameter("category", category);
 		}
 		List<Service> s = q.getResultList();
 		return s;
