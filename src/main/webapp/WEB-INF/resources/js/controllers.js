@@ -391,16 +391,6 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
  	$scope.request = {};
  	Catalog.getServiceById({id:$routeParams.id}, function (data) {
          $scope.service = data;
-         $scope.service.accessInformation.authentication = {
-        		 accessProtocol : 'oauth',
-        		 accessAttributes : {
-	         		clientId:'fcb1cb81-50a7-4948-8f46-05a1f14e7089',
-	             	scopes:["smartcampus.profile.basicprofile.me"],
-	             	authorizationUrl: "https://vas-dev.smartcampuslab.it/aac/eauth/authorize",
-	             	response_type: 'token',
-	             	grant_type: 'implicit'
-        		 }
-         };
          var testprops = {
         		 authentication : $scope.service.accessInformation.authentication,
         		 tests: [{

@@ -4,7 +4,7 @@ services.factory('RemoteApi', ['oAuth','$q',
   function (oAuth, $q) {
     function RemoteApi (type){
         switch (type) { 
-        case 'oauth': 
+        case 'OAuth': 
           this.api = oAuth;
         break; 
 
@@ -73,7 +73,7 @@ services.factory('oAuth', ['$http', '$window', '$location', '$rootScope',
     var getParams = function (self) {
       return {
         response_type: self.config.response_type,
-        client_id: self.config.clientId,
+        client_id: self.config.client_id,
         redirect_uri: self.config.redirectUri,
         scope: self.config.scopes.join(",")
       }
@@ -81,8 +81,8 @@ services.factory('oAuth', ['$http', '$window', '$location', '$rootScope',
 
     return {
       config: {
-        clientId: null,
-        redirectUri: getRootPath()+'/callback',//$location.protocol() + '://' + $location.host() + ':8080/openservice/callback',
+        client_id: null,
+        redirectUri: getRootPath()+'/callback',
         authorizationUrl: null,
         verifyFunc: null,
         response_type: null,
