@@ -226,7 +226,11 @@ app.controller('viewServiceCtrl', ['$scope', '$routeParams', '$location', 'Servi
 app.controller('newMethodCtrl', ['$scope', '$http', '$location', '$routeParams', 'Service', 
   function ($scope, $http, $location, $routeParams, Service) {
     $scope.title = 'New';
-    $scope.method = {serviceId : $routeParams.id};
+    $scope.method = {serviceId : $routeParams.id,tests:[]};
+    
+    $scope.addTest=function(){
+    	$scope.method.tests.push({})
+    }
     
     $scope.submit = function(){
     	console.log('saving method');
