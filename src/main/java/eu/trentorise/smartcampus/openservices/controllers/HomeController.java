@@ -52,7 +52,7 @@ public class HomeController {
 	 * @return
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(HttpServletResponse response) {
+	public String home(HttpServletRequest request, HttpServletResponse response) {
 		logger.info("-- Welcome home! --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		response.setHeader("User", username);
@@ -67,9 +67,29 @@ public class HomeController {
 			value = SecurityContextHolder.getContext().getAuthentication().isAuthenticated()+"";
 		}
 		logger.info("-- Welcome home! Authenticated: "+value+" --");
-		Cookie cookies = new Cookie("value", value);
-		//cookies.setPath("/openservice");
-		response.addCookie(cookies);
+		Cookie cookie = new Cookie("value", value);
+		cookie.setPath("/openservice/");
+		
+		boolean found = false;
+		Cookie[] cookies = request.getCookies();
+		String name;
+		if(cookies!=null){
+			for (int i = 0; i < cookies.length; i++) {
+				name = cookies[i].getName();
+				if(name.equalsIgnoreCase("value")){
+				cookies[i].setValue(value);
+				//cookies[i].setMaxAge(0);
+				found = true;
+				}
+				response.addCookie(cookies[i]);
+			}
+		}
+		else{
+			response.addCookie(cookie);
+		}
+		if(!found){
+			response.addCookie(cookie);
+		}
 		
 		return "index";
 	}
@@ -111,7 +131,7 @@ public class HomeController {
 	@RequestMapping()
 	public String error(HttpServletRequest request, HttpServletResponse response) {
 		logger.info("-- Error mapping! --");
-		return home(response);
+		return home(request, response);
 	}
 	
 	//try for a strange behavior of spring security
