@@ -104,7 +104,7 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
 app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service', 'Org', 'Category',
   function ($scope, $http, $location, Service, Org, Category) {
 	$scope.protocols = ["OAuth", "openID"]
-	$scope.accessInformation = {authentication:{accessProtocol:null, accessAttributes:{client_id: '',response_type: '', authorizationUrl: '',grant_type: ''}}};
+	$scope.accessInformation = {authentication:{accessProtocol:null, accessAttributes:{client_id: null,response_type: null, authorizationUrl: null,grant_type: null}}};
     Category.list({},function (data) {
         $scope.categories = data.categories;
       });
@@ -127,22 +127,13 @@ app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service', 'Or
     	$scope.service.accessInformation=$scope.accessInformation;
     	console.log($scope.service)
     };
-    
-    $scope.check = function(){
-    	for (var key in $scope.accessInformation.authentication.accessAttributes){
-    		if ($scope.accessInformation.authentication.accessAttributes[key] === ''){
-    			return true;
-    		}
-    	} 
-    	return false;
-    }
   }
 ]);
 
 app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Service', 'Org', 'Category',
   function ($scope, $routeParams, $location, Service, Org, Category) {
 	$scope.protocols = ["OAuth", "openID"]
-	$scope.accessInformation = {authentication:{accessProtocol:null, accessAttributes:{client_id: '',response_type: '', authorizationUrl: '',grant_type: ''}}};
+	$scope.accessInformation = {authentication:{accessProtocol:null, accessAttributes:{client_id: null,response_type: null, authorizationUrl: null,grant_type: null}}};
     Category.list({},function (data) {
         $scope.categories = data.categories;
       });
@@ -167,15 +158,6 @@ app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Servi
     	$scope.service.accessInformation=$scope.accessInformation;
     	console.log($scope.service)
     };
-    
-    $scope.check = function(){
-    	for (var key in $scope.accessInformation.authentication.accessAttributes){
-    		if ($scope.accessInformation.authentication.accessAttributes[key] === ''){
-    			return true;
-    		}
-    	} 
-    	return false;
-    }
     
     $scope.submit = function () {
 	    if ($scope.service.expiration) {
