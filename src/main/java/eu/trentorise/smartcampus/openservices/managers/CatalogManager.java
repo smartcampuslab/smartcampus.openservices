@@ -15,15 +15,25 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.managers;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import eu.trentorise.smartcampus.openservices.dao.*;
-import eu.trentorise.smartcampus.openservices.entities.*;
+import eu.trentorise.smartcampus.openservices.dao.MethodDao;
+import eu.trentorise.smartcampus.openservices.dao.OrganizationDao;
+import eu.trentorise.smartcampus.openservices.dao.ServiceDao;
+import eu.trentorise.smartcampus.openservices.dao.ServiceHistoryDao;
+import eu.trentorise.smartcampus.openservices.entities.Category;
+import eu.trentorise.smartcampus.openservices.entities.Method;
+import eu.trentorise.smartcampus.openservices.entities.Organization;
+import eu.trentorise.smartcampus.openservices.entities.Service;
+import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
+import eu.trentorise.smartcampus.openservices.support.CategoryServices;
 
 /**
  * 
@@ -157,6 +167,25 @@ public class CatalogManager {
 	 */
 	public Organization catalogOrgById(int id) {
 		return orgDao.getOrganizationById(id);
+	}
+
+	/**
+	 * @return
+	 */
+	public CategoryServices getCategoryServices() {
+		CategoryServices res = new CategoryServices();
+		List<Category> list = categoryManager.getCategories();
+		res.setCategories(list);
+		if (res.getCategories() != null) {
+			Map<Integer, Integer> counts = serviceDao.findCategoryServices();
+			res.setServices(new ArrayList<Integer>());
+			for (Category c : res.getCategories()) {
+				Integer count = counts.get(c.getId());
+				res.getServices().add(count == null ? 0 : count);
+			}
+		}
+		
+		return res;
 	}
 
 }

@@ -193,5 +193,11 @@ public class CatalogController {
 	}
 	//browse catalog using filters (by geography) - when add address of organization - TODO
 	
+	@RequestMapping(value = "/service/browse/category", method = RequestMethod.GET, produces="application/json") 
+	@ResponseBody
+	public CategoryServices catalogCategoryServices() {
+		logger.info("-- Category Catalog browse --");
+		return catalogManager.getCategoryServices();
+	}
 	
 }

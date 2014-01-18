@@ -248,4 +248,12 @@ public class ServiceManager {
 		methodDao.deleteMethod(m);
 	}
 
+	/**
+	 * @param method
+	 */
+	@Transactional
+	public Method getMethodById(int method) {
+		return methodDao.getMethodById(method);
+	}
+
 }

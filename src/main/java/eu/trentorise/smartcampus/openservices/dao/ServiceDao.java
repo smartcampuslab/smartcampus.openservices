@@ -16,6 +16,7 @@
 package eu.trentorise.smartcampus.openservices.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.dao.DataAccessException;
 
@@ -121,5 +122,11 @@ public interface ServiceDao {
 	 * @return services of the specific category
 	 */
 	public List<Service> findByCategory(int id);
+
 	
+	/**
+	 * @return number of services for each category;
+	 * @throws DataAccessException
+	 */
+	public Map<Integer,Integer> findCategoryServices() throws DataAccessException;
 }
