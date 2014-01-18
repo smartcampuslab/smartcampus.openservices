@@ -49,11 +49,26 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
       templateUrl: 'partials/categories.html',
       access: access.anon
     }).
-    when('/categories/:id', {
+    when('/categories/:category', {
         controller: 'servicesCtrl',
         templateUrl: 'partials/services/list.html',
         access: access.anon
       }).
+    when('/organizations', {
+      controller: 'organizationsCtrl',
+      templateUrl: 'partials/organizations.html',
+      access: access.anon
+    }).
+    when('/organizations/:id', {
+        controller: 'organizationCtrl',
+        templateUrl: 'partials/organization.html',
+        access: access.anon
+      }).
+   when('/organizations/:org/services', {
+      controller: 'servicesCtrl',
+      templateUrl: 'partials/services/list.html',
+      access: access.anon
+    }).
     when('/signin', {
       controller: 'signinCtrl',
       templateUrl: 'partials/signin.html',

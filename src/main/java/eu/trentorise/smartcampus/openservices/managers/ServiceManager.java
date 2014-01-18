@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import eu.trentorise.smartcampus.openservices.Constants.SERVICE_STATE;
 import eu.trentorise.smartcampus.openservices.dao.MethodDao;
 import eu.trentorise.smartcampus.openservices.dao.OrganizationDao;
 import eu.trentorise.smartcampus.openservices.dao.ServiceDao;
@@ -67,7 +68,7 @@ public class ServiceManager {
 		UserRole ur = urDao.getRoleOfUser(user.getId(), service.getOrganizationId());
 		if (ur == null) throw new SecurityException();
 		service.setCreatorId(user.getId());
-		service.setState("UNPUBLISH");
+		service.setState(SERVICE_STATE.UNPUBLISH.toString());
 		serviceDao.createService(service);
 		// create history
 		ServiceHistory sh = new ServiceHistory();

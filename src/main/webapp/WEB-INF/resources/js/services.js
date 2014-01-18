@@ -216,6 +216,10 @@ services.factory('Catalog', ['$resource',
         method: 'GET',
         url: 'api/catalog/service/browse/category/:category',
       },
+      browseServiceOrg: {
+          method: 'GET',
+          url: 'api/catalog/service/browse/org/:org',
+        },
       browseAllServiceCat: {
           method: 'GET',
           url: 'api/catalog/service/browse/category',

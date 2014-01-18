@@ -16,6 +16,7 @@
 package eu.trentorise.smartcampus.openservices.managers;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import eu.trentorise.smartcampus.openservices.Constants.SERVICE_STATE;
 import eu.trentorise.smartcampus.openservices.dao.MethodDao;
 import eu.trentorise.smartcampus.openservices.dao.OrganizationDao;
 import eu.trentorise.smartcampus.openservices.dao.ServiceDao;
@@ -72,7 +74,7 @@ public class CatalogManager {
 	 */
 	public Service catalogServiceById(int service_id){
 		Service s = serviceDao.getServiceById(service_id);
-		if(s.getState().equalsIgnoreCase("UNPUBLISH")){
+		if(s.getState().equalsIgnoreCase(SERVICE_STATE.UNPUBLISH.toString())){
 			s = null;
 		}
 		return s;
@@ -121,6 +123,19 @@ public class CatalogManager {
 		return s;
 	}
 	
+	/**
+	 * @param org
+	 * @return
+	 */
+	public List<Service> catalogServiceBrowseByOrg(int org) {
+		List<Service> s = serviceDao.getServiceByIdOrg(org);
+		for (Iterator<Service> iterator = s.iterator(); iterator.hasNext();) {
+			Service service = iterator.next();
+			if (SERVICE_STATE.UNPUBLISH.toString().equals(service.getState())) iterator.remove();
+		}
+		return s;
+	}
+
 	/**
 	 * Get list of all services, searching by tags
 	 * @param tags

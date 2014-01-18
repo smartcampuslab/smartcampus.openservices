@@ -318,8 +318,13 @@ app.controller('servicesCtrl', ['$scope', '$http', '$routeParams', 'Catalog',
       $scope.categoryActive = undefined;
     }
 
-    if ($routeParams.id) {
-        Catalog.browseServiceCat({category:$routeParams.id},function (services) {
+    if ($routeParams.category) {
+        Catalog.browseServiceCat({category:$routeParams.category},function (services) {
+            console.log(services);
+            $scope.services = services.services;
+          });
+    } else if ($routeParams.org) {
+        Catalog.browseServiceOrg({org:$routeParams.org},function (services) {
             console.log(services);
             $scope.services = services.services;
           });
@@ -348,6 +353,27 @@ app.controller('servicesCtrl', ['$scope', '$http', '$routeParams', 'Catalog',
     };
   }
 ]);
+
+app.controller('organizationsCtrl', ['$scope', '$http', '$routeParams', 'Catalog', 
+    function ($scope, $http, $routeParams, Catalog) {
+      Catalog.listOrgs({},function (data) {
+          $scope.orgs = data.orgs;
+        });
+    }
+  ]);
+app.controller('organizationCtrl', ['$scope', '$http', '$routeParams', 'Catalog', 'Category', 
+     function ($scope, $http, $routeParams, Catalog, Category) {
+       Catalog.getOrgById({id:$routeParams.id},function (data) {
+           $scope.org = data;
+    	    if ($scope.org.category) {
+     	 	    Category.getById({id:$scope.org.category},function (data) {
+     	 	        $scope.category = data;
+     	 	      });
+     	    } 
+
+         });
+     }
+   ]);
 
 app.controller('cbCtrl', ['$location',
   function ($location) {
