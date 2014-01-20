@@ -178,6 +178,7 @@ public class HomeController {
 	@RequestMapping(value = "/loginfailed", method = RequestMethod.GET)
 	public String loginfailed(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		logger.info("-- Login failed --");
+		response.setStatus(401);
 		return "index";
 	}
 	
