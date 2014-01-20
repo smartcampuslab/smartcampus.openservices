@@ -521,9 +521,9 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
                withCredentials: true
              }).success(function (data, status, headers) {
                $scope.response = 'HTTP/1.1 ' + status + '\n';
-               for (var key in headers()) {
-                 $scope.response += toTitleCase(key) + ': ' + headers()[key] + '\n';
-               }
+//               for (var key in headers()) {
+//                 $scope.response += toTitleCase(key) + ': ' + headers()[key] + '\n';
+//               }
                $scope.response += '\n' + JSON.stringify(data, null, 2);
              }).error(function (err) {
                console.log(err);
