@@ -595,7 +595,7 @@ services.factory('Gravatar', ['$http', '$rootScope',
         };
 
         var size = size || 80;
-        return 'http://www.gravatar.com/avatar/' + MD5($rootScope.currentUser.username) + '.jpg?s=' + size;
+        return 'http://www.gravatar.com/avatar/' + MD5(email) + '.jpg?s=' + size;
 
       }
     }
