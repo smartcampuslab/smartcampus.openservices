@@ -1,15 +1,17 @@
 'use strict';
 
-services.factory('RemoteApi', ['oAuth','$q',
-  function (oAuth, $q) {
+services.factory('RemoteApi', ['oAuth','noauth','$q',
+  function (oAuth, noauth, $q) {
     function RemoteApi (type){
         switch (type) { 
         case 'OAuth': 
           this.api = oAuth;
         break; 
-
-        case 'openid': 
+        case 'OpenID': 
           this.api = null; 
+        break; 
+        case 'Public': 
+          this.api = noauth; 
         break; 
       }
     }
@@ -106,3 +108,14 @@ services.factory('oAuth', ['$http', '$window', '$location', '$rootScope',
     }
   }
 ]);
+
+services.factory('noauth', [
+   function () {
+     return {
+       config: {},
+       authorize: function (cb) {
+           cb({})
+       }
+     }
+   }
+ ]);

@@ -49,6 +49,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping(value="/api/testbox")
 public class TestboxController {
 
+	/**
+	 * 
+	 */
+	private static final String CUSTOMHEADER_PREFIX = "CUSTOMHEADER:";
 	/** Timeout (in ms) we specify for each http request */
     public static final int HTTP_REQUEST_TIMEOUT_MS = 30 * 1000;
     /** Default charset */
@@ -90,7 +94,8 @@ public class TestboxController {
 		while(names.hasMoreElements()) {
 			String name = names.nextElement();
 			if (HEADER_TARGET_URL.equals(name)) continue;
-			headers.put(name, req.getHeader(name));
+			if (!name.startsWith(CUSTOMHEADER_PREFIX)) continue;
+			headers.put(name.substring(CUSTOMHEADER_PREFIX.length()), req.getHeader(name));
 		}
 		return headers;
 	}

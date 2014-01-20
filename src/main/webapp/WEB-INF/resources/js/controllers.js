@@ -103,7 +103,7 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
 
 app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service', 'Org', 'Category',
   function ($scope, $http, $location, Service, Org, Category) {
-	$scope.protocols = ["OAuth", "openID"]
+	$scope.protocols = ["OAuth", "OpenID", "Public"];
 	$scope.accessInformation = {authentication:{accessProtocol:null, accessAttributes:{client_id: null,response_type: null, authorizationUrl: null,grant_type: null}}};
     Category.list({},function (data) {
         $scope.categories = data.categories;
@@ -132,7 +132,7 @@ app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service', 'Or
 
 app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Service', 'Org', 'Category',
   function ($scope, $routeParams, $location, Service, Org, Category) {
-	$scope.protocols = ["OAuth", "openID"]
+	$scope.protocols = ["OAuth", "OpenID", "Public"];
 	$scope.accessInformation = {authentication:{accessProtocol:null, accessAttributes:{client_id: null,response_type: null, authorizationUrl: null,grant_type: null}}};
     Category.list({},function (data) {
         $scope.categories = data.categories;
@@ -511,13 +511,17 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
          remoteapi.authorize(config).then(function(result){
              console.info($scope.request.sample.headers);
              var nheaders = result;
+             var sheader = {};
              _.extend(nheaders, $scope.request.sample.headers);
-             nheaders.targeturl = $scope.request.sample.requestPath;
-             $http({
+             for (var h in nheaders) {
+            	 sheaders['CUSTOMHEADER:'+h] = nheaders[h];
+             }
+             sheaders.targeturl = $scope.request.sample.requestPath;
+             $http(	{
                method: $scope.request.sample.requestMethod,
                url: 'api/testbox',
                data: $scope.request.sample.body,
-               headers: nheaders,
+               headers: sheaders,
                withCredentials: true
              }).success(function (data, status, headers) {
                $scope.response = 'HTTP/1.1 ' + status + '\n';
