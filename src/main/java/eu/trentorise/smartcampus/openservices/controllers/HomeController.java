@@ -16,6 +16,8 @@
 package eu.trentorise.smartcampus.openservices.controllers;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +28,10 @@ import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -35,6 +40,7 @@ import org.springframework.web.bind.annotation.*;
 import eu.trentorise.smartcampus.openservices.dao.UserDao;
 import eu.trentorise.smartcampus.openservices.entities.User;
 import eu.trentorise.smartcampus.openservices.managers.UserManager;
+import eu.trentorise.smartcampus.openservices.securitymodel.CustomUserDetailsService;
 
 /**
  * Handles requests for the application home page.
@@ -76,8 +82,10 @@ public class HomeController {
 		if(cookies!=null){
 			for (int i = 0; i < cookies.length; i++) {
 				name = cookies[i].getName();
+				System.out.println("Found cookies: "+i+", name: "+name);
 				if(name.equalsIgnoreCase("value")){
 				cookies[i].setValue(value);
+				cookies[i].setPath("/openservice/");
 				//cookies[i].setMaxAge(0);
 				found = true;
 				}
@@ -85,9 +93,11 @@ public class HomeController {
 			}
 		}
 		else{
+			System.out.println("No cookie in response");
 			response.addCookie(cookie);
 		}
-		if(!found){
+		if(cookies!=null && !found){
+			System.out.println("No cookie value in this request");
 			response.addCookie(cookie);
 		}
 		
@@ -117,6 +127,7 @@ public class HomeController {
 				name = cookies[i].getName();
 				if(name.equalsIgnoreCase("value")){
 				cookies[i].setValue(value+"");
+				cookies[i].setPath("/openservice/");
 				}
 				response.addCookie(cookies[i]);
 			}
@@ -127,10 +138,44 @@ public class HomeController {
 	
 	/**
 	 * If url is wrong, then return index page.
+	 * @throws NoSuchFieldException 
+	 * @throws SecurityException 
+	 * @throws IllegalAccessException 
+	 * @throws IllegalArgumentException 
 	 */
 	@RequestMapping()
-	public String error(HttpServletRequest request, HttpServletResponse response) {
+	public String error(@CookieValue(value="value", required=false) String value, 
+			@CookieValue(value="user", required=false) String user, HttpServletRequest request, HttpServletResponse response) throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 		logger.info("-- Error mapping! --");
+	/*	String username = null;
+		String password = null;
+		String role = null;
+		if(user!=null){
+			String sub = (String) user.subSequence(1, user.indexOf(","));//"username":"sara"
+			logger.info("*****"+sub);
+			username = (String)sub.subSequence(sub.indexOf(":\"")+2, sub.lastIndexOf("\""));
+			logger.info("++++++"+username);
+			//get user data
+			User userDetails = userManager.getUserByUsername(username);
+			password = userDetails.getPassword();
+			logger.info("++++++"+password);
+			role = userDetails.getRole();
+			logger.info("++++++"+role);
+		}
+		
+		if(value!=null){
+			if(value.equalsIgnoreCase("true")){
+				if(user!=null && username!=null && password!=null){
+					//try manual authentication
+					CustomUserDetailsService udService = new CustomUserDetailsService();
+					logger.info("Print user before load it: "+username);
+					UserDetails userDetails = udService.loadUserByUsername(username);
+					Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails.getUsername(),
+							userDetails.getPassword(),userDetails.getAuthorities());
+					SecurityContextHolder.getContext().setAuthentication(authentication);
+				}
+			}
+		}*/
 		return home(request, response);
 	}
 	
@@ -204,6 +249,7 @@ public class HomeController {
 				name = cookies[i].getName();
 				if(name.equalsIgnoreCase("value")){
 					cookies[i].setValue(value+"");
+					cookies[i].setPath("/openservice/");
 				}
 				response.addCookie(cookies[i]);
 			}
