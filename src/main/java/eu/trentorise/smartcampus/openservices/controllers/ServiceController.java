@@ -33,6 +33,7 @@ import eu.trentorise.smartcampus.openservices.Constants.SERVICE_STATE;
 import eu.trentorise.smartcampus.openservices.entities.Method;
 import eu.trentorise.smartcampus.openservices.entities.Service;
 import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
+import eu.trentorise.smartcampus.openservices.entities.TestInfo;
 import eu.trentorise.smartcampus.openservices.managers.ServiceManager;
 import eu.trentorise.smartcampus.openservices.support.ListMethod;
 import eu.trentorise.smartcampus.openservices.support.ListService;
@@ -271,4 +272,50 @@ public class ServiceController {
 		serviceManager.deleteMethod(username, id);
 		return HttpStatus.OK;
 	}
+	
+	/**
+	 * Add a test to a service method 
+	 * User must be service owner
+	 * @param method
+	 * @return
+	 */
+	@RequestMapping(value = "/method/{id}/test/add", method = RequestMethod.POST, consumes="application/json") 
+	@ResponseBody
+	public HttpStatus createTest(@RequestBody TestInfo testinfo, @PathVariable int id){
+		logger.info("-- Create new method test --");
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		serviceManager.addTest(username, id, testinfo);
+		return HttpStatus.CREATED;
+	}
+
+	/**
+	 * Modify a test of the service method 
+	 * User must be service owner
+	 * @param method
+	 * @return
+	 */
+	@RequestMapping(value = "/method/{id}/test/{pos}", method = RequestMethod.PUT, consumes="application/json") 
+	@ResponseBody
+	public HttpStatus updateTest(@RequestBody TestInfo testinfo, @PathVariable int id, @PathVariable int pos){
+		logger.info("-- Update method test --");
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		serviceManager.modifyTest(username, id, pos, testinfo);
+		return HttpStatus.OK;
+	}
+
+	/**
+	 * Add service method to a service
+	 * User must be service owner
+	 * @param method
+	 * @return
+	 */
+	@RequestMapping(value = "/method/{id}/test/{pos}", method = RequestMethod.DELETE) 
+	@ResponseBody
+	public HttpStatus deleteTest(@PathVariable int id, @PathVariable int pos){
+		logger.info("-- Delete method test --");
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		serviceManager.deleteTest(username, id, pos);
+		return HttpStatus.OK;
+	}
+
 }

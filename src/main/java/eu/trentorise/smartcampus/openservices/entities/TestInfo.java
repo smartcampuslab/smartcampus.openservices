@@ -31,7 +31,7 @@ public class TestInfo implements Serializable {
 	private String requestPath;
 	private boolean requestPathEditable;
 	private String requestBody;
-	private boolean reuqestBodyEditable;
+	private boolean requestBodyEditable;
 	private String requestMethod;
 	private Map<String,String> headers;
 	private String response;
@@ -65,11 +65,11 @@ public class TestInfo implements Serializable {
 	public void setRequestBody(String requestBody) {
 		this.requestBody = requestBody;
 	}
-	public boolean isReuqestBodyEditable() {
-		return reuqestBodyEditable;
+	public boolean isRequestBodyEditable() {
+		return requestBodyEditable;
 	}
-	public void setReuqestBodyEditable(boolean reuqestBodyEditable) {
-		this.reuqestBodyEditable = reuqestBodyEditable;
+	public void setRequestBodyEditable(boolean reuqestBodyEditable) {
+		this.requestBodyEditable = reuqestBodyEditable;
 	}
 	public String getRequestMethod() {
 		return requestMethod;
@@ -89,6 +89,17 @@ public class TestInfo implements Serializable {
 	public void setResponse(String response) {
 		this.response = response;
 	}
-	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "TestInfo [name=" + name + ", description=" + description
+				+ ", requestPath=" + requestPath + ", requestPathEditable="
+				+ requestPathEditable + ", requestBody=" + requestBody
+				+ ", requestBodyEditable=" + requestBodyEditable
+				+ ", requestMethod=" + requestMethod + ", headers=" + headers
+				+ ", response=" + response + "]";
+	}
 	
 }

@@ -16,6 +16,7 @@
 
 package eu.trentorise.smartcampus.openservices.managers;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -33,6 +34,8 @@ import eu.trentorise.smartcampus.openservices.dao.UserRoleDao;
 import eu.trentorise.smartcampus.openservices.entities.Method;
 import eu.trentorise.smartcampus.openservices.entities.Service;
 import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
+import eu.trentorise.smartcampus.openservices.entities.TestBoxProperties;
+import eu.trentorise.smartcampus.openservices.entities.TestInfo;
 import eu.trentorise.smartcampus.openservices.entities.User;
 import eu.trentorise.smartcampus.openservices.entities.UserRole;
 
@@ -255,6 +258,69 @@ public class ServiceManager {
 	@Transactional
 	public Method getMethodById(int method) {
 		return methodDao.getMethodById(method);
+	}
+
+	/**
+	 * Add test case to the service method
+	 * @param username
+	 * @param id
+	 * @param testinfo
+	 */
+	public void addTest(String username, int id, TestInfo testinfo) {
+		User user = userDao.getUserByUsername(username);
+		Method m = methodDao.getMethodById(id);
+		Service s = getServiceById(m.getServiceId());
+		UserRole ur = urDao.getRoleOfUser(user.getId(), s.getOrganizationId());
+		if (ur == null) throw new SecurityException();
+		TestBoxProperties props = m.getTestboxProperties();
+		if (props == null) {
+			props = new TestBoxProperties();
+			m.setTestboxProprieties(props);
+		}
+		List<TestInfo> tests = props.getTests();
+		if (tests == null) {
+			tests = new ArrayList<TestInfo>();
+			props.setTests(tests);
+		}
+		tests.add(testinfo);
+		methodDao.modifyMethod(m);
+	}
+
+	/**
+	 * Modify test case of the service method
+	 * @param username
+	 * @param id
+	 * @param pos
+	 * @param testinfo
+	 */
+	public void modifyTest(String username, int id, int pos, TestInfo testinfo) {
+		User user = userDao.getUserByUsername(username);
+		Method m = methodDao.getMethodById(id);
+		Service s = getServiceById(m.getServiceId());
+		UserRole ur = urDao.getRoleOfUser(user.getId(), s.getOrganizationId());
+		if (ur == null) throw new SecurityException();
+		TestBoxProperties props = m.getTestboxProperties();
+		List<TestInfo> tests = props.getTests();
+		tests.set(pos, testinfo);
+		methodDao.modifyMethod(m);
+	}
+
+	/**
+	 * Delete method test
+	 * @param username
+	 * @param id
+	 * @param pos
+	 */
+	public void deleteTest(String username, int id, int pos) {
+		User user = userDao.getUserByUsername(username);
+		Method m = methodDao.getMethodById(id);
+		Service s = getServiceById(m.getServiceId());
+		UserRole ur = urDao.getRoleOfUser(user.getId(), s.getOrganizationId());
+		if (ur == null) throw new SecurityException();
+		TestBoxProperties props = m.getTestboxProperties();
+		List<TestInfo> tests = props.getTests();
+		tests.remove(pos);
+		methodDao.modifyMethod(m);
 	}
 
 }

@@ -251,6 +251,10 @@ services.factory('Catalog', ['$resource',
 services.factory('Service', ['$resource',
   function ($resource) {
     return $resource('api/service/my/:id', {}, {
+        get: {
+            method: 'GET',
+            url: 'api/service/my'
+          },
       list: {
         method: 'GET',
         url: 'api/service/view',
@@ -304,9 +308,17 @@ services.factory('Service', ['$resource',
         method: 'DELETE',
         url: 'api/service/method/delete/:id',
       },
-      get: {
-          method: 'GET',
-          url: 'api/service/my'
+      createTest: {
+          method: 'POST',
+          url: 'api/service/method/:id/test/add',
+        },
+      updateTest: {
+          method: 'PUT',
+          url: 'api/service/method/:id/test/:pos',
+        },
+     deleteTest: {
+          method: 'DELETE',
+          url: 'api/service/method/:id/test/:pos',
         }
 
     });
@@ -362,7 +374,7 @@ services.factory('Gravatar', ['$http', '$rootScope',
   function ($http, $rootScope) {
 
     return {
-      picture: function (size) {
+      picture: function (size, email) {
         var MD5 = function (s) {
           function L(k, d) {
             return (k << d) | (k >>> (32 - d))

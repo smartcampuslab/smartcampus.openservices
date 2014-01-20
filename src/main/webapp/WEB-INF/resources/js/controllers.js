@@ -210,14 +210,6 @@ app.controller('newMethodCtrl', ['$scope', '$http', '$location', '$routeParams',
     $scope.title = 'New';
     $scope.method = {serviceId : $routeParams.id, testboxProperties: {tests:[]}};
     
-    $scope.addTest=function(){
-    	$scope.method.testboxProperties.tests.push({headers:[]})
-    }
-    $scope.addHeader=function(i){
-    	$scope.method.testboxProperties.tests[i].headers.push({})
-    	console.log($scope.method)
-    }
-    
     $scope.submit = function(){
     	console.log('saving method');
     	Service.createMethod($scope.method,function(){
@@ -239,6 +231,12 @@ app.controller('viewMethodCtrl', ['$scope', '$http', '$location', '$routeParams'
   			}
   		}
      });
+    
+    $scope.deleteTest = function(i) {
+       	Service.deleteTest({id:$scope.method.id, pos:i},$scope.test,function(){
+       		$location.path('profile/services/'+$scope.method.serviceId+'/methods/'+$scope.method.id+'/view');
+       	});
+    };
   }
 ]);
 
@@ -262,6 +260,61 @@ app.controller('editMethodCtrl', ['$scope', '$http', '$location', '$routeParams'
 
   }
 ]);
+
+app.controller('newTestCtrl', ['$scope', '$http', '$location', '$routeParams', 'Service', 
+   function ($scope, $http, $location, $routeParams, Service) {
+     $scope.title = 'New';
+     $scope.method = {serviceId : $routeParams.id, id: $routeParams.method};
+
+     $scope.addHeader=function(){
+    	 if (!test.headers) {
+    		 test.headers = {};
+    	 }
+     	test.headers.push($scope.nheader);
+     	console.log($scope.method);
+     };
+     $scope.submit = function(){
+     	console.log('saving test');
+     	Service.createTest({id:$scope.method.id},$scope.test,function(){
+     		$location.path('profile/services/'+$scope.method.serviceId+'/methods/'+$scope.method.id+'/view');
+         	});
+         }
+       }
+     ]);
+
+app.controller('editTestCtrl', ['$scope', '$http', '$location', '$routeParams', 'Service', 
+ function ($scope, $http, $location, $routeParams, Service) {
+   $scope.title = 'Edit';
+   Service.getMethods({id: $routeParams.id},function(data){
+ 		for (var i = 0; i < data.methods.length; i++) {
+ 			if ($routeParams.method == data.methods[i].id) {
+ 				$scope.method = data.methods[i];
+ 				$scope.test = $scope.method.testboxProperties.tests[$routeParams.pos];
+ 			}
+ 		}
+    });
+
+   $scope.addHeader=function(){
+  	 if (!$scope.test.headers) {
+  		$scope.test.headers = {};
+  	 }
+  	 $scope.test.headers[$scope.nheader.name] = $scope.nheader.value;
+   	 console.log($scope.method);
+   };
+   $scope.deleteHeader = function(n) {
+	  	 delete $scope.test.headers[n];
+   };
+
+   $scope.submit = function(){
+   	console.log('saving test');
+   	Service.updateTest({id:$scope.method.id, pos: $routeParams.pos},$scope.test,function(){
+   		$location.path('profile/services/'+$scope.method.serviceId+'/methods/'+$scope.method.id+'/view');
+       	});
+       }
+     }
+   ]);
+
+
 
 app.controller('newOrgCtrl', ['$scope', '$http', '$location', 'Org', 'Category',
   function ($scope, $http, $location, Org, Category) {
@@ -403,17 +456,17 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
  	$scope.request = {};
  	Catalog.getServiceById({id:$routeParams.id}, function (data) {
          $scope.service = data;
-         var testprops = {
-        		 authentication : $scope.service.accessInformation.authentication,
-        		 tests: [{
-        			name : 'personal profile',
-        			description: 'request personal profile',
-        			requestPath: 'https://vas-dev.smartcampuslab.it/aac/basicprofile/me',
-        			requestPathEditable: false,
-        			requestMethod: 'GET',
-        			headers: {'Accept':'application/json'}
-        		 }]
-         };
+//         var testprops = {
+//        		 authentication : $scope.service.accessInformation.authentication,
+//        		 tests: [{
+//        			name : 'personal profile',
+//        			description: 'request personal profile',
+//        			requestPath: 'https://vas-dev.smartcampuslab.it/aac/basicprofile/me',
+//        			requestPathEditable: false,
+//        			requestMethod: 'GET',
+//        			headers: {'Accept':'application/json'}
+//        		 }]
+//         };
          
      	 Catalog.getOrgById({id:data.organizationId}, function (data) {
      		$scope.org = data;
@@ -425,9 +478,10 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
   	    } 
          Catalog.getServiceMethods({id: $routeParams.id},function(data){
       		$scope.methods = data.methods;
-      		// TODO method sample data
       		for (var i = 0; i < $scope.methods.length; i++) {
-      			$scope.methods[i].testboxProperties = testprops;
+      			if ($scope.methods[i].testboxProperties) {
+      				$scope.methods[i].testboxProperties.authentication = $scope.service.accessInformation.authentication;
+      			}
       		}
         });
 

@@ -17,7 +17,7 @@
         <div class="col-md-8 col-md-offset-2">
             <h4>Test cases</h4>
 						<div class="animated fadeIn">
-						    <div class="row" ng-repeat="test in testcases">
+						    <div class="row" ng-repeat="test in method.testboxProperties.tests">
 						        <div class="col-md-12 section-box">
 						            <h3>
 						                {{test.name}}
@@ -25,7 +25,7 @@
 						            <p>
 						                {{test.description}}
 						                <button type="button" class="pull-right btn btn-danger btn-xs" ng-click="deleteTest($index)"><i class="fa fa-trash-o"></i></button>
-						                <a href="profile/services/{{service.id}}/methods/{{method.id}}/tests/{{test.id}}/edit" class="pull-right btn btn-default btn-xs orgbtn"><i class="fa fa-edit"></i></a>
+						                <a href="profile/services/{{service.id}}/methods/{{method.id}}/tests/{{$index}}/edit" class="pull-right btn btn-default btn-xs orgbtn"><i class="fa fa-edit"></i></a>
 						            </p>
 						            <hr />
 						        </div>

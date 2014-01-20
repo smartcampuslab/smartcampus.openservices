@@ -119,6 +119,16 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
           templateUrl: 'partials/profile/methods/view.html',
           access: access.ROLE_NORMAL
         }).
+      when('/profile/services/:id/methods/:method/tests/new', {
+          controller: 'newTestCtrl',
+          templateUrl: 'partials/profile/methods/test.html',
+          access: access.ROLE_NORMAL
+        }).
+      when('/profile/services/:id/methods/:method/tests/:pos/edit', {
+          controller: 'editTestCtrl',
+          templateUrl: 'partials/profile/methods/test.html',
+          access: access.ROLE_NORMAL
+        }).
     when('/profile/organizations/new', {
       controller: 'newOrgCtrl',
       templateUrl: 'partials/profile/organizations/edit.html',
