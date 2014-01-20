@@ -94,7 +94,7 @@ public class TestboxController {
 		while(names.hasMoreElements()) {
 			String name = names.nextElement();
 			if (HEADER_TARGET_URL.equals(name)) continue;
-			if (!name.startsWith(CUSTOMHEADER_PREFIX)) continue;
+			if (!name.toLowerCase().startsWith(CUSTOMHEADER_PREFIX)) continue;
 			headers.put(name.substring(CUSTOMHEADER_PREFIX.length()), req.getHeader(name));
 		}
 		return headers;
