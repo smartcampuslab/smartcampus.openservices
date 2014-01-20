@@ -52,7 +52,7 @@ public class TestboxController {
 	/**
 	 * 
 	 */
-	private static final String CUSTOMHEADER_PREFIX = "CUSTOMHEADER:";
+	private static final String CUSTOMHEADER_PREFIX = "customheader-";
 	/** Timeout (in ms) we specify for each http request */
     public static final int HTTP_REQUEST_TIMEOUT_MS = 30 * 1000;
     /** Default charset */

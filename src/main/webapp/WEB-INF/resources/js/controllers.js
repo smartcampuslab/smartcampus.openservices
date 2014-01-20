@@ -511,10 +511,10 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
          remoteapi.authorize(config).then(function(result){
              console.info($scope.request.sample.headers);
              var nheaders = result;
-             var sheader = {};
+             var sheaders = {};
              _.extend(nheaders, $scope.request.sample.headers);
              for (var h in nheaders) {
-            	 sheaders['CUSTOMHEADER:'+h] = nheaders[h];
+            	 sheaders['customheader-'+h] = nheaders[h];
              }
              sheaders.targeturl = $scope.request.sample.requestPath;
              $http(	{

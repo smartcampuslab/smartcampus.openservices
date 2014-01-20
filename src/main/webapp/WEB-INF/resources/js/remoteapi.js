@@ -114,7 +114,7 @@ services.factory('noauth', [
      return {
        config: {},
        authorize: function (cb) {
-           cb({})
+           cb({});
        }
      }
    }
