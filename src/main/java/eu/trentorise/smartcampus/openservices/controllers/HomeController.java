@@ -84,12 +84,12 @@ public class HomeController {
 				name = cookies[i].getName();
 				System.out.println("Found cookies: "+i+", name: "+name);
 				if(name.equalsIgnoreCase("value")){
-				cookies[i].setValue(value);
-				cookies[i].setPath("/openservice/");
-				//cookies[i].setMaxAge(0);
-				found = true;
+					cookies[i].setValue(value);
+					cookies[i].setPath("/openservice/");
+					//cookies[i].setMaxAge(0);
+					found = true;
+					response.addCookie(cookies[i]);
 				}
-				response.addCookie(cookies[i]);
 			}
 		}
 		else{
@@ -115,7 +115,9 @@ public class HomeController {
 		logger.info("-- Welcome after login --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userManager.getUserByUsername(username);
-		user.setPassword(null);
+		if(user!=null){
+			user.setPassword(null);
+		}
 		logger.info("-- User "+username+" --");
 		
 		//check if cookie value exists and set it
@@ -128,8 +130,9 @@ public class HomeController {
 				if(name.equalsIgnoreCase("value")){
 				cookies[i].setValue(value+"");
 				cookies[i].setPath("/openservice/");
-				}
 				response.addCookie(cookies[i]);
+				}
+				
 			}
 		}
 
@@ -250,8 +253,9 @@ public class HomeController {
 				if(name.equalsIgnoreCase("value")){
 					cookies[i].setValue(value+"");
 					cookies[i].setPath("/openservice/");
+					response.addCookie(cookies[i]);
 				}
-				response.addCookie(cookies[i]);
+				
 			}
 		}
 		return "index";
