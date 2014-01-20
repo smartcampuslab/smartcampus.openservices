@@ -72,56 +72,6 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope',
   }
 ]);
 
-services.factory('Facebook', ['$resource', '$cookies', '$rootScope',
-  function ($resource, $cookies, $rootScope) {
-    $rootScope.authed = false;
-    var obj = {
-      login: function (cb) {
-        FB.login(function (response) {
-          return cb(response);
-        }, {
-          scope: 'email'
-        });
-      },
-      me: function () {
-        FB.api('/me', function (response) {
-          return response;
-        });
-      },
-      picture: function (cb) {
-        FB.api('/me/picture', function (response) {
-          cb(response)
-        });
-      }
-    };
-
-    FB.init({
-      appId: '408153889317850',
-      channelUrl: 'channel.html',
-      status: true,
-      cookie: true,
-      xfbml: true
-    });
-
-    FB.Event.subscribe('auth.authResponseChange', function (response) {
-      if (response.status === 'connected') {
-        $rootScope.authed = true;
-        //create session here
-        FB.api('/me', function (response) {
-          $rootScope.$apply(function () {
-            console.log('setting user role')
-            $rootScope.currentUser.role = routingConfig.userRoles.user;
-            $rootScope.currentUser.username = response.email;
-          });
-        });
-      } else {
-        //destroy backend session if user is not loggedin
-      }
-    });
-
-    return obj;
-  }
-]);
 
 services.factory('User', ['$resource',
   function ($resource) {
