@@ -17,7 +17,7 @@ directives.directive('prism', ['$timeout',
   function ($timeout) {
     return {
       link: function (scope, element, attrs) {
-        scope.$watch('request.sample', function (val) {
+        scope.$watch('response', function (val) {
           $timeout(function () {
             Prism.highlightElement(element.get(0))
           }, 0)
