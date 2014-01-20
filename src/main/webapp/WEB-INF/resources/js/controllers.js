@@ -17,7 +17,6 @@ app.controller('signinCtrl', ['$scope', '$location', 'Auth',
   function ($scope, $location, Auth) {
 
     $scope.signin = function (service) {
-    	console.log('trying to login')
       Auth.login($scope.user, function () {
         $location.path('profile');
       });
