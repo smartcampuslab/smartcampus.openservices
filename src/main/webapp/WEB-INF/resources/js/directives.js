@@ -32,15 +32,15 @@ directives.directive('gravatar', ['Gravatar','$compile',
                                 function (Gravatar, $compile) {
                                   return {
                                   	
-                                    link: function (scope, element, attrs, navCtrl) {
-                                      scope.$watch('currentUser.username', function (val) {
-                                        if (val) {
-                                      	  var html ='<img class="media-object dp img-circle" style="width: 100px;height:100px;" src="' + Gravatar.picture(120) + '" />';
-                                      	  var e = $compile(html)(scope);
-                                            element.replaceWith(e);
-                                        }
-                                      })
+                                    link: function (scope, element, attrs) {
+                                    	attrs.$observe('gravatar', function (email) {
+                                    		if(email){
+                                        		var html ='<img class="media-object dp img-circle" style="width: 100px;height:100px;" src="' + Gravatar.picture(120, email) + '" />';
+                                        		var e = $compile(html)(scope);
+                                                  element.replaceWith(e);
+                                    		}
 
+                                        });
                                     }
                                   };
                                 }

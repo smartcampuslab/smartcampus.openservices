@@ -362,7 +362,7 @@ services.factory('Gravatar', ['$http', '$rootScope',
   function ($http, $rootScope) {
 
     return {
-      picture: function (size) {
+      picture: function (size, email) {
         var MD5 = function (s) {
           function L(k, d) {
             return (k << d) | (k >>> (32 - d))
@@ -583,7 +583,7 @@ services.factory('Gravatar', ['$http', '$rootScope',
         };
 
         var size = size || 80;
-        return 'http://www.gravatar.com/avatar/' + MD5($rootScope.currentUser.username) + '.jpg?s=' + size;
+        return 'http://www.gravatar.com/avatar/' + MD5(email) + '.jpg?s=' + size;
 
       }
     }
