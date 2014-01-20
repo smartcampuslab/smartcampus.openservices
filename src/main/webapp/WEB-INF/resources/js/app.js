@@ -27,57 +27,57 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
     when('/', {
       controller: 'homeCtrl',
       templateUrl: 'partials/home.html',
-      access: access.anon
+      access: access.public
     }).
     when('/callback', {
       controller: 'cbCtrl',
       templateUrl: 'partials/cb.html',
-      access: access.anon
+      access: access.public
     }).
     when('/services', {
       controller: 'servicesCtrl',
       templateUrl: 'partials/services/list.html',
-      access: access.anon
+      access: access.public
     }).
     when('/services/:id', {
       controller: 'serviceCtrl',
       templateUrl: 'partials/services/show.html',
-      access: access.anon
+      access: access.public
     }).
     when('/categories', {
       controller: 'categoriesCtrl',
       templateUrl: 'partials/categories.html',
-      access: access.anon
+      access: access.public
     }).
     when('/categories/:category', {
         controller: 'servicesCtrl',
         templateUrl: 'partials/services/list.html',
-        access: access.anon
+        access: access.public
       }).
     when('/organizations', {
       controller: 'organizationsCtrl',
       templateUrl: 'partials/organizations.html',
-      access: access.anon
+      access: access.public
     }).
     when('/organizations/:id', {
         controller: 'organizationCtrl',
         templateUrl: 'partials/organization.html',
-        access: access.anon
+        access: access.public
       }).
    when('/organizations/:org/services', {
       controller: 'servicesCtrl',
       templateUrl: 'partials/services/list.html',
-      access: access.anon
+      access: access.public
     }).
     when('/signin', {
       controller: 'signinCtrl',
       templateUrl: 'partials/signin.html',
-      access: access.anon
+      access: access.public
     }).
     when('/signup', {
       controller: 'signUpCtrl',
       templateUrl: 'partials/signup.html',
-      access: access.anon
+      access: access.public
     }).
     when('/profile', {
       controller: 'profileCtrl',
@@ -143,14 +143,18 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
       redirectTo: '/'
     });
   }
-]).run(function ($rootScope, $location, Auth, $routeParams) {
+]).run(function ($rootScope, $location, Auth, $routeParams, $cookieStore) {
 	  var history = [];
+	  var value = $cookieStore.get('value');
+	  if (value === false){
+		  $cookieStore.remove('user');
+	  }
 	  
   $rootScope.$on('$routeChangeStart', function (event, next) {
     history.push($location.$$path);
     $rootScope.error = null;
     if (!Auth.authorize(next.access)) {
-      if (!Auth.isLoggedIn()) {
+      if (!Auth.isLoggedIn()||value === false) {
         $location.path('/signin');
       }
     }
