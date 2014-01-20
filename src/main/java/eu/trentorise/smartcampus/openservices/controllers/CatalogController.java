@@ -117,7 +117,21 @@ public class CatalogController {
 		lserv.setServices(catalogManager.catalogServiceBrowseByCategory(category));
 		return lserv;
 	}
-	
+
+	/**
+	 * Browse service in catalog by org
+	 * @param category
+	 * @return
+	 */
+	@RequestMapping(value = "/service/browse/org/{org}", method = RequestMethod.GET, produces="application/json") 
+	@ResponseBody
+	public ListService catalogServiceBrowseByOrg(@PathVariable int org){
+		logger.info("-- Service Catalog browse (org) --");
+		ListService lserv = new ListService();
+		lserv.setServices(catalogManager.catalogServiceBrowseByOrg(org));
+		return lserv;
+	}
+
 	/**
 	 * Browse service in catalog by tags
 	 * @param tags
@@ -193,5 +207,11 @@ public class CatalogController {
 	}
 	//browse catalog using filters (by geography) - when add address of organization - TODO
 	
+	@RequestMapping(value = "/service/browse/category", method = RequestMethod.GET, produces="application/json") 
+	@ResponseBody
+	public CategoryServices catalogCategoryServices() {
+		logger.info("-- Category Catalog browse --");
+		return catalogManager.getCategoryServices();
+	}
 	
 }

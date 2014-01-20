@@ -15,7 +15,9 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -180,6 +182,7 @@ public class ServiceDaoImpl implements ServiceDao{
 		return s;
 	}
 
+	@Transactional
 	@Override
 	public List<Service> findByCategory(int id) {
 		Query q = getEntityManager().createQuery("FROM Service S WHERE S.category=:category")
@@ -188,6 +191,20 @@ public class ServiceDaoImpl implements ServiceDao{
 		return s;
 	}
 
-	
+
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public Map<Integer,Integer> findCategoryServices() {
+		Map<Integer,Integer> res = new HashMap<Integer, Integer>();
+		List<Object[]> results = entityManager
+		        .createQuery("SELECT s.category AS category, COUNT(s) AS total FROM Service AS s WHERE s.state != 'UNPUBLISH' GROUP BY s.category")
+		        .getResultList();
+		for (Object[] result : results) {
+		    int category = ((Integer) result[0]).intValue();
+		    int count = ((Number) result[1]).intValue();
+		    res.put(category, count);
+		}		
+		return res;
+	}
 
 }

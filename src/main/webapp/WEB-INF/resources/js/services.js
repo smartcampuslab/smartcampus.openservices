@@ -210,15 +210,23 @@ services.factory('Catalog', ['$resource',
       },
       searchService: {
         method: 'GET',
-        url: '/api/catalog/service/search/:token',
+        url: 'api/catalog/service/search/:token',
       },
       browseServiceCat: {
         method: 'GET',
-        url: '/api/catalog/service/browse/category/:category',
+        url: 'api/catalog/service/browse/category/:category',
       },
+      browseServiceOrg: {
+          method: 'GET',
+          url: 'api/catalog/service/browse/org/:org',
+        },
+      browseAllServiceCat: {
+          method: 'GET',
+          url: 'api/catalog/service/browse/category',
+        },
       browseServiceTags: {
         method: 'GET',
-        url: '/api/catalog/service/browse/tags/:tag',
+        url: 'api/catalog/service/browse/tags/:tag',
       },
       listOrgs:{
       	method: 'GET',
@@ -230,11 +238,11 @@ services.factory('Catalog', ['$resource',
       },
       searchOrg: {
         method: 'GET',
-        url: '/api/catalog/org/search/:org',
+        url: 'api/catalog/org/search/:org',
       },
       browseOrgCat: {
         method: 'GET',
-        url: '/api/catalog/org/browse/category/:category',
+        url: 'api/catalog/org/browse/category/:category',
       }
     });
   }

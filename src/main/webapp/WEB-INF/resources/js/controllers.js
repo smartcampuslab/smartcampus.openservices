@@ -300,50 +300,41 @@ app.controller('editOrgCtrl', ['$scope', '$http', '$location', '$routeParams', '
   }
 ]);
 
-app.controller('categoriesCtrl', ['$scope', '$http', '$location', 'Category',
-  function ($scope, $http, $location, Category) {
-    $scope.getCategoriesRows = function (categories, size) {
-      var rows = [];
-
-      if ( !! categories) {
-        var counter = 0;
-        var buffer = [];
-        for (var i = 0; i < categories.length; i++) {
-          var category = categories[i];
-          buffer.push(category);
-          counter++;
-          if (counter === size || (i + 1) === categories.length) {
-            rows.push(buffer);
-            buffer = [];
-            counter = 0;
-          }
-        }
-      }
-      return rows;
-    };
-
-    Category.list({},function (categories) {
-      $scope.categories = categories;
+app.controller('categoriesCtrl', ['$scope', '$http', '$location', 'Catalog',
+  function ($scope, $http, $location, Catalog) {
+    Catalog.browseAllServiceCat({},function (data) {
+      $scope.categoryData = data;
     });
-
-    $scope.setCategoryActive = function (category) {
-      $scope.categoryActive = category;
-      $location.path('services');
+    
+    $scope.serviceCount = function(i){
+    	return $scope.categoryData.services[i];
     };
   }
 ]);
 
-app.controller('servicesCtrl', ['$scope', '$http',
-  function ($scope, $http) {
+app.controller('servicesCtrl', ['$scope', '$http', '$routeParams', 'Catalog', 
+  function ($scope, $http, $routeParams, Catalog) {
     if ( !! $scope.categoryActive) {
       $scope.categoryActive = undefined;
     }
 
-    $http.get('api/catalog/service').success(function (services) {
-      console.log(services);
-      $scope.services = services.services;
-    });
-
+    if ($routeParams.category) {
+        Catalog.browseServiceCat({category:$routeParams.category},function (services) {
+            console.log(services);
+            $scope.services = services.services;
+          });
+    } else if ($routeParams.org) {
+        Catalog.browseServiceOrg({org:$routeParams.org},function (services) {
+            console.log(services);
+            $scope.services = services.services;
+          });
+    } else {
+        Catalog.listServices({},function (services) {
+            console.log(services);
+            $scope.services = services.services;
+          });
+    }
+    
     $scope.servicesActive = [];
 
     $scope.isServiceActive = function (service) {
@@ -362,6 +353,27 @@ app.controller('servicesCtrl', ['$scope', '$http',
     };
   }
 ]);
+
+app.controller('organizationsCtrl', ['$scope', '$http', '$routeParams', 'Catalog', 
+    function ($scope, $http, $routeParams, Catalog) {
+      Catalog.listOrgs({},function (data) {
+          $scope.orgs = data.orgs;
+        });
+    }
+  ]);
+app.controller('organizationCtrl', ['$scope', '$http', '$routeParams', 'Catalog', 'Category', 
+     function ($scope, $http, $routeParams, Catalog, Category) {
+       Catalog.getOrgById({id:$routeParams.id},function (data) {
+           $scope.org = data;
+    	    if ($scope.org.category) {
+     	 	    Category.getById({id:$scope.org.category},function (data) {
+     	 	        $scope.category = data;
+     	 	      });
+     	    } 
+
+         });
+     }
+   ]);
 
 app.controller('cbCtrl', ['$location',
   function ($location) {
@@ -438,8 +450,6 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
      $scope.checkBeforeToken = function () {
     	 return checkBeforeSend() && $scope.request.method.testboxProperties.authentication.accessProtocol != 'public';
      }
-
-     
      
      $scope.send = function () {
          var config = $scope.service.accessInformation.authentication.accessAttributes;

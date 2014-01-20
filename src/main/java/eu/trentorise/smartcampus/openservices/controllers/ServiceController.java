@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import eu.trentorise.smartcampus.openservices.Constants.SERVICE_STATE;
 import eu.trentorise.smartcampus.openservices.entities.Method;
 import eu.trentorise.smartcampus.openservices.entities.Service;
 import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
@@ -169,7 +170,7 @@ public class ServiceController {
 	public HttpStatus publishService(@PathVariable int id){
 		logger.info("-- Publish service --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		serviceManager.changeState(username, id, "PUBLISH");
+		serviceManager.changeState(username, id, SERVICE_STATE.PUBLISH.toString());
 		return HttpStatus.OK;
 	}
 	
@@ -185,7 +186,7 @@ public class ServiceController {
 	public HttpStatus unpublishService(@PathVariable int id){
 		logger.info("-- Unpublish service --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		serviceManager.changeState(username, id,"UNPUBLISH");
+		serviceManager.changeState(username, id,SERVICE_STATE.UNPUBLISH.toString());
 		//Change service state
 		return HttpStatus.OK;
 	}
@@ -202,7 +203,7 @@ public class ServiceController {
 	public HttpStatus deprecateService(@PathVariable int id){
 		logger.info("-- Deprecate service --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		serviceManager.changeState(username, id,"DEPRECATE");
+		serviceManager.changeState(username, id,SERVICE_STATE.DEPRECATE.toString());
 		return HttpStatus.OK;
 	}
 	
