@@ -7,8 +7,8 @@
       </h3>
       <p>
         {{org.description}}
-        <button type="button" class="pull-right btn btn-danger btn-xs" ng-click="deleteOrg($index)"><i class="fa fa-trash-o"></i></button>
-        <a ng-href="profile/organizations/{{org.id}}/edit" type="button" class="pull-right btn btn-default btn-xs orgbtn"><i class="fa fa-edit"></i>
+        <button type="button" data-toggle="tooltip" title="Delete organization" class="pull-right btn btn-danger btn-sm" ng-click="deleteOrg($index)"><i class="fa fa-trash-o"></i></button>
+        <a ng-href="profile/organizations/{{org.id}}/edit" type="button" data-toggle="tooltip" title="Edit organization" class="pull-right btn btn-default btn-sm orgbtn"><i class="fa fa-edit"></i>
         </a>
       </p>
       <hr />
