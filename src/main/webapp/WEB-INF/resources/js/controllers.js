@@ -509,18 +509,14 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
          remoteapi = new RemoteApi($scope.service.accessInformation.authentication.accessProtocol);
          remoteapi.authorize(config).then(function(result){
              console.info($scope.request.sample.headers);
-             var nheaders = result;
-             var sheaders = {};
-             _.extend(nheaders, $scope.request.sample.headers);
-             for (var h in nheaders) {
-            	 sheaders['customheader-'+h] = nheaders[h];
+             if (!$scope.request.sample.headers) {
+            	 $scope.request.sample.headers = {};
              }
-             sheaders.targeturl = $scope.request.sample.requestPath;
+             _.extend($scope.request.sample.headers, result);
              $http(	{
-               method: $scope.request.sample.requestMethod,
+               method: 'POST',
                url: 'api/testbox',
-               data: $scope.request.sample.body,
-               headers: sheaders,
+               data: $scope.request.sample,
                withCredentials: true
              }).success(function (data, status, headers) {
                $scope.response = 'HTTP/1.1 ' + status + '\n';

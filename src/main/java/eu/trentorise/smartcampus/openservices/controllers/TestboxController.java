@@ -41,6 +41,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import eu.trentorise.smartcampus.openservices.entities.TestInfo;
+
 /**
  * @author raman
  *
@@ -49,56 +51,70 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping(value="/api/testbox")
 public class TestboxController {
 
-	/**
-	 * 
-	 */
-	private static final String CUSTOMHEADER_PREFIX = "customheader-";
+//	private static final String CUSTOMHEADER_PREFIX = "customheader-";
 	/** Timeout (in ms) we specify for each http request */
     public static final int HTTP_REQUEST_TIMEOUT_MS = 30 * 1000;
     /** Default charset */
 	private static final String DEFAULT_CHARSET = "UTF-8";
-	private static final String HEADER_TARGET_URL = "targeturl";
+//	private static final String HEADER_TARGET_URL = "targeturl";
 
-	@RequestMapping(method=RequestMethod.GET)
-	public @ResponseBody String forwardGet(HttpServletRequest req) throws TestBoxException {
-		String url = req.getHeader(HEADER_TARGET_URL);
-		Map<String, String> headers = extractHeaders(req);
-		return getJSON(url, headers);
-	}
-
-	@RequestMapping(method=RequestMethod.POST, consumes="application/json")
-	public @ResponseBody String forwardPost(HttpServletRequest req, @RequestBody String body) throws TestBoxException {
-		String url = req.getHeader(HEADER_TARGET_URL);
-		Map<String, String> headers = extractHeaders(req);
-		return postJSON(url, body, headers);
-	}
-
-	@RequestMapping(method=RequestMethod.PUT, consumes="application/json")
-	public @ResponseBody String forwardPut(HttpServletRequest req, @RequestBody String body) throws TestBoxException {
-		String url = req.getHeader(HEADER_TARGET_URL);
-		Map<String, String> headers = extractHeaders(req);
-		return putJSON(url, body, headers);
-	}
-
-	@RequestMapping(method=RequestMethod.DELETE)
-	public @ResponseBody String forwardDelete(HttpServletRequest req) throws TestBoxException {
-		String url = req.getHeader(HEADER_TARGET_URL);
-		Map<String, String> headers = extractHeaders(req);
-		return deleteJSON(url, headers);
-	}
-
-	@SuppressWarnings("unchecked")
-	private Map<String, String> extractHeaders(HttpServletRequest req) {
-		Map<String,String> headers = new HashMap<String, String>();
-		Enumeration<String> names = req.getHeaderNames();
-		while(names.hasMoreElements()) {
-			String name = names.nextElement();
-			if (HEADER_TARGET_URL.equals(name)) continue;
-			if (!name.toLowerCase().startsWith(CUSTOMHEADER_PREFIX)) continue;
-			headers.put(name.substring(CUSTOMHEADER_PREFIX.length()), req.getHeader(name));
+	@RequestMapping(method=RequestMethod.POST)
+	public @ResponseBody String performTest(HttpServletRequest req, @RequestBody TestInfo test) throws TestBoxException {
+		if ("GET".equals(test.getRequestMethod())) {
+			return getJSON(test.getRequestPath(), test.getHeaders());
 		}
-		return headers;
+		if ("POST".equals(test.getRequestMethod())) {
+			return postJSON(test.getRequestPath(),test.getRequestBody(), test.getHeaders());
+		}
+		if ("PUT".equals(test.getRequestMethod())) {
+			return putJSON(test.getRequestPath(),test.getRequestBody(), test.getHeaders());
+		}
+		if ("GET".equals(test.getRequestMethod())) {
+			return getJSON(test.getRequestPath(), test.getHeaders());
+		}
+		throw new TestBoxException(HttpStatus.SC_BAD_REQUEST);
 	}
+	
+//	@RequestMapping(method=RequestMethod.GET)
+//	public @ResponseBody String forwardGet(HttpServletRequest req) throws TestBoxException {
+//		String url = req.getHeader(HEADER_TARGET_URL);
+//		Map<String, String> headers = extractHeaders(req);
+//		return getJSON(url, headers);
+//	}
+//
+//	@RequestMapping(method=RequestMethod.POST)
+//	public @ResponseBody String forwardPost(HttpServletRequest req, @RequestBody String body) throws TestBoxException {
+//		String url = req.getHeader(HEADER_TARGET_URL);
+//		Map<String, String> headers = extractHeaders(req);
+//		return postJSON(url, body, headers);
+//	}
+//
+//	@RequestMapping(method=RequestMethod.PUT)
+//	public @ResponseBody String forwardPut(HttpServletRequest req, @RequestBody String body) throws TestBoxException {
+//		String url = req.getHeader(HEADER_TARGET_URL);
+//		Map<String, String> headers = extractHeaders(req);
+//		return putJSON(url, body, headers);
+//	}
+//
+//	@RequestMapping(method=RequestMethod.DELETE)
+//	public @ResponseBody String forwardDelete(HttpServletRequest req) throws TestBoxException {
+//		String url = req.getHeader(HEADER_TARGET_URL);
+//		Map<String, String> headers = extractHeaders(req);
+//		return deleteJSON(url, headers);
+//	}
+//
+//	@SuppressWarnings("unchecked")
+//	private Map<String, String> extractHeaders(HttpServletRequest req) {
+//		Map<String,String> headers = new HashMap<String, String>();
+//		Enumeration<String> names = req.getHeaderNames();
+//		while(names.hasMoreElements()) {
+//			String name = names.nextElement();
+//			if (HEADER_TARGET_URL.equals(name)) continue;
+//			if (!name.toLowerCase().startsWith(CUSTOMHEADER_PREFIX)) continue;
+//			headers.put(name.substring(CUSTOMHEADER_PREFIX.length()), req.getHeader(name));
+//		}
+//		return headers;
+//	}
 	
 	protected static HttpClient getHttpClient() {
 		HttpClient httpClient = new DefaultHttpClient();
