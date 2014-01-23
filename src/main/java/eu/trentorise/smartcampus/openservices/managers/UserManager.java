@@ -16,6 +16,7 @@
 package eu.trentorise.smartcampus.openservices.managers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,8 +41,11 @@ public class UserManager {
 	 * @return a {@link User} instance
 	 */
 	public User getUserById( int id){
-		User user = userDao.getUserById(id);
-		return user;
+		try{ 
+			return userDao.getUserById(id);
+		}catch(DataAccessException d){
+			return null;
+		}
 	}
 	
 	/**
@@ -50,8 +54,11 @@ public class UserManager {
 	 * @return a {@link User} instance
 	 */
 	public User getUserByUsername(String username){
-		User user = userDao.getUserByUsername(username);
-		return user;
+		try{
+			return userDao.getUserByUsername(username);
+		}catch(DataAccessException d){
+			return null;
+		}
 	}
 	
 	/**
@@ -63,8 +70,12 @@ public class UserManager {
 	public User createUser(User user){
 		user.setEnabled(0);
 		user.setRole("ROLE_NORMAL");
-		userDao.addUser(user);
-		return userDao.getUserByUsername(user.getUsername());
+		try{
+			userDao.addUser(user);
+			return userDao.getUserByUsername(user.getUsername());
+		}catch(DataAccessException d){
+			return null;
+		}
 	}
 	
 	public void enableUser(){
@@ -79,10 +90,14 @@ public class UserManager {
 	 * @return a {@link User} instance
 	 */
 	public User modifyUserData(String username, User user){
-		User sessionU = userDao.getUserByUsername(username);
-		userDao.modifyUser(sessionU.getId(), user);
-		User userN = userDao.getUserById(sessionU.getId());
-		return userN;
+		try{
+			User sessionU = userDao.getUserByUsername(username);
+			userDao.modifyUser(sessionU.getId(), user);
+			User userN = userDao.getUserById(sessionU.getId());
+			return userN;
+		}catch(DataAccessException d){
+			return null;
+		}
 		
 	}
 	
@@ -93,10 +108,14 @@ public class UserManager {
 	 * @return a {@link User} instance
 	 */
 	public User disabledUser(String username){
-		User user = userDao.getUserByUsername(username);
-		userDao.disableUser(user);
+		try{
+			User user = userDao.getUserByUsername(username);
+			userDao.disableUser(user);
 		
-		User userN = userDao.getUserById(user.getId());
-		return userN;
+			User userN = userDao.getUserById(user.getId());
+			return userN;
+		}catch(DataAccessException d){
+			return null;
+		}
 	}
 }

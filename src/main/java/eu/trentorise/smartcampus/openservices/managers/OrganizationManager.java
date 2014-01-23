@@ -16,11 +16,13 @@
 
 package eu.trentorise.smartcampus.openservices.managers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,30 +70,33 @@ public class OrganizationManager {
 	 */
 	@Transactional
 	public boolean deleteOrganization(String username, int orgId) throws SecurityException {
-		User user = userDao.getUserByUsername(username);
-		//check user role
-		UserRole ur = urDao.getRoleOfUser(user.getId(), orgId);
-		if(ur != null && ur.getRole().equalsIgnoreCase("ROLE_ORGOWNER")){
-			// delete user roles
-			List<UserRole> list = urDao.getUserRoleByIdOrg(orgId);
-			for (UserRole urElem : list) {
-				urDao.deleteUserRole(urElem);
+		try {
+			User user = userDao.getUserByUsername(username);
+			// check user role
+			UserRole ur = urDao.getRoleOfUser(user.getId(), orgId);
+			if (ur != null && ur.getRole().equalsIgnoreCase("ROLE_ORGOWNER")) {
+				// delete user roles
+				List<UserRole> list = urDao.getUserRoleByIdOrg(orgId);
+				for (UserRole urElem : list) {
+					urDao.deleteUserRole(urElem);
+				}
+				// delete services
+				List<Service> serviceList = serviceDao.getServiceByIdOrg(orgId);
+				for (Service s : serviceList) {
+					serviceDao.deleteService(s);
+				}
+				// delete org
+				orgDao.deleteOrganization(orgId);
+				// TODO history
+			} else {
+				throw new SecurityException();
 			}
-			// delete services
-			List<Service> serviceList = serviceDao.getServiceByIdOrg(orgId);
-			for (Service s : serviceList) {
-				serviceDao.deleteService(s);
+			// check if organization is deleted
+			if (orgDao.getOrganizationById(orgId) == null) {
+				return true;
 			}
-			// delete org
-			orgDao.deleteOrganization(orgId);
-			// TODO history
-		} else {
-			throw new SecurityException();
-		}
-		
-		//check if organization is deleted
-		if(orgDao.getOrganizationById(orgId)==null){
-			return true;
+		} catch (DataAccessException d) {
+			return false;
 		}
 		return false;
 	}
@@ -103,19 +108,23 @@ public class OrganizationManager {
 	 */
 	@Transactional
 	public boolean createOrganization(String username, Organization org) {
-		User user = userDao.getUserByUsername(username);
-		//check name of Organization
-		if(orgDao.getOrganizationByName(org.getName())==null){
-			org.setCreatorId(user.getId());
-			orgDao.createOrganization(org);
-			// add UserRole
-			urDao.createUserRole(org.getCreatorId(), org.getId(),
-					"ROLE_ORGOWNER");
-			// TODO history
-			// check if this new organizatione exist
-			if (orgDao.getOrganizationByName(org.getName()) != null) {
-				return true;
+		try {
+			User user = userDao.getUserByUsername(username);
+			// check name of Organization
+			if (orgDao.getOrganizationByName(org.getName()) == null) {
+				org.setCreatorId(user.getId());
+				orgDao.createOrganization(org);
+				// add UserRole
+				urDao.createUserRole(org.getCreatorId(), org.getId(),
+						"ROLE_ORGOWNER");
+				// TODO history
+				// check if this new organizatione exist
+				if (orgDao.getOrganizationByName(org.getName()) != null) {
+					return true;
+				}
 			}
+		} catch (DataAccessException d) {
+			return false;
 		}
 		return false;
 		
@@ -128,22 +137,25 @@ public class OrganizationManager {
 	 */
 	@Transactional
 	public boolean updateOrganization(String username, Organization org) {
-		User user = userDao.getUserByUsername(username);
-		Organization o = orgDao.getOrganizationById(org.getId());
-		//check user role
-		UserRole ur = urDao.getRoleOfUser(user.getId(), org.getId());
-		if(ur != null && ur.getRole().equalsIgnoreCase("ROLE_ORGOWNER")){
-			//TODO which values can be modified by user?
-			o.setDescription(org.getDescription());
-			o.setCategory(org.getCategory());
-			o.setContacts(org.getContacts());
-			orgDao.modifyOrganization(o);
-			// TODO history
-			return true;
-		} /*else {
-			throw new SecurityException();
-		}*/
-		return false;
+		try {
+			User user = userDao.getUserByUsername(username);
+			Organization o = orgDao.getOrganizationById(org.getId());
+			// check user role
+			UserRole ur = urDao.getRoleOfUser(user.getId(), org.getId());
+			if (ur != null && ur.getRole().equalsIgnoreCase("ROLE_ORGOWNER")) {
+				// TODO which values can be modified by user?
+				o.setDescription(org.getDescription());
+				o.setCategory(org.getCategory());
+				o.setContacts(org.getContacts());
+				orgDao.modifyOrganization(o);
+				// TODO history
+				return true;
+			} else {
+				throw new SecurityException();
+			}
+		} catch (DataAccessException d) {
+			return false;
+		}
 	}
 
 	/**
@@ -151,33 +163,42 @@ public class OrganizationManager {
 	 * @return list of organizations, where the user is org owner or data owner
 	 */
 	public List<Organization> getUserOrganizations(String username) {
-		User user = userDao.getUserByUsername(username);
-		List<Organization> orgs = orgDao.showMyOrganizations(user.getId());
+		List<Organization> orgs = new ArrayList<Organization>();
+		try {
+			User user = userDao.getUserByUsername(username);
+			orgs = orgDao.showMyOrganizations(user.getId());
+		} catch (DataAccessException d) {
+			orgs = null;
+		}
 		return orgs;
 	}
 	
 	public String createInvitation(String username, int org_id, String role, String email) throws SecurityException {
-		User user = userDao.getUserByUsername(username);
-		//check user role
-		Organization org = orgDao.getOrganizationById(org_id);
-		UserRole ur = urDao.getRoleOfUser(user.getId(), org.getId());
-		if(ur != null && ur.getRole().equalsIgnoreCase("ROLE_ORGOWNER")){
-			
-			//Generate a key
-			GenerateKey g = new GenerateKey();
-			String s = g.getPriv().toString().split("@")[1];
-			
-			//saved in a temporary table
-			TemporaryLink entity = new TemporaryLink();	
-			entity.setKey(s);
-			entity.setId_org(org_id);
-			entity.setRole(role);
-			entity.setEmail(email);
-			tlDao.save(entity);
-			
-			return s;
+		try {
+			User user = userDao.getUserByUsername(username);
+			// check user role
+			Organization org = orgDao.getOrganizationById(org_id);
+			UserRole ur = urDao.getRoleOfUser(user.getId(), org.getId());
+			if (ur != null && ur.getRole().equalsIgnoreCase("ROLE_ORGOWNER")) {
+
+				// Generate a key
+				GenerateKey g = new GenerateKey();
+				String s = g.getPriv().toString().split("@")[1];
+
+				// saved in a temporary table
+				TemporaryLink entity = new TemporaryLink();
+				entity.setKey(s);
+				entity.setId_org(org_id);
+				entity.setRole(role);
+				entity.setEmail(email);
+				tlDao.save(entity);
+
+				return s;
+			}
+			throw new SecurityException();
+		} catch (DataAccessException d) {
+			throw new SecurityException();
 		}
-		throw new SecurityException();
 	}
 
 	/**
@@ -185,14 +206,22 @@ public class OrganizationManager {
 	 * @return {@link Organization} instance
 	 */
 	public Organization getOrganizationById(int org_id) {
-		return orgDao.getOrganizationById(org_id);
+		try{
+			return orgDao.getOrganizationById(org_id);
+		}catch(DataAccessException d){
+			return null;
+		}
 	}
 
 	/**
 	 * @return all {@link Organization} instances
 	 */
 	public List<Organization> getOrganizations() {
-		return orgDao.showOrganizations();
+		try{
+			return orgDao.showOrganizations();
+		}catch(DataAccessException d){
+			return null;
+		}
 	}
 
 	/**
@@ -200,7 +229,11 @@ public class OrganizationManager {
 	 * @return list of {@link ServiceHistory} instances for the organization
 	 */
 	public List<ServiceHistory> getHistory(int org_id) {
-		return shDao.getServiceHistoryByOrgId(org_id);
+		try{
+			return shDao.getServiceHistoryByOrgId(org_id);
+		} catch(DataAccessException d){
+			return null;
+		}
 	}
 
 	/**
@@ -208,21 +241,29 @@ public class OrganizationManager {
 	 * @param username
 	 * @param key
 	 */
-	public void addOwner(String username, String key) throws SecurityException, EntityNotFoundException {
-		User user = userDao.getUserByUsername(username);
-		//Check in table TemporaryLink if this key is saved and if user is correct
-		TemporaryLink tl = tlDao.getTLByKey(key);
-		if (tl != null) {
-			// delete it if it is all ok
-			if (tl.getEmail() == user.getEmail()) {
-				// add a UserRole data in table: user_id, org_id, role ORG_OWNER
-				urDao.createUserRole(user.getId(), tl.getId_org(), tl.getRole());
-				// delete temporary link
-				tlDao.delete(key);
+	public boolean addOwner(String username, String key) throws SecurityException, EntityNotFoundException {
+		try {
+			User user = userDao.getUserByUsername(username);
+			// Check in table TemporaryLink if this key is saved and if user is
+			// correct
+			TemporaryLink tl = tlDao.getTLByKey(key);
+			if (tl != null) {
+				// delete it if it is all ok
+				if (tl.getEmail() == user.getEmail()) {
+					// add a UserRole data in table: user_id, org_id, role
+					// ORG_OWNER
+					urDao.createUserRole(user.getId(), tl.getId_org(),
+							tl.getRole());
+					// delete temporary link
+					tlDao.delete(key);
+					return true;
+				} else
+					throw new SecurityException();
 			} else
-				throw new SecurityException();
+				throw new EntityNotFoundException(key);
+		} catch (DataAccessException d) {
+			return false;
 		}
-		else throw new EntityNotFoundException(key);
 		
 	}
 	
@@ -232,15 +273,20 @@ public class OrganizationManager {
 	 * @param user_id
 	 */
 	public boolean deleteOrgUser(String username, int org_id, int user_id) {
-		//Check user role
-		User user = userDao.getUserByUsername(username);
-		UserRole userRole = urDao.getRoleOfUser(user.getId(), org_id);
-		if(userRole.getRole()=="ROLE_ORGOWNER"){
-			UserRole ur = new UserRole(user_id, org_id, "ROLE_ORGOWNER");
-			urDao.deleteUserRole(ur);
-			return true;
+		try {
+			// Check user role
+			User user = userDao.getUserByUsername(username);
+			UserRole userRole = urDao.getRoleOfUser(user.getId(), org_id);
+			if (userRole.getRole() == "ROLE_ORGOWNER") {
+				UserRole ur = new UserRole(user_id, org_id, "ROLE_ORGOWNER");
+				urDao.deleteUserRole(ur);
+				return true;
+			} else {
+				throw new SecurityException();
+			}
+		} catch (DataAccessException d) {
+			return false;
 		}
-		return false;
 	}
 
 }

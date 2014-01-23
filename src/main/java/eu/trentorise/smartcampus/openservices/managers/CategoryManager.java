@@ -48,48 +48,74 @@ public class CategoryManager {
 
 	@Transactional
 	public Category getCategoryById(int id) throws DataAccessException {
-		return categoryDao.getCategoryById(id);
+		try{
+			return categoryDao.getCategoryById(id);
+		}catch(DataAccessException d){
+			return null;
+		}
 	}
-	
 	
 	@Transactional
 	public Category getCategoryByName(String name) throws DataAccessException {
-		return categoryDao.getCategoryByName(name);
+		try{
+			return categoryDao.getCategoryByName(name);
+		}catch(DataAccessException d){
+			return null;
+		}
 	}
 
 	@Transactional
 	public List<Category> getCategories() throws DataAccessException {
-		return categoryDao.getCategories();
+		try{
+			return categoryDao.getCategories();
+		}catch(DataAccessException d){
+			return null;
+		}
 	}
 	
 	@Transactional
 	public Category addCategory(Category category) throws DataAccessException {
-		if (categoryDao.getCategoryByName(category.getName()) != null) {
-			throw new EntityExistsException();
+		try {
+			if (categoryDao.getCategoryByName(category.getName()) != null) {
+				throw new EntityExistsException();
+			}
+			categoryDao.addCategory(category);
+			return category;
+		} catch (DataAccessException d) {
+			return null;
 		}
-		categoryDao.addCategory(category);
-		return category;
 	} 
 	
 	@Transactional
 	public Category modifyCategory(Category category) throws DataAccessException {
-		Category old = categoryDao.getCategoryByName(category.getName());
-		if (old != null && old.getId() != category.getId()) {
-			throw new EntityExistsException();
+		try {
+			Category old = categoryDao.getCategoryByName(category.getName());
+			if (old != null && old.getId() != category.getId()) {
+				throw new EntityExistsException();
+			}
+			categoryDao.modifyCategory(category);
+			return category;
+		} catch (DataAccessException d) {
+			return null;
 		}
-		categoryDao.modifyCategory(category);
-		return category;
 	}
 	
 	@Transactional
-	public void deleteCategory(int id) throws DataAccessException {
-		List<Organization> orgs = organizationDao.findByCategory(id);
-		if (orgs != null && ! orgs.isEmpty()) throw new EntityExistsException();
-		
-		List<Service> services = serviceDao.findByCategory(id);
-		if (services != null && ! services.isEmpty()) throw new EntityExistsException();
-		
-		categoryDao.deleteCategory(categoryDao.getCategoryById(id));
+	public boolean deleteCategory(int id) throws DataAccessException {
+		try {
+			List<Organization> orgs = organizationDao.findByCategory(id);
+			if (orgs != null && !orgs.isEmpty())
+				throw new EntityExistsException();
+
+			List<Service> services = serviceDao.findByCategory(id);
+			if (services != null && !services.isEmpty())
+				throw new EntityExistsException();
+
+			categoryDao.deleteCategory(categoryDao.getCategoryById(id));
+			return true;
+		} catch (DataAccessException d) {
+			return false;
+		}
 	}
 }
 

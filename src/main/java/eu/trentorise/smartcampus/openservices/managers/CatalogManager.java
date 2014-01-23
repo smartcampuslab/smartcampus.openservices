@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -63,8 +64,12 @@ public class CatalogManager {
 	 * @return all {@link Service} instances
 	 */
 	public List<Service> catalogServices(){
-		List<Service> s = serviceDao.showPublishedService();
-		return s;
+		try{
+			return serviceDao.showPublishedService();
+			
+		}catch(DataAccessException d){
+			return null;
+		}
 	}
 	
 	/**
@@ -73,8 +78,14 @@ public class CatalogManager {
 	 * @return a {@link Service} instance
 	 */
 	public Service catalogServiceById(int service_id){
-		Service s = serviceDao.getServiceById(service_id);
-		if(s.getState().equalsIgnoreCase(SERVICE_STATE.UNPUBLISH.toString())){
+		Service s=new Service();
+		try{
+			s = serviceDao.getServiceById(service_id);
+			if(s!=null && s.getState().equalsIgnoreCase(SERVICE_STATE.UNPUBLISH.toString())){
+				s = null;
+			}
+		}
+		catch(DataAccessException d){
 			s = null;
 		}
 		return s;
@@ -87,8 +98,11 @@ public class CatalogManager {
 	 * @return all {@link Method} instances
 	 */
 	public List<Method> catalogServiceMethods(int service_id){
-		List<Method> meth = methodDao.getMethodByServiceId(service_id);
-		return meth;
+		try{
+			return methodDao.getMethodByServiceId(service_id);			
+		}catch(DataAccessException e){
+			return null;
+		}
 	}
 	
 	/**
@@ -98,8 +112,11 @@ public class CatalogManager {
 	 * @return all {@link ServiceHistory} instances
 	 */
 	public List<ServiceHistory> catalogServiceHistory(int service_id){
-		List<ServiceHistory> sh = shDao.getServiceHistoryByServiceId(service_id);
-		return sh;
+		try{
+			return shDao.getServiceHistoryByServiceId(service_id);
+		}catch(DataAccessException d){
+			return null;
+		}
 	}
 	
 	/**
@@ -109,8 +126,11 @@ public class CatalogManager {
 	 * @return all {@link Service} instances
 	 */
 	public List<Service> catalogServiceSimpleSearch(String token){
-		List<Service> s = serviceDao.searchService(token);
-		return s;
+		try{
+			return serviceDao.searchService(token);
+		}catch(DataAccessException d){
+			return null;
+		}
 	}
 	
 	/**
@@ -119,8 +139,11 @@ public class CatalogManager {
 	 * @return all {@link Service} instances
 	 */
 	public List<Service> catalogServiceBrowseByCategory(int category){
-		List<Service> s = serviceDao.browseService(category, null);
-		return s;
+		try{
+			return serviceDao.browseService(category, null);
+		}catch(DataAccessException d){
+			return null;
+		}
 	}
 	
 	/**
@@ -128,10 +151,19 @@ public class CatalogManager {
 	 * @return
 	 */
 	public List<Service> catalogServiceBrowseByOrg(int org) {
-		List<Service> s = serviceDao.getServiceByIdOrg(org);
-		for (Iterator<Service> iterator = s.iterator(); iterator.hasNext();) {
-			Service service = iterator.next();
-			if (SERVICE_STATE.UNPUBLISH.toString().equals(service.getState())) iterator.remove();
+		List<Service> s = new ArrayList<Service>();
+		try {
+			s = serviceDao.getServiceByIdOrg(org);
+			if (s != null) {
+				for (Iterator<Service> iterator = s.iterator(); iterator.hasNext();) {
+					Service service = iterator.next();
+					if (SERVICE_STATE.UNPUBLISH.toString().equals(
+							service.getState()))
+						iterator.remove();
+				}
+			}
+		} catch (DataAccessException d) {
+			s = null;
 		}
 		return s;
 	}
@@ -142,8 +174,11 @@ public class CatalogManager {
 	 * @return all {@link Service} instances
 	 */
 	public List<Service> catalogServiceBrowseByTags( String tags) {
-		List<Service> s = serviceDao.browseService(null, tags);
-		return s;
+		try{
+			return serviceDao.browseService(null, tags);
+		}catch(DataAccessException d){
+			return null;
+		}
 	}
 	
 	/**
@@ -151,8 +186,11 @@ public class CatalogManager {
 	 * @return all {@link Organization} instances
 	 */
 	public List<Organization> catalogOrg(){
-		List<Organization> orgs = orgDao.showOrganizations();
-		return orgs;
+		try{
+			return orgDao.showOrganizations();
+		}catch(DataAccessException d){
+			return null;
+		}
 	}
 	
 	/**
@@ -162,8 +200,11 @@ public class CatalogManager {
 	 * @return all {@link Organization} instances
 	 */
 	public List<Organization> catalogOrgSimpleSearch(@PathVariable String token){
-		List<Organization> orgs = orgDao.searchOrganization(token);
-		return orgs;
+		try{
+			return orgDao.searchOrganization(token);
+		}catch(DataAccessException d){
+			return null;
+		}
 	}
 	
 	/**
@@ -172,8 +213,11 @@ public class CatalogManager {
 	 * @return all {@link Organization} instances
 	 */
 	public List<Organization> catalogOrgBrowse(@PathVariable int category){
-		List<Organization> orgs = orgDao.browseOrganization(category,null);
-		return orgs;
+		try{
+			return orgDao.browseOrganization(category,null);
+		}catch(DataAccessException d){
+			return null;
+		}
 	}
 
 	/**
@@ -181,7 +225,11 @@ public class CatalogManager {
 	 * @return
 	 */
 	public Organization catalogOrgById(int id) {
-		return orgDao.getOrganizationById(id);
+		try{
+			return orgDao.getOrganizationById(id);
+		}catch(DataAccessException d){
+			return null;
+		}
 	}
 
 	/**
@@ -189,15 +237,20 @@ public class CatalogManager {
 	 */
 	public CategoryServices getCategoryServices() {
 		CategoryServices res = new CategoryServices();
-		List<Category> list = categoryManager.getCategories();
-		res.setCategories(list);
-		if (res.getCategories() != null) {
-			Map<Integer, Integer> counts = serviceDao.findCategoryServices();
-			res.setServices(new ArrayList<Integer>());
-			for (Category c : res.getCategories()) {
-				Integer count = counts.get(c.getId());
-				res.getServices().add(count == null ? 0 : count);
+		try {
+			List<Category> list = categoryManager.getCategories();
+			res.setCategories(list);
+			if (res.getCategories() != null) {
+				Map<Integer, Integer> counts = serviceDao
+						.findCategoryServices();
+				res.setServices(new ArrayList<Integer>());
+				for (Category c : res.getCategories()) {
+					Integer count = counts.get(c.getId());
+					res.getServices().add(count == null ? 0 : count);
+				}
 			}
+		} catch (DataAccessException d) {
+			res = null;
 		}
 		
 		return res;

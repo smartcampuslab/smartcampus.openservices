@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,23 +68,27 @@ public class ServiceManager {
 	 */
 	@Transactional
 	public boolean createService(String username, Service service) {
-		User user = userDao.getUserByUsername(username);
-		UserRole ur = urDao.getRoleOfUser(user.getId(), service.getOrganizationId());
-		if (ur == null) return false;//throw new SecurityException();
-		service.setCreatorId(user.getId());
-		service.setState(SERVICE_STATE.UNPUBLISH.toString());
-		serviceDao.createService(service);
-		// create history
-		ServiceHistory sh = new ServiceHistory();
-		sh.setOperation("service added");
-		sh.setId_service(service.getId());
-		sh.setDate(new Date());
-		shDao.addServiceHistory(sh);
-		//check if service is created
-		if(serviceDao.useService(service.getName())!=null){
-			return true;
+		try {
+			User user = userDao.getUserByUsername(username);
+			UserRole ur = urDao.getRoleOfUser(user.getId(), service.getOrganizationId());
+			if (ur == null) throw new SecurityException();//TODO
+			service.setCreatorId(user.getId());
+			service.setState(SERVICE_STATE.UNPUBLISH.toString());
+			serviceDao.createService(service);
+			// create history
+			ServiceHistory sh = new ServiceHistory();
+			sh.setOperation("service added");
+			sh.setId_service(service.getId());
+			sh.setDate(new Date());
+			shDao.addServiceHistory(sh);
+			// check if service is created
+			if (serviceDao.useService(service.getName()) != null) {
+				return true;
+			}
+			return false;
+		} catch (DataAccessException d) {
+			return false;
 		}
-		return false;
 	}
 
 	/**
@@ -91,32 +96,40 @@ public class ServiceManager {
 	 * @param service
 	 */
 	@Transactional
-	public void updateService(String username, Service service) {
-		User user = userDao.getUserByUsername(username);
+	public boolean updateService(String username, Service service) {
+		
+		try {
+			User user = userDao.getUserByUsername(username);
 
-		UserRole ur = urDao.getRoleOfUser(user.getId(), service.getOrganizationId());
-		if (ur == null) throw new SecurityException();
+			UserRole ur = urDao.getRoleOfUser(user.getId(),
+					service.getOrganizationId());
+			if (ur == null)
+				throw new SecurityException();
 
-		Service s = serviceDao.getServiceById(service.getId());
-		// cannot change name
-		s.setDescription(service.getDescription());
-		s.setTags(service.getTags());
-		s.setCategory(service.getCategory());
-		s.setDocumentation(service.getDocumentation());
-		s.setAccessInformation(service.getAccessInformation());
-		s.setExpiration(service.getExpiration());
-		s.setImplementation(service.getImplementation());
-		s.setLicense(service.getLicense());
-		s.setState(service.getState());
-		s.setVersion(service.getVersion());
-		serviceDao.modifyService(s);
+			Service s = serviceDao.getServiceById(service.getId());
+			// cannot change name
+			s.setDescription(service.getDescription());
+			s.setTags(service.getTags());
+			s.setCategory(service.getCategory());
+			s.setDocumentation(service.getDocumentation());
+			s.setAccessInformation(service.getAccessInformation());
+			s.setExpiration(service.getExpiration());
+			s.setImplementation(service.getImplementation());
+			s.setLicense(service.getLicense());
+			s.setState(service.getState());
+			s.setVersion(service.getVersion());
+			serviceDao.modifyService(s);
 
-		//Add a new ServiceHistory
-		ServiceHistory sh = new ServiceHistory();
-		sh.setOperation("Modify service");
-		sh.setId_service(s.getId());
-		sh.setDate(new Date());
-		shDao.addServiceHistory(sh);
+			// Add a new ServiceHistory
+			ServiceHistory sh = new ServiceHistory();
+			sh.setOperation("Modify service");
+			sh.setId_service(s.getId());
+			sh.setDate(new Date());
+			shDao.addServiceHistory(sh);
+			return true;
+		} catch (DataAccessException d) {
+			return false;
+		}
 		
 	}
 
@@ -125,40 +138,55 @@ public class ServiceManager {
 	 * @param service
 	 */
 	@Transactional
-	public void changeState(String username, int serviceId, String state) {
-		User user = userDao.getUserByUsername(username);
-		Service service = serviceDao.getServiceById(serviceId);
+	public boolean changeState(String username, int serviceId, String state) {
+		try {
+			User user = userDao.getUserByUsername(username);
+			Service service = serviceDao.getServiceById(serviceId);
 
-		UserRole ur = urDao.getRoleOfUser(user.getId(), service.getOrganizationId());
-		if (ur == null) throw new SecurityException();
+			UserRole ur = urDao.getRoleOfUser(user.getId(),
+					service.getOrganizationId());
+			if (ur == null)
+				throw new SecurityException();
 
-		//Change service state
-		service.setState(state);
-		serviceDao.modifyService(service);
-		//add service history
-		ServiceHistory sh = new ServiceHistory();
-		sh.setOperation(state + " service");
-		sh.setId_service(service.getId());
-		sh.setDate(new Date());
-		shDao.addServiceHistory(sh);
+			// Change service state
+			service.setState(state);
+			serviceDao.modifyService(service);
+			// add service history
+			ServiceHistory sh = new ServiceHistory();
+			sh.setOperation(state + " service");
+			sh.setId_service(service.getId());
+			sh.setDate(new Date());
+			shDao.addServiceHistory(sh);
+			
+			return true;
+		} catch (DataAccessException d) {
+			return false;
+		}
 	}
 
 	/**
 	 * @param username
 	 * @param id
 	 */
-	public void deleteService(String username, int id) {
-		User user = userDao.getUserByUsername(username);
-		Service service = serviceDao.getServiceById(id);
-		UserRole ur = urDao.getRoleOfUser(user.getId(), service.getOrganizationId());
-		if (ur == null) throw new SecurityException();
-		serviceDao.deleteService(service);
-		//add service history
-		ServiceHistory sh = new ServiceHistory();
-		sh.setOperation("delete service");
-		sh.setId_service(service.getId());
-		sh.setDate(new Date());
-		shDao.addServiceHistory(sh);
+	public boolean deleteService(String username, int id) {
+		try {
+			User user = userDao.getUserByUsername(username);
+			Service service = serviceDao.getServiceById(id);
+			UserRole ur = urDao.getRoleOfUser(user.getId(),
+					service.getOrganizationId());
+			if (ur == null)
+				throw new SecurityException();
+			serviceDao.deleteService(service);
+			// add service history
+			ServiceHistory sh = new ServiceHistory();
+			sh.setOperation("delete service");
+			sh.setId_service(service.getId());
+			sh.setDate(new Date());
+			shDao.addServiceHistory(sh);
+			return true;
+		} catch (DataAccessException d) {
+			return false;
+		}
 		
 	}
 
@@ -167,7 +195,11 @@ public class ServiceManager {
 	 */
 	@Transactional
 	public List<Service> getServices() {
-		return serviceDao.showService();
+		try{
+			return serviceDao.showService();
+		}catch(DataAccessException d){
+			return null;
+		}
 	}
 
 	/**
@@ -177,7 +209,11 @@ public class ServiceManager {
 	 */
 	@Transactional
 	public List<Service> getUserServices(String username) {
-		return serviceDao.showMyService(username);
+		try{
+			return serviceDao.showMyService(username);
+		}catch(DataAccessException d){
+			return null;
+		}
 	}
 
 	/**
@@ -186,7 +222,11 @@ public class ServiceManager {
 	 */
 	@Transactional
 	public Service getServiceById(int service_id) {
-		return serviceDao.getServiceById(service_id);
+		try{
+			return serviceDao.getServiceById(service_id);
+		}catch(DataAccessException d){
+			return null;
+		}
 	}
 
 	/**
@@ -195,7 +235,11 @@ public class ServiceManager {
 	 */
 	@Transactional
 	public List<Method> getServiceMethodsByServiceId(int service_id) {
-		return methodDao.getMethodByServiceId(service_id);
+		try{
+			return methodDao.getMethodByServiceId(service_id);
+		}catch(DataAccessException d){
+			return null;
+		}
 	}
 
 	/**
@@ -204,7 +248,11 @@ public class ServiceManager {
 	 */
 	@Transactional
 	public List<ServiceHistory> getServiceHistoryByServiceId(int service_id) {
-		return shDao.getServiceHistoryByServiceId(service_id);
+		try{
+			return shDao.getServiceHistoryByServiceId(service_id);
+		}catch(DataAccessException d){
+			return null;
+		}
 	}
 
 	/**
@@ -213,12 +261,19 @@ public class ServiceManager {
 	 * @param method
 	 */
 	@Transactional
-	public void addMethod(String username, Method method) {
-		User user = userDao.getUserByUsername(username);
-		Service s = getServiceById(method.getServiceId());
-		UserRole ur = urDao.getRoleOfUser(user.getId(), s.getOrganizationId());
-		if (ur == null) throw new SecurityException();
-		methodDao.addMethod(method);
+	public boolean addMethod(String username, Method method) {
+		try {
+			User user = userDao.getUserByUsername(username);
+			Service s = getServiceById(method.getServiceId());
+			UserRole ur = urDao.getRoleOfUser(user.getId(),
+					s.getOrganizationId());
+			if (ur == null)
+				throw new SecurityException();
+			methodDao.addMethod(method);
+			return true;
+		} catch (DataAccessException d) {
+			return false;
+		}
 	}
 
 	/**
@@ -227,18 +282,25 @@ public class ServiceManager {
 	 * @param method
 	 */
 	@Transactional
-	public void updateMethod(String username, Method method) {
-		User user = userDao.getUserByUsername(username);
-		Service s = getServiceById(method.getServiceId());
-		UserRole ur = urDao.getRoleOfUser(user.getId(), s.getOrganizationId());
-		if (ur == null) throw new SecurityException();
+	public boolean updateMethod(String username, Method method) {
+		try {
+			User user = userDao.getUserByUsername(username);
+			Service s = getServiceById(method.getServiceId());
+			UserRole ur = urDao.getRoleOfUser(user.getId(),
+					s.getOrganizationId());
+			if (ur == null)
+				throw new SecurityException();
 
-		Method m = methodDao.getMethodById(method.getId());
-		m.setName(method.getName());
-		m.setSynopsis(method.getSynopsis());
-		m.setDocumentation(method.getDocumentation());
-		m.setTestboxProprieties(method.getTestboxProperties());
-		methodDao.modifyMethod(m);
+			Method m = methodDao.getMethodById(method.getId());
+			m.setName(method.getName());
+			m.setSynopsis(method.getSynopsis());
+			m.setDocumentation(method.getDocumentation());
+			m.setTestboxProprieties(method.getTestboxProperties());
+			methodDao.modifyMethod(m);
+			return true;
+		} catch (DataAccessException d) {
+			return false;
+		}
 	}
 	
 	/**
@@ -247,14 +309,21 @@ public class ServiceManager {
 	 * @param method
 	 */
 	@Transactional
-	public void deleteMethod(String username, int methodId) {
-		User user = userDao.getUserByUsername(username);
+	public boolean deleteMethod(String username, int methodId) {
+		try {
+			User user = userDao.getUserByUsername(username);
 
-		Method m = methodDao.getMethodById(methodId);
-		Service s = getServiceById(m.getServiceId());
-		UserRole ur = urDao.getRoleOfUser(user.getId(), s.getOrganizationId());
-		if (ur == null) throw new SecurityException();
-		methodDao.deleteMethod(m);
+			Method m = methodDao.getMethodById(methodId);
+			Service s = getServiceById(m.getServiceId());
+			UserRole ur = urDao.getRoleOfUser(user.getId(),
+					s.getOrganizationId());
+			if (ur == null)
+				throw new SecurityException();
+			methodDao.deleteMethod(m);
+			return true;
+		} catch (DataAccessException d) {
+			return false;
+		}
 	}
 
 	/**
@@ -262,7 +331,11 @@ public class ServiceManager {
 	 */
 	@Transactional
 	public Method getMethodById(int method) {
-		return methodDao.getMethodById(method);
+		try{
+			return methodDao.getMethodById(method);
+		}catch(DataAccessException d){
+			return null;
+		}
 	}
 
 	/**
@@ -271,24 +344,31 @@ public class ServiceManager {
 	 * @param id
 	 * @param testinfo
 	 */
-	public void addTest(String username, int id, TestInfo testinfo) {
-		User user = userDao.getUserByUsername(username);
-		Method m = methodDao.getMethodById(id);
-		Service s = getServiceById(m.getServiceId());
-		UserRole ur = urDao.getRoleOfUser(user.getId(), s.getOrganizationId());
-		if (ur == null) throw new SecurityException();
-		TestBoxProperties props = m.getTestboxProperties();
-		if (props == null) {
-			props = new TestBoxProperties();
-			m.setTestboxProprieties(props);
+	public boolean addTest(String username, int id, TestInfo testinfo) {
+		try {
+			User user = userDao.getUserByUsername(username);
+			Method m = methodDao.getMethodById(id);
+			Service s = getServiceById(m.getServiceId());
+			UserRole ur = urDao.getRoleOfUser(user.getId(),
+					s.getOrganizationId());
+			if (ur == null)
+				throw new SecurityException();
+			TestBoxProperties props = m.getTestboxProperties();
+			if (props == null) {
+				props = new TestBoxProperties();
+				m.setTestboxProprieties(props);
+			}
+			List<TestInfo> tests = props.getTests();
+			if (tests == null) {
+				tests = new ArrayList<TestInfo>();
+				props.setTests(tests);
+			}
+			tests.add(testinfo);
+			methodDao.modifyMethod(m);
+			return true;
+		} catch (DataAccessException d) {
+			return false;
 		}
-		List<TestInfo> tests = props.getTests();
-		if (tests == null) {
-			tests = new ArrayList<TestInfo>();
-			props.setTests(tests);
-		}
-		tests.add(testinfo);
-		methodDao.modifyMethod(m);
 	}
 
 	/**
@@ -298,16 +378,23 @@ public class ServiceManager {
 	 * @param pos
 	 * @param testinfo
 	 */
-	public void modifyTest(String username, int id, int pos, TestInfo testinfo) {
-		User user = userDao.getUserByUsername(username);
-		Method m = methodDao.getMethodById(id);
-		Service s = getServiceById(m.getServiceId());
-		UserRole ur = urDao.getRoleOfUser(user.getId(), s.getOrganizationId());
-		if (ur == null) throw new SecurityException();
-		TestBoxProperties props = m.getTestboxProperties();
-		List<TestInfo> tests = props.getTests();
-		tests.set(pos, testinfo);
-		methodDao.modifyMethod(m);
+	public boolean modifyTest(String username, int id, int pos, TestInfo testinfo) {
+		try {
+			User user = userDao.getUserByUsername(username);
+			Method m = methodDao.getMethodById(id);
+			Service s = getServiceById(m.getServiceId());
+			UserRole ur = urDao.getRoleOfUser(user.getId(),
+					s.getOrganizationId());
+			if (ur == null)
+				throw new SecurityException();
+			TestBoxProperties props = m.getTestboxProperties();
+			List<TestInfo> tests = props.getTests();
+			tests.set(pos, testinfo);
+			methodDao.modifyMethod(m);
+			return true;
+		} catch (DataAccessException d) {
+			return false;
+		}
 	}
 
 	/**
@@ -316,16 +403,23 @@ public class ServiceManager {
 	 * @param id
 	 * @param pos
 	 */
-	public void deleteTest(String username, int id, int pos) {
-		User user = userDao.getUserByUsername(username);
-		Method m = methodDao.getMethodById(id);
-		Service s = getServiceById(m.getServiceId());
-		UserRole ur = urDao.getRoleOfUser(user.getId(), s.getOrganizationId());
-		if (ur == null) throw new SecurityException();
-		TestBoxProperties props = m.getTestboxProperties();
-		List<TestInfo> tests = props.getTests();
-		tests.remove(pos);
-		methodDao.modifyMethod(m);
+	public boolean deleteTest(String username, int id, int pos) {
+		try {
+			User user = userDao.getUserByUsername(username);
+			Method m = methodDao.getMethodById(id);
+			Service s = getServiceById(m.getServiceId());
+			UserRole ur = urDao.getRoleOfUser(user.getId(),
+					s.getOrganizationId());
+			if (ur == null)
+				throw new SecurityException();
+			TestBoxProperties props = m.getTestboxProperties();
+			List<TestInfo> tests = props.getTests();
+			tests.remove(pos);
+			methodDao.modifyMethod(m);
+			return true;
+		} catch (DataAccessException d) {
+			return false;
+		}
 	}
 
 }
