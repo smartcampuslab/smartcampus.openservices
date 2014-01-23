@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -41,6 +42,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.entities.TestInfo;
 
 /**
@@ -51,6 +53,8 @@ import eu.trentorise.smartcampus.openservices.entities.TestInfo;
 @RequestMapping(value="/api/testbox")
 public class TestboxController {
 
+	private ResponseObject responseObject;
+	
 //	private static final String CUSTOMHEADER_PREFIX = "customheader-";
 	/** Timeout (in ms) we specify for each http request */
     public static final int HTTP_REQUEST_TIMEOUT_MS = 30 * 1000;
@@ -59,20 +63,28 @@ public class TestboxController {
 //	private static final String HEADER_TARGET_URL = "targeturl";
 
 	@RequestMapping(method=RequestMethod.POST)
-	public @ResponseBody String performTest(HttpServletRequest req, @RequestBody TestInfo test) throws TestBoxException {
+	public @ResponseBody ResponseObject/*String*/ performTest(HttpServletRequest req, @RequestBody TestInfo test) throws TestBoxException {
+		responseObject = new ResponseObject();
+		
 		if ("GET".equals(test.getRequestMethod())) {
-			return getJSON(test.getRequestPath(), test.getHeaders());
+			responseObject.setData(getJSON(test.getRequestPath(), test.getHeaders()));//return getJSON(test.getRequestPath(), test.getHeaders());
+			return responseObject;
 		}
 		if ("POST".equals(test.getRequestMethod())) {
-			return postJSON(test.getRequestPath(),test.getRequestBody(), test.getHeaders());
+			responseObject.setData(postJSON(test.getRequestPath(),test.getRequestBody(), test.getHeaders()));
+			return responseObject;
 		}
 		if ("PUT".equals(test.getRequestMethod())) {
-			return putJSON(test.getRequestPath(),test.getRequestBody(), test.getHeaders());
+			responseObject.setData(putJSON(test.getRequestPath(),test.getRequestBody(), test.getHeaders()));
+			return responseObject;
 		}
 		if ("GET".equals(test.getRequestMethod())) {
-			return getJSON(test.getRequestPath(), test.getHeaders());
+			responseObject.setData(getJSON(test.getRequestPath(), test.getHeaders()));
+			return responseObject;
 		}
-		throw new TestBoxException(HttpStatus.SC_BAD_REQUEST);
+		responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+		responseObject.setError(new TestBoxException(HttpStatus.SC_BAD_REQUEST)+"");
+		return responseObject;
 	}
 	
 //	@RequestMapping(method=RequestMethod.GET)
