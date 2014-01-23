@@ -16,6 +16,8 @@
 
 package eu.trentorise.smartcampus.openservices.controllers;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import eu.trentorise.smartcampus.openservices.entities.Category;
+import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.managers.CategoryManager;
 import eu.trentorise.smartcampus.openservices.support.ListCategory;
 
@@ -36,33 +39,50 @@ import eu.trentorise.smartcampus.openservices.support.ListCategory;
 @RequestMapping(value="/api/category")
 public class CategoryController {
 
+	private ResponseObject responseObject;
+	
 	@Autowired
 	private CategoryManager categoryManager;
 	
 	@RequestMapping(value="/{category}", method=RequestMethod.GET)
-	public @ResponseBody Category getCategoryById(@PathVariable int category) {
-		return categoryManager.getCategoryById(category);
+	public @ResponseBody ResponseObject getCategoryById(@PathVariable int category) {
+		responseObject = new ResponseObject();
+		responseObject.setData(categoryManager.getCategoryById(category));
+		responseObject.setStatus(HttpServletResponse.SC_OK);
+		return responseObject;
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)
-	public @ResponseBody ListCategory getCategories() {
-		return  new ListCategory(categoryManager.getCategories());
+	public @ResponseBody ResponseObject getCategories() {
+		responseObject = new ResponseObject();
+		responseObject.setData(categoryManager.getCategories());
+		responseObject.setStatus(HttpServletResponse.SC_OK);
+		return responseObject;
 	}
 
 
 	@RequestMapping(value="/add", method=RequestMethod.POST, consumes="application/json")
-	public @ResponseBody Category createCategory(@RequestBody Category category) {
-		return categoryManager.addCategory(category);
+	public @ResponseBody ResponseObject createCategory(@RequestBody Category category) {
+		responseObject = new ResponseObject();
+		responseObject.setData(categoryManager.addCategory(category));
+		responseObject.setStatus(HttpServletResponse.SC_OK);
+		return responseObject;
 	}
 	
 	@RequestMapping(value="/modify", method=RequestMethod.PUT, consumes="application/json")
-	public @ResponseBody Category modifyCategory(@RequestBody Category category) {
-		return categoryManager.modifyCategory(category);
+	public @ResponseBody ResponseObject modifyCategory(@RequestBody Category category) {
+		responseObject = new ResponseObject();
+		responseObject.setData(categoryManager.modifyCategory(category));
+		responseObject.setStatus(HttpServletResponse.SC_OK);
+		return responseObject;
 	}
 
 	@RequestMapping(value="/delete/{id}", method=RequestMethod.DELETE)
-	public void deleteCategory(@PathVariable int category) {
+	public ResponseObject deleteCategory(@PathVariable int category) {
+		responseObject = new ResponseObject();
+		responseObject.setStatus(HttpServletResponse.SC_OK);
 		categoryManager.deleteCategory(category);
+		return responseObject;
 	}
 
 }
