@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import com.sun.mail.iap.Response;
 
 import eu.trentorise.smartcampus.openservices.dao.UserDao;
+import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.entities.User;
 import eu.trentorise.smartcampus.openservices.managers.UserManager;
 import eu.trentorise.smartcampus.openservices.support.ApplicationMailer;
@@ -39,7 +40,7 @@ import eu.trentorise.smartcampus.openservices.support.EmailValidator;
 public class UserController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-	
+	private ResponseObject responseObject;
 	@Autowired
 	private UserManager userManager;
 	
@@ -56,14 +57,20 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
-	public User getUserById(@PathVariable int id, HttpServletResponse response) throws IOException{
+	public ResponseObject getUserById(@PathVariable int id, HttpServletResponse response){
 		logger.info("-- User Data by Id --");
 		User user = userManager.getUserById(id);
+		responseObject = new ResponseObject();
 		if(user == null){
-			response.getWriter().println("User does not exist");
+			//response.getWriter().println("User does not exist");
+			responseObject.setError("User does not exist");
+			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		}else{
+			responseObject.setData(user);
+			responseObject.setStatus(HttpServletResponse.SC_OK);
 		}
-		return user;
+		return responseObject;
 	}
 	
 	/**
@@ -75,15 +82,21 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/my", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
-	public User getUserByUsername(HttpServletResponse response) throws IOException{
+	public ResponseObject getUserByUsername(HttpServletResponse response) throws IOException{
 		logger.info("-- My User Data--");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userManager.getUserByUsername(username);
+		responseObject = new ResponseObject();
 		if(user == null){
-			response.getWriter().println("You do not exist");
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			//response.getWriter().println("User does not exist");
+			responseObject.setError("Connection Problem with database");
+			responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+			response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+		}else{
+			responseObject.setData(user);
+			responseObject.setStatus(HttpServletResponse.SC_OK);
 		}
-		return user;
+		return responseObject;
 	}
 	
 	/**
@@ -96,24 +109,39 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
-	public User createUser(@RequestBody User user, HttpServletResponse response) throws IOException{
+	public ResponseObject createUser(@RequestBody User user, HttpServletResponse response) throws IOException{
 		logger.info("-- Add user data --");
 		//Check username
 		User userDB = userManager.getUserByUsername(user.getUsername());
-		if(userDB!=null){
-			response.getWriter().println("Username already use");
-			response.setStatus(403);
-			return null;
+		responseObject = new ResponseObject();
+		if(userDB != null){
+			//response.getWriter().println("User does not exist");
+			responseObject.setError("Username already use");
+			responseObject.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+		}else{
+			//Check email
+			EmailValidator ev = new EmailValidator();
+			if(!ev.validate(user.getEmail())){
+				responseObject.setError("This is not a valid email address");
+				responseObject.setStatus(HttpServletResponse.SC_FORBIDDEN);
+				response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			}
+			else{
+				User newUser = userManager.createUser(user);
+				if(newUser!=null){
+					responseObject.setData(newUser);
+					responseObject.setStatus(HttpServletResponse.SC_CREATED);
+					response.setStatus(HttpServletResponse.SC_CREATED);
+				}
+				else{
+					responseObject.setError("Connection problem with database");
+					responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+					response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				}
+			}
 		}
-		//Check email
-		EmailValidator ev = new EmailValidator();
-		if(!ev.validate(user.getEmail())){
-			response.getWriter().println("This is not a valid email address");
-			response.setStatus(403);
-			return null;
-		}
-		response.setStatus(HttpServletResponse.SC_CREATED);
-		return userManager.createUser(user);
+		return responseObject;
 	}
 	
 	/**
@@ -123,11 +151,15 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/add/verify", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
-	public void verifyEmail(@RequestBody User user){
+	public ResponseObject verifyEmail(@RequestBody User user){
+		//TODO
 		logger.info("-- User verify email --");
 		ApplicationMailer mailer = new ApplicationMailer();
 		mailer.sendMail(user.getEmail(), "[OpenService] Welcome!", "For activating your account goes to following link: "
 				+ "<choseLink>");
+		responseObject = new ResponseObject();
+		responseObject.setStatus(HttpServletResponse.SC_OK);
+		return responseObject;
 	}
 	
 	/**
@@ -135,9 +167,11 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/add/enable", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
-	public void enableUser(){
+	public ResponseObject enableUser(){
 		logger.info("-- User enable --");
+		responseObject = new ResponseObject();
 		//TODO
+		return responseObject;
 	}
 	
 	/**
@@ -147,10 +181,20 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/modify", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
-	public User modifyUserData(@RequestBody User user){
+	public ResponseObject modifyUserData(@RequestBody User user, HttpServletResponse response){
 		logger.info("-- User modify --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		return userManager.modifyUserData(username, user);
+		User modifiedUser = userManager.modifyUserData(username, user);
+		responseObject = new ResponseObject();
+		if (modifiedUser != null) {
+			responseObject.setData(modifiedUser);
+			responseObject.setStatus(HttpServletResponse.SC_OK);
+		} else {
+			responseObject.setError("Connection problem with database");
+			responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+			response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+		}
+		return responseObject;
 		
 	}
 	
@@ -163,9 +207,19 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/disable/{username}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
-	public User disabledUser(@PathVariable String username){
+	public ResponseObject disabledUser(@PathVariable String username, HttpServletResponse response){
 		logger.info("-- User disable --");
-		return userManager.disabledUser(username);
+		User user =  userManager.disabledUser(username);
+		responseObject = new ResponseObject();
+		if (user != null) {
+			responseObject.setData(user);
+			responseObject.setStatus(HttpServletResponse.SC_OK);
+		} else {
+			responseObject.setError("Connection problem with database");
+			responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+			response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+		}
+		return responseObject;
 	}
 	
 }

@@ -207,16 +207,24 @@ public class ServiceController {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		//check structure for required field
 		responseObject = new ResponseObject();
-		if(service.getName()!=null && service.getVersion()!=null && service.getOrganizationId()!=0){
-			boolean result = serviceManager.createService(username, service);
-			if (result) {
-				responseObject.setStatus(HttpServletResponse.SC_CREATED);
-				response.setStatus(HttpServletResponse.SC_CREATED);
-			} else {
-				responseObject.setError("User has not role ORG_OWNER for Organization OR "
-								+ "Organization is not created");
-				responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+		if (service.getName() != null && service.getVersion() != null
+				&& service.getOrganizationId() != 0) {
+			try {
+				boolean result = serviceManager
+						.createService(username, service);
+				if (result) {
+					responseObject.setStatus(HttpServletResponse.SC_CREATED);
+					response.setStatus(HttpServletResponse.SC_CREATED);
+				} else {
+					responseObject.setError("Organization is not created");
+					responseObject
+							.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				}
+			} catch (SecurityException s) {
+				responseObject.setError("Unauthorized user");
+				responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			}
 		}
 		else{
@@ -239,9 +247,22 @@ public class ServiceController {
 		logger.info("-- Modify service --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		responseObject = new ResponseObject();
-		serviceManager.updateService(username,service);
-		responseObject.setStatus(HttpServletResponse.SC_OK);
-		response.setStatus(HttpServletResponse.SC_OK);
+		try {
+			boolean result = serviceManager.updateService(username, service);
+			if (result) {
+				responseObject.setStatus(HttpServletResponse.SC_OK);
+				response.setStatus(HttpServletResponse.SC_OK);
+			} else {
+				responseObject.setError("Connection problem with database");
+				responseObject
+						.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+			}
+		}catch(SecurityException s){
+			responseObject.setError("User must be invitated to this organizaiton");
+			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		}
 		return responseObject;
 	}
 	
@@ -258,9 +279,24 @@ public class ServiceController {
 		logger.info("-- Publish service --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		responseObject = new ResponseObject();
-		serviceManager.changeState(username, id, SERVICE_STATE.PUBLISH.toString());
-		responseObject.setStatus(HttpServletResponse.SC_OK);
-		response.setStatus(HttpServletResponse.SC_OK);
+		try {
+			boolean result = serviceManager.changeState(username, id,
+					SERVICE_STATE.PUBLISH.toString());
+			if (result) {
+				responseObject.setStatus(HttpServletResponse.SC_OK);
+				response.setStatus(HttpServletResponse.SC_OK);
+			} else {
+				responseObject.setError("Connection problem with database");
+				responseObject
+						.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+			}
+		}
+		catch(SecurityException s){
+			responseObject.setError("User must be part of this organization before changing this service");
+			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		}
 		return responseObject;
 	}
 	
@@ -277,9 +313,21 @@ public class ServiceController {
 		logger.info("-- Unpublish service --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		responseObject = new ResponseObject();
-		serviceManager.changeState(username, id,SERVICE_STATE.UNPUBLISH.toString());
-		responseObject.setStatus(HttpServletResponse.SC_OK);
-		response.setStatus(HttpServletResponse.SC_OK);
+		try {
+			boolean result = serviceManager.changeState(username, id,SERVICE_STATE.UNPUBLISH.toString());
+			if (result) {
+				responseObject.setStatus(HttpServletResponse.SC_OK);
+				response.setStatus(HttpServletResponse.SC_OK);
+			} else {
+				responseObject.setError("Connection problem with database");
+				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+			}
+		} catch (SecurityException s) {
+			responseObject.setError("User must be part of this organization before changing this service");
+			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		}
 		return responseObject;
 	}
 	
@@ -296,9 +344,21 @@ public class ServiceController {
 		logger.info("-- Deprecate service --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		responseObject = new ResponseObject();
-		serviceManager.changeState(username, id,SERVICE_STATE.DEPRECATE.toString());
-		responseObject.setStatus(HttpServletResponse.SC_OK);
-		response.setStatus(HttpServletResponse.SC_OK);
+		try {
+			boolean result = serviceManager.changeState(username, id,SERVICE_STATE.DEPRECATE.toString());
+			if (result) {
+				responseObject.setStatus(HttpServletResponse.SC_OK);
+				response.setStatus(HttpServletResponse.SC_OK);
+			} else {
+				responseObject.setError("Connection problem with database");
+				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+			}
+		} catch (SecurityException s) {
+			responseObject.setError("User must be part of this organization before changing this service");
+			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		}
 		return responseObject;
 	}
 	
@@ -315,9 +375,21 @@ public class ServiceController {
 		logger.info("-- Delete service --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		responseObject = new ResponseObject();
-		serviceManager.deleteService(username, id);
-		responseObject.setStatus(HttpServletResponse.SC_OK);
-		response.setStatus(HttpServletResponse.SC_OK);
+		try {
+			boolean result = serviceManager.deleteService(username, id);
+			if (result) {
+				responseObject.setStatus(HttpServletResponse.SC_OK);
+				response.setStatus(HttpServletResponse.SC_OK);
+			} else {
+				responseObject.setError("Connection problem with database");
+				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+			}
+		} catch (SecurityException s) {
+			responseObject.setError("User must be part of this organization before deleting this service");
+			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		}
 		return responseObject;
 	}
 	
@@ -335,9 +407,21 @@ public class ServiceController {
 		logger.info("-- Create new service method --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		responseObject = new ResponseObject();
-		serviceManager.addMethod(username, method);
-		responseObject.setStatus(HttpServletResponse.SC_CREATED);
-		response.setStatus(HttpServletResponse.SC_CREATED);
+		try {
+			boolean result = serviceManager.addMethod(username, method);
+			if (result) {
+				responseObject.setStatus(HttpServletResponse.SC_CREATED);
+				response.setStatus(HttpServletResponse.SC_CREATED);
+			} else {
+				responseObject.setError("Connection problem with database");
+				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+			}
+		} catch (SecurityException s) {
+			responseObject.setError("User must be part of this organization before adding a method to this service");
+			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		}
 		return responseObject;
 	}
 	
@@ -354,9 +438,21 @@ public class ServiceController {
 		logger.info("-- Modify a service method --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		responseObject = new ResponseObject();
-		serviceManager.updateMethod(username, method);
-		responseObject.setStatus(HttpServletResponse.SC_OK);
-		response.setStatus(HttpServletResponse.SC_OK);
+		try {
+			boolean result = serviceManager.updateMethod(username, method);
+			if (result) {
+				responseObject.setStatus(HttpServletResponse.SC_OK);
+				response.setStatus(HttpServletResponse.SC_OK);
+			} else {
+				responseObject.setError("Connection problem with database");
+				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+			}
+		} catch (SecurityException s) {
+			responseObject.setError("User must be part of this organization before modifying a method to this service");
+			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		}
 		return responseObject;
 	}
 	
@@ -373,9 +469,21 @@ public class ServiceController {
 		logger.info("-- Delete a service method --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		responseObject = new ResponseObject();
-		serviceManager.deleteMethod(username, id);
-		responseObject.setStatus(HttpServletResponse.SC_OK);
-		response.setStatus(HttpServletResponse.SC_OK);
+		try {
+			boolean result = serviceManager.deleteMethod(username, id);
+			if (result) {
+				responseObject.setStatus(HttpServletResponse.SC_OK);
+				response.setStatus(HttpServletResponse.SC_OK);
+			} else {
+				responseObject.setError("Connection problem with database");
+				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+			}
+		} catch (SecurityException s) {
+			responseObject.setError("User must be part of this organization before deleting a method to this service");
+			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		}
 		return responseObject;
 	}
 	
@@ -391,9 +499,21 @@ public class ServiceController {
 		logger.info("-- Create new method test --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		responseObject = new ResponseObject();
-		serviceManager.addTest(username, id, testinfo);
-		responseObject.setStatus(HttpServletResponse.SC_CREATED);
-		response.setStatus(HttpServletResponse.SC_CREATED);
+		try {
+			boolean result = serviceManager.addTest(username, id, testinfo);
+			if (result) {
+				responseObject.setStatus(HttpServletResponse.SC_OK);
+				response.setStatus(HttpServletResponse.SC_OK);
+			} else {
+				responseObject.setError("Connection problem with database");
+				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+			}
+		} catch (SecurityException s) {
+			responseObject.setError("User must be part of this organization before adding a test for this service method");
+			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		}
 		return responseObject;
 	}
 
@@ -410,9 +530,21 @@ public class ServiceController {
 		logger.info("-- Update method test --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		responseObject = new ResponseObject();
-		serviceManager.modifyTest(username, id, pos, testinfo);
-		responseObject.setStatus(HttpServletResponse.SC_OK);
-		response.setStatus(HttpServletResponse.SC_OK);
+		try {
+			boolean result = serviceManager.modifyTest(username, id, pos, testinfo);
+			if (result) {
+				responseObject.setStatus(HttpServletResponse.SC_OK);
+				response.setStatus(HttpServletResponse.SC_OK);
+			} else {
+				responseObject.setError("Connection problem with database");
+				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+			}
+		} catch (SecurityException s) {
+			responseObject.setError("User must be part of this organization before modifying test for this method service");
+			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		}
 		return responseObject;
 	}
 
@@ -428,9 +560,21 @@ public class ServiceController {
 		logger.info("-- Delete method test --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		responseObject = new ResponseObject();
-		serviceManager.deleteTest(username, id, pos);
-		responseObject.setStatus(HttpServletResponse.SC_OK);
-		response.setStatus(HttpServletResponse.SC_OK);
+		try {
+			boolean result = serviceManager.deleteTest(username, id, pos);
+			if (result) {
+				responseObject.setStatus(HttpServletResponse.SC_OK);
+				response.setStatus(HttpServletResponse.SC_OK);
+			} else {
+				responseObject.setError("Connection problem with database");
+				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+			}
+		} catch (SecurityException s) {
+			responseObject.setError("User must be part of this organization before deleting test for this method service");
+			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		}
 		return responseObject;
 	}
 

@@ -16,6 +16,8 @@
 
 package eu.trentorise.smartcampus.openservices.controllers;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,43 +47,78 @@ public class CategoryController {
 	private CategoryManager categoryManager;
 	
 	@RequestMapping(value="/{category}", method=RequestMethod.GET)
-	public @ResponseBody ResponseObject getCategoryById(@PathVariable int category) {
+	public @ResponseBody ResponseObject getCategoryById(@PathVariable int category, HttpServletResponse response) {
 		responseObject = new ResponseObject();
-		responseObject.setData(categoryManager.getCategoryById(category));
-		responseObject.setStatus(HttpServletResponse.SC_OK);
+		Category cat = categoryManager.getCategoryById(category);
+		if(cat!=null){
+			responseObject.setData(cat);
+			responseObject.setStatus(HttpServletResponse.SC_OK);
+		}else{
+			responseObject.setError("Connection problem or no category found");
+			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		}
 		return responseObject;
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)
-	public @ResponseBody ResponseObject getCategories() {
+	public @ResponseBody ResponseObject getCategories(HttpServletResponse response) {
 		responseObject = new ResponseObject();
-		responseObject.setData(categoryManager.getCategories());
-		responseObject.setStatus(HttpServletResponse.SC_OK);
+		List<Category> cat = categoryManager.getCategories();
+		if(cat!=null){
+			responseObject.setData(cat);
+			responseObject.setStatus(HttpServletResponse.SC_OK);
+		}else{
+			responseObject.setError("Connection problem or no categories found");
+			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		}
 		return responseObject;
 	}
 
 
 	@RequestMapping(value="/add", method=RequestMethod.POST, consumes="application/json")
-	public @ResponseBody ResponseObject createCategory(@RequestBody Category category) {
+	public @ResponseBody ResponseObject createCategory(@RequestBody Category category, HttpServletResponse response) {
 		responseObject = new ResponseObject();
-		responseObject.setData(categoryManager.addCategory(category));
-		responseObject.setStatus(HttpServletResponse.SC_OK);
+		Category cat = categoryManager.addCategory(category);
+		if(cat!=null){
+			responseObject.setData(cat);
+			responseObject.setStatus(HttpServletResponse.SC_OK);
+		}else{
+			responseObject.setError("Connection problem or no added category found");
+			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		}
 		return responseObject;
 	}
 	
 	@RequestMapping(value="/modify", method=RequestMethod.PUT, consumes="application/json")
-	public @ResponseBody ResponseObject modifyCategory(@RequestBody Category category) {
+	public @ResponseBody ResponseObject modifyCategory(@RequestBody Category category, HttpServletResponse response) {
 		responseObject = new ResponseObject();
-		responseObject.setData(categoryManager.modifyCategory(category));
-		responseObject.setStatus(HttpServletResponse.SC_OK);
+		Category cat = categoryManager.modifyCategory(category);
+		if(cat!=null){
+			responseObject.setData(cat);
+			responseObject.setStatus(HttpServletResponse.SC_OK);
+		}else{
+			responseObject.setError("Connection problem or no modified category found");
+			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		}
 		return responseObject;
 	}
 
 	@RequestMapping(value="/delete/{id}", method=RequestMethod.DELETE)
-	public ResponseObject deleteCategory(@PathVariable int category) {
+	public ResponseObject deleteCategory(@PathVariable int category, HttpServletResponse response) {
 		responseObject = new ResponseObject();
-		responseObject.setStatus(HttpServletResponse.SC_OK);
-		categoryManager.deleteCategory(category);
+		boolean cat = categoryManager.deleteCategory(category);
+		if(cat){
+			responseObject.setData(cat);
+			responseObject.setStatus(HttpServletResponse.SC_OK);
+		}else{
+			responseObject.setError("Connection problem");
+			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		}
 		return responseObject;
 	}
 
