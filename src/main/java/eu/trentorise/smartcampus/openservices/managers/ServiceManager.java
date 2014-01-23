@@ -66,10 +66,10 @@ public class ServiceManager {
 	 * @param service
 	 */
 	@Transactional
-	public void createService(String username, Service service) {
+	public boolean createService(String username, Service service) {
 		User user = userDao.getUserByUsername(username);
 		UserRole ur = urDao.getRoleOfUser(user.getId(), service.getOrganizationId());
-		if (ur == null) throw new SecurityException();
+		if (ur == null) return false;//throw new SecurityException();
 		service.setCreatorId(user.getId());
 		service.setState(SERVICE_STATE.UNPUBLISH.toString());
 		serviceDao.createService(service);
@@ -79,6 +79,11 @@ public class ServiceManager {
 		sh.setId_service(service.getId());
 		sh.setDate(new Date());
 		shDao.addServiceHistory(sh);
+		//check if service is created
+		if(serviceDao.useService(service.getName())!=null){
+			return true;
+		}
+		return false;
 	}
 
 	/**

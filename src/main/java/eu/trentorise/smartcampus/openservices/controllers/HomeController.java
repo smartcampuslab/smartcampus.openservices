@@ -67,6 +67,10 @@ public class HomeController {
 		response.setHeader("Roles", roles);
 		logger.info("-- Welcome home! Roles: "+roles+" --");
 		
+		//Principal and credentials
+		logger.info("-- Principal: "+SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString()+" --"+
+		"Credentials: "+SecurityContextHolder.getContext().getAuthentication().getCredentials()+" --");
+		
 		//return cookie not Http Only with value true if user is authenticated o.w. false
 		String value = "false";
 		if(!username.equalsIgnoreCase("anonymousUser")){
@@ -179,6 +183,7 @@ public class HomeController {
 				}
 			}
 		}*/
+		response.setStatus(404);
 		return home(request, response);
 	}
 	
@@ -224,10 +229,10 @@ public class HomeController {
 	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/loginfailed", method = RequestMethod.GET)
-	public String loginfailed(HttpServletRequest request, HttpServletResponse response) throws IOException{
+	public void loginfailed(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		logger.info("-- Login failed --");
 		response.setStatus(401);
-		return "index";
+		//return "index";
 	}
 	
 	//User - logout

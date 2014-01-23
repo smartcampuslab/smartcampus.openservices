@@ -52,12 +52,17 @@ public class UserController {
 	 * user id is a primary key
 	 * @param id
 	 * @return
+	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
-	public User getUserById(@PathVariable int id){
+	public User getUserById(@PathVariable int id, HttpServletResponse response) throws IOException{
 		logger.info("-- User Data by Id --");
 		User user = userManager.getUserById(id);
+		if(user == null){
+			response.getWriter().println("User does not exist");
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		}
 		return user;
 	}
 	
@@ -66,13 +71,18 @@ public class UserController {
 	 * username is unique
 	 * @param username
 	 * @return
+	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/my", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
-	public User getUserByUsername(){
+	public User getUserByUsername(HttpServletResponse response) throws IOException{
 		logger.info("-- My User Data--");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userManager.getUserByUsername(username);
+		if(user == null){
+			response.getWriter().println("You do not exist");
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		}
 		return user;
 	}
 	
@@ -91,17 +101,18 @@ public class UserController {
 		//Check username
 		User userDB = userManager.getUserByUsername(user.getUsername());
 		if(userDB!=null){
-			response.setHeader("403", "Username already use");
+			response.getWriter().println("Username already use");
 			response.setStatus(403);
 			return null;
 		}
 		//Check email
 		EmailValidator ev = new EmailValidator();
 		if(!ev.validate(user.getEmail())){
-			response.setHeader("403", "Username already use");
+			response.getWriter().println("This is not a valid email address");
 			response.setStatus(403);
 			return null;
 		}
+		response.setStatus(HttpServletResponse.SC_CREATED);
 		return userManager.createUser(user);
 	}
 	

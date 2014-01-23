@@ -14,13 +14,15 @@
 	<http pattern="/js/**" security="none"></http>
 	<http pattern="/partials/**" security="none"></http>
 	
-	<http auto-config="true" use-expressions="true"  >
+	<http auto-config="false" use-expressions="true"  entry-point-ref="CustomAuthenticationEntryPoint">
+		<!-- Insert a custom filter for FORM_LOGIN_FILTER -->
+		<custom-filter ref="authFilter" position="FORM_LOGIN_FILTER"/>
+		
 		<!-- Permission. Note order: general at the end, more specific at the top -->
 		<intercept-url pattern="/api/admin/**" access="hasRole('ROLE_ADMIN')" />
 	
 	 	 <intercept-url pattern="/api/catalog/**" access="permitAll" />
-     <intercept-url pattern="/api/testbox/**" access="permitAll" />
-	 	 
+  
 		<intercept-url pattern="/api/org/my/**" access="isAuthenticated()"/>
 		<intercept-url pattern="/api/org/manage/**" access="isAuthenticated()"/>
     	<intercept-url pattern="/api/org/**" access="hasAnyRole('ROLE_ADMIN','ROLE_ORGOWNER')" />
@@ -39,14 +41,20 @@
     <intercept-url pattern="/api/category/**" access="hasAnyRole('ROLE_ADMIN')" />
 			
 		<intercept-url pattern="/" access="permitAll"/>
-		<intercept-url pattern="/profile" access="isAuthenticated()" />
-		<form-login login-page="/login"
+		
+		<!-- <form-login login-page="/login"
 			default-target-url="/welcome" 
 			authentication-failure-url="/loginfailed"
-			login-processing-url="/perform_login" always-use-default-target="true"/><!-- j_spring_security_check default value -->
-		<logout logout-success-url="/logout" invalidate-session="true" delete-cookies="JSESSIONID"/>
-		<!-- <remember-me key="segret" use-secure-cookie="true" user-service-ref="jdbcUserService"/>  -->
+			login-processing-url="/perform_login" /><! j_spring_security_check default value -->
+		<logout logout-success-url="/logout" invalidate-session="true" delete-cookies="JSESSIONID"/>		
 	</http>
+	
+	<beans:bean id="CustomAuthenticationEntryPoint" 
+		class="eu.trentorise.smartcampus.openservices.securitymodel.CustomAuthenticationEntryPoint"></beans:bean>
+	<beans:bean id="authFilter" 
+		class="eu.trentorise.smartcampus.openservices.securitymodel.AuthenticationTokenProcessingFilter">
+			<beans:constructor-arg ref="authenticationManager"></beans:constructor-arg>
+		</beans:bean>
 	
 	 <!-- My authentication with custom db (not using ACL) -->
 	 <authentication-manager  alias="authenticationManager"> <!--  -->

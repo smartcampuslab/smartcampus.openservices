@@ -64,7 +64,7 @@ public class ServiceDaoImpl implements ServiceDao{
 	@Transactional
 	@Override
 	public List<Service> showPublishedService() throws DataAccessException {
-		Query q = getEntityManager().createQuery("FROM Service S WHERE S.state='PUBLISH' OR S.state='DEPRECATE'");
+		Query q = getEntityManager().createQuery("FROM Service S WHERE S.state!='UNPUBLISH'");
 		List<Service> s = q.getResultList();
 		return s;
 	}
@@ -154,7 +154,7 @@ public class ServiceDaoImpl implements ServiceDao{
 	@Transactional
 	@Override
 	public List<Service> searchService(String token) throws DataAccessException{
-		Query q = getEntityManager().createQuery("FROM Service S WHERE S.name LIKE :token AND S.state='PUBLISH'")
+		Query q = getEntityManager().createQuery("FROM Service S WHERE S.name LIKE :token AND S.state!='UNPUBLISH'")
 				.setParameter("token", "%"+token+"%");
 		List<Service> s = q.getResultList();
 		return s;
@@ -166,16 +166,16 @@ public class ServiceDaoImpl implements ServiceDao{
 		Query q = null;
 		if(category!=null && tags!=null){
 			q = getEntityManager().createQuery("FROM Service S WHERE S.category=:category AND " +
-				"S.tags LIKE :tags AND S.state='PUBLISH'")
+				"S.tags LIKE :tags AND S.state!='UNPUBLISH'")
 				.setParameter("category", category)
 				.setParameter("tags", "%"+tags+"%");
 		}
 		else if(category==null && tags!=null){
-			q = getEntityManager().createQuery("FROM Service S WHERE S.tags LIKE :tags AND S.state='PUBLISH'")
+			q = getEntityManager().createQuery("FROM Service S WHERE S.tags LIKE :tags AND S.state!='UNPUBLISH'")
 					.setParameter("tags", "%"+tags+"%");
 		}
 		else if(category!=null && tags==null){
-			q = getEntityManager().createQuery("FROM Service S WHERE S.category=:category AND S.state='PUBLISH'")
+			q = getEntityManager().createQuery("FROM Service S WHERE S.category=:category AND S.state!='UNPUBLISH'")
 					.setParameter("category", category);
 		}
 		List<Service> s = q.getResultList();

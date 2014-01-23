@@ -67,7 +67,7 @@ public class OrganizationManager {
 	 * @throws SecurityException
 	 */
 	@Transactional
-	public void deleteOrganization(String username, int orgId) throws SecurityException {
+	public boolean deleteOrganization(String username, int orgId) throws SecurityException {
 		User user = userDao.getUserByUsername(username);
 		//check user role
 		UserRole ur = urDao.getRoleOfUser(user.getId(), orgId);
@@ -88,6 +88,12 @@ public class OrganizationManager {
 		} else {
 			throw new SecurityException();
 		}
+		
+		//check if organization is deleted
+		if(orgDao.getOrganizationById(orgId)==null){
+			return true;
+		}
+		return false;
 	}
 	
 	/**
@@ -96,13 +102,23 @@ public class OrganizationManager {
 	 * @param org
 	 */
 	@Transactional
-	public void createOrganization(String username, Organization org) {
+	public boolean createOrganization(String username, Organization org) {
 		User user = userDao.getUserByUsername(username);
-		org.setCreatorId(user.getId());
-		orgDao.createOrganization(org);
-		//add UserRole
-		urDao.createUserRole(org.getCreatorId(), org.getId(), "ROLE_ORGOWNER");
-		// TODO history
+		//check name of Organization
+		if(orgDao.getOrganizationByName(org.getName())==null){
+			org.setCreatorId(user.getId());
+			orgDao.createOrganization(org);
+			// add UserRole
+			urDao.createUserRole(org.getCreatorId(), org.getId(),
+					"ROLE_ORGOWNER");
+			// TODO history
+			// check if this new organizatione exist
+			if (orgDao.getOrganizationByName(org.getName()) != null) {
+				return true;
+			}
+		}
+		return false;
+		
 	}
 
 	/**
@@ -111,7 +127,7 @@ public class OrganizationManager {
 	 * @param org
 	 */
 	@Transactional
-	public void updateOrganization(String username, Organization org) {
+	public boolean updateOrganization(String username, Organization org) {
 		User user = userDao.getUserByUsername(username);
 		Organization o = orgDao.getOrganizationById(org.getId());
 		//check user role
@@ -123,9 +139,11 @@ public class OrganizationManager {
 			o.setContacts(org.getContacts());
 			orgDao.modifyOrganization(o);
 			// TODO history
-		} else {
+			return true;
+		} /*else {
 			throw new SecurityException();
-		}
+		}*/
+		return false;
 	}
 
 	/**
@@ -213,9 +231,16 @@ public class OrganizationManager {
 	 * @param org_id
 	 * @param user_id
 	 */
-	public void deleteOrgUser(int org_id, int user_id) {
-		UserRole ur = new UserRole(user_id, org_id, "ROLE_ORGOWNER");
-		urDao.deleteUserRole(ur);
+	public boolean deleteOrgUser(String username, int org_id, int user_id) {
+		//Check user role
+		User user = userDao.getUserByUsername(username);
+		UserRole userRole = urDao.getRoleOfUser(user.getId(), org_id);
+		if(userRole.getRole()=="ROLE_ORGOWNER"){
+			UserRole ur = new UserRole(user_id, org_id, "ROLE_ORGOWNER");
+			urDao.deleteUserRole(ur);
+			return true;
+		}
+		return false;
 	}
 
 }
