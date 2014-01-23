@@ -38,6 +38,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import eu.trentorise.smartcampus.openservices.dao.UserDao;
+import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.entities.User;
 import eu.trentorise.smartcampus.openservices.managers.UserManager;
 import eu.trentorise.smartcampus.openservices.securitymodel.CustomUserDetailsService;
@@ -51,6 +52,8 @@ public class HomeController {
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	@Autowired
 	private UserManager userManager;
+	
+	private ResponseObject responseObjetc;
 	
 	/**
 	 * Home view
@@ -115,12 +118,18 @@ public class HomeController {
 	 */
 	@RequestMapping(value="/welcome", method = RequestMethod.GET)
 	@ResponseBody
-	public User printWelcome(HttpServletRequest request, HttpServletResponse response) {
+	public ResponseObject printWelcome(HttpServletRequest request, HttpServletResponse response) {
 		logger.info("-- Welcome after login --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userManager.getUserByUsername(username);
+		responseObjetc = new ResponseObject();
 		if(user!=null){
 			user.setPassword(null);
+			responseObjetc.setData(user);
+			responseObjetc.setStatus(HttpServletResponse.SC_OK);
+		}else{
+			responseObjetc.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			responseObjetc.setError("User does not exist or database problem");
 		}
 		logger.info("-- User "+username+" --");
 		
@@ -140,7 +149,7 @@ public class HomeController {
 			}
 		}
 
-		return user;
+		return responseObjetc;
 	}
 	
 	/**
@@ -229,10 +238,15 @@ public class HomeController {
 	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/loginfailed", method = RequestMethod.GET)
-	public void loginfailed(HttpServletRequest request, HttpServletResponse response) throws IOException{
+	@ResponseBody
+	public ResponseObject loginfailed(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		logger.info("-- Login failed --");
+		responseObjetc = new ResponseObject();
+		responseObjetc.setStatus(401);
+		responseObjetc.setError("Invalid username or password");
 		response.setStatus(401);
 		//return "index";
+		return responseObjetc;
 	}
 	
 	//User - logout
