@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import eu.trentorise.smartcampus.openservices.Constants.SERVICE_STATE;
 import eu.trentorise.smartcampus.openservices.entities.Method;
+import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.entities.Service;
 import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
 import eu.trentorise.smartcampus.openservices.entities.TestInfo;
@@ -49,6 +50,8 @@ public class ServiceController {
 	private static final Logger logger = LoggerFactory
 			.getLogger(ServiceController.class);
 
+	private ResponseObject responseObject;
+	
 	@Autowired
 	private ServiceManager serviceManager;
 	
@@ -65,17 +68,24 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/my", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
-	public ListService myServices(HttpServletResponse response) throws IOException{
+	public ResponseObject myServices(HttpServletResponse response){
 		logger.info("-- User: Access my data service --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		ListService lserv = new ListService();
+		//ListService lserv = new ListService();
 		List<Service> services = serviceManager.getUserServices(username);
-		lserv.setServices(services);
+		//lserv.setServices(services);
+		responseObject = new ResponseObject();
 		if(services==null || services.size()==0){
-			response.getWriter().println("No service for this user");
+			//response.getWriter().println("No service for this user");
+			responseObject.setError("No service for this user");
+			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
-		return lserv;
+		else{
+			responseObject.setData(services);
+			responseObject.setStatus(HttpServletResponse.SC_OK);
+		}
+		return responseObject;
 	}
 	
 	//Service - View Service
@@ -86,16 +96,22 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/view", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
-	public ListService viewServices(HttpServletResponse response) throws IOException{
+	public ResponseObject viewServices(HttpServletResponse response){
 		logger.info("-- View Services --");
-		ListService lserv = new ListService();
+		//ListService lserv = new ListService();
 		List<Service> services = serviceManager.getServices();
-		lserv.setServices(services);
+		//lserv.setServices(services);
+		responseObject = new ResponseObject();
 		if(services==null || services.size()==0){
-			response.getWriter().println("No service availables");
+			responseObject.setError("No service availables");
+			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
-		return lserv;
+		else{
+			responseObject.setData(services);
+			response.setStatus(HttpServletResponse.SC_OK);
+		}
+		return responseObject;
 	}
 	
 	//Service - View Service - view service description
@@ -107,14 +123,20 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/view/description/{service_id}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
-	public Service viewServiceDescription(@PathVariable int service_id, HttpServletResponse response) throws IOException{
+	public ResponseObject viewServiceDescription(@PathVariable int service_id, HttpServletResponse response){
 		logger.info("-- View service description --");
 		Service service = serviceManager.getServiceById(service_id);
+		responseObject = new ResponseObject();
 		if(service==null){
-			response.getWriter().println("No service with this id");
+			responseObject.setError("No service with this id");
+			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
-		return service;
+		else{
+			responseObject.setData(service);
+			responseObject.setStatus(HttpServletResponse.SC_OK);
+		}
+		return responseObject;
 	}
 	
 	//Service - View Service - view service method
@@ -126,16 +148,22 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/view/method/{service_id}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
-	public ListMethod viewServiceMethod(@PathVariable int service_id, HttpServletResponse response) throws IOException{
+	public ResponseObject viewServiceMethod(@PathVariable int service_id, HttpServletResponse response){
 		logger.info("-- View service method --");
-		ListMethod lmethod = new ListMethod();
+		//ListMethod lmethod = new ListMethod();
 		List<Method> m = serviceManager.getServiceMethodsByServiceId(service_id);
-		lmethod.setMethods(m);
+		//lmethod.setMethods(m);
+		responseObject = new ResponseObject();
 		if(m==null || m.size()==0){
-			response.getWriter().println("No methods for this service");
+			responseObject.setError("No methods for this service");
+			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
-		return lmethod;
+		else{
+			responseObject.setData(m);
+			responseObject.setStatus(HttpServletResponse.SC_OK);
+		}
+		return responseObject;
 	}
 	
 	//Service - View Service - view service history
@@ -147,16 +175,22 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/view/history/{service_id}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
-	public ListServiceHistory viewServiceHistory(@PathVariable int service_id, HttpServletResponse response) throws IOException{
+	public ResponseObject viewServiceHistory(@PathVariable int service_id, HttpServletResponse response){
 		logger.info("-- View service history --");
-		ListServiceHistory lsh = new ListServiceHistory();
+		//ListServiceHistory lsh = new ListServiceHistory();
 		List<ServiceHistory> sh = serviceManager.getServiceHistoryByServiceId(service_id);
-		lsh.setLserviceh(sh);
+		//lsh.setLserviceh(sh);
+		responseObject = new ResponseObject();
 		if(sh==null || sh.size()==0){
-			response.getWriter().println("No history for this service or this service does not exist");
+			responseObject.setError("No history for this service or this service does not exist");
+			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
-		return lsh;
+		else{
+			responseObject.setData(sh);
+			responseObject.setStatus(HttpServletResponse.SC_OK);
+		}
+		return responseObject;
 	}
 	
 	//Service - Manage Service - create Service
@@ -168,25 +202,29 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
-	public void createService(@RequestBody Service service, HttpServletResponse response) throws IOException{
+	public ResponseObject createService(@RequestBody Service service, HttpServletResponse response){
 		logger.info("-- Create new service entry --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		//check structure for required field
+		responseObject = new ResponseObject();
 		if(service.getName()!=null && service.getVersion()!=null && service.getOrganizationId()!=0){
-		boolean result = serviceManager.createService(username, service);
-		if(result){
-			response.setStatus(HttpServletResponse.SC_CREATED);
+			boolean result = serviceManager.createService(username, service);
+			if (result) {
+				responseObject.setStatus(HttpServletResponse.SC_CREATED);
+				response.setStatus(HttpServletResponse.SC_CREATED);
+			} else {
+				responseObject.setError("User has not role ORG_OWNER for Organization OR "
+								+ "Organization is not created");
+				responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			}
 		}
 		else{
-			response.getWriter().println("User has not role ORG_OWNER for Organization OR " +
-					"Organization is not created");
+			responseObject.setError("Name, version and organizaton id of service are required.");
+			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
-		}
-		else{
-			response.getWriter().println("Name, version and organizaton id of service are required.");
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-		}
+		return responseObject;
 	}
 	//Service - Manage Service - modify Service
 	/**
@@ -197,11 +235,14 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/modify", method = RequestMethod.PUT, consumes="application/json") 
 	@ResponseBody
-	public void modService(@RequestBody Service service, HttpServletResponse response){
+	public ResponseObject modService(@RequestBody Service service, HttpServletResponse response){
 		logger.info("-- Modify service --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		responseObject = new ResponseObject();
 		serviceManager.updateService(username,service);
+		responseObject.setStatus(HttpServletResponse.SC_OK);
 		response.setStatus(HttpServletResponse.SC_OK);
+		return responseObject;
 	}
 	
 	//Service - Manage Service - publish Service (create ServiceHistory.operation)
@@ -213,11 +254,14 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/publish/{id}", method = RequestMethod.PUT, consumes="application/json") 
 	@ResponseBody
-	public void publishService(@PathVariable int id, HttpServletResponse response){
+	public ResponseObject publishService(@PathVariable int id, HttpServletResponse response){
 		logger.info("-- Publish service --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		responseObject = new ResponseObject();
 		serviceManager.changeState(username, id, SERVICE_STATE.PUBLISH.toString());
+		responseObject.setStatus(HttpServletResponse.SC_OK);
 		response.setStatus(HttpServletResponse.SC_OK);
+		return responseObject;
 	}
 	
 	//Service - Manage Service - unpublish Service (create ServiceHistory.operation)
@@ -229,12 +273,14 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/unpublish/{id}", method = RequestMethod.PUT, consumes="application/json") 
 	@ResponseBody
-	public void unpublishService(@PathVariable int id, HttpServletResponse response){
+	public ResponseObject unpublishService(@PathVariable int id, HttpServletResponse response){
 		logger.info("-- Unpublish service --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		responseObject = new ResponseObject();
 		serviceManager.changeState(username, id,SERVICE_STATE.UNPUBLISH.toString());
-		//Change service state
+		responseObject.setStatus(HttpServletResponse.SC_OK);
 		response.setStatus(HttpServletResponse.SC_OK);
+		return responseObject;
 	}
 	
 	//Service - Manage Service - deprecate Service (create ServiceHistory.operation)
@@ -246,11 +292,14 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/deprecate/{id}", method = RequestMethod.PUT, consumes="application/json") 
 	@ResponseBody
-	public void deprecateService(@PathVariable int id, HttpServletResponse response){
+	public ResponseObject deprecateService(@PathVariable int id, HttpServletResponse response){
 		logger.info("-- Deprecate service --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		responseObject = new ResponseObject();
 		serviceManager.changeState(username, id,SERVICE_STATE.DEPRECATE.toString());
+		responseObject.setStatus(HttpServletResponse.SC_OK);
 		response.setStatus(HttpServletResponse.SC_OK);
+		return responseObject;
 	}
 	
 	//Service - Manage Service - deprecate Service (create ServiceHistory.operation)
@@ -262,11 +311,14 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE) 
 	@ResponseBody
-	public void deleteService(@PathVariable int id, HttpServletResponse response){
+	public ResponseObject deleteService(@PathVariable int id, HttpServletResponse response){
 		logger.info("-- Delete service --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		responseObject = new ResponseObject();
 		serviceManager.deleteService(username, id);
+		responseObject.setStatus(HttpServletResponse.SC_OK);
 		response.setStatus(HttpServletResponse.SC_OK);
+		return responseObject;
 	}
 	
 	
@@ -279,11 +331,14 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/method/add", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
-	public void createMethod(@RequestBody Method method, HttpServletResponse response){
+	public ResponseObject createMethod(@RequestBody Method method, HttpServletResponse response){
 		logger.info("-- Create new service method --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		responseObject = new ResponseObject();
 		serviceManager.addMethod(username, method);
+		responseObject.setStatus(HttpServletResponse.SC_CREATED);
 		response.setStatus(HttpServletResponse.SC_CREATED);
+		return responseObject;
 	}
 	
 	//Service - Manage Service method - modify Method (create ServiceHistory.operation)
@@ -295,11 +350,14 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/method/modify", method = RequestMethod.PUT, consumes="application/json") 
 	@ResponseBody
-	public void modifyMethod(@RequestBody Method method, HttpServletResponse response){
+	public ResponseObject modifyMethod(@RequestBody Method method, HttpServletResponse response){
 		logger.info("-- Modify a service method --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		responseObject = new ResponseObject();
 		serviceManager.updateMethod(username, method);
+		responseObject.setStatus(HttpServletResponse.SC_OK);
 		response.setStatus(HttpServletResponse.SC_OK);
+		return responseObject;
 	}
 	
 	//Service - Manage Service method - delete method (create ServiceHistory.operation)
@@ -311,11 +369,14 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/method/delete/{id}", method = RequestMethod.DELETE) 
 	@ResponseBody
-	public void deleteMethod(@PathVariable int id, HttpServletResponse response){
+	public ResponseObject deleteMethod(@PathVariable int id, HttpServletResponse response){
 		logger.info("-- Delete a service method --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		responseObject = new ResponseObject();
 		serviceManager.deleteMethod(username, id);
+		responseObject.setStatus(HttpServletResponse.SC_OK);
 		response.setStatus(HttpServletResponse.SC_OK);
+		return responseObject;
 	}
 	
 	/**
@@ -326,11 +387,14 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/method/{id}/test/add", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
-	public void createTest(@RequestBody TestInfo testinfo, @PathVariable int id, HttpServletResponse response){
+	public ResponseObject createTest(@RequestBody TestInfo testinfo, @PathVariable int id, HttpServletResponse response){
 		logger.info("-- Create new method test --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		responseObject = new ResponseObject();
 		serviceManager.addTest(username, id, testinfo);
+		responseObject.setStatus(HttpServletResponse.SC_CREATED);
 		response.setStatus(HttpServletResponse.SC_CREATED);
+		return responseObject;
 	}
 
 	/**
@@ -341,12 +405,15 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/method/{id}/test/{pos}", method = RequestMethod.PUT, consumes="application/json") 
 	@ResponseBody
-	public void updateTest(@RequestBody TestInfo testinfo, @PathVariable int id, @PathVariable int pos,
+	public ResponseObject updateTest(@RequestBody TestInfo testinfo, @PathVariable int id, @PathVariable int pos,
 			HttpServletResponse response){
 		logger.info("-- Update method test --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		responseObject = new ResponseObject();
 		serviceManager.modifyTest(username, id, pos, testinfo);
+		responseObject.setStatus(HttpServletResponse.SC_OK);
 		response.setStatus(HttpServletResponse.SC_OK);
+		return responseObject;
 	}
 
 	/**
@@ -357,11 +424,14 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/method/{id}/test/{pos}", method = RequestMethod.DELETE) 
 	@ResponseBody
-	public void deleteTest(@PathVariable int id, @PathVariable int pos, HttpServletResponse response){
+	public ResponseObject deleteTest(@PathVariable int id, @PathVariable int pos, HttpServletResponse response){
 		logger.info("-- Delete method test --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		responseObject = new ResponseObject();
 		serviceManager.deleteTest(username, id, pos);
+		responseObject.setStatus(HttpServletResponse.SC_OK);
 		response.setStatus(HttpServletResponse.SC_OK);
+		return responseObject;
 	}
 
 }
