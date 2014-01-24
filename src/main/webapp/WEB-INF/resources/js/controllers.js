@@ -84,16 +84,16 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
     };
 
     User.getInfo({}, function(data) {
-    	$scope.user = data;
+    	$scope.user = data.data;
     });
     
     Org.get({}, function(data) {
     	console.log('getting orgs',data)
-        $scope.orgs = data.orgs;
+        $scope.orgs = data.data;
     });
     Service.get({}, function(data) {
     	console.log('getting services',data)
-        $scope.services = data.services;
+        $scope.services = data.data;
     });
     
     
@@ -409,17 +409,17 @@ app.controller('servicesCtrl', ['$scope', '$http', '$routeParams', 'Catalog',
 app.controller('organizationsCtrl', ['$scope', '$http', '$routeParams', 'Catalog', 
     function ($scope, $http, $routeParams, Catalog) {
       Catalog.listOrgs({},function (data) {
-          $scope.orgs = data.orgs;
+          $scope.orgs = data.data;
         });
     }
   ]);
 app.controller('organizationCtrl', ['$scope', '$http', '$routeParams', 'Catalog', 'Category', 
      function ($scope, $http, $routeParams, Catalog, Category) {
        Catalog.getOrgById({id:$routeParams.id},function (data) {
-           $scope.org = data;
+           $scope.org = data.data;
     	    if ($scope.org.category) {
      	 	    Category.getById({id:$scope.org.category},function (data) {
-     	 	        $scope.category = data;
+     	 	        $scope.category = data.data;
      	 	      });
      	    } 
 

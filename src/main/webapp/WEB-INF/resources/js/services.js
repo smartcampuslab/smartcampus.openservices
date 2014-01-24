@@ -42,9 +42,9 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope',
           }
         }).success(function (data) {
         	console.log('user data: ', data)
-          var role = data.role
+          var role = data.data.role
           var templ = {
-        	  username : data.username,
+        	  username : data.data.username,
             role: userRoles[role]
           };
           
