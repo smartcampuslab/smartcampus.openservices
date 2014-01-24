@@ -373,17 +373,17 @@ app.controller('servicesCtrl', ['$scope', '$http', '$routeParams', 'Catalog',
     if ($routeParams.category) {
         Catalog.browseServiceCat({category:$routeParams.category},function (services) {
             console.log(services);
-            $scope.services = services.services;
+            $scope.services = services.data;
           });
     } else if ($routeParams.org) {
         Catalog.browseServiceOrg({org:$routeParams.org},function (services) {
             console.log(services);
-            $scope.services = services.services;
+            $scope.services = services.data;
           });
     } else {
         Catalog.listServices({},function (services) {
             console.log(services);
-            $scope.services = services.services;
+            $scope.services = services.data;
           });
     }
     
@@ -454,7 +454,7 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
  	var remoteapi;
  	$scope.request = {};
  	Catalog.getServiceById({id:$routeParams.id}, function (data) {
-         $scope.service = data;
+         $scope.service = data.data;
 //         var testprops = {
 //        		 authentication : $scope.service.accessInformation.authentication,
 //        		 tests: [{
@@ -468,15 +468,15 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
 //         };
          
      	 Catalog.getOrgById({id:data.organizationId}, function (data) {
-     		$scope.org = data;
+     		$scope.org = data.data;
      	 });
          if ($scope.service.category) {
   	 	    Category.getById({id:$scope.service.category},function (data) {
-  	 	        $scope.category = data;
+  	 	        $scope.category = data.data;
   	 	    });
   	    } 
          Catalog.getServiceMethods({id: $routeParams.id},function(data){
-      		$scope.methods = data.methods;
+      		$scope.methods = data.data;
       		for (var i = 0; i < $scope.methods.length; i++) {
       			if ($scope.methods[i].testboxProperties) {
       				$scope.methods[i].testboxProperties.authentication = $scope.service.accessInformation.authentication;
