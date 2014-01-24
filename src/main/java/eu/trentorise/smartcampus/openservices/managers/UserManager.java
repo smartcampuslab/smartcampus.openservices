@@ -78,10 +78,6 @@ public class UserManager {
 		}
 	}
 	
-	public void enableUser(){
-		//TODO
-	}
-	
 	/**
 	 * Modify user data
 	 * Profile and email
@@ -101,6 +97,26 @@ public class UserManager {
 		
 	}
 	
+	
+	/**
+	 * Enable user
+	 * This can be done by verifying email
+	 * @param username
+	 * @param user
+	 */
+	public User enableUser(String username){
+		//TODO
+		try{
+			User user = userDao.getUserByUsername(username);
+			userDao.enableUser(user.getId());
+		
+			User userN = userDao.getUserById(user.getId());
+			return userN;
+		}catch(DataAccessException d){
+			return null;
+		}
+	}
+	
 	/**
 	 * Disable a user
 	 * Only for admin
@@ -110,7 +126,7 @@ public class UserManager {
 	public User disabledUser(String username){
 		try{
 			User user = userDao.getUserByUsername(username);
-			userDao.disableUser(user);
+			userDao.disableUser(user.getId());
 		
 			User userN = userDao.getUserById(user.getId());
 			return userN;
