@@ -100,10 +100,19 @@ public class UserDaoImpl implements UserDao{
 
 	@Transactional
 	@Override
-	public void disableUser(User user) throws DataAccessException{
-		user.setEnabled(0);
-		getEntityManager().merge(user);
+	public void disableUser(int user_id) throws DataAccessException{
+		User oldUser = getUserById(user_id);
+		oldUser.setEnabled(0);
+		getEntityManager().merge(oldUser);
 		
+	}
+	
+	@Transactional
+	@Override
+	public void enableUser(int user_id) throws DataAccessException{
+		User oldUser = getUserById(user_id);
+		oldUser.setEnabled(0);
+		getEntityManager().merge(oldUser);
 	}
 	
 	//TODO modify password

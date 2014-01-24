@@ -60,6 +60,13 @@ public interface UserDao {
 	 * disable a user
 	 * @param id
 	 */
-	public void disableUser(User user) throws DataAccessException;
+	public void disableUser(int user_id) throws DataAccessException;
+	
+	/**
+	 * Enable user
+	 * @param user_id
+	 * @throws DataAccessException
+	 */
+	public void enableUser(int user_id) throws DataAccessException;
 
 }
