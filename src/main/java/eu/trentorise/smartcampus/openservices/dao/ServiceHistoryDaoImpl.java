@@ -83,8 +83,8 @@ public class ServiceHistoryDaoImpl implements ServiceHistoryDao{
 	@Override
 	public List<ServiceHistory> getServiceHistoryByOrgId(int org_id)
 			throws DataAccessException {
-		getEntityManager().createQuery("FROM ServiceHistory SH WHERE SH.id_service = (" +
-				"SELECT S.id FROM Service S WHERE S.id_org=:id_org )")
+		getEntityManager().createQuery("FROM ServiceHistory SH WHERE SH.id_service IN (" +
+				"SELECT S.id FROM Service S WHERE S.organization_id=:id_org )")
 				.setParameter("id_org", org_id);
 		return null;
 	}
