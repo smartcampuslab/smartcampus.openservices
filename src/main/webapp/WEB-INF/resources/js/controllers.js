@@ -105,12 +105,12 @@ app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service', 'Or
 	$scope.protocols = ["OAuth", "OpenID", "Public"];
 	$scope.accessInformation = {authentication:{accessProtocol:null, accessAttributes:{client_id: null,response_type: null, authorizationUrl: null,grant_type: null}}};
     Category.list({},function (data) {
-        $scope.categories = data.categories;
+        $scope.categories = data.data;
       });
 
     Org.get({}, function(data) {
     	console.log('getting orgs',data)
-        $scope.orgs = data.orgs;
+        $scope.orgs = data.data;
     });
 
     $scope.submit = function(){
@@ -134,11 +134,11 @@ app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Servi
 	$scope.protocols = ["OAuth", "OpenID", "Public"];
 	$scope.accessInformation = {authentication:{accessProtocol:null, accessAttributes:{client_id: null,response_type: null, authorizationUrl: null,grant_type: null}}};
     Category.list({},function (data) {
-        $scope.categories = data.categories;
+        $scope.categories = data.data;
       });
 
 	Service.getDescription({id: $routeParams.id},function(data){
-		$scope.service = data;	
+		$scope.service = data.data;	
 		if ($scope.service.accessInformation != null){
 			$scope.accessInformation = $scope.service.accessInformation;
 		}
@@ -150,7 +150,7 @@ app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Servi
 	});
     Org.get({}, function(data) {
     	console.log('getting orgs',data)
-        $scope.orgs = data.orgs;
+        $scope.orgs = data.data;
     });
     
     $scope.keep = function(){
@@ -174,24 +174,23 @@ app.controller('viewServiceCtrl', ['$scope', '$routeParams', '$location', 'Servi
    function ($scope, $routeParams, $location, Service, Org, Category) {
  	
  	Service.getDescription({id: $routeParams.id},function(data){
- 		$scope.service = data;	
+ 		$scope.service = data.data;	
  	    if ($scope.service.expiration && $scope.service.expiration > 0) {
  	    	$scope.service.expiration = new Date($scope.service.expiration).toISOString().slice(0,10);
  	    }
- 	    Org.getById({id:data.organizationId}, function(data) {
- 	     	console.log('getting orgs',data)
- 	        $scope.org = data;
+ 	    Org.getById({id:data.data.organizationId}, function(data) {
+ 	        $scope.org = data.data;
  	    });
  	     
  	    if ($scope.service.category) {
  	 	    Category.getById({id:$scope.service.category},function (data) {
- 	 	        $scope.category = data;
+ 	 	        $scope.category = data.data;
  	 	      });
  	    } 
 
  	});
      Service.getMethods({id: $routeParams.id},function(data){
-  		$scope.methods = data.methods;
+  		$scope.methods = data.data;
      });
 
      $scope.deleteMethod = function (i) {
@@ -222,7 +221,7 @@ app.controller('viewMethodCtrl', ['$scope', '$http', '$location', '$routeParams'
   function ($scope, $http, $location, $routeParams, Service) {
 
     Service.getMethods({id: $routeParams.id},function(data){
-  		$scope.methods = data.methods;
+  		$scope.methods = data.data;
   		for (var i = 0; i < $scope.methods.length; i++) {
   			if ($routeParams.method == $scope.methods[i].id) {
   				$scope.method = $scope.methods[i];
@@ -243,7 +242,7 @@ app.controller('editMethodCtrl', ['$scope', '$http', '$location', '$routeParams'
   function ($scope, $http, $location, $routeParams, Service) {
 
     Service.getMethods({id: $routeParams.id},function(data){
-  		$scope.methods = data.methods;
+  		$scope.methods = data.data;
   		for (var i = 0; i < $scope.methods.length; i++) {
   			if ($routeParams.method == $scope.methods[i].id) {
   				$scope.method = $scope.methods[i];
@@ -285,9 +284,9 @@ app.controller('editTestCtrl', ['$scope', '$http', '$location', '$routeParams', 
  function ($scope, $http, $location, $routeParams, Service) {
    $scope.title = 'Edit';
    Service.getMethods({id: $routeParams.id},function(data){
- 		for (var i = 0; i < data.methods.length; i++) {
- 			if ($routeParams.method == data.methods[i].id) {
- 				$scope.method = data.methods[i];
+ 		for (var i = 0; i < data.data.length; i++) {
+ 			if ($routeParams.method == data.data[i].id) {
+ 				$scope.method = data.data[i];
  				$scope.test = $scope.method.testboxProperties.tests[$routeParams.pos];
  			}
  		}
@@ -320,7 +319,7 @@ app.controller('newOrgCtrl', ['$scope', '$http', '$location', 'Org', 'Category',
     $scope.title = 'New';
     
     Category.list({},function (data) {
-        $scope.categories = data.categories;
+        $scope.categories = data.data;
       });
 
     
@@ -338,10 +337,10 @@ app.controller('editOrgCtrl', ['$scope', '$http', '$location', '$routeParams', '
   function ($scope, $http, $location, $routeParams, Org, Category) {
     $scope.title = 'Edit';
     Org.getById({id:$routeParams.id}, function (org) {
-      $scope.org = org;
+      $scope.org = org.data;
     });
     Category.list({},function (data) {
-        $scope.categories = data.categories;
+        $scope.categories = data.data;
       });
     $scope.submit = function () {
     	Org.update($scope.org, function() {
@@ -355,7 +354,7 @@ app.controller('editOrgCtrl', ['$scope', '$http', '$location', '$routeParams', '
 app.controller('categoriesCtrl', ['$scope', '$http', '$location', 'Catalog',
   function ($scope, $http, $location, Catalog) {
     Catalog.browseAllServiceCat({},function (data) {
-      $scope.categoryData = data;
+      $scope.categoryData = data.data;
     });
     
     $scope.serviceCount = function(i){
