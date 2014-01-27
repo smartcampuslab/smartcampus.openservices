@@ -1,44 +1,36 @@
 <div class="animated fadeIn">
     <div class="row">
-        <div class="col-md-4 col-md-offset-2">
+        <div class="col-md-6 col-md-offset-3">
             <h2>{{method.name}}</h2>
             <h5>{{method.synopsis}}</h5>
             <h5>documentation: <a ng-href="{{method.documentation}}">{{method.documentation}}</a></h5>
         </div>
     </div>
     <div class="row">
-      <div class="col-md-1 col-md-offset-9">
+      <div class="col-md-1 col-md-offset-8">
         <a href="profile/services/{{service.id}}/methods/{{method.id}}/edit" class="btn btn-info btn-block">Edit</a>
       </div>
     </div>
     <hr/>
 
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <h4>Test cases</h4>
-						<div class="animated fadeIn">
-						    <div class="row" ng-repeat="test in method.testboxProperties.tests">
-						        <div class="col-md-12 section-box">
-						            <h3>
-						                {{test.name}}
-						            </h3>
-						            <p>
-						                {{test.description}}
-						                <button type="button" class="pull-right btn btn-danger btn-xs" ng-click="deleteTest($index)"><i class="fa fa-trash-o"></i></button>
-						                <a href="profile/services/{{service.id}}/methods/{{method.id}}/tests/{{$index}}/edit" class="pull-right btn btn-default btn-xs orgbtn"><i class="fa fa-edit"></i></a>
-						            </p>
-						            <hr />
-						        </div>
-						    </div>
-						    <br>
-						    <div class="row">
-						        <div class="col-md-1 col-md-offset-11">
-						            <a href="profile/services/{{service.id}}/methods/{{method.id}}/tests/new" class="btn btn-info btn-block">Add</a>
-						        </div>
-						    </div>
-						    <br>
-						
-						</div>
+        <div class="col-md-6 col-md-offset-3">
+        	<div class="">
+				<div class="panel panel-default">
+				  <div class="panel-heading"><h4 class="panel-title">Test Cases</h4></div>
+				  <div ng-repeat="method in methods" class="panel-body">
+				    {{test.name}}
+					<button type="button" class="pull-right btn btn-default btn-sm" ng-click="deleteTest($index)"><i class="fa fa-trash-o"></i></button>
+					<a href="profile/services/{{service.id}}/methods/{{method.id}}/tests/{{$index}}/edit" class="pull-right btn btn-default btn-sm orgbtn"><i class="fa fa-edit"></i></a>
+				  </div>
+				</div>
+        	</div>
+            
         </div>
     </div>
+    <div class="row">
+		<div class="col-md-1 col-md-offset-8">
+			<a href="profile/services/{{service.id}}/methods/{{method.id}}/tests/new" class="btn btn-info btn-block">Add Test</a>
+		</div>
+	</div>
 </div>

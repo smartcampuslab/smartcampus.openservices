@@ -50,17 +50,17 @@
 
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
-            <h4>Methods</h4>
-						<div class="animated fadeIn">
-							<div ng-repeat="method in methods" class="panel panel-default">
-							  <div class="panel-body">
-							    <strong>{{method.name}}</strong> <em>{{method.description}}</em>
-							    <button type="button" class="pull-right btn btn-default btn-sm" ng-click="deleteMethod($index)"><i class="fa fa-trash-o"></i></button>
-						        <a href="profile/services/{{service.id}}/methods/{{method.id}}/view" class="pull-right btn btn-default btn-sm orgbtn"><i class="fa fa-edit"></i></a>
-							  </div>
-							</div>
-						</div>
-        </div>
+			<div class="animated fadeIn">
+				<div class="panel panel-default">
+				  <div class="panel-heading"><h4 class="panel-title">Methods</h4></div>
+				  <div ng-repeat="method in methods" class="panel-body">
+				    {{method.name}}
+					<button type="button" class="pull-right btn btn-default btn-sm" ng-click="deleteMethod($index)"><i class="fa fa-trash-o"></i></button>
+					<a href="profile/services/{{service.id}}/methods/{{method.id}}/view" class="pull-right btn btn-default btn-sm orgbtn"><i class="fa fa-edit"></i></a>
+				  </div>
+				</div>
+        	</div>
+    	</div>
     </div>
     <div class="row">
 		<div class="col-md-1 col-md-offset-8">

@@ -221,6 +221,8 @@ app.controller('viewMethodCtrl', ['$scope', '$http', '$location', '$routeParams'
   function ($scope, $http, $location, $routeParams, Service) {
 
     Service.getMethods({id: $routeParams.id},function(data){
+    	//will fix this. single method should be returned instead of array
+    	console.log(data)
   		$scope.methods = data.data;
   		for (var i = 0; i < $scope.methods.length; i++) {
   			if ($routeParams.method == $scope.methods[i].id) {
@@ -243,6 +245,7 @@ app.controller('editMethodCtrl', ['$scope', '$http', '$location', '$routeParams'
 
     Service.getMethods({id: $routeParams.id},function(data){
   		$scope.methods = data.data;
+  		console.log(data)
   		for (var i = 0; i < $scope.methods.length; i++) {
   			if ($routeParams.method == $scope.methods[i].id) {
   				$scope.method = $scope.methods[i];
