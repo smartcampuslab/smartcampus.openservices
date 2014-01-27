@@ -43,6 +43,14 @@ import eu.trentorise.smartcampus.openservices.support.ListMethod;
 import eu.trentorise.smartcampus.openservices.support.ListService;
 import eu.trentorise.smartcampus.openservices.support.ListServiceHistory;
 
+/**
+ * Service Controller
+ * Restful web services which retrieves service data
+ * mapping /api/service
+ * 
+ * @author Giulia Canobbio
+ *
+ */
 @Controller
 @RequestMapping(value="/api/service")
 public class ServiceController {
@@ -61,10 +69,9 @@ public class ServiceController {
 	
 	//User - Access my data: service
 	/**
-	 * Access my data
-	 * @param user_id
-	 * @return
-	 * @throws IOException 
+	 * Access logged in user data
+	 * @param response
+	 * @return {@link ResponseObject} with services data, status or error message.
 	 */
 	@RequestMapping(value = "/my", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
@@ -90,17 +97,15 @@ public class ServiceController {
 	
 	//Service - View Service
 	/**
-	 * View services
-	 * @return
-	 * @throws IOException 
+	 * Access logged in user services data
+	 * @param response
+	 * @return {@link ResponseObject} with services data, status or error message.
 	 */
 	@RequestMapping(value = "/view", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
 	public ResponseObject viewServices(HttpServletResponse response){
 		logger.info("-- View Services --");
-		//ListService lserv = new ListService();
 		List<Service> services = serviceManager.getServices();
-		//lserv.setServices(services);
 		responseObject = new ResponseObject();
 		if(services==null || services.size()==0){
 			responseObject.setError("No service availables");
@@ -116,10 +121,11 @@ public class ServiceController {
 	
 	//Service - View Service - view service description
 	/**
-	 * View description of service
+	 * View data of a service
+	 * Searching by service id
 	 * @param service_id
-	 * @return
-	 * @throws IOException 
+	 * @param response
+	 * @return {@link ResponseObject} with services data, status or error message.
 	 */
 	@RequestMapping(value = "/view/description/{service_id}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
@@ -141,18 +147,16 @@ public class ServiceController {
 	
 	//Service - View Service - view service method
 	/**
-	 * View service methods
+	 * Retrieve service method data
 	 * @param service_id
-	 * @return
-	 * @throws IOException 
+	 * @param response
+	 * @return {@link ResponseObject} with services method data, status or error message.
 	 */
 	@RequestMapping(value = "/view/method/{service_id}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
 	public ResponseObject viewServiceMethod(@PathVariable int service_id, HttpServletResponse response){
 		logger.info("-- View service method --");
-		//ListMethod lmethod = new ListMethod();
 		List<Method> m = serviceManager.getServiceMethodsByServiceId(service_id);
-		//lmethod.setMethods(m);
 		responseObject = new ResponseObject();
 		if(m==null || m.size()==0){
 			responseObject.setError("No methods for this service");
@@ -168,18 +172,16 @@ public class ServiceController {
 	
 	//Service - View Service - view service history
 	/**
-	 * View service history
+	 * Retrieve service history data
 	 * @param service_id
-	 * @return
-	 * @throws IOException 
+	 * @param response
+	 * @return {@link ResponseObject} with service history data, status or error message.
 	 */
 	@RequestMapping(value = "/view/history/{service_id}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
 	public ResponseObject viewServiceHistory(@PathVariable int service_id, HttpServletResponse response){
 		logger.info("-- View service history --");
-		//ListServiceHistory lsh = new ListServiceHistory();
 		List<ServiceHistory> sh = serviceManager.getServiceHistoryByServiceId(service_id);
-		//lsh.setLserviceh(sh);
 		responseObject = new ResponseObject();
 		if(sh==null || sh.size()==0){
 			responseObject.setError("No history for this service or this service does not exist");
@@ -195,10 +197,10 @@ public class ServiceController {
 	
 	//Service - Manage Service - create Service
 	/**
-	 * Add new service to an organization
+	 * Add a new service to an organization
 	 * @param service
-	 * @return
-	 * @throws IOException 
+	 * @param response
+	 * @return {@link ResponseObject} with status or error message.
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
@@ -236,10 +238,10 @@ public class ServiceController {
 	}
 	//Service - Manage Service - modify Service
 	/**
-	 * Modify a service
-	 * User must be service_owner
+	 * Modify an existing service in database
 	 * @param service
-	 * @return
+	 * @param response
+	 * @return {@link ResponseObject} with status or error message.
 	 */
 	@RequestMapping(value = "/modify", method = RequestMethod.PUT, consumes="application/json") 
 	@ResponseBody
@@ -269,9 +271,9 @@ public class ServiceController {
 	//Service - Manage Service - publish Service (create ServiceHistory.operation)
 	/**
 	 * Publish a service
-	 * User must be service owner
-	 * @param service
-	 * @return
+	 * @param id
+	 * @param response
+	 * @return {@link ResponseObject} with status or error message.
 	 */
 	@RequestMapping(value = "/publish/{id}", method = RequestMethod.PUT, consumes="application/json") 
 	@ResponseBody
@@ -302,10 +304,10 @@ public class ServiceController {
 	
 	//Service - Manage Service - unpublish Service (create ServiceHistory.operation)
 	/**
-	 * Unpublish service
-	 * User must be service owner
-	 * @param service
-	 * @return
+	 * Unpublish a service
+	 * @param id
+	 * @param response
+	 * @return {@link ResponseObject} status or error message.
 	 */
 	@RequestMapping(value = "/unpublish/{id}", method = RequestMethod.PUT, consumes="application/json") 
 	@ResponseBody
@@ -334,9 +336,9 @@ public class ServiceController {
 	//Service - Manage Service - deprecate Service (create ServiceHistory.operation)
 	/**
 	 * Deprecate a service
-	 * User must be service owner
-	 * @param service
-	 * @return
+	 * @param id
+	 * @param response
+	 * @return {@link ResponseObject} with status or error message.
 	 */
 	@RequestMapping(value = "/deprecate/{id}", method = RequestMethod.PUT, consumes="application/json") 
 	@ResponseBody
@@ -364,10 +366,10 @@ public class ServiceController {
 	
 	//Service - Manage Service - deprecate Service (create ServiceHistory.operation)
 	/**
-	 * Deprecate a service
-	 * User must be service owner
-	 * @param service
-	 * @return
+	 * Delete an existing service
+	 * @param id
+	 * @param response
+	 * @return {@link ResponseObject} status or error message.
 	 */
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE) 
 	@ResponseBody
@@ -396,10 +398,10 @@ public class ServiceController {
 	
 	//Service - Manage Service method - create Method (create ServiceHistory.operation)
 	/**
-	 * Add service method to a service
-	 * User must be service owner
+	 * Add a service method to a service
 	 * @param method
-	 * @return
+	 * @param response
+	 * @return {@link ResponseObject} with status or error message.
 	 */
 	@RequestMapping(value = "/method/add", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
@@ -428,9 +430,9 @@ public class ServiceController {
 	//Service - Manage Service method - modify Method (create ServiceHistory.operation)
 	/**
 	 * Modify a service method
-	 * User must be service owner
 	 * @param method
-	 * @return
+	 * @param response 
+	 * @return {@link ResponseObject} with status or error message.
 	 */
 	@RequestMapping(value = "/method/modify", method = RequestMethod.PUT, consumes="application/json") 
 	@ResponseBody
@@ -458,10 +460,10 @@ public class ServiceController {
 	
 	//Service - Manage Service method - delete method (create ServiceHistory.operation)
 	/**
-	 * Delete service method
-	 * User must be service owner
-	 * @param method
-	 * @return
+	 * Delete a service method from a service
+	 * @param id
+	 * @param response
+	 * @return {@link ResponseObject} with status or error message.
 	 */
 	@RequestMapping(value = "/method/delete/{id}", method = RequestMethod.DELETE) 
 	@ResponseBody
@@ -488,10 +490,11 @@ public class ServiceController {
 	}
 	
 	/**
-	 * Add a test to a service method 
-	 * User must be service owner
-	 * @param method
-	 * @return
+	 * Add a test to a service method
+	 * @param testinfo
+	 * @param id
+	 * @param response
+	 * @return {@link ResponseObject} with status or error message.
 	 */
 	@RequestMapping(value = "/method/{id}/test/add", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
@@ -518,10 +521,12 @@ public class ServiceController {
 	}
 
 	/**
-	 * Modify a test of the service method 
-	 * User must be service owner
-	 * @param method
-	 * @return
+	 * Update a test to a service method
+	 * @param testinfo
+	 * @param id
+	 * @param pos
+	 * @param response
+	 * @return {@link ResponseObject} with status or error message.
 	 */
 	@RequestMapping(value = "/method/{id}/test/{pos}", method = RequestMethod.PUT, consumes="application/json") 
 	@ResponseBody
@@ -549,10 +554,11 @@ public class ServiceController {
 	}
 
 	/**
-	 * Add service method to a service
-	 * User must be service owner
-	 * @param method
-	 * @return
+	 * Delete a test from a service method
+	 * @param id
+	 * @param pos
+	 * @param response
+	 * @return {@link ResponseObject} with status or error message.
 	 */
 	@RequestMapping(value = "/method/{id}/test/{pos}", method = RequestMethod.DELETE) 
 	@ResponseBody

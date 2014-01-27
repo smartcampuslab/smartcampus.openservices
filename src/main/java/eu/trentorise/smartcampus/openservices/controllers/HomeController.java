@@ -45,6 +45,8 @@ import eu.trentorise.smartcampus.openservices.securitymodel.CustomUserDetailsSer
 
 /**
  * Handles requests for the application home page.
+ * @author Giulia Canobbio
+ *
  */
 @Controller
 public class HomeController {
@@ -58,7 +60,7 @@ public class HomeController {
 	/**
 	 * Home view
 	 * @param response
-	 * @return
+	 * @return jsp name
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(HttpServletRequest request, HttpServletResponse response) {
@@ -114,7 +116,7 @@ public class HomeController {
 	/**
 	 * Welcome which is always home view
 	 * It is just for login problem
-	 * @return
+	 * @return ResponseObject with logged in user data
 	 */
 	@RequestMapping(value="/welcome", method = RequestMethod.GET)
 	@ResponseBody
@@ -153,15 +155,17 @@ public class HomeController {
 	}
 	
 	/**
-	 * If url is wrong, then return index page.
+	 * If url is wrong, then return index page with response error.
 	 * @throws NoSuchFieldException 
 	 * @throws SecurityException 
 	 * @throws IllegalAccessException 
-	 * @throws IllegalArgumentException 
+	 * @throws IllegalArgumentException
+	 * @return home function
 	 */
 	@RequestMapping()
 	public String error(@CookieValue(value="value", required=false) String value, 
-			@CookieValue(value="user", required=false) String user, HttpServletRequest request, HttpServletResponse response) throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+			@CookieValue(value="user", required=false) String user, HttpServletRequest request, HttpServletResponse response) 
+					throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 		logger.info("-- Error mapping! --");
 	/*	String username = null;
 		String password = null;
@@ -196,14 +200,12 @@ public class HomeController {
 		return home(request, response);
 	}
 	
-	//try for a strange behavior of spring security
 	/**
-	 * Login page
-	 * @return
+	 * Login page shows index jsp
+	 * @return jsp
 	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	//@ResponseBody
 	public String login(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		logger.info("-- Perform Login --");
 		/*String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -234,7 +236,7 @@ public class HomeController {
 	 * Login failed
 	 * Show login with error true
 	 * @param model
-	 * @return
+	 * @return ResponseObject without data, but with error message and status
 	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/loginfailed", method = RequestMethod.GET)
@@ -245,14 +247,13 @@ public class HomeController {
 		responseObjetc.setStatus(401);
 		responseObjetc.setError("Invalid username or password");
 		response.setStatus(401);
-		//return "index";
 		return responseObjetc;
 	}
 	
 	//User - logout
 	/**
 	 * Logout returns to login page
-	 * @return
+	 * @return jsp page
 	 */
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(HttpServletRequest request, HttpServletResponse response){

@@ -34,6 +34,10 @@ import eu.trentorise.smartcampus.openservices.managers.CategoryManager;
 import eu.trentorise.smartcampus.openservices.support.ListCategory;
 
 /**
+ * Category Controller
+ * Retrieve, add, delete category data
+ * mapping /api/category
+ * 
  * @author raman
  *
  */
@@ -46,6 +50,12 @@ public class CategoryController {
 	@Autowired
 	private CategoryManager categoryManager;
 	
+	/**
+	 * Retrieve category data searching by category id
+	 * @param category
+	 * @param response
+	 * @return {@link ResponseObject} with category data, status or error message.
+	 */
 	@RequestMapping(value="/{category}", method=RequestMethod.GET)
 	public @ResponseBody ResponseObject getCategoryById(@PathVariable int category, HttpServletResponse response) {
 		responseObject = new ResponseObject();
@@ -61,6 +71,11 @@ public class CategoryController {
 		return responseObject;
 	}
 	
+	/**
+	 * Retrieve all categories data
+	 * @param response
+	 * @return {@link ResponseObject} with category data, status or error message.
+	 */
 	@RequestMapping(method=RequestMethod.GET)
 	public @ResponseBody ResponseObject getCategories(HttpServletResponse response) {
 		responseObject = new ResponseObject();
@@ -76,7 +91,12 @@ public class CategoryController {
 		return responseObject;
 	}
 
-
+	/**
+	 * Add a new category to database
+	 * @param category
+	 * @param response
+	 * @return {@link ResponseObject} with category data, status or error message.
+	 */
 	@RequestMapping(value="/add", method=RequestMethod.POST, consumes="application/json")
 	public @ResponseBody ResponseObject createCategory(@RequestBody Category category, HttpServletResponse response) {
 		responseObject = new ResponseObject();
@@ -92,6 +112,12 @@ public class CategoryController {
 		return responseObject;
 	}
 	
+	/**
+	 * Modify a category
+	 * @param category
+	 * @param response
+	 * @return {@link ResponseObject} with category data, status or error message.
+	 */
 	@RequestMapping(value="/modify", method=RequestMethod.PUT, consumes="application/json")
 	public @ResponseBody ResponseObject modifyCategory(@RequestBody Category category, HttpServletResponse response) {
 		responseObject = new ResponseObject();
@@ -107,6 +133,12 @@ public class CategoryController {
 		return responseObject;
 	}
 
+	/**
+	 * Delete a category
+	 * @param category
+	 * @param response
+	 * @return {@link ResponseObject} with category data, status or error message.
+	 */
 	@RequestMapping(value="/delete/{id}", method=RequestMethod.DELETE)
 	public ResponseObject deleteCategory(@PathVariable int category, HttpServletResponse response) {
 		responseObject = new ResponseObject();

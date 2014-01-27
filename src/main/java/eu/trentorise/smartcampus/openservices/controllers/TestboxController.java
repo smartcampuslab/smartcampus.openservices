@@ -46,6 +46,10 @@ import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.entities.TestInfo;
 
 /**
+ * TestBox Controller
+ * Performing test on service method
+ * mapping /api/testbox
+ * 
  * @author raman
  *
  */
@@ -62,6 +66,13 @@ public class TestboxController {
 	private static final String DEFAULT_CHARSET = "UTF-8";
 //	private static final String HEADER_TARGET_URL = "targeturl";
 
+	/**
+	 * Perform test on service method
+	 * @param req
+	 * @param test
+	 * @return {@link ResponseObject} with data, status or error message.
+	 * @throws TestBoxException
+	 */
 	@RequestMapping(method=RequestMethod.POST)
 	public @ResponseBody ResponseObject/*String*/ performTest(HttpServletRequest req, @RequestBody TestInfo test) throws TestBoxException {
 		responseObject = new ResponseObject();
@@ -128,6 +139,10 @@ public class TestboxController {
 //		return headers;
 //	}
 	
+	/**
+	 * Set up HttpClient
+	 * @return {@link HttpClient}
+	 */
 	protected static HttpClient getHttpClient() {
 		HttpClient httpClient = new DefaultHttpClient();
 		final HttpParams params = httpClient.getParams();
@@ -137,6 +152,14 @@ public class TestboxController {
 		return httpClient;
 	}
 
+	/**
+	 * Set up response for POST method
+	 * @param url
+	 * @param body
+	 * @param headers
+	 * @return String response
+	 * @throws TestBoxException
+	 */
 	public static String postJSON(String url, String body, Map<String, String> headers) throws TestBoxException {
 
 		final HttpResponse resp;
@@ -163,6 +186,14 @@ public class TestboxController {
 		}
 	}
 
+	/**
+	 * Set up response for PUT method
+	 * @param url
+	 * @param body
+	 * @param headers
+	 * @return String response
+	 * @throws TestBoxException
+	 */
 	protected static final String putJSON(String url, String body, Map<String, String> headers) throws TestBoxException {
 
 		final HttpResponse resp;
@@ -189,6 +220,13 @@ public class TestboxController {
 		}
 	}
 
+	/**
+	 * Set up response for DELETE method
+	 * @param url
+	 * @param headers
+	 * @return String response
+	 * @throws TestBoxException
+	 */
 	protected static final String deleteJSON(String url, Map<String, String> headers) throws TestBoxException {
 
 		final HttpResponse resp;
@@ -212,6 +250,13 @@ public class TestboxController {
 		}
 	}
 
+	/**
+	 * Set up response for GET method
+	 * @param url
+	 * @param headers
+	 * @return String response
+	 * @throws TestBoxException
+	 */
 	public static String getJSON(String url, Map<String, String> headers) throws TestBoxException {
 
 		final HttpResponse resp;
@@ -236,6 +281,12 @@ public class TestboxController {
 		}
 	}
 
+	/**
+	 * TestBoxException
+	 * return status error
+	 * @author raman
+	 *
+	 */
 	public static class TestBoxException extends Exception {
 		private static final long serialVersionUID = 1L;
 

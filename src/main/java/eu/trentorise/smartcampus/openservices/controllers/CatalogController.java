@@ -29,6 +29,14 @@ import eu.trentorise.smartcampus.openservices.entities.*;
 import eu.trentorise.smartcampus.openservices.managers.CatalogManager;
 import eu.trentorise.smartcampus.openservices.support.*;
 
+/**
+ * Catalog controller
+ * Restful web services that retrieves data for all users
+ * mapping on /api/catalog
+ * 
+ * @author Giulia Canobbio
+ *
+ */
 @Controller
 @RequestMapping(value="/api/catalog")
 public class CatalogController {
@@ -41,7 +49,8 @@ public class CatalogController {
 	
 	/**
 	 * Show all services in catalog which are published.
-	 * @return
+	 * @param response
+	 * @return {@link ResponseObject} with services data, status or error message.
 	 */
 	@RequestMapping(value="/service", method = RequestMethod.GET, produces="application/json")
 	@ResponseBody
@@ -66,7 +75,7 @@ public class CatalogController {
 	/**
 	 * Get data of a service
 	 * @param service_id
-	 * @return
+	 * @return {@link ResponseObject} with services data, status or error message.
 	 */
 	@RequestMapping(value="/service/{service_id}", method = RequestMethod.GET, produces="application/json")
 	@ResponseBody
@@ -83,7 +92,6 @@ public class CatalogController {
 			responseObject.setData(service);
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 		}
-		//return service;
 		return responseObject;
 	}
 	
@@ -91,15 +99,13 @@ public class CatalogController {
 	 * Return methods of a service.
 	 * Search by service id
 	 * @param service_id
-	 * @return
+	 * @return {@link ResponseObject} with services method data, status or error message.
 	 */
 	@RequestMapping(value="/service/methods/{service_id}", method = RequestMethod.GET, produces="application/json")
 	@ResponseBody
 	public ResponseObject cataogServiceMethods(@PathVariable int service_id, HttpServletResponse response){
 		logger.info("-- Service Catalog Show Methods --");
-		//ListMethod lmeth = new ListMethod();
 		List<Method> methods = catalogManager.catalogServiceMethods(service_id);
-		//lmeth.setMethods(methods);
 		responseObject=new ResponseObject();
 		if(methods==null || methods.size()==0){
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -110,7 +116,6 @@ public class CatalogController {
 			responseObject.setData(methods);
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 		}
-		//return lmeth;
 		return responseObject;
 	}
 	
@@ -118,15 +123,13 @@ public class CatalogController {
 	 * Return history of a service.
 	 * Search by service id
 	 * @param service_id
-	 * @return
+	 * @return {@link ResponseObject} with services history data, status or error message.
 	 */
 	@RequestMapping(value="/service/history/{service_id}", method = RequestMethod.GET, produces="application/json")
 	@ResponseBody
 	public ResponseObject cataogServiceHistory(@PathVariable int service_id, HttpServletResponse response){
 		logger.info("-- Service Catalog Show Methods --");
-		//ListServiceHistory lsh = new ListServiceHistory();
 		List<ServiceHistory> history = catalogManager.catalogServiceHistory(service_id);
-		//lsh.setLserviceh(history);
 		responseObject=new ResponseObject();
 		if(history==null || history.size()==0){
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -137,7 +140,6 @@ public class CatalogController {
 			responseObject.setData(history);
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 		}
-		//return lsh;
 		return responseObject;
 	}
 	
@@ -145,15 +147,13 @@ public class CatalogController {
 	 * Simple search in service catalog
 	 * Catalog shows publish services
 	 * @param token
-	 * @return
+	 * @return {@link ResponseObject} with services data, status or error message.
 	 */
 	@RequestMapping(value = "/service/search/{token}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
 	public ResponseObject catalogServiceSimpleSearch(@PathVariable String token, HttpServletResponse response){
 		logger.info("-- Service Catalog simple search --");
-		//ListService lserv = new ListService();
 		List<Service> services = catalogManager.catalogServiceSimpleSearch(token);
-		//lserv.setServices(services);
 		responseObject=new ResponseObject();
 		if(services==null || services.size()==0){
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -164,22 +164,19 @@ public class CatalogController {
 			responseObject.setData(services);
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 		}
-		//return lserv;
 		return responseObject;
 	}
 	
 	/**
 	 * Browse service in catalog by category
 	 * @param category
-	 * @return
+	 * @return {@link ResponseObject} with services data, status or error message.
 	 */
 	@RequestMapping(value = "/service/browse/category/{category}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
 	public ResponseObject catalogServiceBrowseByCategory(@PathVariable int category, HttpServletResponse response){
 		logger.info("-- Service Catalog browse (category) --");
-		//ListService lserv = new ListService();
 		List<Service> services = catalogManager.catalogServiceBrowseByCategory(category);
-		//lserv.setServices(services);
 		responseObject=new ResponseObject();
 		if(services==null || services.size()==0){
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -196,15 +193,13 @@ public class CatalogController {
 	/**
 	 * Browse service in catalog by org
 	 * @param category
-	 * @return
+	 * @return {@link ResponseObject} with services data, status or error message.
 	 */
 	@RequestMapping(value = "/service/browse/org/{org}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
 	public ResponseObject catalogServiceBrowseByOrg(@PathVariable int org, HttpServletResponse response){
 		logger.info("-- Service Catalog browse (org) --");
-		//ListService lserv = new ListService();
 		List<Service> services = catalogManager.catalogServiceBrowseByOrg(org);
-		//lserv.setServices(services);
 		responseObject=new ResponseObject();
 		if(services==null || services.size()==0){
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -221,15 +216,13 @@ public class CatalogController {
 	/**
 	 * Browse service in catalog by tags
 	 * @param tags
-	 * @return
+	 * @return {@link ResponseObject} with services data, status or error message.
 	 */
 	@RequestMapping(value = "/service/browse/tags/{tags}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public ResponseObject catalogServiceBrowseByTags(@PathVariable String tags, HttpServletResponse response) {
 		logger.info("-- Service Catalog browse (category) --");
-		//ListService lserv = new ListService();
 		List<Service> services = catalogManager.catalogServiceBrowseByTags(tags);
-		//lserv.setServices(services);
 		responseObject = new ResponseObject();
 		if(services==null || services.size()==0){
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -252,15 +245,13 @@ public class CatalogController {
 	
 	/**
 	 * Get all organization
-	 * @return
+	 * @return {@link ResponseObject} with organization data, status or error message.
 	 */
 	@RequestMapping(value="/org", method = RequestMethod.GET, produces="application/json")
 	@ResponseBody
 	public ResponseObject catalogOrg(HttpServletResponse response){
 		logger.info("-- Organization Catalog data --");
-		//ListOrganization lorg = new ListOrganization();
 		List<Organization> orgs = catalogManager.catalogOrg();
-		//lorg.setOrgs(orgs);
 		responseObject = new ResponseObject();
 		if(orgs==null || orgs.size()==0){
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -276,7 +267,7 @@ public class CatalogController {
 	
 	/**
 	 * Get organization
-	 * @return
+	 * @return {@link ResponseObject} with organization data, status or error message.
 	 */
 	@RequestMapping(value="/org/{id}", method = RequestMethod.GET, produces="application/json")
 	@ResponseBody
@@ -300,15 +291,13 @@ public class CatalogController {
 	/**
 	 * Simple search in organization catalog
 	 * @param token
-	 * @return
+	 * @return {@link ResponseObject} with organization data, status or error message.
 	 */
 	@RequestMapping(value = "/org/search/{token}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
 	public ResponseObject catalogOrgSimpleSearch(@PathVariable String token, HttpServletResponse response){
 		logger.info("-- Organization Catalog simple search --");
-		//ListOrganization lserv = new ListOrganization();
 		List<Organization> orgs = catalogManager.catalogOrgSimpleSearch(token);
-		//lserv.setOrgs(orgs);
 		responseObject = new ResponseObject();
 		if(orgs==null || orgs.size()==0){
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -324,16 +313,15 @@ public class CatalogController {
 	
 	/**
 	 * Browse organization by category
-	 * @param category
-	 * @return
+	 * @param category: path variable
+	 * @param response
+	 * @return {@link ResponseObject} with organization data, status or error message.
 	 */
 	@RequestMapping(value = "/org/browse/category/{category}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
 	public ResponseObject catalogOrgBrowse(@PathVariable int category, HttpServletResponse response){
 		logger.info("-- Organization Catalog browse --");
-		//ListOrganization lserv = new ListOrganization();
 		List<Organization> orgs = catalogManager.catalogOrgBrowse(category);
-		//lserv.setOrgs(orgs);
 		responseObject = new ResponseObject();
 		if(orgs==null || orgs.size()==0){
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -348,6 +336,11 @@ public class CatalogController {
 	}
 	//browse catalog using filters (by geography) - when add address of organization - TODO
 	
+	/**
+	 * Browse services divided by category
+	 * @param response
+	 * @return {@link ResponseObject} with services category data, status or error message.
+	 */
 	@RequestMapping(value = "/service/browse/category", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
 	public ResponseObject catalogCategoryServices(HttpServletResponse response) {

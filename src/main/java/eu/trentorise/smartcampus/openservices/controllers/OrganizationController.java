@@ -41,6 +41,14 @@ import eu.trentorise.smartcampus.openservices.support.ApplicationMailer;
 import eu.trentorise.smartcampus.openservices.support.ListOrganization;
 import eu.trentorise.smartcampus.openservices.support.ListServiceHistory;
 
+/**
+ * Organization Controller interfaces with dao
+ * Retrieve, add, modify, delete organization data
+ * mapping /api/org
+ * 
+ * @author Giulia Canobbio
+ *
+ */
 @Controller
 @RequestMapping(value="/api/org")
 public class OrganizationController {
@@ -57,7 +65,7 @@ public class OrganizationController {
 	/**
 	 * Retrieve data of an organization
 	 * @param org_id
-	 * @return
+	 * @return {@link ResponseObject} with organization data, status or error message.
 	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/{org_id}", method = RequestMethod.GET, produces="application/json") 
@@ -82,7 +90,7 @@ public class OrganizationController {
 	/**
 	 * Get my organization data
 	 * @param user_id
-	 * @return
+	 * @return {@link ResponseObject} with organization data, status or error message.
 	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/my", method = RequestMethod.GET, produces="application/json") 
@@ -109,7 +117,7 @@ public class OrganizationController {
 	//Organization - View organization data
 	/**
 	 * Show organizations
-	 * @return
+	 * @return {@link ResponseObject} with organization data, status or error message.
 	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET, produces="application/json") 
@@ -136,7 +144,7 @@ public class OrganizationController {
 	/**
 	 * View organization history
 	 * @param org_id
-	 * @return
+	 * @return {@link ResponseObject} with service history data, status or error message.
 	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/activity/history/{org_id}", method = RequestMethod.GET, produces="application/json") 
@@ -164,7 +172,7 @@ public class OrganizationController {
 	/**
 	 * Add organization
 	 * @param org
-	 * @return
+	 * @return {@link ResponseObject} with status or error message.
 	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST, consumes="application/json") 
@@ -192,7 +200,7 @@ public class OrganizationController {
 	 * Delete an organization
 	 * User must be organization owner
 	 * @param org
-	 * @return
+	 * @return {@link ResponseObject} with status or error message.
 	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE) 
@@ -225,7 +233,7 @@ public class OrganizationController {
 	/**
 	 * Modify organization data
 	 * @param org
-	 * @return
+	 * @return {@link ResponseObject} status or error message.
 	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/modify", method = RequestMethod.PUT, consumes="application/json") 
@@ -261,7 +269,7 @@ public class OrganizationController {
 	 * User who invites another user must be an organization owner
 	 * @param org_id
 	 * @param email
-	 * @return
+	 * @return {@link ResponseObject} with status or error message.
 	 */
 	@RequestMapping(value = "/manage/owner/{org_id}/{role}/{email}", method = RequestMethod.POST)
 	@ResponseBody
@@ -303,7 +311,7 @@ public class OrganizationController {
 	/**
 	 * Add new role to user having the invitation link
 	 * @param key
-	 * @return
+	 * @return {@link ResponseObject} with status or error message.
 	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/manage/owner/add/{key}", method = RequestMethod.POST)
@@ -337,7 +345,7 @@ public class OrganizationController {
 	 * User who deletes other owners must be organizaton owner
 	 * @param org_id
 	 * @param user_id
-	 * @return
+	 * @return {@link ResponseObject} with sstatus or error message.
 	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/manage/owner/delete/{org_id},{user_id}", method = RequestMethod.POST)

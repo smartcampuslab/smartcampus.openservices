@@ -35,6 +35,15 @@ import eu.trentorise.smartcampus.openservices.managers.UserManager;
 import eu.trentorise.smartcampus.openservices.support.ApplicationMailer;
 import eu.trentorise.smartcampus.openservices.support.EmailValidator;
 
+/**
+ * 
+ * User Controller
+ * Restful web services for user data
+ * mapping /api/user
+ * 
+ * @author Giulia Canobbio
+ *
+ */
 @Controller
 @RequestMapping(value="/api/user")
 public class UserController {
@@ -52,8 +61,8 @@ public class UserController {
 	 * Retrieve User data by user id
 	 * user id is a primary key
 	 * @param id
-	 * @return
-	 * @throws IOException 
+	 * @param response
+	 * @return {@link ResponseObject} with user data, status or error message.
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
@@ -77,18 +86,17 @@ public class UserController {
 	 * Retrieve User data by username
 	 * username is unique
 	 * @param username
-	 * @return
-	 * @throws IOException 
+	 * @param response
+	 * @return {@link ResponseObject} with user data, status or error message. 
 	 */
 	@RequestMapping(value = "/my", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
-	public ResponseObject getUserByUsername(HttpServletResponse response) throws IOException{
+	public ResponseObject getUserByUsername(HttpServletResponse response){
 		logger.info("-- My User Data--");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userManager.getUserByUsername(username);
 		responseObject = new ResponseObject();
 		if(user == null){
-			//response.getWriter().println("User does not exist");
 			responseObject.setError("Connection Problem with database");
 			responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 			response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
@@ -104,18 +112,17 @@ public class UserController {
 	 * First check if username is already in use.
 	 * Return saved user.
 	 * @param user
-	 * @return
-	 * @throws IOException 
+	 * @param response
+	 * @return {@link ResponseObject} with status or error message.
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
-	public ResponseObject createUser(@RequestBody User user, HttpServletResponse response) throws IOException{
+	public ResponseObject createUser(@RequestBody User user, HttpServletResponse response){
 		logger.info("-- Add user data --");
 		//Check username
 		User userDB = userManager.getUserByUsername(user.getUsername());
 		responseObject = new ResponseObject();
 		if(userDB != null){
-			//response.getWriter().println("User does not exist");
 			responseObject.setError("Username already use");
 			responseObject.setStatus(HttpServletResponse.SC_FORBIDDEN);
 			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
@@ -148,6 +155,7 @@ public class UserController {
 	 * Verify user email, sending an email with a link to 
 	 * a rest service which enable user's account
 	 * @param user
+	 * @return {@link ResponseObject} with status or error message.
 	 */
 	@RequestMapping(value = "/add/verify", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
@@ -164,6 +172,7 @@ public class UserController {
 	
 	/**
 	 * Enable user account
+	 * @return {@link ResponseObject} with status or error message.
 	 */
 	@RequestMapping(value = "/add/enable", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
@@ -177,7 +186,8 @@ public class UserController {
 	/**
 	 * Modify user account and update data in db
 	 * @param user
-	 * @return
+	 * @param response
+	 * @return {@link ResponseObject} with modified user data, status or error message.
 	 */
 	@RequestMapping(value = "/modify", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
@@ -203,7 +213,8 @@ public class UserController {
 	 * Therefore user cannot login.
 	 * Then retrieve disabled user.
 	 * @param username
-	 * @return
+	 * @param response
+	 * @return {@link ResponseObject} with disabled user data, status or error message.
 	 */
 	@RequestMapping(value = "/disable/{username}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
