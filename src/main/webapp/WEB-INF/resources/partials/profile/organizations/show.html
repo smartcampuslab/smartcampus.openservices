@@ -1,14 +1,15 @@
 <div class="animated fadeIn">
   <div  class="row">
-<br>
-    <div class="col-md-12" ng-mouseenter="show = true" ng-mouseleave="show = false">
-    <ul class="list-group">
-	    <li ng-repeat="org in orgs" class="list-group-item">{{org.name}}
+	<br>
+    <div class="col-md-12">
+	    <div class="panel panel-default" ng-repeat="org in orgs">
+		  <div class="panel-body">
+		    <strong>{{org.name}}</strong>  <em>{{org.description}}</em>
 	    	<button type="button" data-toggle="tooltip" title="Delete organization" class="pull-right btn btn-default btn-sm" ng-click="deleteOrg($index)"><i class="fa fa-trash-o"></i></button>
 	        <a ng-href="profile/organizations/{{org.id}}/edit" type="button" data-toggle="tooltip" title="Edit organization" class="pull-right btn btn-default btn-sm orgbtn"><i class="fa fa-edit"></i>
 	        </a>
-	    </li>
-    </ul>
+		  </div>
+		</div>
     </div>
   </div>
   

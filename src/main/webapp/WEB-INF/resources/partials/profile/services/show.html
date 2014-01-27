@@ -1,23 +1,17 @@
 <div class="animated fadeIn">
-    <div class="row" ng-repeat="service in services">
-        <div class="col-xs-12 col-md-12 section-box">
-            <h3>
-                {{service.name}}
-            </h3>
-            <p>
-                {{service.description}}
-                <button ng-show="service.state=='UNPUBLISH'" type="button" data-toggle="tooltip" title="Publish service" class="pull-right btn btn-success btn-sm" ng-click="publishService($index)"><i class="fa fa-check-circle-o"></i></button>
-                <button ng-show="service.state=='PUBLISH'" type="button" data-toggle="tooltip" title="Unpublish service" class="pull-right btn btn-warning btn-sm" ng-click="unpublishService($index)"><i class="fa fa-circle-o"></i></button>
-                <button ng-show="service.state=='PUBLISH'" type="button" data-toggle="tooltip" title="Deprecate service" class="pull-right btn btn-danger btn-sm" ng-click="deprecateService($index)"><i class="fa fa-level-down"></i></button>
-                <button type="button" data-toggle="tooltip" title="Delete service" class="pull-right btn btn-danger btn-sm" ng-click="deleteService($index)"><i class="fa fa-trash-o"></i></button>
+    <div class="row">
+    	<br>
+        <div class="col-md-12">
+        	<div ng-repeat="service in services" class="panel panel-default">
+			  <div class="panel-body">
+			    <strong>{{service.name}}</strong> <em>{{service.description}}</em>
+			    <button ng-show="service.state=='UNPUBLISH'" type="button" data-toggle="tooltip" title="Publish service" class="pull-right btn btn-default btn-sm orgbtn" ng-click="publishService($index)"><i class="fa fa-check-circle-o"></i></button>
+                <button ng-show="service.state=='PUBLISH'" type="button" data-toggle="tooltip" title="Unpublish service" class="pull-right btn btn-default btn-sm orgbtn" ng-click="unpublishService($index)"><i class="fa fa-circle-o"></i></button>
+                <button ng-show="service.state=='PUBLISH'" type="button" data-toggle="tooltip" title="Deprecate service" class="pull-right btn btn-default btn-sm orgbtn" ng-click="deprecateService($index)"><i class="fa fa-level-down"></i></button>
+                <button type="button" data-toggle="tooltip" title="Delete service" class="pull-right btn btn-default btn-sm orgbtn" ng-click="deleteService($index)"><i class="fa fa-trash-o"></i></button>
                 <a href="profile/services/{{service.id}}/view" data-toggle="tooltip" title="Edit service" class="pull-right btn btn-default btn-sm orgbtn"><i class="fa fa-edit"></i></a>
-            </p>
-            <hr />
-            <div class="row">
-                <div class="col-md-12">
-                    <span class="label label-default">{{service.tags}}</span>
-                </div>
-            </div>
+			  </div>
+			</div>
         </div>
     </div>
 
