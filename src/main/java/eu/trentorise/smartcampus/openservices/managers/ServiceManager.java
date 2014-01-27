@@ -77,7 +77,7 @@ public class ServiceManager {
 			serviceDao.createService(service);
 			// create history
 			ServiceHistory sh = new ServiceHistory();
-			sh.setOperation("service added");
+			sh.setOperation("Unpublish Service Added");
 			sh.setId_service(service.getId());
 			sh.setDate(new Date());
 			shDao.addServiceHistory(sh);
@@ -116,13 +116,13 @@ public class ServiceManager {
 			s.setExpiration(service.getExpiration());
 			s.setImplementation(service.getImplementation());
 			s.setLicense(service.getLicense());
-			s.setState(service.getState());
+			//s.setState(service.getState());
 			s.setVersion(service.getVersion());
 			serviceDao.modifyService(s);
 
 			// Add a new ServiceHistory
 			ServiceHistory sh = new ServiceHistory();
-			sh.setOperation("Modify service");
+			sh.setOperation("Modify Service");
 			sh.setId_service(s.getId());
 			sh.setDate(new Date());
 			shDao.addServiceHistory(sh);
@@ -179,7 +179,7 @@ public class ServiceManager {
 			serviceDao.deleteService(service);
 			// add service history
 			ServiceHistory sh = new ServiceHistory();
-			sh.setOperation("delete service");
+			sh.setOperation("Delete Service");
 			sh.setId_service(service.getId());
 			sh.setDate(new Date());
 			shDao.addServiceHistory(sh);

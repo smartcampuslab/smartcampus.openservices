@@ -85,9 +85,14 @@ public class OrganizationManager {
 				for (Service s : serviceList) {
 					serviceDao.deleteService(s);
 				}
+				// delete history
+				List<ServiceHistory> shList = shDao.getServiceHistoryByOrgId(orgId);
+				for(ServiceHistory sh: shList){
+					shDao.deleteServiceHistory(sh);
+				}
 				// delete org
 				orgDao.deleteOrganization(orgId);
-				// TODO history
+				
 			} else {
 				throw new SecurityException();
 			}
@@ -117,7 +122,6 @@ public class OrganizationManager {
 				// add UserRole
 				urDao.createUserRole(org.getCreatorId(), org.getId(),
 						"ROLE_ORGOWNER");
-				// TODO history
 				// check if this new organizatione exist
 				if (orgDao.getOrganizationByName(org.getName()) != null) {
 					return true;
@@ -148,7 +152,6 @@ public class OrganizationManager {
 				o.setCategory(org.getCategory());
 				o.setContacts(org.getContacts());
 				orgDao.modifyOrganization(o);
-				// TODO history
 				return true;
 			} else {
 				throw new SecurityException();
@@ -249,7 +252,7 @@ public class OrganizationManager {
 			TemporaryLink tl = tlDao.getTLByKey(key);
 			if (tl != null) {
 				// delete it if it is all ok
-				if (tl.getEmail() == user.getEmail()) {
+				if (tl.getEmail().equalsIgnoreCase(user.getEmail())) {
 					// add a UserRole data in table: user_id, org_id, role
 					// ORG_OWNER
 					urDao.createUserRole(user.getId(), tl.getId_org(),
@@ -277,7 +280,7 @@ public class OrganizationManager {
 			// Check user role
 			User user = userDao.getUserByUsername(username);
 			UserRole userRole = urDao.getRoleOfUser(user.getId(), org_id);
-			if (userRole.getRole() == "ROLE_ORGOWNER") {
+			if (userRole.getRole().equalsIgnoreCase("ROLE_ORGOWNER")) {
 				UserRole ur = new UserRole(user_id, org_id, "ROLE_ORGOWNER");
 				urDao.deleteUserRole(ur);
 				return true;
