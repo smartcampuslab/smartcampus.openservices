@@ -27,20 +27,41 @@ import org.springframework.transaction.annotation.Transactional;
 
 import eu.trentorise.smartcampus.openservices.entities.TemporaryLink;
 
+/**
+ * Retrieve, add and delete temporary link object from database
+ * This object is needed to add new organization owner
+ * 
+ * @author Giulia Canobbio
+ *
+ */
 @Repository
 public class TemporaryLinkDaoImpl implements TemporaryLinkDao{
 
 	@PersistenceContext(name="JpaPersistenceUnit")
 	protected EntityManager entityManager;
 
+	/**
+	 * 
+	 * @return entity manager
+	 */
 	public EntityManager getEntityManager() {
 		return entityManager;
 	}
 
+	/**
+	 * Set entity manager
+	 * @param entityManager
+	 */
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
 
+	/**
+	 * Retrieve temporary link data from database by key
+	 * @param String key
+	 * @return {@TemporaryLink} instance
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public TemporaryLink getTLByKey(String key) throws DataAccessException {
@@ -53,6 +74,11 @@ public class TemporaryLinkDaoImpl implements TemporaryLinkDao{
 		else return ltl.get(0);
 	}
 
+	/**
+	 * Add a new temporary link in database
+	 * @param {@TemporaryLink} instance
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public void save(TemporaryLink tl) throws DataAccessException {
@@ -60,6 +86,12 @@ public class TemporaryLinkDaoImpl implements TemporaryLinkDao{
 		
 	}
 
+	/**
+	 * Delete an existing temporary link from database
+	 * Searching by key
+	 * @param String key
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public void delete(String key) throws DataAccessException{

@@ -29,20 +29,40 @@ import org.springframework.transaction.annotation.Transactional;
 
 import eu.trentorise.smartcampus.openservices.entities.*;
 
+/**
+ * User Dao Implementation
+ * Retrieve, add, modify and delete User data
+ * 
+ * @author Giulia Canobbio
+ *
+ */
 @Repository
 public class UserDaoImpl implements UserDao{
 	
 	@PersistenceContext(unitName="JpaPersistenceUnit")
 	protected EntityManager entityManager;
 
+	/**
+	 * 
+	 * @return entity manager
+	 */
 	public EntityManager getEntityManager() {
 		return entityManager;
 	}
 
+	/**
+	 * Set entity manager
+	 * @param entityManager
+	 */
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
 
+	/**
+	 * Retrieve all user data from database
+	 * @return list of {@User} instance
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public List<User> getUsers() throws DataAccessException{
@@ -55,12 +75,24 @@ public class UserDaoImpl implements UserDao{
 		else return users;
 	}
 
+	/**
+	 * Retrieve user data by user id
+	 * @param int user id
+	 * @return {@User} instance
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public User getUserById(int id) throws DataAccessException{
 		return getEntityManager().find(User.class, id);
 	}
 
+	/**
+	 * Retrieve user data by username
+	 * @param String username
+	 * @return {@User} instance
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public User getUserByUsername(String username) throws DataAccessException{
@@ -74,21 +106,34 @@ public class UserDaoImpl implements UserDao{
 		else return users.get(0);
 	}
 
+	/**
+	 * Modify an existing user profile from database
+	 * if password is different (not null) then save new password in database
+	 * @param int user id
+	 * @param {@User} user
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public void modifyUser(int user_id, User user) throws DataAccessException{
 		User oldUser = getUserById(user_id);
-		/*if(user.getPassword()!=null){
+		//new password
+		if(user.getPassword()!=null && !oldUser.getPassword().equalsIgnoreCase(user.getPassword())){
 			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 			String encodedPassword = ((BCryptPasswordEncoder) passwordEncoder)
 					.encode(user.getPassword());
 			user.setPassword(encodedPassword);
-		}*/
+		}
 		oldUser.setProfile(user.getProfile());
 		oldUser.setEmail(user.getEmail());
 		getEntityManager().merge(oldUser);
 	}
 
+	/**
+	 * Add a new user to database
+	 * @param {@User} user
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public void addUser(User user) throws DataAccessException{
@@ -98,6 +143,11 @@ public class UserDaoImpl implements UserDao{
 		getEntityManager().persist(user);
 	}
 
+	/**
+	 * Disable a user
+	 * @param int user id
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public void disableUser(int user_id) throws DataAccessException{
@@ -107,6 +157,11 @@ public class UserDaoImpl implements UserDao{
 		
 	}
 	
+	/**
+	 * Enable a user
+	 * @param int user id
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public void enableUser(int user_id) throws DataAccessException{
@@ -114,7 +169,5 @@ public class UserDaoImpl implements UserDao{
 		oldUser.setEnabled(0);
 		getEntityManager().merge(oldUser);
 	}
-	
-	//TODO modify password
 
 }

@@ -27,26 +27,53 @@ import org.springframework.transaction.annotation.Transactional;
 
 import eu.trentorise.smartcampus.openservices.entities.Method;
 
+/**
+ * Method Dao Implementation
+ * Find, add, modify and delete Method object from database
+ * 
+ * @author Giulia Canobbio
+ *
+ */
 @Repository
 public class MethodDaoImpl implements MethodDao{
 	
 	@PersistenceContext(unitName="JpaPersistenceUnit")
 	protected EntityManager entityManager;
 	
+	/**
+	 * 
+	 * @return entity manager
+	 */
 	public EntityManager getEntityManager() {
 		return entityManager;
 	}
 
+	/**
+	 * Set entity manager
+	 * @param entityManager
+	 */
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
 
+	/**
+	 * Retrieve method from database searching by method id
+	 * @param int method id
+	 * @return {@Method} instance
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public Method getMethodById(int id) throws DataAccessException {
 		return getEntityManager().find(Method.class, id);
 	}
 
+	/**
+	 * Retrieve method from database searching by method name
+	 * @param String method name
+	 * @return {@Method} instance
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public Method getMethodByName(String name) throws DataAccessException {
@@ -59,6 +86,13 @@ public class MethodDaoImpl implements MethodDao{
 		else return ms.get(0);
 	}
 	
+	/**
+	 * Retrieve list of methods for a service.
+	 * Search methods by service id
+	 * @param int service id
+	 * @return a list of {@Method} instance
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public List<Method> getMethodByServiceId(int service_id)
@@ -69,13 +103,22 @@ public class MethodDaoImpl implements MethodDao{
 		return ms;
 	}
 
-
+	/**
+	 * Add a new method in database
+	 * @param {@Method} instance
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public void addMethod(Method method) throws DataAccessException {
 		getEntityManager().persist(method);
 	}
 
+	/**
+	 * Modify an existing method from database
+	 * @param {@Method} instance
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public void modifyMethod(Method method) throws DataAccessException {
@@ -83,6 +126,11 @@ public class MethodDaoImpl implements MethodDao{
 		
 	}
 
+	/**
+	 * Delete an existing method from database
+	 * @param {@Method} instance
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public void deleteMethod(Method method) throws DataAccessException {

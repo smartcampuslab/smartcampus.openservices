@@ -21,6 +21,12 @@ import org.springframework.dao.DataAccessException;
 
 import eu.trentorise.smartcampus.openservices.entities.Organization;
 
+/**
+ * Organization Dao Interface
+ * 
+ * @author Giulia Canobbio
+ *
+ */
 public interface OrganizationDao {
 	
 	/**
@@ -72,30 +78,6 @@ public interface OrganizationDao {
 	 * @param org_name
 	 */
 	public void deleteOrganization(int org) throws DataAccessException;
-	
-	
-	/**
-	 * Delete service_owner of an organization
-	 * @param username
-	 * @param org_name
-	 */
-	//public void deleteServiceOwner(String username, String org_name) throws DataAccessException;
-	
-	/**
-	 * Add an organization owner to an organization
-	 * @param username
-	 * @param org_owner
-	 * @param org_name
-	 */
-	//public void addOrganizationOwner(String username, String org_name) throws DataAccessException;
-	
-	/**
-	 * Delete organization owner
-	 * @param username
-	 * @param org_owner
-	 * @param org_name
-	 */
-	//public void deleteOrganizationOwner(String username, String org_name) throws DataAccessException;
 	
 	/**
 	 * Get a list of organizations where user is owner

@@ -32,6 +32,13 @@ import eu.trentorise.smartcampus.openservices.entities.Organization;
 import eu.trentorise.smartcampus.openservices.entities.Service;
 import eu.trentorise.smartcampus.openservices.entities.User;
 
+/**
+ * Service Dao Implementation
+ * Retrieve, add, modify, delete service object from database
+ * 
+ * @author Giulia Canobbio
+ *
+ */
 @Repository
 public class ServiceDaoImpl implements ServiceDao{
 	
@@ -45,14 +52,28 @@ public class ServiceDaoImpl implements ServiceDao{
 	@Autowired
 	private UserRoleDao urDao;	
 	
+	/**
+	 * 
+	 * @return entity manager
+	 */
 	public EntityManager getEntityManager() {
 		return entityManager;
 	}
 	
+	/**
+	 * Set entity manager
+	 * @param entityManager
+	 */
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
 
+	/**
+	 * Retrieve all service data from database
+	 * Publish, Unpublish and Deprecated service.
+	 * @return List of {@Service} instance
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public List<Service> showService() throws DataAccessException {
@@ -61,6 +82,11 @@ public class ServiceDaoImpl implements ServiceDao{
 		return s;
 	}
 	
+	/**
+	 * Retrieve all service data but unpublished from database
+	 * @return List of {@Service} instance
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public List<Service> showPublishedService() throws DataAccessException {
@@ -69,6 +95,12 @@ public class ServiceDaoImpl implements ServiceDao{
 		return s;
 	}
 
+	/**
+	 * Retrieve all user's service from database
+	 * @param String username
+	 * @return List of {@Service} instance
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public List<Service> showMyService(String username)
@@ -82,6 +114,13 @@ public class ServiceDaoImpl implements ServiceDao{
 		return s;
 	}
 
+	/**
+	 * Retrieve service data from database
+	 * Searching by service name
+	 * @param String service name
+	 * @return {@Service} instance
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public Service useService(String service_name) throws DataAccessException {
@@ -94,32 +133,59 @@ public class ServiceDaoImpl implements ServiceDao{
 		else return s.get(0);
 	}
 
+	/**
+	 * Add a new service in database
+	 * @param {@Service} service
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public void createService(Service service) throws DataAccessException {
-		//ALTER TABLE Org to add new service
 		getEntityManager().persist(service);
 	}
 
+	/**
+	 * Modify an existing service from database
+	 * @param {@Service} service
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public void modifyService(Service service) throws DataAccessException {
 		getEntityManager().merge(service);
 	}
 
+	/**
+	 * Delete an existing service from database
+	 * @param {@Service} service
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public void deleteService(Service service) throws DataAccessException {
 		getEntityManager().remove(getEntityManager().merge(service));
 	}
 
+	/**
+	 * Retrieve organization data for a particular service
+	 * Search by service id
+	 * @param int service id
+	 * @return {@Organization} instance
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public Organization getOrganizationofService(int service_id) throws DataAccessException{
 		Service service = getEntityManager().find(Service.class, service_id);
 		return getEntityManager().find(Organization.class, service.getOrganizationId());
 	}
-
+	
+	/**
+	 * Retrieve user data for a particular service in which user is owner
+	 * @param int service id
+	 * @return {@User} instance
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public User getOwnerOfService(int service_id) throws DataAccessException{
@@ -127,12 +193,24 @@ public class ServiceDaoImpl implements ServiceDao{
 		return getEntityManager().find(User.class, service.getCreatorId());
 	}
 
+	/**
+	 * Find service by its id
+	 * @param int service id
+	 * @return {@Service} instance
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public Service getServiceById(int service_id) throws DataAccessException{
 		return getEntityManager().find(Service.class, service_id);
 	}
 
+	/**
+	 * Find a service by its owner
+	 * @param int service owner id
+	 * @return {@Service} instance
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public List<Service> getServiceByIdOwner(int id_owner) throws DataAccessException{
@@ -142,6 +220,12 @@ public class ServiceDaoImpl implements ServiceDao{
 		return s;
 	}
 
+	/**
+	 * Find a service by its organization id
+	 * @param int organization id
+	 * @return {@Service} instance
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public List<Service> getServiceByIdOrg(int id_org) throws DataAccessException{
@@ -151,6 +235,13 @@ public class ServiceDaoImpl implements ServiceDao{
 		return s;
 	}
 
+	/**
+	 * Retrieve all services but unpublished one
+	 * Search by a token in name
+	 * @param String token
+	 * @return a list of {@Service} instance
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public List<Service> searchService(String token) throws DataAccessException{
@@ -160,6 +251,13 @@ public class ServiceDaoImpl implements ServiceDao{
 		return s;
 	}
 
+	/**
+	 * Browse all services but unpublished one by category and tags
+	 * @param int category id
+	 * @param String tags
+	 * @return list of {@Service} instance
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public List<Service> browseService(Integer category, String tags) throws DataAccessException {
@@ -182,6 +280,12 @@ public class ServiceDaoImpl implements ServiceDao{
 		return s;
 	}
 
+	/**
+	 * Retrieve services by category
+	 * @param int category id
+	 * @return list of {@Service} instance
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public List<Service> findByCategory(int id) {
@@ -192,6 +296,11 @@ public class ServiceDaoImpl implements ServiceDao{
 	}
 
 
+	/**
+	 * Retrieve how many services there are group by categories
+	 * @return Map<Integer,Integer> res
+	 * @throws DataAccessException
+	 */
 	@SuppressWarnings("unchecked")
 	@Transactional
 	public Map<Integer,Integer> findCategoryServices() {

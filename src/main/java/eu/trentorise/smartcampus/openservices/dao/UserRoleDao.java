@@ -21,6 +21,11 @@ import org.springframework.dao.DataAccessException;
 
 import eu.trentorise.smartcampus.openservices.entities.UserRole;
 
+/**
+ * User Role Dao Interface
+ * @author Giulia Canobbio
+ *
+ */
 public interface UserRoleDao {
 	
 	/**

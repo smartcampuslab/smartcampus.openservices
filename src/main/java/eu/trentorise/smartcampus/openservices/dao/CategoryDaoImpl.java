@@ -28,26 +28,46 @@ import org.springframework.transaction.annotation.Transactional;
 import eu.trentorise.smartcampus.openservices.entities.Category;
 import eu.trentorise.smartcampus.openservices.entities.Service;
 
+/**
+ * Category Dao Implementation 
+ * Retrieve, find, add, modify and delete category object
+ * from database.
+ * 
+ * @author Giulia Canobbio
+ *
+ */
 @Repository
 public class CategoryDaoImpl implements CategoryDao {
 	
 	@PersistenceContext(unitName="JpaPersistenceUnit")
 	protected EntityManager entityManager;
 	
+	/**
+	 * 
+	 * @return entityManager
+	 */
 	public EntityManager getEntityManager() {
 		return entityManager;
 	}
 
-	public void setEntityManager(EntityManager entityManager) {
-		this.entityManager = entityManager;
-	}
-
+	/**
+	 * Return {@Category} instance searching by category id
+	 * @param int category id
+	 * @return {@Category} instance
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public Category getCategoryById(int id) throws DataAccessException {
 		return getEntityManager().find(Category.class, id);
 	}
 
+	/**
+	 * Return {@Category} instance searching by category name
+	 * @param string name
+	 * @return {@Category} instance
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public Category getCategoryByName(String name) throws DataAccessException {
@@ -60,18 +80,33 @@ public class CategoryDaoImpl implements CategoryDao {
 		else return ms.get(0);
 	}
 	
+	/**
+	 * Return a list of all categories
+	 * @return {@Category} instance list
+	 * @throws DataAccessException
+	 */
 	@Override
 	public List<Category> getCategories() throws DataAccessException {
 		Query q = getEntityManager().createQuery("FROM Category");
 		return q.getResultList();
 	}
 
+	/**
+	 * Save a new category in database
+	 * @param {@Category} category
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public void addCategory(Category Category) throws DataAccessException {
 		getEntityManager().persist(Category);
 	}
 
+	/**
+	 * Modify an existing category
+	 * @param {@Category} category
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public void modifyCategory(Category Category) throws DataAccessException {
@@ -79,6 +114,11 @@ public class CategoryDaoImpl implements CategoryDao {
 		
 	}
 
+	/**
+	 * Delete an existing category from database
+	 * @param {@Category} category
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	@Override
 	public void deleteCategory(Category Category) throws DataAccessException {

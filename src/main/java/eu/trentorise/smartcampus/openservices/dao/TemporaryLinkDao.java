@@ -21,6 +21,11 @@ import org.springframework.dao.DataAccessException;
 
 import eu.trentorise.smartcampus.openservices.entities.*;
 
+/**
+ * Temporary Link Dao Interface
+ * @author Giulia Canobbio
+ *
+ */
 public interface TemporaryLinkDao /*extends Repository<TemporaryLink, Long>*/{
 	
 	/**

@@ -21,6 +21,12 @@ import org.springframework.dao.DataAccessException;
 
 import eu.trentorise.smartcampus.openservices.entities.Category;
 
+/**
+ * Category Dao Interface
+ * 
+ * @author Giulia Canobbio
+ *
+ */
 public interface CategoryDao {
 	
 	/**
