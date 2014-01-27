@@ -25,7 +25,9 @@ import java.security.SecureRandom;
 
 /**
  * Just a sample of a generation of a private and a public key
- * with java security
+ * with java security.
+ * This key is used for adding a new organization owner to an organization
+ * 
  * @author Giulia Canobbio
  *
  */
@@ -34,6 +36,9 @@ public class GenerateKey {
 	private PrivateKey priv;
 	private PublicKey publ;
 	
+	/**
+	 * Generate keys (public and private) using dsa and sha1prng
+	 */
 	public GenerateKey(){
 		try {
 			KeyPairGenerator keyGen = KeyPairGenerator.getInstance("DSA", "SUN");
@@ -55,20 +60,20 @@ public class GenerateKey {
 		
 	}
 
+	/**
+	 * 
+	 * @return private key
+	 */
 	public PrivateKey getPriv() {
 		return priv;
 	}
 
-	public void setPriv(PrivateKey priv) {
-		this.priv = priv;
-	}
-
+	/**
+	 * 
+	 * @return public key
+	 */
 	public PublicKey getPubl() {
 		return publ;
-	}
-
-	public void setPubl(PublicKey publ) {
-		this.publ = publ;
 	}
 
 }

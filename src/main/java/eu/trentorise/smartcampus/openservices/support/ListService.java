@@ -28,14 +28,25 @@ public class ListService{
 
 	private List<Service> services;
 	
+	/**
+	 * New {@ListService} instance
+	 */
 	public ListService(){
 		
 	}
 
+	/**
+	 * 
+	 * @return List<Service> services
+	 */
 	public List<Service> getServices() {
 		return services;
 	}
 
+	/**
+	 * 
+	 * @param services
+	 */
 	public void setServices(List<Service> services) {
 		this.services = services;
 	}

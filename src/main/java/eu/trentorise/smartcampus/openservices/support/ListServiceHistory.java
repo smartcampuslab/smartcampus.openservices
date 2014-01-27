@@ -29,13 +29,24 @@ public class ListServiceHistory {
 	
 	private List<ServiceHistory> lserviceh;
 	
+	/**
+	 * New {@ListServiceHistory} instance
+	 */
 	public ListServiceHistory(){
 	}
 
+	/**
+	 * 
+	 * @return List<ServiceHistory> service history list
+	 */
 	public List<ServiceHistory> getLserviceh() {
 		return lserviceh;
 	}
 
+	/**
+	 * 
+	 * @param lserviceh
+	 */
 	public void setLserviceh(List<ServiceHistory> lserviceh) {
 		this.lserviceh = lserviceh;
 	}

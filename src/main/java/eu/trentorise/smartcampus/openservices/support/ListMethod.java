@@ -29,14 +29,25 @@ public class ListMethod {
 	
 	private List<Method> methods;
 	
+	/**
+	 * New {@ListMethod} instance
+	 */
 	public ListMethod(){
 		
 	}
 
+	/**
+	 * 
+	 * @return List<Method> methods
+	 */
 	public List<Method> getMethods() {
 		return methods;
 	}
 
+	/**
+	 * 
+	 * @param methods
+	 */
 	public void setMethods(List<Method> methods) {
 		this.methods = methods;
 	}

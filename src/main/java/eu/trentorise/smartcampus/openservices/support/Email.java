@@ -19,28 +19,54 @@ import java.util.Properties;
 import javax.mail.*;
 import javax.mail.internet.*;
 
-//TODO
+/**
+ * Try to verify if email address is correct by sending an email
+ * 
+ * @author Giulia Canobbio
+ *
+ * NOT IN USE
+ */
 public class Email {
 	
 	private String email;
 	private String password;
 
+	/**
+	 * 
+	 * @return email
+	 */
 	public String getEmail() {
 		return email;
 	}
 
+	/**
+	 * 
+	 * @param email
+	 */
 	public void setEmail(String email) {
 		this.email = email;
 	}
 	
+	/**
+	 * 
+	 * @return password 
+	 */
 	public String getPassword() {
 		return password;
 	}
 
+	/**
+	 * 
+	 * @param password
+	 */
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
+	/**
+	 * verify email by sending a new message
+	 * @return true if it is successful otherwise throw Exception
+	 */
 	public boolean verify(){
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");

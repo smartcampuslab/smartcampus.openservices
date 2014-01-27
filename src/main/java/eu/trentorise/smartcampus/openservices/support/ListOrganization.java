@@ -28,14 +28,25 @@ public class ListOrganization{
 
 	private List<Organization> orgs;
 	
+	/**
+	 * New {@ListOrganization} instance
+	 */
 	public ListOrganization(){
 		
 	}
 
+	/**
+	 * 
+	 * @return List<Organization> organizations
+	 */
 	public List<Organization> getOrgs() {
 		return orgs;
 	}
 
+	/**
+	 * 
+	 * @param orgs
+	 */
 	public void setOrgs(List<Organization> orgs) {
 		this.orgs = orgs;
 	}

@@ -19,7 +19,7 @@ import java.util.List;
 
 import eu.trentorise.smartcampus.openservices.entities.Category;
 /**
- * Simple class just to return a list of organization
+ * Simple class just to return a list of categories
  * REST JSON use
  * @author Giulia Canobbio
  *
@@ -28,21 +28,24 @@ public class ListCategory{
 
 	private List<Category> categories;
 	
+	/**
+	 * New {@ListCategory} instance
+	 */
 	public ListCategory(){
 		
 	}
-
 	/**
-	 * @param categories
+	 * 
+	 * @return categories list
 	 */
-	public ListCategory(List<Category> categories) {
-		this.categories = categories;
-	}
-
 	public List<Category> getCategories() {
 		return categories;
 	}
 
+	/**
+	 * 
+	 * @param categories list
+	 */
 	public void setCategories(List<Category> categories) {
 		this.categories = categories;
 	}

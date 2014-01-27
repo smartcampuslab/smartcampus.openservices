@@ -33,10 +33,18 @@ public class EmailValidator {
 	private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" +
 			"[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 	
+	/**
+	 * New instance of {@EmailValidator}
+	 */
 	public EmailValidator(){
 		pattern = Pattern.compile(EMAIL_PATTERN);
 	}
 	
+	/**
+	 * Validate email, checking if it matches pattern.
+	 * @param hex
+	 * @return
+	 */
 	public boolean validate(final String hex){
 		matcher = pattern.matcher(hex);
 		return matcher.matches();
