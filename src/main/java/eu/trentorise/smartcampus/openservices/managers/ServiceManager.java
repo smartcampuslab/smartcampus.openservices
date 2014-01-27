@@ -270,6 +270,12 @@ public class ServiceManager {
 			if (ur == null)
 				throw new SecurityException();
 			methodDao.addMethod(method);
+			//Add history
+			ServiceHistory sh = new ServiceHistory();
+			sh.setOperation("Add new service method");
+			sh.setId_service(method.getServiceId());
+			sh.setDate(new Date());
+			shDao.addServiceHistory(sh);
 			return true;
 		} catch (DataAccessException d) {
 			return false;
@@ -297,6 +303,12 @@ public class ServiceManager {
 			m.setDocumentation(method.getDocumentation());
 			m.setTestboxProprieties(method.getTestboxProperties());
 			methodDao.modifyMethod(m);
+			//Add history
+			ServiceHistory sh = new ServiceHistory();
+			sh.setOperation("Modify service method");
+			sh.setId_service(method.getServiceId());
+			sh.setDate(new Date());
+			shDao.addServiceHistory(sh);
 			return true;
 		} catch (DataAccessException d) {
 			return false;
@@ -320,6 +332,12 @@ public class ServiceManager {
 			if (ur == null)
 				throw new SecurityException();
 			methodDao.deleteMethod(m);
+			//Add history
+			ServiceHistory sh = new ServiceHistory();
+			sh.setOperation("Delete service method");
+			sh.setId_service(m.getServiceId());
+			sh.setDate(new Date());
+			shDao.addServiceHistory(sh);
 			return true;
 		} catch (DataAccessException d) {
 			return false;
