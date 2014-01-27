@@ -522,7 +522,7 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
 //               for (var key in headers()) {
 //                 $scope.response += toTitleCase(key) + ': ' + headers()[key] + '\n';
 //               }
-               $scope.response += '\n' + JSON.stringify(data, null, 2);
+               $scope.response += '\n' + JSON.stringify(data.data, null, 2);
              }).error(function (err) {
                console.log(err);
              });
