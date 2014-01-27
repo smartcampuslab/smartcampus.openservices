@@ -17,14 +17,25 @@ package eu.trentorise.smartcampus.openservices.entities;
 
 import javax.persistence.*;
 
+/**
+ * Temporary Link Entity for temporary link table
+ * primary key, not null, auto increment int(11) id
+ * not null int(11) id organization
+ * not null, unique index varchar(50) key
+ * not null varchar(45)
+ * varchar(255) role
+ * 
+ * Used to invite user in an organization by a key
+ * 
+ * @author Giulia Canobbio
+ *
+ */
 @Entity
 @Table(name="TemporaryLink")
 public class TemporaryLink {
 	
 	@Id
 	private int id;
-	/*@Column(name="id_user")
-	private int id_user;*/
 	@Column(name="id_org")
 	private int id_org;
 	@Column(name="\"key\"")
@@ -34,53 +45,88 @@ public class TemporaryLink {
 	@Column(name="role")
 	private String role;
 	
+	/**
+	 * New {@Temporary Link} instance
+	 */
 	public TemporaryLink(){
 	}
 
+	/**
+	 * 
+	 * @return int id of {@Temporary Link} instance
+	 */
 	public int getId() {
 		return id;
 	}
 
+	/**
+	 * 
+	 * @param id in {@Temporary Link} instance
+	 */
 	public void setId(int id) {
 		this.id = id;
 	}
-	/*
-	public int getId_user() {
-		return id_user;
-	}
-
-	public void setId_user(int id_user) {
-		this.id_user = id_user;
-	}
-	*/
+	
+	/**
+	 * 
+	 * @return int organization id of {@Temporary Link} instance
+	 */
 	public int getId_org() {
 		return id_org;
 	}
 
+	/**
+	 * 
+	 * @param id_org in {@Temporary Link} instance
+	 */
 	public void setId_org(int id_org) {
 		this.id_org = id_org;
 	}
 	
+	/**
+	 * 
+	 * @return String key of {@Temporary Link} instance
+	 */
 	public String getKey() {
 		return key;
 	}
 
+	/**
+	 * 
+	 * @param key in {@Temporary Link} instance
+	 */
 	public void setKey(String key) {
 		this.key = key;
 	}
 
+	/**
+	 * 
+	 * @return String email of {@Temporary Link} instance
+	 */
 	public String getEmail() {
 		return email;
 	}
 
+	/**
+	 * 
+	 * @param email in {@Temporary Link} instance
+	 */
 	public void setEmail(String email) {
 		this.email = email;
 	}
 
+	/**
+	 * 
+	 * @return String role of {@Temporary Link} instance
+	 */
 	public String getRole() {
 		return role;
 	}
 
+	/**
+	 * 
+	 * @param role in {@Temporary Link} instance
+	 */
 	public void setRole(String role) {
 		this.role = role;
 	}

@@ -17,6 +17,19 @@ package eu.trentorise.smartcampus.openservices.entities;
 
 import javax.persistence.*;
 
+/**
+ * User Entity for user table
+ * primary key, not null, auto increment int(11) id
+ * not null, unique index varchar(45) username
+ * not null varchar(45) password
+ * not null, unique index varchar(145) password
+ * not null int(11) enabled
+ * mediumblob profile
+ * not null varchar(45) role
+ * 
+ * @author Giulia Canobbio
+ *
+ */
 @Entity
 @Table(name="User")
 public class User {
@@ -39,16 +52,22 @@ public class User {
 	@Column(name="role")
 	private String role;
 	
-	//OneToMany: Users -> Organization_Owner -> Organization
-	/*@OneToMany(fetch=FetchType.LAZY, cascade= CascadeType.REFRESH)
-	@JoinTable(name="UserRole", joinColumns={ @JoinColumn(name="id_user", referencedColumnName="id") },
-	inverseJoinColumns={ @JoinColumn(name="id_org", referencedColumnName="id", unique=true) })
-	private List<Organization> orgs; //this are all organizations of users having roles service_owner and organization_owner
-	*/
+	/**
+	 * New {@User} instance
+	 */
 	public User(){
 		
 	}
 	
+	/**
+	 * New {@User} instance
+	 * @param id
+	 * @param username
+	 * @param password
+	 * @param email
+	 * @param enabled
+	 * @param role
+	 */
 	public User(int id, String username, String password, String email, int enabled, String role){
 		this.id=id;
 		this.username=username;
@@ -58,66 +77,116 @@ public class User {
 		this.role = role;
 	}
 
+	/**
+	 * 
+	 * @return int user id of {@User} instance
+	 */
 	public int getId() {
 		return id;
 	}
 
+	/**
+	 * 
+	 * @param id in {@User} instance
+	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 
+	/**
+	 * 
+	 * @return String username of {@User} instance
+	 */
 	public String getUsername() {
 		return username;
 	}
 
+	/**
+	 * 
+	 * @param username in {@User} instance
+	 */
 	public void setUsername(String username) {
 		this.username = username;
 	}
 
+	/**
+	 * 
+	 * @return String password of {@User} instance
+	 */
 	public String getPassword() {
 		return password;
 	}
 
+	/**
+	 * 
+	 * @param password in {@User} instance
+	 */
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
+	/**
+	 * 
+	 * @return String email of {@User} instance
+	 */
 	public String getEmail() {
 		return email;
 	}
 
+	/**
+	 * 
+	 * @param email in {@User} instance
+	 */
 	public void setEmail(String email) {
 		this.email = email;
 	}
 
+	/**
+	 * 0 - if user is not enabled
+	 * 1- if user is enabled
+	 * @return int enabled of {@User} instance
+	 */
 	public int getEnabled() {
 		return enabled;
 	}
 
+	/**
+	 * 0 - if user is not enabled
+	 * 1 - if user is enabled
+	 * @param enabled in {@User} instance
+	 */
 	public void setEnabled(int enabled) {
 		this.enabled = enabled;
 	}
-	/*
-	public List<Organization> getOrgs() {
-		return orgs;
-	}
-
-	public void setOrgs(List<Organization> orgs) {
-		this.orgs = orgs;
-	}
-*/
+	
+	/**
+	 * 
+	 * @return {@Profile} profile of {@User} instance
+	 */
 	public Profile getProfile() {
 		return profile;
 	}
 
+	/**
+	 * 
+	 * @param profile in {@User} instance
+	 */
 	public void setProfile(Profile profile) {
 		this.profile = profile;
 	}
 
+	/**
+	 * Role can be: normal user or admin
+	 * @return String role of {@User} instance
+	 */
 	public String getRole() {
 		return role;
 	}
 
+	/**
+	 * Role can be: normal user or admin
+	 * @param role in {@User} instance
+	 */
 	public void setRole(String role) {
 		this.role = role;
 	}

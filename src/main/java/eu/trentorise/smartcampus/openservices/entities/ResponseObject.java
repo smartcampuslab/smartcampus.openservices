@@ -16,8 +16,10 @@
 package eu.trentorise.smartcampus.openservices.entities;
 
 /**
- * Response Entity for Controllers
- * @author Giulia
+ * Response Entity Object for Controllers
+ * This is object response of restful web services
+ * 
+ * @author Giulia Canobbio
  *
  */
 public class ResponseObject {
@@ -26,40 +28,59 @@ public class ResponseObject {
 	private int status;
 	private String error;
 	
+	/**
+	 * New {@Response Object} instance
+	 */
 	public ResponseObject(){
 		
 	}
-	
-	public ResponseObject(Object data, int status, String error){
-		this.data=data;
-		this.status=status;
-		this.error=error;
-	}
 
+	/**
+	 * 
+	 * @return Object data of {@Response Object} instance
+	 */
 	public Object getData() {
 		return data;
 	}
 
+	/**
+	 * 
+	 * @param data in {@Response Object} instance
+	 */
 	public void setData(Object data) {
 		this.data = data;
 	}
 
+	/**
+	 * 
+	 * @return in status of {@Response Object} instance
+	 */
 	public int getStatus() {
 		return status;
 	}
 
+	/**
+	 * 
+	 * @param status in {@Response Object} instance
+	 */
 	public void setStatus(int status) {
 		this.status = status;
 	}
 
+	/**
+	 * 
+	 * @return String error of {@Response Object} instance
+	 */
 	public String getError() {
 		return error;
 	}
 
+	/**
+	 * 
+	 * @param error in {@Response Object} instance
+	 */
 	public void setError(String error) {
 		this.error = error;
 	}
-	
-	
 
 }

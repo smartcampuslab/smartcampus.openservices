@@ -18,6 +18,15 @@ package eu.trentorise.smartcampus.openservices.entities;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Blob object for Implementation Info in table Service
+ * executive environment
+ * service dependencies
+ * hosting
+ * source code
+ * @author Giulia Canobbio
+ *
+ */
 public class ImplementationInfo implements Serializable{
 	private static final long serialVersionUID = 1L;
 
@@ -26,38 +35,73 @@ public class ImplementationInfo implements Serializable{
 	private String hosting;
 	private String sourceCode;
 	
+	/**
+	 * new instance of {@Implementation Info}
+	 */
 	public ImplementationInfo(){
 		
 	}
 
+	/**
+	 * Get executive environment of {@Implementation Info} instance
+	 * @return String executive environment
+	 */
 	public String getExecutionEnvironment() {
 		return executionEnvironment;
 	}
 
+	/**
+	 * Set executive environment in {@Implementation Info} instance
+	 * @param executionEnvironment
+	 */
 	public void setExecutionEnvironment(String executionEnvironment) {
 		this.executionEnvironment = executionEnvironment;
 	}
 
+	/**
+	 * Get source code of {@Implementation Info} instance
+	 * @return String source code
+	 */
 	public String getSourceCode() {
 		return sourceCode;
 	}
 
+	/**
+	 * Set source code in {@Implementation Info} instance
+	 * @param sourceCode
+	 */
 	public void setSourceCode(String sourceCode) {
 		this.sourceCode = sourceCode;
 	}
 
+	/**
+	 * get list of service dependencies of {@Implementation Info} instance
+	 * @return List<Integer> service dependencies
+	 */
 	public List<Integer> getServiceDependencies() {
 		return serviceDependencies;
 	}
 
+	/**
+	 * Set service dependencies in {@Implementation Info} instance
+	 * @param serviceDependencies
+	 */
 	public void setServiceDependencies(List<Integer> serviceDependencies) {
 		this.serviceDependencies = serviceDependencies;
 	}
 
+	/**
+	 * Get hosting of {@Implementation Info} instance
+	 * @return String hosting
+	 */
 	public String getHosting() {
 		return hosting;
 	}
 
+	/**
+	 * Set hosting in {@Implementation Info} instance
+	 * @param hosting
+	 */
 	public void setHosting(String hosting) {
 		this.hosting = hosting;
 	}

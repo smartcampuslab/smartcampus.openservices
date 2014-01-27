@@ -16,7 +16,6 @@
 package eu.trentorise.smartcampus.openservices.entities;
 
 import java.io.Serializable;
-import java.util.*;
 
 /**
  * Blob Object AccesInformation for Service table
@@ -37,54 +36,106 @@ public class AccessInformation implements Serializable{
 	private String formats;
 	private Authentication authentication;
 
+	/**
+	 * Constructor method
+	 * Create a new instance of {@AccessInformation}
+	 */
 	public AccessInformation(){
 		
 	}
 
+	/**
+	 * Get access policies
+	 * @return {@String} access policies
+	 */
 	public String getAccessPolicies() {
 		return accessPolicies;
 	}
 
+	/**
+	 * Set access policies
+	 * @param {@String} accessPolicies
+	 */
 	public void setAccessPolicies(String accessPolicies) {
 		this.accessPolicies = accessPolicies;
 	}
 
+	/**
+	 * Get testing endpoint
+	 * @return {@String} testing endpoint
+	 */
 	public String getTestingEndpoint() {
 		return testingEndpoint;
 	}
 
+	/**
+	 * Set testing endpoint
+	 * @param {@String} testingEndpoint
+	 */
 	public void setTestingEndpoint(String testingEndpoint) {
 		this.testingEndpoint = testingEndpoint;
 	}
 
+	/**
+	 * Get production endpoint
+	 * @return {@String} production endpoint
+	 */
 	public String getProductionEndpoint() {
 		return productionEndpoint;
 	}
 
+	/**
+	 * Set production endpoint
+	 * @param {@String} productionEndpoint
+	 */
 	public void setProductionEndpoint(String productionEndpoint) {
 		this.productionEndpoint = productionEndpoint;
 	}
 
+	/**
+	 * Get protocols
+	 * @return {@String} protocols
+	 */
 	public String getProtocols() {
 		return protocols;
 	}
 
+	/**
+	 * Set protocols
+	 * @param {@String} protocols
+	 */
 	public void setProtocols(String protocols) {
 		this.protocols = protocols;
 	}
 
+	/**
+	 * Get formats
+	 * @return {@String} formats
+	 */
 	public String getFormats() {
 		return formats;
 	}
 
+	/**
+	 * Set formats
+	 * @param {@String} formats
+	 */
 	public void setFormats(String formats) {
 		this.formats = formats;
 	}
 
+	/**
+	 * Get {@Authentication} instance
+	 * @return {@Authentication} authentication
+	 */
 	public Authentication getAuthentication() {
 		return authentication;
 	}
 
+	/**
+	 * Set {@Authentication} authentication
+	 * @param {@Authentication} authentication
+	 */
 	public void setAuthentication(Authentication authentication) {
 		this.authentication = authentication;
 	}

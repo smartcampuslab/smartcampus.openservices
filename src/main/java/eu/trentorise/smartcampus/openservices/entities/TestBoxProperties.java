@@ -21,9 +21,8 @@ import java.util.*;
 /**
  * Blob Object for Method table
  * authentication descriptor
- * InOutPairs list: 0- request string, 1- input, 2- output
- * Fixed Requests: 0- request string, 1- input
- * Parametric Request: 0- example request string, 1- example input
+ * a list of tests
+ * 
  * @author Giulia Canobbio
  *
  */
@@ -33,21 +32,40 @@ public class TestBoxProperties implements Serializable{
 	private Authentication authenticationDescriptor;
 	private List<TestInfo> tests;//request string, input, output
 	
+	/**
+	 * New {@TestBoxProperties} instance
+	 */
 	public TestBoxProperties() {
 	}
 
+	/**
+	 * 
+	 * @return {@Authentication} instance of {@TestBoxProperties} instance
+	 */
 	public Authentication getAuthenticationDescriptor() {
 		return authenticationDescriptor;
 	}
 
+	/**
+	 * 
+	 * @param authenticationDescriptor in {@TestBoxProperties} instance
+	 */
 	public void setAuthenticationDescriptor(Authentication authenticationDescriptor) {
 		this.authenticationDescriptor = authenticationDescriptor;
 	}
 
+	/**
+	 * 
+	 * @return list of {@TestInfo} instance of {@TestBoxProperties} instance
+	 */
 	public List<TestInfo> getTests() {
 		return tests;
 	}
 
+	/**
+	 * 
+	 * @param tests in {@TestBoxProperties} instance
+	 */
 	public void setTests(List<TestInfo> tests) {
 		this.tests = tests;
 	}

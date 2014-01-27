@@ -21,6 +21,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * Category Entity for table Category
+ * primary key, not null, auto increment int(11) id
+ * not null, unique index varchar(45) name
+ * varchar(100) description
+ * 
+ * @author Giulia Canobbio
+ *
+ */
 @Entity
 @Table(name="Category")
 public class Category {
@@ -33,30 +42,57 @@ public class Category {
 	@Column(name="description")
 	private String description;
 	
+	/**
+	 * New instance of {@Category}
+	 */
 	public Category(){
 		
 	}
 
+	/**
+	 * Get id of {@Category}
+	 * @return {@int} id
+	 */
 	public int getId() {
 		return id;
 	}
 
+	/**
+	 * Set id of {@Category}
+	 * @param id
+	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 
+	/**
+	 * Get name of {@Category}
+	 * @return String name
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Set name of {@Category}
+	 * @param name
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	/**
+	 * Get description of {@Category}
+	 * @return String description
+	 */
 	public String getDescription() {
 		return description;
 	}
 
+	/**
+	 * Set description of {@Category}
+	 * @param description
+	 */
 	public void setDescription(String description) {
 		this.description = description;
 	}

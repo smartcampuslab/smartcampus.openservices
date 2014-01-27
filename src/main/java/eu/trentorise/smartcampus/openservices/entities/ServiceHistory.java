@@ -23,6 +23,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * Service History Entity for service history table
+ * primary key, not null, auto increment int(11) id
+ * not null varchar(45) operation
+ * not null int(11) id service
+ * int(11) id service method
+ * not null date date
+ * 
+ * @author Giulia Canobbio
+ *
+ */
 @Entity
 @Table(name="ServiceHistory")
 public class ServiceHistory {
@@ -39,46 +50,89 @@ public class ServiceHistory {
 	@Column(name="date")
 	private Date date;
 	
+	/**
+	 * New {@Service History} instance
+	 */
 	public ServiceHistory(){
 		
 	}
 
+	/**
+	 * 
+	 * @return int id of {@Service History} instance
+	 */
 	public int getId() {
 		return id;
 	}
 
+	/**
+	 * 
+	 * @param id in {@Service History} instance
+	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 
+	/**
+	 * 
+	 * @return String operation of {@Service History} instance
+	 */
 	public String getOperation() {
 		return operation;
 	}
 
+	/**
+	 * 
+	 * @param operation in {@Service History} instance
+	 */
 	public void setOperation(String operation) {
 		this.operation = operation;
 	}
 
+	/**
+	 * 
+	 * @return int service id of {@Service History} instance
+	 */
 	public int getId_service() {
 		return id_service;
 	}
 
+	/**
+	 * 
+	 * @param id_service in {@Service History} instance
+	 */
 	public void setId_service(int id_service) {
 		this.id_service = id_service;
 	}
 
+	/**
+	 * 
+	 * @return int service method id of {@Service History} instance
+	 */
 	public int getId_serviceMethod() {
 		return id_serviceMethod;
 	}
 
+	/**
+	 * 
+	 * @param id_serviceMethod in {@Service History} instance
+	 */
 	public void setId_serviceMethod(int id_serviceMethod) {
 		this.id_serviceMethod = id_serviceMethod;
 	}
 
+	/**
+	 * 
+	 * @return Date date of creation {@Service History} instance
+	 */
 	public Date getDate() {
 		return date;
 	}
 
+	/**
+	 * 
+	 * @param date of creation in {@Service History} instance
+	 */
 	public void setDate(Date date) {
 		this.date = date;
 	}

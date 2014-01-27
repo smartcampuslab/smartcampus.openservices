@@ -22,6 +22,20 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 
+/**
+ * Organization Entity for organization table
+ * primary key, not null, auto increment int(11) id
+ * not null, unique index varchar(45) name
+ * varchar(255) description
+ * varchar(45) activityArea
+ * int(11) category
+ * MediumBlob contacts
+ * int(11) creator id
+ * varchar(255) logo
+ * 
+ * @author Giulia Canobbio
+ *
+ */
 @Entity
 @Table(name="Organization")
 public class Organization{
@@ -46,46 +60,89 @@ public class Organization{
 	@Column(name="logo")
 	private String logo;
 	
+	/**
+	 * New {@Organization} instance
+	 */
 	public Organization(){
 		
 	}
 
+	/**
+	 * Get id of {@Organization} instance
+	 * @return int id
+	 */
 	public int getId() {
 		return id;
 	}
 
+	/**
+	 * Set id in {@Organization} instance
+	 * @param id
+	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 
+	/**
+	 * Get name of {@Organization} instance
+	 * @return String name
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Set name in {@Organization} instance
+	 * @param name
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	/**
+	 * Get activity area of {@Organization} instance
+	 * @return
+	 */
 	public String getActivityArea() {
 		return activityArea;
 	}
 
+	/**
+	 * Set activity area in {@Organization} instance
+	 * @param activityArea
+	 */
 	public void setActivityArea(String activityArea) {
 		this.activityArea = activityArea;
 	}
 
+	/**
+	 * Get category of {@Organization} instance
+	 * @return
+	 */
 	public int getCategory() {
 		return category;
 	}
 
+	/**
+	 * Set category in {@Organization} instance
+	 * @param category
+	 */
 	public void setCategory(int category) {
 		this.category = category;
 	}
 
+	/**
+	 * Get {@Contact} instance of {@Organization} instance
+	 * @return {@Contact} instance
+	 */
 	public Contact getContacts() {
 		return contacts;
 	}
 
+	/**
+	 * Set {@Contact} instance in {@Organization} instance
+	 * @param contacts
+	 */
 	public void setContacts(Contact contacts) {
 		this.contacts = contacts;
 	}
