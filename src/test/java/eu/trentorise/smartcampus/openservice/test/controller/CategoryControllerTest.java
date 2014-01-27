@@ -26,6 +26,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.web.client.RestTemplate;
 
 import eu.trentorise.smartcampus.openservices.entities.Category;
+import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.support.ListCategory;
 
 import static junit.framework.Assert.assertEquals;
@@ -40,7 +41,7 @@ public class CategoryControllerTest {
 	private static final String BASE_URL = "http://localhost:8080/openservice/api/category";
 	private RestTemplate restTemplate;
 	//Log
-	private Logger log = LoggerFactory.getLogger(ServiceControllerTest.class);
+	private Logger log = LoggerFactory.getLogger(CategoryControllerTest.class);
 	
 	@Before
 	public void setUp(){
@@ -49,20 +50,20 @@ public class CategoryControllerTest {
 	
 	@Test
 	public void testCategoryData() throws Exception{
-		log.info("* Test Catalog REST: /service - STARTING");
-		Category category = restTemplate.getForObject(BASE_URL+"/1", Category.class, new Object[]{});
-		assertNotNull("A category found", category);
-		assertEquals(1, category.getId());
-		assertTrue("Category name", category.getName().equalsIgnoreCase("book"));
+		log.info("* Test Catalog REST: /service/id - STARTING");
+		ResponseObject category = restTemplate.getForObject(BASE_URL+"/1", ResponseObject.class, new Object[]{});
+		assertNotNull("A category found", category.getData());
+		assertTrue("Category id", category.getData().toString().contains("id=1"));
+		assertTrue("Category name", category.getData().toString().contains("name=book"));
 	}
 	
 	@Test
 	public void testCategoryList() throws Exception{
 		log.info("* Test Catalog REST: /service - STARTING");
-		ListCategory category = restTemplate.getForObject(BASE_URL, ListCategory.class, new Object[]{});
-		assertNotNull("A category found", category);
-		assertEquals(1, category.getCategories().get(0).getId());
-		assertTrue("Category name", category.getCategories().get(0).getName().equalsIgnoreCase("book"));
+		ResponseObject category = restTemplate.getForObject(BASE_URL, ResponseObject.class, new Object[]{});
+		assertNotNull("A category found", category.getData());
+		assertTrue("Category id", category.getData().toString().contains("id=1"));
+		assertTrue("Category name", category.getData().toString().contains("name=book"));
 	}
 
 }

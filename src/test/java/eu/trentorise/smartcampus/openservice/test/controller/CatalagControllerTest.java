@@ -37,12 +37,12 @@ import static junit.framework.Assert.assertTrue;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(value= {"file:src/main/webapp/WEB-INF/spring/root-context.xml","file:src/main/webapp/WEB-INF/spring/spring-security.xml","file:src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml"})
 @TransactionConfiguration(transactionManager="transactionManager", defaultRollback=false)
-public class CatalagoControllerTest {
+public class CatalagControllerTest {
 	
 	private static final String BASE_URL = "http://localhost:8080/openservice/api/catalog";
 	private RestTemplate restTemplate;
 	//Log
-	private Logger log = LoggerFactory.getLogger(ServiceControllerTest.class);
+	private Logger log = LoggerFactory.getLogger(CatalagControllerTest.class);
 	
 	@Before
 	public void setUp(){
@@ -52,55 +52,61 @@ public class CatalagoControllerTest {
 	@Test
 	public void testServicesPublishDepracate() throws Exception{
 		log.info("* Test Catalog REST: /service - STARTING");
-		ListService searchService = restTemplate.getForObject(BASE_URL+"/service", ListService.class, new Object[]{});
+		//ListService searchService 
+		ResponseObject searchService= restTemplate.getForObject(BASE_URL+"/service", ResponseObject.class, new Object[]{});
+		System.out.println("RESPONSEOBJECT: "+searchService.getData()+", "+searchService.getStatus()+", "
+				+searchService.getError());
 		assertNotNull("No service for this simple search", searchService);
-		assertEquals(1, searchService.getServices().get(0).getId());
-		assertTrue("Not empty", searchService.getServices().size()>0);
+		assertTrue("Not found service with id = 1", searchService.getData().toString().contains("id=1"));
+		assertTrue("Not status 200", searchService.getStatus()==200);
 	}
 	
 	@Test
 	public void testServiceData() throws Exception{
 		log.info("* Test Catalog REST: /service/{service_id} - STARTING");
 		//publish service
-		Service searchService = restTemplate.getForObject(BASE_URL+"/service/1", Service.class, new Object[]{});
+		ResponseObject searchService = restTemplate.getForObject(BASE_URL+"/service/1", ResponseObject.class, new Object[]{});
 		assertNotNull("No service data", searchService);
-		assertTrue("Not empty", searchService.getId()==1);
+		assertTrue("Not empty", searchService.getData().toString().contains("id=1"));
+		assertTrue("Not status 200", searchService.getStatus()==200);
 		
 		//unpublish service
-		Service unpublService = restTemplate.getForObject(BASE_URL+"/service/4", Service.class, new Object[]{});
-		assertNull("Service is not unpublish", unpublService);
+		ResponseObject unpublService = restTemplate.getForObject(BASE_URL+"/service/4", ResponseObject.class, new Object[]{});
+		System.out.println("RESPONSEOBJECT: "+searchService.getData()+", "+searchService.getStatus()+", "
+				+searchService.getError());
+		assertNull("Service is not unpublish", unpublService.getData());
 		
 	}
 	
 	@Test
 	public void testServiceMethods() throws Exception{
 		log.info("* Test Catalog REST: /service/methods/{service_id} - STARTING");
-		ListMethod searchService = restTemplate.getForObject(BASE_URL+"/service/methods/1", ListMethod.class, new Object[]{});
+		ResponseObject searchService = restTemplate.getForObject(BASE_URL+"/service/methods/1", ResponseObject.class, new Object[]{});
 		assertNotNull("No service for this simple search", searchService);
-		assertTrue("Empty", searchService.getMethods().size()==0);
+		assertTrue("Empty", searchService.getData()!=null);
 	}
 	
 	@Test
 	public void testServiceHistory() throws Exception{
 		log.info("* Test Catalog REST: /service/history/{service_id} - STARTING");
-		ListServiceHistory searchService = restTemplate.getForObject(BASE_URL+"/service/history/1", ListServiceHistory.class, new Object[]{});
+		ResponseObject searchService = restTemplate.getForObject(BASE_URL+"/service/history/1", ResponseObject.class, new Object[]{});
 		assertNotNull("No service for this simple search", searchService);
-		assertTrue("Empty", searchService.getLserviceh().size()==0);
+		assertTrue("Empty", searchService.getData()==null);
 	}
 	
 	@Test
 	public void testServiceSimpleSearch() throws Exception{
 		log.info("* Test Catalog REST: /service/search/{token} - STARTING");
 		String token = "book"; 
-		ListService searchService = restTemplate.getForObject(BASE_URL+"/service/search/"+token, ListService.class, new Object[]{});
-		assertNotNull("No service for this simple search", searchService);
+		ResponseObject searchService = restTemplate.getForObject(BASE_URL+"/service/search/"+token, ResponseObject.class, new Object[]{});
+		assertNotNull("No service for this simple search", searchService.getData());
 	}
 	
 	@Test
 	public void testServiceSearchByCategory() throws Exception{
 		log.info("** Test Catalog REST: /service/browse/category/{category} - STARTING ...");
-		ListService searchService = restTemplate.getForObject(BASE_URL+"/service/browse/category/1", ListService.class, new Object[]{});
-		assertNotNull("No service for this search by category", searchService);
+		ResponseObject searchService = restTemplate.getForObject(BASE_URL+"/service/browse/category/1", ResponseObject.class, new Object[]{});
+		assertNotNull("No service for this search by category", searchService.getData());
 		//assertTrue("Service category contains book", searchService.getServices().get(0).getCategory().contains("book"));
 	}
 	
@@ -108,18 +114,17 @@ public class CatalagoControllerTest {
 	public void testServiceSearchByTags() throws Exception{
 		log.info("** Test Catalog REST: /service/browse/tags/{tags} - STARTING ...");
 		String token = "book"; 
-		ListService searchService = restTemplate.getForObject(BASE_URL+"/service/browse/tags/"+token, ListService.class, new Object[]{});
-		assertNotNull("No service for this search by tags", searchService);
-		assertTrue("List is empty", searchService.getServices().size()==0);
+		ResponseObject searchService = restTemplate.getForObject(BASE_URL+"/service/browse/tags/"+token, ResponseObject.class, new Object[]{});
+		assertNotNull("No service for this search by tags", searchService.getData());
+		assertTrue("List is empty", searchService.getData()==null);
 	}
 	
 	@Test
 	public void testOrg() throws Exception{
 		log.info("** Test Catalog REST: /org - STARTING ...");
 		String token = "amazon"; 
-		ListOrganization searchOrg = restTemplate.getForObject(BASE_URL+"/org", ListOrganization.class, new Object[]{});
-		assertNotNull("No organization for this simple search", searchOrg);
-		assertTrue("List is not empty", searchOrg.getOrgs().size()>0);
+		ResponseObject searchOrg = restTemplate.getForObject(BASE_URL+"/org", ResponseObject.class, new Object[]{});
+		assertNotNull("No organization for this simple search", searchOrg.getData());
 
 	}
 	
@@ -127,19 +132,18 @@ public class CatalagoControllerTest {
 	public void testOrgSimpleSearch() throws Exception{
 		log.info("** Test Catalog REST: /org/search/{token} - STARTING ...");
 		String token = "amazon"; 
-		ListOrganization searchOrg = restTemplate.getForObject(BASE_URL+"/org/search/"+token, ListOrganization.class, new Object[]{});
-		assertNotNull("No organization for this simple search", searchOrg);
-		assertTrue("List is not empty", searchOrg.getOrgs().size()>0);
+		ResponseObject searchOrg = restTemplate.getForObject(BASE_URL+"/org/search/"+token, ResponseObject.class, new Object[]{});
+		assertNotNull("No organization for this simple search", searchOrg.getData());
 
 	}
 
 	@Test
 	public void testOrgSearchByCategory() throws Exception{
 		log.info("** Test Catalog REST: /org/browse/category/{category} - STARTING ...");
-		ListOrganization searchOrg = restTemplate.getForObject(BASE_URL+"/org/browse/category/2", ListOrganization.class, new Object[]{});
+		ResponseObject searchOrg = restTemplate.getForObject(BASE_URL+"/org/browse/category/2", ResponseObject.class, new Object[]{});
 		assertNotNull("No service for this search by category", searchOrg);
-		assertTrue("Organization name is not Amazon1", searchOrg.getOrgs().get(0).getName().equalsIgnoreCase("Amazon1"));
-		assertTrue("Organization category contains", searchOrg.getOrgs().size()>0);
+		assertTrue("Organization name is not Amazon1", searchOrg.getData().toString().contains("Amazon1"));
+		assertTrue("Organization category contains", searchOrg.getData()!=null);
 	}
 
 }

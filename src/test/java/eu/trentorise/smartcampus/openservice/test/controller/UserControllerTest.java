@@ -48,6 +48,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import eu.trentorise.smartcampus.openservice.test.resttemplate.RestClient;
+import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.entities.Service;
 import eu.trentorise.smartcampus.openservices.entities.User;
 import eu.trentorise.smartcampus.openservices.securitymodel.CustomUserDetailsService;
@@ -62,7 +63,7 @@ public class UserControllerTest {
 	private static final String BASE_URL = "http://localhost:8080/openservice/api/user";
 	private RestTemplate restTemplate;
 	//Log
-	private Logger log = LoggerFactory.getLogger(ServiceControllerTest.class);
+	private Logger log = LoggerFactory.getLogger(UserControllerTest.class);
 	
 	@Before
 	public void setUp(){
@@ -91,8 +92,8 @@ public class UserControllerTest {
 		input.setPassword("provaTest");
 		input.setEmail("provaTest@prova");
 		
-		User response = restTemplate.postForObject(BASE_URL+"/add", input, User.class);
-		assertNull("No user here",response);
+		ResponseObject response = restTemplate.postForObject(BASE_URL+"/add", input, ResponseObject.class);
+		assertNull("No user here",response.getData());
 	}
 	
 	@Test
@@ -137,7 +138,7 @@ public class UserControllerTest {
 		RestClient client = new RestClient();
 		client.setApplicationPath("openservice");
 		String url = client.login("sara", "sara");
-		ResponseEntity<User> user = client.template().getForEntity(BASE_URL+"/my", User.class);
+		ResponseEntity<ResponseObject> user = client.template().getForEntity(BASE_URL+"/my", ResponseObject.class);
 		
 		System.out.println(user);
 	}
@@ -155,9 +156,9 @@ public class UserControllerTest {
 		body.add("j_password", "123489");//wrong password
 		// Note the body object as first parameter!
 		HttpEntity<?> httpEntity = new HttpEntity<Object>(body, headers);
-		ResponseEntity<User> response = restTemplate.exchange(
+		ResponseEntity<ResponseObject> response = restTemplate.exchange(
 				"http://localhost:8080/openservice/perform_login",
-				HttpMethod.POST, httpEntity, User.class);
+				HttpMethod.POST, httpEntity, ResponseObject.class);
 
 		log.info("## ResponseEntity Headers: "
 				+ response.getHeaders().getLocation() + " ##");

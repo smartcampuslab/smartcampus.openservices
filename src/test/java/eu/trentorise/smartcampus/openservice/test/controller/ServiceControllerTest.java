@@ -55,6 +55,7 @@ import org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAda
 
 import eu.trentorise.smartcampus.openservices.controllers.ServiceController;
 import eu.trentorise.smartcampus.openservices.dao.ServiceDao;
+import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.entities.Service;
 import eu.trentorise.smartcampus.openservices.entities.User;
 import eu.trentorise.smartcampus.openservices.securitymodel.CustomUserDetailsService;
@@ -118,6 +119,8 @@ public class ServiceControllerTest {
 	@Before
 	public void setUp(){
 		restTemplate = new RestTemplate();
+		
+		//need log in
 	}
 	
 	@Test
@@ -130,7 +133,7 @@ public class ServiceControllerTest {
 	public void testFindOneService() throws Exception{
 		log.info("** Test Service REST: /view/description/1 - STARTING ...");
 		//Get service with id 1
-		Service service = restTemplate.getForObject(BASE_URL+"/view/description/1", Service.class, new Object[]{});
+		ResponseObject service = restTemplate.getForObject(BASE_URL+"/view/description/1", ResponseObject.class, new Object[]{});
 		assertNotNull("no service with this id", service);
 		//check if result is the expected one
 		Service expected = new Service();
@@ -143,7 +146,8 @@ public class ServiceControllerTest {
 		expected.setVersion("1");
 		expected.setExpiration(0);
 		expected.setState("publish");
-		assertEquals(expected.getId(), service.getId());
+		
+		assertTrue("Same id", service.getData().toString().contains("id="+expected.getId()));
 	}
 
 }
