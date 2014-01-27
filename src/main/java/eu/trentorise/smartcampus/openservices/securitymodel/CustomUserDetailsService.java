@@ -35,6 +35,8 @@ import eu.trentorise.smartcampus.openservices.entities.User;
 /**
  * Custom User Details Service
  * retrieve data of user during login for spring security
+ * and put them in security context holder
+ * 
  * @author Giulia Canobbio
  *
  */
@@ -47,6 +49,10 @@ public class CustomUserDetailsService implements UserDetailsService{
 	@Autowired
 	private UserRoleDao usDao;
 
+	/**
+	 * Check if user exists in database and if username and password are correct,
+	 * return a {@UserDetails} instance.
+	 */
 	@Override
 	public UserDetails loadUserByUsername(String arg0)
 			throws UsernameNotFoundException {
@@ -56,6 +62,9 @@ public class CustomUserDetailsService implements UserDetailsService{
 		
 		return new UserDetails() {
 			
+			/**
+			 * Check if user is enabled
+			 */
 			@Override
 			public boolean isEnabled() {
 				int enabled = domainUser.getEnabled();
@@ -82,16 +91,25 @@ public class CustomUserDetailsService implements UserDetailsService{
 				return true;
 			}
 			
+			/**
+			 * Get username
+			 */
 			@Override
 			public String getUsername() {
 				return domainUser.getUsername();
 			}
 			
+			/**
+			 * Get password
+			 */
 			@Override
 			public String getPassword() {
 				return domainUser.getPassword();
 			}
 			
+			/**
+			 * Find user role in database and put them in authority
+			 */
 			@Override
 			public Collection<? extends GrantedAuthority> getAuthorities() {
 				//Get user id from Users

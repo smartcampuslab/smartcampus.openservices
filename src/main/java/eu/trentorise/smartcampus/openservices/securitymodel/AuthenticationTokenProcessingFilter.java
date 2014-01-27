@@ -16,6 +16,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.GenericFilterBean;
 
+/**
+ * Authentication Filter
+ * Check attributes username and password and then put them in a {@UserDetails} 
+ * instance.
+ * After that, build an Authentication object with user data.
+ * 
+ * @author Giulia Canobbio
+ *
+ * NOT IN USE
+ */
 public class AuthenticationTokenProcessingFilter extends GenericFilterBean{
 	
 	@Autowired

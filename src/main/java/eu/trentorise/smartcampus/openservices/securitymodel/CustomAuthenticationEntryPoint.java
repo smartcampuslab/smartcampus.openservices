@@ -9,6 +9,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
+/**
+ * Custom authentication Entry Point for filter login
+ * 
+ * @author Giulia Canobbio
+ * 
+ * NOT IN USE
+ *
+ */
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint{
 
 	@Override

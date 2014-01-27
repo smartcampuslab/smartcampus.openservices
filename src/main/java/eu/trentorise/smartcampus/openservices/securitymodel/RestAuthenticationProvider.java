@@ -29,6 +29,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import eu.trentorise.smartcampus.openservices.dao.UserDao;
 import eu.trentorise.smartcampus.openservices.entities.User;
 
+/**
+ * Authentication Provider
+ * Try to login without using predefined <login-form> of spring security,
+ * defining an authentication provider.
+ * 
+ * @author Giulia Canobbio
+ * 
+ * NOT IN USE
+ *
+ */
 public class RestAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider{
 	
 	private PasswordEncoder passwordEncoder = new PlaintextPasswordEncoder();
@@ -39,6 +49,9 @@ public class RestAuthenticationProvider extends AbstractUserDetailsAuthenticatio
 		super();
 	}
 	
+	/**
+	 * Retrieve user data and return a {@UserDetails} instance
+	 */
 	@Override
 	protected final UserDetails retrieveUser(String name, UsernamePasswordAuthenticationToken auth){
 		UserDetails loadedUser = null;
@@ -71,10 +84,4 @@ public class RestAuthenticationProvider extends AbstractUserDetailsAuthenticatio
 		
 	}
 	
-	public static void main(String[] args) {
-		String password = "sara";
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); 
-		String encodedPassword = ((BCryptPasswordEncoder) passwordEncoder).encode(password);
-		System.out.println(encodedPassword);
-	}
 }
