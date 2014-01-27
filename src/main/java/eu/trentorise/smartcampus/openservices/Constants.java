@@ -17,6 +17,8 @@
 package eu.trentorise.smartcampus.openservices;
 
 /**
+ * Enumeration class for service state
+ * 
  * @author raman
  *
  */
