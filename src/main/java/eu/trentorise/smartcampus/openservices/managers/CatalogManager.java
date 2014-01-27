@@ -39,8 +39,13 @@ import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
 import eu.trentorise.smartcampus.openservices.support.CategoryServices;
 
 /**
+ * Catalog Manager
+ * Component Interface with dao
  * 
- * @author Giulia
+ * This class retrieves data about service and organization for 
+ * anonymous users
+ * 
+ * @author Giulia Canobbio
  *
  */
 @Component
@@ -147,8 +152,9 @@ public class CatalogManager {
 	}
 	
 	/**
-	 * @param org
-	 * @return
+	 * Retrieve all service of a specific organization
+	 * @param org id of organization
+	 * @return all {@link Service} instances
 	 */
 	public List<Service> catalogServiceBrowseByOrg(int org) {
 		List<Service> s = new ArrayList<Service>();
@@ -221,8 +227,9 @@ public class CatalogManager {
 	}
 
 	/**
-	 * @param id
-	 * @return
+	 * Retrieve organization data searching by its id
+	 * @param id: organzation id
+	 * @return {@link Organization} instance
 	 */
 	public Organization catalogOrgById(int id) {
 		try{
@@ -233,7 +240,8 @@ public class CatalogManager {
 	}
 
 	/**
-	 * @return
+	 * Browse services by category
+	 * @return {@link CategoryServices} instance
 	 */
 	public CategoryServices getCategoryServices() {
 		CategoryServices res = new CategoryServices();

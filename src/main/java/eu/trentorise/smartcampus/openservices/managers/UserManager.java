@@ -24,8 +24,11 @@ import eu.trentorise.smartcampus.openservices.dao.UserDao;
 import eu.trentorise.smartcampus.openservices.entities.User;
 
 /**
+ * User Manager
+ * Interfaces with dao
+ * Retrieve, add, modify, delete user data
  * 
- * @author Giulia
+ * @author Giulia Canobbio
  *
  */
 @Component

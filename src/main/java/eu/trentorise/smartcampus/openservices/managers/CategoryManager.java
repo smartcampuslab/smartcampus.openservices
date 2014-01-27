@@ -33,6 +33,9 @@ import eu.trentorise.smartcampus.openservices.entities.Organization;
 import eu.trentorise.smartcampus.openservices.entities.Service;
 
 /**
+ * Category Manager Interfaces with dao
+ * Retrieve, add, modify and delete category from database
+ * 
  * @author raman
  *
  */
@@ -46,6 +49,13 @@ public class CategoryManager {
 	@Autowired
 	private OrganizationDao organizationDao;
 
+	/**
+	 * Retrieve category data from database
+	 * searching by id
+	 * @param id: category id
+	 * @return {@link Category} instance
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	public Category getCategoryById(int id) throws DataAccessException {
 		try{
@@ -55,6 +65,13 @@ public class CategoryManager {
 		}
 	}
 	
+	/**
+	 * Retrieve category data from database
+	 * Searching by category name
+	 * @param name: category name
+	 * @return {@link Category} instance
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	public Category getCategoryByName(String name) throws DataAccessException {
 		try{
@@ -64,6 +81,11 @@ public class CategoryManager {
 		}
 	}
 
+	/**
+	 * Retrieve all category data from database
+	 * @return all {@link Category} instances
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	public List<Category> getCategories() throws DataAccessException {
 		try{
@@ -73,6 +95,12 @@ public class CategoryManager {
 		}
 	}
 	
+	/**
+	 * Add a new category in database
+	 * @param category: Category data
+	 * @return {@link Category} instance
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	public Category addCategory(Category category) throws DataAccessException {
 		try {
@@ -86,6 +114,12 @@ public class CategoryManager {
 		}
 	} 
 	
+	/**
+	 * Modify category data from database
+	 * @param category: Category data
+	 * @return {@link Category} instance
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	public Category modifyCategory(Category category) throws DataAccessException {
 		try {
@@ -100,6 +134,13 @@ public class CategoryManager {
 		}
 	}
 	
+	/**
+	 * Delete category data from database
+	 * @param id: category id
+	 * @return boolean: true if it is ok else false
+	 * @throw EntityExistsException if delete is not successful
+	 * @throws DataAccessException
+	 */
 	@Transactional
 	public boolean deleteCategory(int id) throws DataAccessException {
 		try {

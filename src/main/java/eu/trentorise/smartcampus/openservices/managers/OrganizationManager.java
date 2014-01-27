@@ -41,6 +41,9 @@ import eu.trentorise.smartcampus.openservices.entities.UserRole;
 import eu.trentorise.smartcampus.openservices.support.GenerateKey;
 
 /**
+ * Organization manager interfaces with dao
+ * Retrieve, add, modify and delete organization data.
+ * 
  * @author raman
  *
  */
@@ -63,10 +66,11 @@ public class OrganizationManager {
 
 
 	/**
-	 * Delete organization, associated user roles, and services
-	 * @param username
-	 * @param orgId
-	 * @throws SecurityException
+	 * Delete an existing organization from database
+	 * @param username: logged in user
+	 * @param orgId: organizatin id
+	 * @return boolean: true if it is ok, else false
+	 * @throws SecurityException when user has not correct role
 	 */
 	@Transactional
 	public boolean deleteOrganization(String username, int orgId) throws SecurityException {
@@ -107,9 +111,11 @@ public class OrganizationManager {
 	}
 	
 	/**
-	 * Create organization and associate the user as the organization owner
+	 * Add a new organization in database
+	 * Add organization owner role to this user
 	 * @param username
-	 * @param org
+	 * @param org: Organization data
+	 * @return boolean: true if it is ok, else false
 	 */
 	@Transactional
 	public boolean createOrganization(String username, Organization org) {
@@ -135,9 +141,11 @@ public class OrganizationManager {
 	}
 
 	/**
-	 * update organization data
+	 * Update an existing organization data from database
 	 * @param username
-	 * @param org
+	 * @param org: Organization data
+	 * @return boolean: true if it is ok, else false
+	 * @throws SecurityException when user has not correct role
 	 */
 	@Transactional
 	public boolean updateOrganization(String username, Organization org) {
@@ -176,6 +184,17 @@ public class OrganizationManager {
 		return orgs;
 	}
 	
+	/**
+	 * Invite a user to become part of an organization
+	 * User who send invitaton must have role organization owner for this organization
+	 * The invitation create a temporary link object with a key
+	 * @param username: user who invites new organization owner
+	 * @param org_id: organization id
+	 * @param role: role for new organization owner
+	 * @param email: of new organization owner
+	 * @return String key
+	 * @throws SecurityException when user has not correct role
+	 */
 	public String createInvitation(String username, int org_id, String role, String email) throws SecurityException {
 		try {
 			User user = userDao.getUserByUsername(username);
@@ -240,9 +259,13 @@ public class OrganizationManager {
 	}
 
 	/**
-	 * Add invited user to the organization
-	 * @param username
-	 * @param key
+	 * New organization owner user must use its username and key to connect with organization
+	 * If it is ok, then a new user role is created and user become an organization owner
+	 * @param username: logged in user
+	 * @param key: private key of invitation
+	 * @return boolean: true if it is ok, else false
+	 * @throws SecurityException when user has not correct role
+	 * @throws EntityNotFoundException when temporary link object does not exist
 	 */
 	public boolean addOwner(String username, String key) throws SecurityException, EntityNotFoundException {
 		try {
@@ -271,9 +294,12 @@ public class OrganizationManager {
 	}
 	
 	/**
-	 * Remove the specified user from the organization members
-	 * @param org_id
-	 * @param user_id
+	 * Remove an organization owner from organization
+	 * @param username: logged in user
+	 * @param org_id: organization id
+	 * @param user_id: user id of user we want to delete
+	 * @return boolean: true if it is ok, else false
+	 * @throws SecurityException when user has not correct role
 	 */
 	public boolean deleteOrgUser(String username, int org_id, int user_id) {
 		try {
