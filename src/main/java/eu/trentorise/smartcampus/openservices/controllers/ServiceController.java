@@ -15,7 +15,6 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.controllers;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,14 +37,10 @@ import eu.trentorise.smartcampus.openservices.entities.Service;
 import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
 import eu.trentorise.smartcampus.openservices.entities.TestInfo;
 import eu.trentorise.smartcampus.openservices.managers.ServiceManager;
-import eu.trentorise.smartcampus.openservices.support.ListMethod;
-import eu.trentorise.smartcampus.openservices.support.ListService;
-import eu.trentorise.smartcampus.openservices.support.ListServiceHistory;
 
 /**
- * Service Controller
- * Restful web services which retrieves service data
- * mapping /api/service
+ * Controller that retrieves service data and adds, modifies and delets them for 
+ * authenticated users.
  * 
  * @author Giulia Canobbio
  *
@@ -57,9 +51,14 @@ public class ServiceController {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(ServiceController.class);
-
+	/**
+	 * {@link ResponseObject} Response object contains requested data, 
+	 * status of response and if necessary a custom error message.
+	 */
 	private ResponseObject responseObject;
-	
+	/**
+	 * Instance of {@link ServiceManager} to retrieve data using Dao classes.
+	 */
 	@Autowired
 	private ServiceManager serviceManager;
 	
@@ -69,9 +68,11 @@ public class ServiceController {
 	
 	//User - Access my data: service
 	/**
-	 * Access logged in user data
-	 * @param response
-	 * @return {@link ResponseObject} with services data, status or error message.
+	 * Logged user retrieves his/her list of service data.
+	 * Service can be published, deprecated and unpublished.
+	 * @param response : {@link HttpServletResponse} which returns status of response OK or NOT FOUND
+	 * @return {@link ResponseObject} with list of service data, status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/my", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
@@ -97,9 +98,10 @@ public class ServiceController {
 	
 	//Service - View Service
 	/**
-	 * Access logged in user services data
-	 * @param response
-	 * @return {@link ResponseObject} with services data, status or error message.
+	 * Retrieve all service data for logged user.
+	 * @param response : {@link HttpServletResponse} which returns status of response OK or NOT FOUND
+	 * @return {@link ResponseObject} with list of service data, status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/view", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
@@ -121,11 +123,12 @@ public class ServiceController {
 	
 	//Service - View Service - view service description
 	/**
-	 * View data of a service
-	 * Searching by service id
-	 * @param service_id
-	 * @param response
-	 * @return {@link ResponseObject} with services data, status or error message.
+	 * View data of a specific service.
+	 * Searching by service id.
+	 * @param service_id : int service id
+	 * @param response : {@link HttpServletResponse} which returns status of response OK or NOT FOUND
+	 * @return {@link ResponseObject} with service data, status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/view/description/{service_id}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
@@ -147,10 +150,12 @@ public class ServiceController {
 	
 	//Service - View Service - view service method
 	/**
-	 * Retrieve service method data
-	 * @param service_id
-	 * @param response
-	 * @return {@link ResponseObject} with services method data, status or error message.
+	 * Retrieve all methods for a specific service.
+	 * Search is done by service id.
+	 * @param service_id : int service id
+	 * @param response : {@link HttpServletResponse} which returns status of response OK or NOT FOUND
+	 * @return {@link ResponseObject} with list of method data, status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/view/method/{service_id}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
@@ -172,10 +177,12 @@ public class ServiceController {
 	
 	//Service - View Service - view service history
 	/**
-	 * Retrieve service history data
-	 * @param service_id
-	 * @param response
-	 * @return {@link ResponseObject} with service history data, status or error message.
+	 * Retrieve all service history data of a specific service.
+	 * Search is done by service id.
+	 * @param service_id : int service id
+	 * @param response : {@link HttpServletResponse} which returns status of response OK or NOT FOUND
+	 * @return {@link ResponseObject} with list of service history data, status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/view/history/{service_id}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
@@ -197,10 +204,13 @@ public class ServiceController {
 	
 	//Service - Manage Service - create Service
 	/**
-	 * Add a new service to an organization
-	 * @param service
-	 * @param response
-	 * @return {@link ResponseObject} with status or error message.
+	 * Add a new service to an organization.
+	 * User must have role 'organization owner' or 'service owner'.
+	 * @param service : {@link Service} service object
+	 * @param response : {@link HttpServletResponse} which returns status of response CREATED, BAD REQUEST or 
+	 * UNAUTHORIZED
+	 * @return {@link ResponseObject} with status (CREATED, BAD REQUEST or UNAUTHORIZED) and 
+	 * error message (if status is BAD REQUEST or UNAUTHORIZED).
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
@@ -238,10 +248,15 @@ public class ServiceController {
 	}
 	//Service - Manage Service - modify Service
 	/**
-	 * Modify an existing service in database
-	 * @param service
-	 * @param response
-	 * @return {@link ResponseObject} with status or error message.
+	 * Modify an existing service in database.
+	 * User must have role 'organization owner' for organization service and can modify the following service fields:
+	 * description, tags, category, documentation, access information, expiration, implementation,
+	 * license and version.
+	 * @param service : {@link Service} object
+	 * @param response : {@link HttpServletResponse} which returns status of response OK, SERVICE UNAVAILABLE or 
+	 * UNAUTHORIZED
+	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE or UNAUTHORIZED) and 
+	 * error message (if status is SERVICE UNAVAILABLE or UNAUTHORIZED).
 	 */
 	@RequestMapping(value = "/modify", method = RequestMethod.PUT, consumes="application/json") 
 	@ResponseBody
@@ -270,10 +285,13 @@ public class ServiceController {
 	
 	//Service - Manage Service - publish Service (create ServiceHistory.operation)
 	/**
-	 * Publish a service
-	 * @param id
-	 * @param response
-	 * @return {@link ResponseObject} with status or error message.
+	 * Publish a service.
+	 * User must have role 'organization owner' for organization service.
+	 * @param id : int service id
+	 * @param response : {@link HttpServletResponse} which returns status of response OK, SERVICE UNAVAILABLE or 
+	 * UNAUTHORIZED
+	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE or UNAUTHORIZED) and 
+	 * error message (if status is SERVICE UNAVAILABLE or UNAUTHORIZED).
 	 */
 	@RequestMapping(value = "/publish/{id}", method = RequestMethod.PUT, consumes="application/json") 
 	@ResponseBody
@@ -304,10 +322,13 @@ public class ServiceController {
 	
 	//Service - Manage Service - unpublish Service (create ServiceHistory.operation)
 	/**
-	 * Unpublish a service
-	 * @param id
-	 * @param response
-	 * @return {@link ResponseObject} status or error message.
+	 * Unpublish a service.
+	 * User must have role 'organization owner' for organization service.
+	 * @param id : int service id
+	 * @param response : {@link HttpServletResponse} which returns status of response OK, SERVICE UNAVAILABLE or 
+	 * UNAUTHORIZED
+	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE or UNAUTHORIZED) and 
+	 * error message (if status is SERVICE UNAVAILABLE or UNAUTHORIZED).
 	 */
 	@RequestMapping(value = "/unpublish/{id}", method = RequestMethod.PUT, consumes="application/json") 
 	@ResponseBody
@@ -335,10 +356,13 @@ public class ServiceController {
 	
 	//Service - Manage Service - deprecate Service (create ServiceHistory.operation)
 	/**
-	 * Deprecate a service
-	 * @param id
-	 * @param response
-	 * @return {@link ResponseObject} with status or error message.
+	 * Deprecate a service.
+	 * User must have role 'organization owner' for organization service.
+	 * @param id : int service id
+	 * @param response : {@link HttpServletResponse} which returns status of response OK, SERVICE UNAVAILABLE or 
+	 * UNAUTHORIZED
+	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE or UNAUTHORIZED) and 
+	 * error message (if status is SERVICE UNAVAILABLE or UNAUTHORIZED).
 	 */
 	@RequestMapping(value = "/deprecate/{id}", method = RequestMethod.PUT, consumes="application/json") 
 	@ResponseBody
@@ -366,10 +390,13 @@ public class ServiceController {
 	
 	//Service - Manage Service - deprecate Service (create ServiceHistory.operation)
 	/**
-	 * Delete an existing service
-	 * @param id
-	 * @param response
-	 * @return {@link ResponseObject} status or error message.
+	 * Delete an existing service.
+	 * User must have role 'organization owner' for service organization.
+	 * @param id : int service id
+	 * @param response : {@link HttpServletResponse} which returns status of response OK, SERVICE UNAVAILABLE or 
+	 * UNAUTHORIZED
+	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE or UNAUTHORIZED) and 
+	 * error message (if status is SERVICE UNAVAILABLE or UNAUTHORIZED).
 	 */
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE) 
 	@ResponseBody
@@ -398,10 +425,13 @@ public class ServiceController {
 	
 	//Service - Manage Service method - create Method (create ServiceHistory.operation)
 	/**
-	 * Add a service method to a service
-	 * @param method
-	 * @param response
-	 * @return {@link ResponseObject} with status or error message.
+	 * Add a new method to a service.
+	 * User must have role 'organization owner' for organization service.
+	 * @param method : {@link Method} instance
+	 * @param response : {@link HttpServletResponse} which returns status of response CREATED, SERVICE UNAVAILABLE or 
+	 * UNAUTHORIZED
+	 * @return {@link ResponseObject} with status (CREATED, SERVICE UNAVAILABLE or UNAUTHORIZED) and 
+	 * error message (if status is SERVICE UNAVAILABLE or UNAUTHORIZED).
 	 */
 	@RequestMapping(value = "/method/add", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
@@ -429,10 +459,14 @@ public class ServiceController {
 	
 	//Service - Manage Service method - modify Method (create ServiceHistory.operation)
 	/**
-	 * Modify a service method
-	 * @param method
-	 * @param response 
-	 * @return {@link ResponseObject} with status or error message.
+	 * Modify a service method.
+	 * User must have role 'organization owner' for organization service and can modify only the following fields:
+	 * name, synopsis, test, documentation.
+	 * @param method : {@link Method} instance
+	 * @param response : {@link HttpServletResponse} which returns status of response OK, SERVICE UNAVAILABLE or 
+	 * UNAUTHORIZED
+	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE or UNAUTHORIZED) and 
+	 * error message (if status is SERVICE UNAVAILABLE or UNAUTHORIZED).
 	 */
 	@RequestMapping(value = "/method/modify", method = RequestMethod.PUT, consumes="application/json") 
 	@ResponseBody
@@ -459,10 +493,11 @@ public class ServiceController {
 	}
 	
 	/**
-	 * Return method data 
-	 * Searching by method id
-	 * @param method_id
-	 * @return {@ResponseObject} instance: data value!=null if method exists else error message
+	 * Retrieves method data of a specific method.
+	 * Searching by method id.
+	 * @param method_id : int method id
+	 * @return {@link ResponseObject} with method data, status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value="/method/{method_id}", method = RequestMethod.GET, produces="application/json")
 	public @ResponseBody ResponseObject getMethodData(@PathVariable int method_id){
@@ -480,10 +515,13 @@ public class ServiceController {
 	
 	//Service - Manage Service method - delete method (create ServiceHistory.operation)
 	/**
-	 * Delete a service method from a service
-	 * @param id
-	 * @param response
-	 * @return {@link ResponseObject} with status or error message.
+	 * Delete a service method from a service.
+	 * User must have role 'organization owner' for organization service.
+	 * @param id : int method id
+	 * @param response : {@link HttpServletResponse} which returns status of response OK, SERVICE UNAVAILABLE or 
+	 * UNAUTHORIZED
+	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE or UNAUTHORIZED) and 
+	 * error message (if status is SERVICE UNAVAILABLE or UNAUTHORIZED).
 	 */
 	@RequestMapping(value = "/method/delete/{id}", method = RequestMethod.DELETE) 
 	@ResponseBody
@@ -510,11 +548,14 @@ public class ServiceController {
 	}
 	
 	/**
-	 * Add a test to a service method
-	 * @param testinfo
-	 * @param id
-	 * @param response
-	 * @return {@link ResponseObject} with status or error message.
+	 * Add a test to a service method.
+	 * User must have role 'organization owner' for organization service.
+	 * @param testinfo : {@link TestInfo} instance
+	 * @param id : int method id
+	 * @param response : {@link HttpServletResponse} which returns status of response OK, SERVICE UNAVAILABLE or 
+	 * UNAUTHORIZED
+	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE or UNAUTHORIZED) and 
+	 * error message (if status is SERVICE UNAVAILABLE or UNAUTHORIZED).
 	 */
 	@RequestMapping(value = "/method/{id}/test/add", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
@@ -541,12 +582,15 @@ public class ServiceController {
 	}
 
 	/**
-	 * Update a test to a service method
-	 * @param testinfo
-	 * @param id
-	 * @param pos
-	 * @param response
-	 * @return {@link ResponseObject} with status or error message.
+	 * Update a test to a service method.
+	 * User must have role 'organization owner' for organization service and can modify all test information.
+	 * @param testinfo : {@link TestInfo} instance
+	 * @param id : int method id
+	 * @param pos : int index of test that user wants to update
+	 * @param response : {@link HttpServletResponse} which returns status of response OK, SERVICE UNAVAILABLE or 
+	 * UNAUTHORIZED
+	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE or UNAUTHORIZED) and 
+	 * error message (if status is SERVICE UNAVAILABLE or UNAUTHORIZED).
 	 */
 	@RequestMapping(value = "/method/{id}/test/{pos}", method = RequestMethod.PUT, consumes="application/json") 
 	@ResponseBody
@@ -574,11 +618,14 @@ public class ServiceController {
 	}
 
 	/**
-	 * Delete a test from a service method
-	 * @param id
-	 * @param pos
-	 * @param response
-	 * @return {@link ResponseObject} with status or error message.
+	 * Delete a test from a service method.
+	 * User must have role 'organization owner' for organization service.
+	 * @param id : int method id
+	 * @param pos : int index of test that user wants to delete
+	 * @param response : {@link HttpServletResponse} which returns status of response OK, SERVICE UNAVAILABLE or 
+	 * UNAUTHORIZED
+	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE or UNAUTHORIZED) and 
+	 * error message (if status is SERVICE UNAVAILABLE or UNAUTHORIZED).
 	 */
 	@RequestMapping(value = "/method/{id}/test/{pos}", method = RequestMethod.DELETE) 
 	@ResponseBody

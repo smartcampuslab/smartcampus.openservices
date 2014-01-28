@@ -16,35 +16,24 @@
 package eu.trentorise.smartcampus.openservices.controllers;
 
 import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.junit.runner.Request;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-import eu.trentorise.smartcampus.openservices.dao.UserDao;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.entities.User;
 import eu.trentorise.smartcampus.openservices.managers.UserManager;
-import eu.trentorise.smartcampus.openservices.securitymodel.CustomUserDetailsService;
 
 /**
- * Handles requests for the application home page.
+ * A controller which handles requests for the application home page.
  * @author Giulia Canobbio
  *
  */
@@ -52,15 +41,23 @@ import eu.trentorise.smartcampus.openservices.securitymodel.CustomUserDetailsSer
 public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+	/**
+	 * Instance of {@link UserManager} to retrieve data using Dao classes.
+	 */
 	@Autowired
 	private UserManager userManager;
-	
+	/**
+	 * {@link ResponseObject} Response object contains requested data, 
+	 * status of response and if necessary a custom error message.
+	 */
 	private ResponseObject responseObjetc;
 	
 	/**
-	 * Home view
-	 * @param response
-	 * @return jsp name
+	 * Home view rendering home jsp and save or modified a cookie called value.
+	 * This cookie is true if user is logged in, otherwise it is false.
+	 * @param request : {@link HttpServletRequest} which is needed to find out if a specific cookie exists.
+	 * @param response : {@link HttpServletResponse} which returns a new cookie or if it already exists, modified it.
+	 * @return home jsp
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(HttpServletRequest request, HttpServletResponse response) {
@@ -114,9 +111,12 @@ public class HomeController {
 	}
 	
 	/**
-	 * Welcome which is always home view
-	 * It is just for login problem
-	 * @return ResponseObject with logged in user data
+	 * Retrieve user data, it is called after login in.
+	 * It returns user data and set cookie value to true.
+	 * @param request : {@link HttpServletRequest} which is needed to find out if a specific cookie exists.
+	 * @param response : {@link HttpServletResponse} which returns a new cookie or if it already exists, modified it.
+	 * @return {@link ResponseObject} with user data, status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value="/welcome", method = RequestMethod.GET)
 	@ResponseBody
@@ -155,12 +155,17 @@ public class HomeController {
 	}
 	
 	/**
-	 * If url is wrong, then return index page with response error.
-	 * @throws NoSuchFieldException 
-	 * @throws SecurityException 
-	 * @throws IllegalAccessException 
+	 * Return to home jsp with an error code of NOT FOUND.
+	 * It is called when user request wrong urls.
+	 * @param value : {@link Cookie} object, it contains value cookie set to false or true.
+	 * @param user : {@link Cookie} object, it contains user data such as username and roles.
+	 * @param request : {@link HttpServletRequest} DO NOTHING NOW
+	 * @param response : {@link HttpServletResponse} which returns an error response (404, NOT FOUND).
+	 * @return home jsp
+	 * @throws SecurityException
+	 * @throws NoSuchFieldException
 	 * @throws IllegalArgumentException
-	 * @return home function
+	 * @throws IllegalAccessException
 	 */
 	@RequestMapping()
 	public String error(@CookieValue(value="value", required=false) String value, 
@@ -201,12 +206,14 @@ public class HomeController {
 	}
 	
 	/**
-	 * Login page shows index jsp
-	 * @return jsp
-	 * @throws IOException 
+	 * Login view which is in this case home jsp.
+	 * @param request : {@link HttpServletRequest} DO NOTHING NOW
+	 * @param response : {@link HttpServletResponse} DO NOTHING NOW
+	 * @return index jsp
+	 * @throws IOException
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login(HttpServletRequest request, HttpServletResponse response) throws IOException{
+	public String login(HttpServletRequest request, HttpServletResponse response){
 		logger.info("-- Perform Login --");
 		/*String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userManager.getUserByUsername(username);
@@ -233,15 +240,15 @@ public class HomeController {
 	}
 	
 	/**
-	 * Login failed
-	 * Show login with error true
-	 * @param model
-	 * @return ResponseObject without data, but with error message and status
-	 * @throws IOException 
+	 * Login failed.
+	 * Returns an error message, because user does not exists or insert wrong credentials.
+	 * @param response : {@link HttpServletResponse} which returns an error response (404, NOT FOUND).
+	 * @return {@link ResponseObject} with status (401, UNAUTHORIZED) and error message.
+	 * @throws IOException
 	 */
 	@RequestMapping(value = "/loginfailed", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseObject loginfailed(HttpServletRequest request, HttpServletResponse response) throws IOException{
+	public ResponseObject loginfailed(HttpServletResponse response){
 		logger.info("-- Login failed --");
 		responseObjetc = new ResponseObject();
 		responseObjetc.setStatus(401);
@@ -252,8 +259,11 @@ public class HomeController {
 	
 	//User - logout
 	/**
-	 * Logout returns to login page
-	 * @return jsp page
+	 * Logout, it set authentication to false and set cookie value to false.
+	 * Returns index jsp
+	 * @param request : {@link HttpServletRequest} which is needed to find out if a specific cookie exists.
+	 * @param response : {@link HttpServletResponse} which returns a new cookie or if it already exists, modified it.
+	 * @return home jsp
 	 */
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(HttpServletRequest request, HttpServletResponse response){

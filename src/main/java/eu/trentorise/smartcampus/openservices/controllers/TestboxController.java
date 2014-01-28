@@ -16,8 +16,6 @@
 
 package eu.trentorise.smartcampus.openservices.controllers;
 
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -46,9 +44,7 @@ import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.entities.TestInfo;
 
 /**
- * TestBox Controller
- * Performing test on service method
- * mapping /api/testbox
+ * Controller that performs test on service method
  * 
  * @author raman
  *
@@ -56,7 +52,10 @@ import eu.trentorise.smartcampus.openservices.entities.TestInfo;
 @Controller
 @RequestMapping(value="/api/testbox")
 public class TestboxController {
-
+	/**
+	 * {@link ResponseObject} Response object contains requested data, 
+	 * status of response and if necessary a custom error message.
+	 */
 	private ResponseObject responseObject;
 	
 //	private static final String CUSTOMHEADER_PREFIX = "customheader-";
@@ -67,10 +66,11 @@ public class TestboxController {
 //	private static final String HEADER_TARGET_URL = "targeturl";
 
 	/**
-	 * Perform test on service method
-	 * @param req
-	 * @param test
-	 * @return {@link ResponseObject} with data, status or error message.
+	 * Perform test on service method and retrieves test data based on request method of test.
+	 * @param req : {@link HttpServletRequest} request
+	 * @param test : {@link TestInfo} test information
+	 * @return {@link ResponseObject} with response data, status (OK or BAD REQUEST) and 
+	 * error message (if status is BAD REQUEST).
 	 * @throws TestBoxException
 	 */
 	@RequestMapping(method=RequestMethod.POST)
@@ -79,18 +79,22 @@ public class TestboxController {
 		
 		if ("GET".equals(test.getRequestMethod())) {
 			responseObject.setData(getJSON(test.getRequestPath(), test.getHeaders()));//return getJSON(test.getRequestPath(), test.getHeaders());
+			responseObject.setStatus(HttpServletResponse.SC_OK);
 			return responseObject;
 		}
 		if ("POST".equals(test.getRequestMethod())) {
 			responseObject.setData(postJSON(test.getRequestPath(),test.getRequestBody(), test.getHeaders()));
+			responseObject.setStatus(HttpServletResponse.SC_OK);
 			return responseObject;
 		}
 		if ("PUT".equals(test.getRequestMethod())) {
 			responseObject.setData(putJSON(test.getRequestPath(),test.getRequestBody(), test.getHeaders()));
+			responseObject.setStatus(HttpServletResponse.SC_OK);
 			return responseObject;
 		}
 		if ("GET".equals(test.getRequestMethod())) {
 			responseObject.setData(getJSON(test.getRequestPath(), test.getHeaders()));
+			responseObject.setStatus(HttpServletResponse.SC_OK);
 			return responseObject;
 		}
 		responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -140,8 +144,8 @@ public class TestboxController {
 //	}
 	
 	/**
-	 * Set up HttpClient
-	 * @return {@link HttpClient}
+	 * Set up http client
+	 * @return {@link HttpClient} instance
 	 */
 	protected static HttpClient getHttpClient() {
 		HttpClient httpClient = new DefaultHttpClient();
@@ -154,10 +158,10 @@ public class TestboxController {
 
 	/**
 	 * Set up response for POST method
-	 * @param url
-	 * @param body
-	 * @param headers
-	 * @return String response
+	 * @param url : String url that user wants to test
+	 * @param body : String body that test needs
+	 * @param headers : Map<String,String> headers that test needs
+	 * @return String response, data response if it is ok, else {@link TestBoxException} instance
 	 * @throws TestBoxException
 	 */
 	public static String postJSON(String url, String body, Map<String, String> headers) throws TestBoxException {
@@ -188,10 +192,10 @@ public class TestboxController {
 
 	/**
 	 * Set up response for PUT method
-	 * @param url
-	 * @param body
-	 * @param headers
-	 * @return String response
+	 * @param url : String url that user wants to test
+	 * @param body : String body that test needs
+	 * @param headers : Map<String,String> headers that test needs
+	 * @return String response, data response if it is ok, else {@link TestBoxException} instance
 	 * @throws TestBoxException
 	 */
 	protected static final String putJSON(String url, String body, Map<String, String> headers) throws TestBoxException {
@@ -222,9 +226,9 @@ public class TestboxController {
 
 	/**
 	 * Set up response for DELETE method
-	 * @param url
-	 * @param headers
-	 * @return String response
+	 * @param url : String url that user wants to test
+	 * @param headers : Map<String,String> headers that test needs
+	 * @return String response, data response if it is ok, else {@link TestBoxException} instance
 	 * @throws TestBoxException
 	 */
 	protected static final String deleteJSON(String url, Map<String, String> headers) throws TestBoxException {
@@ -252,9 +256,9 @@ public class TestboxController {
 
 	/**
 	 * Set up response for GET method
-	 * @param url
-	 * @param headers
-	 * @return String response
+	 * @param url : String url that user wants to test
+	 * @param headers : Map<String,String> headers that test needs
+	 * @return String response, data response if it is ok, else {@link TestBoxException} instance
 	 * @throws TestBoxException
 	 */
 	public static String getJSON(String url, Map<String, String> headers) throws TestBoxException {

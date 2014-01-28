@@ -15,7 +15,6 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.controllers;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
@@ -24,7 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,13 +36,9 @@ import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
 import eu.trentorise.smartcampus.openservices.managers.OrganizationManager;
 import eu.trentorise.smartcampus.openservices.support.ApplicationMailer;
-import eu.trentorise.smartcampus.openservices.support.ListOrganization;
-import eu.trentorise.smartcampus.openservices.support.ListServiceHistory;
 
 /**
- * Organization Controller interfaces with dao
- * Retrieve, add, modify, delete organization data
- * mapping /api/org
+ * Controller that retrieves, adds, modifies and deletes organization data for authenticated users.
  * 
  * @author Giulia Canobbio
  *
@@ -54,7 +48,14 @@ import eu.trentorise.smartcampus.openservices.support.ListServiceHistory;
 public class OrganizationController {
 
 	private static final Logger logger = LoggerFactory.getLogger(OrganizationController.class);
+	/**
+	 * {@link ResponseObject} Response object contains requested data, 
+	 * status of response and if necessary a custom error message.
+	 */
 	private ResponseObject responseObject;
+	/**
+	 * Instance of {@link OrganizationManager} to retrieve data using Dao classes.
+	 */
 	@Autowired
 	private OrganizationManager organizationManager;
 	
@@ -63,14 +64,15 @@ public class OrganizationController {
 	 */
 
 	/**
-	 * Retrieve data of an organization
-	 * @param org_id
-	 * @return {@link ResponseObject} with organization data, status or error message.
-	 * @throws IOException 
+	 * Retrieves data of organization searching by its id.
+	 * @param org_id : int organization id
+	 * @param response : {@link HttpServletResponse} which returns status of response OK or NOT FOUND
+	 * @return {@link ResponseObject} with organization data, status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/{org_id}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
-	public ResponseObject orgById(@PathVariable int org_id, HttpServletResponse response) throws IOException {
+	public ResponseObject orgById(@PathVariable int org_id, HttpServletResponse response){
 		logger.info("-- Retrieved organization -- ");
 		Organization org = organizationManager.getOrganizationById(org_id);
 		responseObject = new ResponseObject();
@@ -88,19 +90,17 @@ public class OrganizationController {
 	
 	//User: manage my data - org
 	/**
-	 * Get my organization data
-	 * @param user_id
-	 * @return {@link ResponseObject} with organization data, status or error message.
-	 * @throws IOException 
+	 * Retrieves organization data of user having role organization owner.
+	 * @param response : {@link HttpServletResponse} which returns status of response OK or NOT FOUND
+	 * @return {@link ResponseObject} with list of organization data, status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/my", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
-	public ResponseObject orgUser(HttpServletResponse response) throws IOException{
+	public ResponseObject orgUser(HttpServletResponse response){
 		logger.info("-- View my organization --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		//ListOrganization lorg = new ListOrganization();
 		List<Organization> orgs = organizationManager.getUserOrganizations(username);
-		//lorg.setOrgs(orgs);
 		responseObject = new ResponseObject();
 		if(orgs==null || orgs.size()==0){
 			responseObject.setError("No organization for this user");
@@ -116,17 +116,16 @@ public class OrganizationController {
 	
 	//Organization - View organization data
 	/**
-	 * Show organizations
-	 * @return {@link ResponseObject} with organization data, status or error message.
-	 * @throws IOException 
+	 * Retrieves all organization data.
+	 * @param response : {@link HttpServletResponse} which returns status of response OK or NOT FOUND
+	 * @return {@link ResponseObject} with list of organization data, status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
-	public ResponseObject getOrganizations(HttpServletResponse response) throws IOException{
+	public ResponseObject getOrganizations(HttpServletResponse response){
 		logger.info("-- View organization list --");
-		//ListOrganization lorgs = new ListOrganization();
 		List<Organization> orgs = organizationManager.getOrganizations();
-		//lorgs.setOrgs(orgs);
 		responseObject = new ResponseObject();
 		if(orgs==null || orgs.size()==0){
 			responseObject.setError("No organization in database");
@@ -142,19 +141,18 @@ public class OrganizationController {
 	
 	//Organization - View organization activity history
 	/**
-	 * View organization history
-	 * @param org_id
-	 * @return {@link ResponseObject} with service history data, status or error message.
-	 * @throws IOException 
+	 * Retrieves history of services belonging to an organization.
+	 * Search by organization id.
+	 * @param org_id : int organization id
+	 * @param response : {@link HttpServletResponse} which returns status of response OK or NOT FOUND
+	 * @return {@link ResponseObject} with list of service history data, status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/activity/history/{org_id}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
-	public ResponseObject getOrgActivityHistory(@PathVariable int org_id, HttpServletResponse response) throws IOException{
+	public ResponseObject getOrgActivityHistory(@PathVariable int org_id, HttpServletResponse response){
 		logger.info("-- View organization activity history --");
-		//history of service in this organization
-		//ListServiceHistory lsh = new ListServiceHistory();
 		List<ServiceHistory> history = organizationManager.getHistory(org_id);
-		//lsh.setLserviceh(history);
 		responseObject = new ResponseObject();
 		if(history==null || history.size()==0){
 			responseObject.setError("No history found for this organization");
@@ -170,10 +168,11 @@ public class OrganizationController {
 	
 	//Organization - Manage organization data: create organization
 	/**
-	 * Add organization
-	 * @param org
-	 * @return {@link ResponseObject} with status or error message.
-	 * @throws IOException 
+	 * Add a new Organization in database.
+	 * In this way, user becomes organization owner of this organization.
+	 * @param org : {@link Organization} organization object.
+	 * @param response : {@link HttpServletResponse} which returns status of response CREATED or BAD REQUEST
+	 * @return {@link ResponseObject} with status (CREATED or BAD REQUEST) and error message (if status is BAD REQUEST).
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
@@ -197,11 +196,13 @@ public class OrganizationController {
 	
 	//Organization - Manage Organization data: delete organization (if services are published then it delete them)
 	/**
-	 * Delete an organization
-	 * User must be organization owner
-	 * @param org
-	 * @return {@link ResponseObject} with status or error message.
-	 * @throws IOException 
+	 * User can delete an organization from database, only if he/she has role 'organization owner' 
+	 * for this organization.
+	 * Delete operation causes delete of all services, methods and service histories which belogns 
+	 * to this organization.
+	 * @param id : int organization id
+	 * @param response : {@link HttpServletResponse} which returns status of response OK or UNAUTHORIZED
+	 * @return {@link ResponseObject} with status (OK or UNAUTHORIZED) and error message (if status is UNAUTHORIZED).
 	 */
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE) 
 	@ResponseBody
@@ -231,10 +232,12 @@ public class OrganizationController {
 	
 	//Organization - Manage organization data: modify organization
 	/**
-	 * Modify organization data
-	 * @param org
-	 * @return {@link ResponseObject} status or error message.
-	 * @throws IOException 
+	 * Modify organization data in database. User must have role 'organization owner' for this organization.
+	 * He/she can modify only the following field: description, category and contacts.
+	 * @param org : {@link Organization} organization object
+	 * @param response : {@link HttpServletResponse} which returns status of response OK, BAD REQUEST or UNAUTHORIZED
+	 * @return {@link ResponseObject} with status (OK or UNAUTHORIZED) and 
+	 * error message (if status is BAD REQUEST or UNAUTHORIZED).
 	 */
 	@RequestMapping(value = "/modify", method = RequestMethod.PUT, consumes="application/json") 
 	@ResponseBody
@@ -265,11 +268,13 @@ public class OrganizationController {
 	//Organization - Manage organization data: add/remove organization owner (send a link)
 	//Link: rest web service address/key
 	/**
-	 * Add organization owner to an organization
-	 * User who invites another user must be an organization owner
-	 * @param org_id
-	 * @param email
-	 * @return {@link ResponseObject} with status or error message.
+	 * Add organization owner to an organization.
+	 * User who send invitation must be an organization owner.
+	 * @param org_id : int organization id
+	 * @param role : String role
+	 * @param email : String new user email
+	 * @return {@link ResponseObject} with status (OK or UNAUTHORIZED) and 
+	 * error message (if status is UNAUTHORIZED).
 	 */
 	@RequestMapping(value = "/manage/owner/{org_id}/{role}/{email}", method = RequestMethod.POST)
 	@ResponseBody
@@ -309,10 +314,15 @@ public class OrganizationController {
 	}
 	
 	/**
-	 * Add new role to user having the invitation link
-	 * @param key
-	 * @return {@link ResponseObject} with status or error message.
-	 * @throws IOException 
+	 * Complete registration of user as 'organization owner' for a specific organization.
+	 * Invited user must accept sending key, received by email, to this rest service.
+	 * Key is deleted from database and user has role 'organizaiton owner'.
+	 * If user is not invited one or there are problems with database, then an error is sent.
+	 * @param key : String key, a private key saved in database
+	 * @param response : {@link HttpServletResponse} which returns status of response OK, SERVICE UNAVAILABLE,
+	 * NOT FOUND or UNAUTHORIZED
+	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE, NOT FOUND or UNAUTHORIZED) and 
+	 * error message (if status is SERVICE UNAVAILABLE, NOT FOUND or UNAUTHORIZED).
 	 */
 	@RequestMapping(value = "/manage/owner/add/{key}", method = RequestMethod.POST)
 	@ResponseBody
@@ -341,12 +351,14 @@ public class OrganizationController {
 	}
 	
 	/**
-	 * Delete owner from an organization
-	 * User who deletes other owners must be organizaton owner
-	 * @param org_id
-	 * @param user_id
-	 * @return {@link ResponseObject} with sstatus or error message.
-	 * @throws IOException 
+	 * Delete owner from an organization.
+	 * User who deletes other owners must be organization owner.
+	 * @param org_id : int organization id
+	 * @param user_id : int user id
+	 * @param response : : {@link HttpServletResponse} which returns status of response OK, SERVICE UNAVAILABLE 
+	 * or UNAUTHORIZED
+	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE or UNAUTHORIZED) and 
+	 * error message (if status is SERVICE UNAVAILABLE or UNAUTHORIZED).
 	 */
 	@RequestMapping(value = "/manage/owner/delete/{org_id},{user_id}", method = RequestMethod.POST)
 	@ResponseBody

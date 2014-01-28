@@ -31,12 +31,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import eu.trentorise.smartcampus.openservices.entities.Category;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.managers.CategoryManager;
-import eu.trentorise.smartcampus.openservices.support.ListCategory;
 
 /**
- * Category Controller
- * Retrieve, add, delete category data
- * mapping /api/category
+ * A controller which retrieves category data for all users and 
+ * adds, deletes category data for admin user. 
  * 
  * @author raman
  *
@@ -44,17 +42,24 @@ import eu.trentorise.smartcampus.openservices.support.ListCategory;
 @Controller
 @RequestMapping(value="/api/category")
 public class CategoryController {
-
-	private ResponseObject responseObject;
 	
+	/**
+	 * {@link ResponseObject} Response object contains requested data, 
+	 * status of response and if necessary a custom error message.
+	 */
+	private ResponseObject responseObject;
+	/**
+	 * Instance of {@link CategoryManager} to retrieve data using Dao classes.
+	 */
 	@Autowired
 	private CategoryManager categoryManager;
 	
 	/**
 	 * Retrieve category data searching by category id
-	 * @param category
-	 * @param response
-	 * @return {@link ResponseObject} with category data, status or error message.
+	 * @param category : int category id
+	 * @param response : {@link HttpServletResponse} which returns status of response OK or NOT FOUND
+	 * @return {@link ResponseObject} with category data, status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value="/{category}", method=RequestMethod.GET)
 	public @ResponseBody ResponseObject getCategoryById(@PathVariable int category, HttpServletResponse response) {
@@ -72,9 +77,10 @@ public class CategoryController {
 	}
 	
 	/**
-	 * Retrieve all categories data
-	 * @param response
-	 * @return {@link ResponseObject} with category data, status or error message.
+	 * Retrieve all categories data.
+	 * @param response : {@link HttpServletResponse} which returns status of response OK or NOT FOUND
+	 * @return {@link ResponseObject} with category data, status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(method=RequestMethod.GET)
 	public @ResponseBody ResponseObject getCategories(HttpServletResponse response) {
@@ -92,10 +98,11 @@ public class CategoryController {
 	}
 
 	/**
-	 * Add a new category to database
-	 * @param category
-	 * @param response
-	 * @return {@link ResponseObject} with category data, status or error message.
+	 * Add a new category to database.
+	 * @param category : {@link Category} object
+	 * @param response : {@link HttpServletResponse} which returns status of response OK or NOT FOUND
+	 * @return {@link ResponseObject} with new added category data, status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value="/add", method=RequestMethod.POST, consumes="application/json")
 	public @ResponseBody ResponseObject createCategory(@RequestBody Category category, HttpServletResponse response) {
@@ -113,10 +120,11 @@ public class CategoryController {
 	}
 	
 	/**
-	 * Modify a category
-	 * @param category
-	 * @param response
-	 * @return {@link ResponseObject} with category data, status or error message.
+	 * Modify a category.
+	 * @param category : {@link Category} object
+	 * @param response : {@link HttpServletResponse} which returns status of response OK or NOT FOUND
+	 * @return {@link ResponseObject} with modified category data, status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value="/modify", method=RequestMethod.PUT, consumes="application/json")
 	public @ResponseBody ResponseObject modifyCategory(@RequestBody Category category, HttpServletResponse response) {
@@ -134,10 +142,11 @@ public class CategoryController {
 	}
 
 	/**
-	 * Delete a category
-	 * @param category
-	 * @param response
-	 * @return {@link ResponseObject} with category data, status or error message.
+	 * Delete a category by its id.
+	 * @param category : int category id
+	 * @param response : {@link HttpServletResponse} which returns status of response OK or NOT FOUND
+	 * @return {@link ResponseObject} with true/false value result of delete operation, status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value="/delete/{id}", method=RequestMethod.DELETE)
 	public ResponseObject deleteCategory(@PathVariable int category, HttpServletResponse response) {

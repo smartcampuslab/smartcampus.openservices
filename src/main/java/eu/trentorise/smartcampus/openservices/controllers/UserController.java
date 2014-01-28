@@ -15,8 +15,7 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.controllers;
 
-import java.io.IOException;
-
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
@@ -26,9 +25,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import com.sun.mail.iap.Response;
-
-import eu.trentorise.smartcampus.openservices.dao.UserDao;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.entities.User;
 import eu.trentorise.smartcampus.openservices.managers.UserManager;
@@ -36,10 +32,8 @@ import eu.trentorise.smartcampus.openservices.support.ApplicationMailer;
 import eu.trentorise.smartcampus.openservices.support.EmailValidator;
 
 /**
- * 
- * User Controller
- * Restful web services for user data
- * mapping /api/user
+ * Controller that retrieves and modify user data for logged user and
+ * allows enable and disable operations for admin user.
  * 
  * @author Giulia Canobbio
  *
@@ -49,7 +43,14 @@ import eu.trentorise.smartcampus.openservices.support.EmailValidator;
 public class UserController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+	/**
+	 * {@link ResponseObject} Response object contains requested data, 
+	 * status of response and if necessary a custom error message.
+	 */
 	private ResponseObject responseObject;
+	/**
+	 * Instance of {@link UserManager} to retrieve data using Dao classes.
+	 */
 	@Autowired
 	private UserManager userManager;
 	
@@ -58,11 +59,13 @@ public class UserController {
 	 */
 	
 	/**
-	 * Retrieve User data by user id
-	 * user id is a primary key
-	 * @param id
-	 * @param response
-	 * @return {@link ResponseObject} with user data, status or error message.
+	 * Retrieve User data by user id.
+	 * User id is a primary key.
+	 * This operation is for admin user.
+	 * @param id : int user id
+	 * @param response : {@link HttpServletResponse} which returns status of response OK or NOT FOUND
+	 * @return {@link ResponseObject} with user data, status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
@@ -83,11 +86,11 @@ public class UserController {
 	}
 	
 	/**
-	 * Retrieve User data by username
-	 * username is unique
-	 * @param username
-	 * @param response
-	 * @return {@link ResponseObject} with user data, status or error message. 
+	 * Retrieves user data for logged user.
+	 * This operation is for logged user.
+	 * @param response {@link HttpServletResponse} which returns status of response OK or SERVICE UNAVAILABLE
+	 * @return {@link ResponseObject} with user data, status (OK or SERVICE UNAVAILABLE) and 
+	 * error message (if status is SERVICE UNAVAILABLE).
 	 */
 	@RequestMapping(value = "/my", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
@@ -111,9 +114,11 @@ public class UserController {
 	 * Get in input a User data and add it to User table.
 	 * First check if username is already in use.
 	 * Return saved user.
-	 * @param user
-	 * @param response
-	 * @return {@link ResponseObject} with status or error message.
+	 * @param user : {@link User} instance
+	 * @param response : {@link HttpServletResponse} which returns status of response CREATED, FORBIDDEN or 
+	 * SERVICE UNAVAILABLE
+	 * @return {@link ResponseObject} with new user data, status (CREATED, FORBIDDEN or SERVICE UNAVAILABLE) and 
+	 * error message (if status is FORBIDDEN or SERVICE UNAVAILABLE).
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
@@ -153,41 +158,77 @@ public class UserController {
 	
 	/**
 	 * Verify user email, sending an email with a link to 
-	 * a rest service which enable user's account
-	 * @param user
-	 * @return {@link ResponseObject} with status or error message.
+	 * a rest service which enable user's account.
+	 * @param user : {@link User} instance that wants to enable account.
+	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE or UNAUTHORIZED) and 
+	 * error message (if status is SERIVCE UNAVAILABLE or UNAUTHORIZED).
 	 */
 	@RequestMapping(value = "/add/verify", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
 	public ResponseObject verifyEmail(@RequestBody User user){
-		//TODO
 		logger.info("-- User verify email --");
-		ApplicationMailer mailer = new ApplicationMailer();
-		mailer.sendMail(user.getEmail(), "[OpenService] Welcome!", "For activating your account goes to following link: "
-				+ "<choseLink>");
 		responseObject = new ResponseObject();
+		try {
+			String s = userManager.addKeyVerifyEmail(user.getUsername());
+			if(s!=null){
+			// return link
+			String link = "<host>/api/user/add/enable/"+user.getUsername()+","+ s;
+			// send it via email to user
+			ApplicationMailer mailer = new ApplicationMailer();
+			mailer.sendMail(user.getEmail(),
+					"[OpenService] Welcome "+ user.getUsername(), 
+					"Welcome "+user.getUsername()+"! For activating your account goes to following link: "+link);
+			responseObject.setStatus(HttpServletResponse.SC_OK);
+			}
+			else{
+				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				responseObject.setError("Verification of user email not successful - Service Unavailable.");
+			}
+		} catch (SecurityException s) {
+			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			responseObject.setError("Verification of user email not successful - Your account is already enabled.");
+		}
 		responseObject.setStatus(HttpServletResponse.SC_OK);
 		return responseObject;
 	}
 	
 	/**
-	 * Enable user account
-	 * @return {@link ResponseObject} with status or error message.
+	 * Enables user account verifying username and key.
+	 * @param username : String username, user who wants to enable his/her account
+	 * @param key : String key sent by email to user
+	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE or NOT FOUND) and 
+	 * error message (if status is SERIVCE UNAVAILABLE or NOT FOUND).
 	 */
-	@RequestMapping(value = "/add/enable", method = RequestMethod.POST, consumes="application/json") 
+	@RequestMapping(value = "/add/enable/{username},{key}", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
-	public ResponseObject enableUser(){
+	public ResponseObject enableUser(@PathVariable String username, @PathVariable String key){
 		logger.info("-- User enable --");
 		responseObject = new ResponseObject();
+		try{
+			User enabledUser = userManager.enableUserAfterVerification(username, key);
+			if(enabledUser!=null){
+				responseObject.setData(enabledUser);
+				responseObject.setStatus(HttpServletResponse.SC_OK);
+			}else{
+				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				responseObject.setError("Connection problem with database.");
+			}
+		}catch(EntityNotFoundException e){
+			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			responseObject.setError("Wrong key.");
+		}
 		//TODO
 		return responseObject;
 	}
 	
 	/**
-	 * Modify user account and update data in db
-	 * @param user
-	 * @param response
-	 * @return {@link ResponseObject} with modified user data, status or error message.
+	 * Modify user account and update data in db.
+	 * This operation is only for logged user.
+	 * @param user : {@link User} instance
+	 * @param response : {@link HttpServletResponse} which returns status of response OK or 
+	 * SERVICE UNAVAILABLE
+	 * @return {@link ResponseObject} with modified user data, status (OK or SERVICE UNAVAILABLE) and 
+	 * error message (if status is SERVICE UNAVAILABLE).
 	 */
 	@RequestMapping(value = "/modify", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
@@ -212,9 +253,12 @@ public class UserController {
 	 * Disabled a user by his/her username.
 	 * Therefore user cannot login.
 	 * Then retrieve disabled user.
-	 * @param username
-	 * @param response
-	 * @return {@link ResponseObject} with disabled user data, status or error message.
+	 * This operation is only for admin user.
+	 * @param username : String username of user that admin wants to disable
+	 * @param response : {@link HttpServletResponse} which returns status of response OK or 
+	 * SERVICE UNAVAILABLE
+	 * @return {@link ResponseObject} with disabled user data, status (OK or SERVICE UNAVAILABLE) and 
+	 * error message (if status is SERVICE UNAVAILABLE).
 	 */
 	@RequestMapping(value = "/disable/{username}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody

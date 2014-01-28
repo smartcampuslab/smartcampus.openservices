@@ -30,9 +30,10 @@ import eu.trentorise.smartcampus.openservices.managers.CatalogManager;
 import eu.trentorise.smartcampus.openservices.support.*;
 
 /**
- * Catalog controller
- * Restful web services that retrieves data for all users
- * mapping on /api/catalog
+ * Catalog, a restful web services that retrieves data about Organization or Services 
+ * for all logged and not logged users.
+ * 
+ * A visible service is a deprecated or published service.
  * 
  * @author Giulia Canobbio
  *
@@ -42,15 +43,23 @@ import eu.trentorise.smartcampus.openservices.support.*;
 public class CatalogController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ServiceController.class);
+	/**
+	 * {@link ResponseObject} Response object contains requested data, 
+	 * status of response and if necessary a custom error message.
+	 */
 	private ResponseObject responseObject;
+	/**
+	 * Instance of {@link CatalogManager} to retrieve data using Dao classes.
+	 */
 	@Autowired
 	private CatalogManager catalogManager;
 	
 	
 	/**
-	 * Show all services in catalog which are published.
-	 * @param response
-	 * @return {@link ResponseObject} with services data, status or error message.
+	 * Show all services in catalog which are published or deprecated.
+	 * @param response : {@link HttpServletResponse} which returns status of response OK or NOT FOUND
+	 * @return {@link ResponseObject} with list of published and deprecated services data, status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value="/service", method = RequestMethod.GET, produces="application/json")
 	@ResponseBody
@@ -73,9 +82,12 @@ public class CatalogController {
 	}
 	
 	/**
-	 * Get data of a service
-	 * @param service_id
-	 * @return {@link ResponseObject} with services data, status or error message.
+	 * Retrieve data of a specific service, which must be published or deprecated.
+	 * Search is done by service id.
+	 * @param service_id : int id of published or deprecated service.
+	 * @param response : {@link HttpServletResponse} which is needed for status of response (OK or NOT FOUND)
+	 * @return {@link ResponseObject} with services data, status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value="/service/{service_id}", method = RequestMethod.GET, produces="application/json")
 	@ResponseBody
@@ -96,10 +108,12 @@ public class CatalogController {
 	}
 	
 	/**
-	 * Return methods of a service.
-	 * Search by service id
-	 * @param service_id
-	 * @return {@link ResponseObject} with services method data, status or error message.
+	 * Retrieve methods data of a specific published or deprecated service.
+	 * Search by service id.
+	 * @param service_id : int id of published or deprecated service.
+	 * @param response : {@link HttpServletResponse} which is needed for status of response (OK or NOT FOUND)
+	 * @return {@link ResponseObject} with services method data, status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value="/service/methods/{service_id}", method = RequestMethod.GET, produces="application/json")
 	@ResponseBody
@@ -120,10 +134,12 @@ public class CatalogController {
 	}
 	
 	/**
-	 * Return history of a service.
+	 * Retrieve data history of a specific service.
 	 * Search by service id
-	 * @param service_id
-	 * @return {@link ResponseObject} with services history data, status or error message.
+	 * @param service_id : int id of published or deprecated service.
+	 * @param response : {@link HttpServletResponse} which is needed for status of response (OK or NOT FOUND)
+	 * @return {@link ResponseObject} with services history data, status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value="/service/history/{service_id}", method = RequestMethod.GET, produces="application/json")
 	@ResponseBody
@@ -144,10 +160,12 @@ public class CatalogController {
 	}
 	
 	/**
-	 * Simple search in service catalog
-	 * Catalog shows publish services
-	 * @param token
-	 * @return {@link ResponseObject} with services data, status or error message.
+	 * Simple search in service catalog.
+	 * Search is done comparing a token with service name.
+	 * @param token : String token compared with service name
+	 * @param response : {@link HttpServletResponse} which is needed for status of response (OK or NOT FOUND)
+	 * @return {@link ResponseObject} with list of service data, status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/service/search/{token}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
@@ -168,9 +186,12 @@ public class CatalogController {
 	}
 	
 	/**
-	 * Browse service in catalog by category
-	 * @param category
-	 * @return {@link ResponseObject} with services data, status or error message.
+	 * Browse service in catalog by category.
+	 * Every category has its own id and search is done by category id.
+	 * @param category : int category id
+	 * @param response : {@link HttpServletResponse} which is needed for status of response (OK or NOT FOUND)
+	 * @return {@link ResponseObject} with list of service data, status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/service/browse/category/{category}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
@@ -191,9 +212,12 @@ public class CatalogController {
 	}
 
 	/**
-	 * Browse service in catalog by org
-	 * @param category
-	 * @return {@link ResponseObject} with services data, status or error message.
+	 * Browse service in catalog by organization.
+	 * Search is done by organization id.
+	 * @param org : int organization id
+	 * @param response : {@link HttpServletResponse} which is needed for status of response (OK or NOT FOUND)
+	 * @return {@link ResponseObject} with list of service data, status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/service/browse/org/{org}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
@@ -214,9 +238,11 @@ public class CatalogController {
 	}
 
 	/**
-	 * Browse service in catalog by tags
-	 * @param tags
-	 * @return {@link ResponseObject} with services data, status or error message.
+	 * Browse service in catalog by tags.
+	 * @param tags : String tags
+	 * @param response : {@link HttpServletResponse} which is needed for status of response (OK or NOT FOUND)
+	 * @return {@link ResponseObject} with list of service data, status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/service/browse/tags/{tags}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
@@ -244,8 +270,10 @@ public class CatalogController {
 	}
 	
 	/**
-	 * Get all organization
-	 * @return {@link ResponseObject} with organization data, status or error message.
+	 * Retrieve all organization data for users.
+	 * @param response : {@link HttpServletResponse} which is needed for status of response (OK or NOT FOUND)
+	 * @return {@link ResponseObject} with list of organization data, status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value="/org", method = RequestMethod.GET, produces="application/json")
 	@ResponseBody
@@ -266,8 +294,12 @@ public class CatalogController {
 	}
 	
 	/**
-	 * Get organization
-	 * @return {@link ResponseObject} with organization data, status or error message.
+	 * Retrieve data of a specific organization.
+	 * Search by its id.
+	 * @param id : int organization id
+	 * @param response : {@link HttpServletResponse} which is needed for status of response (OK or NOT FOUND)
+	 * @return {@link ResponseObject} with organization data, status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value="/org/{id}", method = RequestMethod.GET, produces="application/json")
 	@ResponseBody
@@ -289,9 +321,12 @@ public class CatalogController {
 	
 	
 	/**
-	 * Simple search in organization catalog
-	 * @param token
-	 * @return {@link ResponseObject} with organization data, status or error message.
+	 * Simple search in organization catalog.
+	 * Search is done comparing token with organization name.
+	 * @param token : String token
+	 * @param response : {@link HttpServletResponse} which is needed for status of response (OK or NOT FOUND)
+	 * @return {@link ResponseObject} with list of organization data, status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/org/search/{token}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
@@ -312,10 +347,12 @@ public class CatalogController {
 	}
 	
 	/**
-	 * Browse organization by category
-	 * @param category: path variable
-	 * @param response
-	 * @return {@link ResponseObject} with organization data, status or error message.
+	 * Browse organization by category.
+	 * Every category has its own id and search is done by category id.
+	 * @param category : path variable
+	 * @param response : {@link HttpServletResponse} which is needed for status of response (OK or NOT FOUND)
+	 * @return {@link ResponseObject} with list of organization data, status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/org/browse/category/{category}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
@@ -337,9 +374,10 @@ public class CatalogController {
 	//browse catalog using filters (by geography) - when add address of organization - TODO
 	
 	/**
-	 * Browse services divided by category
-	 * @param response
-	 * @return {@link ResponseObject} with services category data, status or error message.
+	 * Browse services group by category.
+	 * @param response : {@link HttpServletResponse} which is needed for status of response (OK or NOT FOUND)
+	 * @return {@link ResponseObject} with list of service and category data, status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/service/browse/category", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
