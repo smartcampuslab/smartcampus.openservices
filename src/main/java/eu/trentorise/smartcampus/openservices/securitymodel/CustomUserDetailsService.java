@@ -51,7 +51,7 @@ public class CustomUserDetailsService implements UserDetailsService{
 
 	/**
 	 * Check if user exists in database and if username and password are correct,
-	 * return a {@UserDetails} instance.
+	 * return a {@link UserDetails} instance.
 	 */
 	@Override
 	public UserDetails loadUserByUsername(String arg0)

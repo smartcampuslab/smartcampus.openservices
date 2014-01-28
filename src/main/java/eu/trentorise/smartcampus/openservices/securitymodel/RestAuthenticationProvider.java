@@ -50,7 +50,7 @@ public class RestAuthenticationProvider extends AbstractUserDetailsAuthenticatio
 	}
 	
 	/**
-	 * Retrieve user data and return a {@UserDetails} instance
+	 * Retrieve user data and return a {@link UserDetails} instance
 	 */
 	@Override
 	protected final UserDetails retrieveUser(String name, UsernamePasswordAuthenticationToken auth){
