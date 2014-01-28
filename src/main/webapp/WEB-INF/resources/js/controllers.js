@@ -220,21 +220,13 @@ app.controller('newMethodCtrl', ['$scope', '$http', '$location', '$routeParams',
 app.controller('viewMethodCtrl', ['$scope', '$http', '$location', '$routeParams', 'Service', 
   function ($scope, $http, $location, $routeParams, Service) {
 
-    Service.getMethods({id: $routeParams.id},function(data){
-    	//will fix this. single method should be returned instead of array
-    	console.log(data)
-  		$scope.methods = data.data;
-  		for (var i = 0; i < $scope.methods.length; i++) {
-  			if ($routeParams.method == $scope.methods[i].id) {
-  				$scope.method = $scope.methods[i];
-  				$scope.service = {id:$scope.method.serviceId};
-  			}
-  		}
+    Service.getMethod({id: $routeParams.id},function(data){
+  		$scope.method = data.data;
      });
     
     $scope.deleteTest = function(i) {
        	Service.deleteTest({id:$scope.method.id, pos:i},$scope.test,function(){
-       		$location.path('profile/services/'+$scope.method.serviceId+'/methods/'+$scope.method.id+'/view');
+       		$scope.method.testboxProperties.tests.splice(i, 1);
        	});
     };
   }

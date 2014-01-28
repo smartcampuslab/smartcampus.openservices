@@ -217,6 +217,10 @@ services.factory('Service', ['$resource',
         method: 'GET',
         url: 'api/service/view/method/:id',
       },
+      getMethod: {
+        method: 'GET',
+        url: 'api/service/method/:id',
+      },
       getHistory: {
         method: 'GET',
         url: 'api/service/view/history/:id',
