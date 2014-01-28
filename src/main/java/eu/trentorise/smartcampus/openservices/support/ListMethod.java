@@ -30,7 +30,7 @@ public class ListMethod {
 	private List<Method> methods;
 	
 	/**
-	 * New {@ListMethod} instance
+	 * New {@link ListMethod} instance
 	 */
 	public ListMethod(){
 		

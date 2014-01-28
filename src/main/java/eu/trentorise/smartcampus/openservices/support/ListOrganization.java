@@ -29,7 +29,7 @@ public class ListOrganization{
 	private List<Organization> orgs;
 	
 	/**
-	 * New {@ListOrganization} instance
+	 * New {@link ListOrganization} instance
 	 */
 	public ListOrganization(){
 		

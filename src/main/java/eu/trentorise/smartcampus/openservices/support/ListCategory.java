@@ -29,7 +29,7 @@ public class ListCategory{
 	private List<Category> categories;
 	
 	/**
-	 * New {@ListCategory} instance
+	 * New {@link ListCategory} instance
 	 */
 	public ListCategory(){
 		

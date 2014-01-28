@@ -34,7 +34,7 @@ public class EmailValidator {
 			"[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 	
 	/**
-	 * New instance of {@EmailValidator}
+	 * New instance of {@link EmailValidator}
 	 */
 	public EmailValidator(){
 		pattern = Pattern.compile(EMAIL_PATTERN);

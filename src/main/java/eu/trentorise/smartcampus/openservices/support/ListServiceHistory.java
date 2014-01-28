@@ -30,7 +30,7 @@ public class ListServiceHistory {
 	private List<ServiceHistory> lserviceh;
 	
 	/**
-	 * New {@ListServiceHistory} instance
+	 * New {@link ListServiceHistory} instance
 	 */
 	public ListServiceHistory(){
 	}

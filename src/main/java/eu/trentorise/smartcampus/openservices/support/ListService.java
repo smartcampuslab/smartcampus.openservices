@@ -29,7 +29,7 @@ public class ListService{
 	private List<Service> services;
 	
 	/**
-	 * New {@ListService} instance
+	 * New {@link ListService} instance
 	 */
 	public ListService(){
 		
