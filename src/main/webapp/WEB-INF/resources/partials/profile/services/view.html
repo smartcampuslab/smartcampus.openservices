@@ -10,34 +10,34 @@
             <h4>Info</h4>
             <hr>
             <ul>
-                <li>organization: {{org.name}}</li>
-                <li>tags: {{service.tags}}</li>
-                <li>category: {{category.name}} </li>
-                <li>documentation: <a ng-href="{{service.documentation}}">{{service.documentation}}</a></li>
-                <li>license: {{service.license}}</li>
-                <li>version: {{service.version}}</li>
-                <li>expiration: {{service.expiration}}</li>
+                <li>organization: <strong><strong>{{org.name}}</strong></strong></li>
+                <li>tags: <strong>{{service.tags}}</strong></li>
+                <li>category: <strong>{{category.name}}</strong> </li>
+                <li>documentation: <a ng-href="<strong>{{service.documentation}}</strong>"><strong>{{service.documentation}}</strong></a></li>
+                <li>license: <strong>{{service.license}}</strong></li>
+                <li>version: <strong>{{service.version}}</strong></li>
+                <li>expiration: <strong>{{service.expiration}}</strong></li>
             </ul>
         </div>
         <div class="col-md-2">
             <h4>Access information</h4>
             <hr>
             <ul>
-                <li>access policies: {{service.accessInformation.accessPolicies}}</li>
-                <li>testing endpoint: {{service.accessInformation.productionEndpoint}}</li>
-                <li>production endpoint: {{service.accessInformation.productionEndpoint}}</li>
-                <li>formats: {{service.accessInformation.formats}}</li>
-                <li>protocols: {{service.accessInformation.protocols}}</li>
-                <li>authentication: {{service.accessInformation.authentication.accessProtocol}}</li>
+                <li>access policies: <strong>{{service.accessInformation.accessPolicies}}</strong></li>
+                <li>testing endpoint: <strong>{{service.accessInformation.productionEndpoint}}</strong></li>
+                <li>production endpoint: <strong>{{service.accessInformation.productionEndpoint}}</strong></li>
+                <li>formats: <strong>{{service.accessInformation.formats}}</strong></li>
+                <li>protocols: <strong>{{service.accessInformation.protocols}}</strong></li>
+                <li>authentication: <strong>{{service.accessInformation.authentication.accessProtocol}}</strong></li>
             </ul>
         </div>
         <div class="col-md-2">
             <h4>Implementation</h4>
             <hr>
             <ul>
-                <li>execution environment: {{service.implementation.executionEnvironment}}</li>
-                <li>hosting: {{service.implementation.hosting}}</li>
-                <li>source: <a ng-href="{{service.implementation.sourceCode}}">{{service.implementation.sourceCode}}</a></li>
+                <li>execution environment: <strong>{{service.implementation.executionEnvironment}}</strong></li>
+                <li>hosting: <strong>{{service.implementation.hosting}}</strong></li>
+                <li>source: <a ng-href="{{service.implementation.sourceCode}}"><strong>{{service.implementation.sourceCode}}</strong></a></li>
             </ul>
         </div>
     </div>
@@ -51,9 +51,9 @@
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
 			<div class="animated fadeIn">
-				<div class="panel panel-default">
-				  <div class="panel-heading"><h4 class="panel-title">Methods</h4></div>
-				  <div ng-repeat="method in methods" class="panel-body">
+				<h4>Methods</h4>
+				<div ng-repeat="method in methods" class="panel panel-default">
+				  <div class="panel-body">
 				    {{method.name}}
 					<button type="button" class="pull-right btn btn-default btn-sm" ng-click="deleteMethod($index)"><i class="fa fa-trash-o"></i></button>
 					<a href="profile/services/{{service.id}}/methods/{{method.id}}/view" class="pull-right btn btn-default btn-sm orgbtn"><i class="fa fa-edit"></i></a>
@@ -64,7 +64,7 @@
     </div>
     <div class="row">
 		<div class="col-md-1 col-md-offset-8">
-			<a href="profile/services/{{service.id}}/methods/new" class="btn btn-info btn-block">Add</a>
+			<a href="profile/services/{{service.id}}/methods/new" class="btn btn-info btn-block">Add Method</a>
 		</div>
 	</div>
 </div>
