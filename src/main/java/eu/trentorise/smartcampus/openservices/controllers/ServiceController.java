@@ -458,6 +458,26 @@ public class ServiceController {
 		return responseObject;
 	}
 	
+	/**
+	 * Return method data 
+	 * Searching by method id
+	 * @param method_id
+	 * @return {@ResponseObject} instance: data value!=null if method exists else error message
+	 */
+	@RequestMapping(value="/method/{method_id}", method = RequestMethod.GET, produces="application/json")
+	public @ResponseBody ResponseObject getMethodData(@PathVariable int method_id){
+		responseObject = new ResponseObject();
+		Method method = serviceManager.getMethodById(method_id);
+		if(method!=null){
+			responseObject.setData(method);
+			responseObject.setStatus(HttpServletResponse.SC_OK);
+		}else{
+			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			responseObject.setError("No method with this id");
+		}
+		return responseObject;
+	}
+	
 	//Service - Manage Service method - delete method (create ServiceHistory.operation)
 	/**
 	 * Delete a service method from a service
