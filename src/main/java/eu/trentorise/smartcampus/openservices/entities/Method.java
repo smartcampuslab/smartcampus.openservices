@@ -53,14 +53,14 @@ public class Method {
 	private TestBoxProperties testboxProperties;
 	
 	/**
-	 * New instance of {@Method}
+	 * New instance of {@link Method}
 	 */
 	public Method(){
 		
 	}
 
 	/**
-	 * Get id of {@Method} instance
+	 * Get id
 	 * @return int id
 	 */
 	public int getId() {
@@ -68,7 +68,7 @@ public class Method {
 	}
 
 	/**
-	 * Set id in {@Method} instance
+	 * Set id
 	 * @param id
 	 */
 	public void setId(int id) {
@@ -76,15 +76,15 @@ public class Method {
 	}
 
 	/**
-	 * Get name of {@Method} instance
-	 * @return
+	 * Get name
+	 * @return String name
 	 */
 	public String getName() {
 		return name;
 	}
 
 	/**
-	 * Set name in {@Method} instance
+	 * Set name
 	 * @param name
 	 */
 	public void setName(String name) {
@@ -92,7 +92,7 @@ public class Method {
 	}
 
 	/**
-	 * Get synopsis of {@Method} instance
+	 * Get synopsis
 	 * @return String synopsis
 	 */
 	public String getSynopsis() {
@@ -100,7 +100,7 @@ public class Method {
 	}
 
 	/**
-	 * Set synopsis in {@Method} instance
+	 * Set synopsis
 	 * @param synopsis
 	 */
 	public void setSynopsis(String synopsis) {
@@ -108,7 +108,7 @@ public class Method {
 	}
 
 	/**
-	 * Get documentation of {@Method} instance 
+	 * Get documentation
 	 * @return String documentation
 	 */
 	public String getDocumentation() {
@@ -116,7 +116,7 @@ public class Method {
 	}
 
 	/**
-	 * Set documentation in {@Method} instance
+	 * Set documentation
 	 * @param documentation
 	 */
 	public void setDocumentation(String documentation) {
@@ -124,7 +124,7 @@ public class Method {
 	}
 
 	/**
-	 * Get service id of {@Method} instance
+	 * Get service id
 	 * @return int service id
 	 */
 	public int getServiceId() {
@@ -132,7 +132,7 @@ public class Method {
 	}
 
 	/**
-	 * Set service id in {@Method} instance 
+	 * Set service id
 	 * @param serviceId
 	 */
 	public void setServiceId(int serviceId) {
@@ -140,16 +140,16 @@ public class Method {
 	}
 
 	/**
-	 * Get {@TestBoxProperties} instance of {@Method} instance
-	 * @return {@TestBoxProperties} instance
+	 * Get {@link TestBoxProperties} instance
+	 * @return a {@link TestBoxProperties} instance
 	 */
 	public TestBoxProperties getTestboxProperties() {
 		return testboxProperties;
 	}
 
 	/**
-	 * Set {@TestBoxProperties} instance in {@Method} instance
-	 * @param testboxProperties
+	 * Set {@link TestBoxProperties} instance
+	 * @param testboxProperties : a {@link TestBoxProperties} instance
 	 */
 	public void setTestboxProprieties(TestBoxProperties testboxProperties) {
 		this.testboxProperties = testboxProperties;

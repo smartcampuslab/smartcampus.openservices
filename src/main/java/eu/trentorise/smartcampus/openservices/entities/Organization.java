@@ -61,14 +61,14 @@ public class Organization{
 	private String logo;
 	
 	/**
-	 * New {@Organization} instance
+	 * New {@link Organization} instance
 	 */
 	public Organization(){
 		
 	}
 
 	/**
-	 * Get id of {@Organization} instance
+	 * Get id 
 	 * @return int id
 	 */
 	public int getId() {
@@ -76,15 +76,15 @@ public class Organization{
 	}
 
 	/**
-	 * Set id in {@Organization} instance
-	 * @param id
+	 * Set id 
+	 * @param id : int
 	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 
 	/**
-	 * Get name of {@Organization} instance
+	 * Get name
 	 * @return String name
 	 */
 	public String getName() {
@@ -92,23 +92,23 @@ public class Organization{
 	}
 
 	/**
-	 * Set name in {@Organization} instance
-	 * @param name
+	 * Set name
+	 * @param name : String
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
 	/**
-	 * Get activity area of {@Organization} instance
-	 * @return
+	 * Get activity area
+	 * @return String activity area
 	 */
 	public String getActivityArea() {
 		return activityArea;
 	}
 
 	/**
-	 * Set activity area in {@Organization} instance
+	 * Set activity area
 	 * @param activityArea
 	 */
 	public void setActivityArea(String activityArea) {
@@ -116,15 +116,15 @@ public class Organization{
 	}
 
 	/**
-	 * Get category of {@Organization} instance
-	 * @return
+	 * Get category
+	 * @return int category
 	 */
 	public int getCategory() {
 		return category;
 	}
 
 	/**
-	 * Set category in {@Organization} instance
+	 * Set category
 	 * @param category
 	 */
 	public void setCategory(int category) {
@@ -132,16 +132,16 @@ public class Organization{
 	}
 
 	/**
-	 * Get {@Contact} instance of {@Organization} instance
-	 * @return {@Contact} instance
+	 * Get {@link Contact} instance
+	 * @return {@link Contact} instance
 	 */
 	public Contact getContacts() {
 		return contacts;
 	}
 
 	/**
-	 * Set {@Contact} instance in {@Organization} instance
-	 * @param contacts
+	 * Set {@link Contact} instance
+	 * @param contacts : {@link Contact}
 	 */
 	public void setContacts(Contact contacts) {
 		this.contacts = contacts;

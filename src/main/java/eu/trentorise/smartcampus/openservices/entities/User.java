@@ -53,33 +53,15 @@ public class User {
 	private String role;
 	
 	/**
-	 * New {@User} instance
+	 * New {@link User} instance
 	 */
 	public User(){
 		
 	}
-	
-	/**
-	 * New {@User} instance
-	 * @param id
-	 * @param username
-	 * @param password
-	 * @param email
-	 * @param enabled
-	 * @param role
-	 */
-	public User(int id, String username, String password, String email, int enabled, String role){
-		this.id=id;
-		this.username=username;
-		this.password=password;
-		this.email=email;
-		this.enabled=enabled;
-		this.role = role;
-	}
 
 	/**
 	 * 
-	 * @return int user id of {@User} instance
+	 * @return int user id
 	 */
 	public int getId() {
 		return id;
@@ -87,7 +69,7 @@ public class User {
 
 	/**
 	 * 
-	 * @param id in {@User} instance
+	 * @param id : int
 	 */
 	public void setId(int id) {
 		this.id = id;
@@ -95,7 +77,7 @@ public class User {
 
 	/**
 	 * 
-	 * @return String username of {@User} instance
+	 * @return String username
 	 */
 	public String getUsername() {
 		return username;
@@ -103,7 +85,7 @@ public class User {
 
 	/**
 	 * 
-	 * @param username in {@User} instance
+	 * @param username : String
 	 */
 	public void setUsername(String username) {
 		this.username = username;
@@ -111,7 +93,7 @@ public class User {
 
 	/**
 	 * 
-	 * @return String password of {@User} instance
+	 * @return String password
 	 */
 	public String getPassword() {
 		return password;
@@ -119,7 +101,7 @@ public class User {
 
 	/**
 	 * 
-	 * @param password in {@User} instance
+	 * @param password : String
 	 */
 	public void setPassword(String password) {
 		this.password = password;
@@ -127,7 +109,7 @@ public class User {
 
 	/**
 	 * 
-	 * @return String email of {@User} instance
+	 * @return String email
 	 */
 	public String getEmail() {
 		return email;
@@ -135,7 +117,7 @@ public class User {
 
 	/**
 	 * 
-	 * @param email in {@User} instance
+	 * @param email : String
 	 */
 	public void setEmail(String email) {
 		this.email = email;
@@ -144,7 +126,7 @@ public class User {
 	/**
 	 * 0 - if user is not enabled
 	 * 1- if user is enabled
-	 * @return int enabled of {@User} instance
+	 * @return int enabled
 	 */
 	public int getEnabled() {
 		return enabled;
@@ -153,7 +135,7 @@ public class User {
 	/**
 	 * 0 - if user is not enabled
 	 * 1 - if user is enabled
-	 * @param enabled in {@User} instance
+	 * @param enabled : int
 	 */
 	public void setEnabled(int enabled) {
 		this.enabled = enabled;
@@ -161,7 +143,7 @@ public class User {
 	
 	/**
 	 * 
-	 * @return {@Profile} profile of {@User} instance
+	 * @return {@link Profile} instance 
 	 */
 	public Profile getProfile() {
 		return profile;
@@ -169,7 +151,7 @@ public class User {
 
 	/**
 	 * 
-	 * @param profile in {@User} instance
+	 * @param profile : {@link Profile}
 	 */
 	public void setProfile(Profile profile) {
 		this.profile = profile;
@@ -177,7 +159,7 @@ public class User {
 
 	/**
 	 * Role can be: normal user or admin
-	 * @return String role of {@User} instance
+	 * @return String role
 	 */
 	public String getRole() {
 		return role;
@@ -185,7 +167,7 @@ public class User {
 
 	/**
 	 * Role can be: normal user or admin
-	 * @param role in {@User} instance
+	 * @param role : String
 	 */
 	public void setRole(String role) {
 		this.role = role;

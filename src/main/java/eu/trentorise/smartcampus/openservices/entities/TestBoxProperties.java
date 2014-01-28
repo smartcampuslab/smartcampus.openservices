@@ -33,14 +33,14 @@ public class TestBoxProperties implements Serializable{
 	private List<TestInfo> tests;//request string, input, output
 	
 	/**
-	 * New {@TestBoxProperties} instance
+	 * New {@link TestBoxProperties} instance
 	 */
 	public TestBoxProperties() {
 	}
 
 	/**
 	 * 
-	 * @return {@Authentication} instance of {@TestBoxProperties} instance
+	 * @return {@link Authentication} instance
 	 */
 	public Authentication getAuthenticationDescriptor() {
 		return authenticationDescriptor;
@@ -48,7 +48,7 @@ public class TestBoxProperties implements Serializable{
 
 	/**
 	 * 
-	 * @param authenticationDescriptor in {@TestBoxProperties} instance
+	 * @param authenticationDescriptor : {@link Authentication} instance
 	 */
 	public void setAuthenticationDescriptor(Authentication authenticationDescriptor) {
 		this.authenticationDescriptor = authenticationDescriptor;
@@ -56,7 +56,7 @@ public class TestBoxProperties implements Serializable{
 
 	/**
 	 * 
-	 * @return list of {@TestInfo} instance of {@TestBoxProperties} instance
+	 * @return list of {@link TestInfo} instance
 	 */
 	public List<TestInfo> getTests() {
 		return tests;
@@ -64,7 +64,7 @@ public class TestBoxProperties implements Serializable{
 
 	/**
 	 * 
-	 * @param tests in {@TestBoxProperties} instance
+	 * @param tests : {@link TestInfo} instance
 	 */
 	public void setTests(List<TestInfo> tests) {
 		this.tests = tests;

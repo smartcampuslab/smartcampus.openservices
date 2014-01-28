@@ -29,7 +29,7 @@ public class ResponseObject {
 	private String error;
 	
 	/**
-	 * New {@Response Object} instance
+	 * New {@link ResponseObject} instance
 	 */
 	public ResponseObject(){
 		
@@ -37,7 +37,7 @@ public class ResponseObject {
 
 	/**
 	 * 
-	 * @return Object data of {@Response Object} instance
+	 * @return Object data
 	 */
 	public Object getData() {
 		return data;
@@ -45,7 +45,7 @@ public class ResponseObject {
 
 	/**
 	 * 
-	 * @param data in {@Response Object} instance
+	 * @param data : Object
 	 */
 	public void setData(Object data) {
 		this.data = data;
@@ -53,7 +53,7 @@ public class ResponseObject {
 
 	/**
 	 * 
-	 * @return in status of {@Response Object} instance
+	 * @return int status 
 	 */
 	public int getStatus() {
 		return status;
@@ -61,7 +61,7 @@ public class ResponseObject {
 
 	/**
 	 * 
-	 * @param status in {@Response Object} instance
+	 * @param status : int
 	 */
 	public void setStatus(int status) {
 		this.status = status;
@@ -69,7 +69,7 @@ public class ResponseObject {
 
 	/**
 	 * 
-	 * @return String error of {@Response Object} instance
+	 * @return String error
 	 */
 	public String getError() {
 		return error;
@@ -77,7 +77,7 @@ public class ResponseObject {
 
 	/**
 	 * 
-	 * @param error in {@Response Object} instance
+	 * @param error : String
 	 */
 	public void setError(String error) {
 		this.error = error;

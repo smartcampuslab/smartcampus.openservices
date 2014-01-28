@@ -46,14 +46,14 @@ public class TemporaryLink {
 	private String role;
 	
 	/**
-	 * New {@Temporary Link} instance
+	 * New {@link TemporaryLink} instance
 	 */
 	public TemporaryLink(){
 	}
 
 	/**
 	 * 
-	 * @return int id of {@Temporary Link} instance
+	 * @return int id 
 	 */
 	public int getId() {
 		return id;
@@ -61,7 +61,7 @@ public class TemporaryLink {
 
 	/**
 	 * 
-	 * @param id in {@Temporary Link} instance
+	 * @param id : int
 	 */
 	public void setId(int id) {
 		this.id = id;
@@ -69,7 +69,7 @@ public class TemporaryLink {
 	
 	/**
 	 * 
-	 * @return int organization id of {@Temporary Link} instance
+	 * @return int organization id 
 	 */
 	public int getId_org() {
 		return id_org;
@@ -77,7 +77,7 @@ public class TemporaryLink {
 
 	/**
 	 * 
-	 * @param id_org in {@Temporary Link} instance
+	 * @param id_org : int 
 	 */
 	public void setId_org(int id_org) {
 		this.id_org = id_org;
@@ -85,7 +85,7 @@ public class TemporaryLink {
 	
 	/**
 	 * 
-	 * @return String key of {@Temporary Link} instance
+	 * @return String key
 	 */
 	public String getKey() {
 		return key;
@@ -93,7 +93,7 @@ public class TemporaryLink {
 
 	/**
 	 * 
-	 * @param key in {@Temporary Link} instance
+	 * @param key : String
 	 */
 	public void setKey(String key) {
 		this.key = key;
@@ -101,7 +101,7 @@ public class TemporaryLink {
 
 	/**
 	 * 
-	 * @return String email of {@Temporary Link} instance
+	 * @return String email 
 	 */
 	public String getEmail() {
 		return email;
@@ -109,7 +109,7 @@ public class TemporaryLink {
 
 	/**
 	 * 
-	 * @param email in {@Temporary Link} instance
+	 * @param email : String
 	 */
 	public void setEmail(String email) {
 		this.email = email;
@@ -117,7 +117,7 @@ public class TemporaryLink {
 
 	/**
 	 * 
-	 * @return String role of {@Temporary Link} instance
+	 * @return String role
 	 */
 	public String getRole() {
 		return role;
@@ -125,7 +125,7 @@ public class TemporaryLink {
 
 	/**
 	 * 
-	 * @param role in {@Temporary Link} instance
+	 * @param role : String
 	 */
 	public void setRole(String role) {
 		this.role = role;

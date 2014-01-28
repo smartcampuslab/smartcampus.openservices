@@ -80,7 +80,7 @@ public class Service {
 	private ImplementationInfo implementation;
 	
 	/**
-	 * New {@Service} instance
+	 * New {@link Service} instance
 	 */
 	public Service(){
 		
@@ -88,7 +88,7 @@ public class Service {
 
 	/**
 	 * 
-	 * @return int id of {@Service} instance
+	 * @return int id
 	 */
 	public int getId() {
 		return id;
@@ -96,7 +96,7 @@ public class Service {
 
 	/**
 	 * 
-	 * @param id in {@Service} instance
+	 * @param id : int
 	 */
 	public void setId(int id) {
 		this.id = id;
@@ -104,7 +104,7 @@ public class Service {
 
 	/**
 	 * 
-	 * @return String name of {@Service} instance
+	 * @return String name
 	 */
 	public String getName() {
 		return name;
@@ -112,7 +112,7 @@ public class Service {
 
 	/**
 	 * 
-	 * @param name in {@Service} instance
+	 * @param name : String
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -120,7 +120,7 @@ public class Service {
 
 	/**
 	 * 
-	 * @return String description of {@Service} instance
+	 * @return String description
 	 */
 	public String getDescription() {
 		return description;
@@ -128,7 +128,7 @@ public class Service {
 
 	/**
 	 * 
-	 * @param description in {@Service} instance
+	 * @param description : String
 	 */
 	public void setDescription(String description) {
 		this.description = description;
@@ -136,7 +136,7 @@ public class Service {
 
 	/**
 	 * 
-	 * @return String tags of {@Service} instance
+	 * @return String tags
 	 */
 	public String getTags() {
 		return tags;
@@ -144,7 +144,7 @@ public class Service {
 
 	/**
 	 * 
-	 * @param tags in {@Service} instance
+	 * @param tags : String
 	 */
 	public void setTags(String tags) {
 		this.tags = tags;
@@ -152,7 +152,7 @@ public class Service {
 
 	/**
 	 * 
-	 * @return int category of {@Service} instance
+	 * @return int category
 	 */
 	public int getCategory() {
 		return category;
@@ -160,7 +160,7 @@ public class Service {
 
 	/**
 	 * 
-	 * @param category in {@Service} instance
+	 * @param category : int
 	 */
 	public void setCategory(int category) {
 		this.category = category;
@@ -168,7 +168,7 @@ public class Service {
 
 	/**
 	 * 
-	 * @return String license of {@Service} instance
+	 * @return String license
 	 */
 	public String getLicense() {
 		return license;
@@ -176,7 +176,7 @@ public class Service {
 
 	/**
 	 * 
-	 * @param license in {@Service} instance
+	 * @param license : String 
 	 */
 	public void setLicense(String license) {
 		this.license = license;
@@ -184,7 +184,7 @@ public class Service {
 
 	/**
 	 * 
-	 * @return String version of {@Service} instance
+	 * @return String version
 	 */
 	public String getVersion() {
 		return version;
@@ -192,7 +192,7 @@ public class Service {
 
 	/**
 	 * 
-	 * @param version in {@Service} instance
+	 * @param version : String
 	 */
 	public void setVersion(String version) {
 		this.version = version;
@@ -200,7 +200,7 @@ public class Service {
 
 	/**
 	 * 
-	 * @return {@Access Information} instance of {@Service} instance
+	 * @return {@link AccessInformation} instance
 	 */
 	public AccessInformation getAccessInformation() {
 		return accessInformation;
@@ -208,7 +208,7 @@ public class Service {
 
 	/**
 	 * 
-	 * @param accessInformation in {@Service} instance
+	 * @param accessInformation : {@link AccessInformation}
 	 */
 	public void setAccessInformation(AccessInformation accessInformation) {
 		this.accessInformation = accessInformation;
@@ -216,7 +216,7 @@ public class Service {
 
 	/**
 	 * 
-	 * @return String documentation of {@Service} instance
+	 * @return String documentation
 	 */
 	public String getDocumentation() {
 		return documentation;
@@ -224,7 +224,7 @@ public class Service {
 
 	/**
 	 * 
-	 * @param documentation in {@Service} instance
+	 * @param documentation : String
 	 */
 	public void setDocumentation(String documentation) {
 		this.documentation = documentation;
@@ -232,7 +232,7 @@ public class Service {
 
 	/**
 	 * 
-	 * @return long expiration of {@Service} instance
+	 * @return long expiration
 	 */
 	public long getExpiration() {
 		return expiration;
@@ -240,7 +240,7 @@ public class Service {
 
 	/**
 	 * 
-	 * @param expiration in {@Service} instance
+	 * @param expiration : long
 	 */
 	public void setExpiration(long expiration) {
 		this.expiration = expiration;
@@ -248,7 +248,7 @@ public class Service {
 
 	/**
 	 * 
-	 * @return String state of {@Service} instance
+	 * @return String state
 	 */
 	public String getState() {
 		return state;
@@ -256,7 +256,7 @@ public class Service {
 
 	/**
 	 * 
-	 * @param state in {@Service} instance
+	 * @param state : String
 	 */
 	public void setState(String state) {
 		this.state = state;
@@ -264,7 +264,7 @@ public class Service {
 
 	/**
 	 * 
-	 * @return int creator id of {@Service} instance
+	 * @return int creator id
 	 */
 	public int getCreatorId() {
 		return creatorId;
@@ -272,7 +272,7 @@ public class Service {
 
 	/**
 	 * 
-	 * @param creatorId in {@Service} instance
+	 * @param creatorId : int 
 	 */
 	public void setCreatorId(int creatorId) {
 		this.creatorId = creatorId;
@@ -280,7 +280,7 @@ public class Service {
 
 	/**
 	 * 
-	 * @return int organizaton id of {@Service} instance
+	 * @return int organizaton id
 	 */
 	public int getOrganizationId() {
 		return organizationId;
@@ -288,7 +288,7 @@ public class Service {
 
 	/**
 	 * 
-	 * @param organizationId in {@Service} instance
+	 * @param organizationId : int
 	 */
 	public void setOrganizationId(int organizationId) {
 		this.organizationId = organizationId;
@@ -296,7 +296,7 @@ public class Service {
 
 	/**
 	 * 
-	 * @return {@Implementation Info} instance of {@Service} instance
+	 * @return a {@link ImplementationInfo} instance
 	 */
 	public ImplementationInfo getImplementation() {
 		return implementation;
@@ -304,7 +304,7 @@ public class Service {
 
 	/**
 	 * 
-	 * @param implementation in {@Service} instance
+	 * @param implementation : {@link ImplementationInfo}
 	 */
 	public void setImplementation(ImplementationInfo implementation) {
 		this.implementation = implementation;

@@ -51,7 +51,7 @@ public class ServiceHistory {
 	private Date date;
 	
 	/**
-	 * New {@Service History} instance
+	 * New {@link ServiceHistory} instance
 	 */
 	public ServiceHistory(){
 		
@@ -59,7 +59,7 @@ public class ServiceHistory {
 
 	/**
 	 * 
-	 * @return int id of {@Service History} instance
+	 * @return int id
 	 */
 	public int getId() {
 		return id;
@@ -67,7 +67,7 @@ public class ServiceHistory {
 
 	/**
 	 * 
-	 * @param id in {@Service History} instance
+	 * @param id : int
 	 */
 	public void setId(int id) {
 		this.id = id;
@@ -75,7 +75,7 @@ public class ServiceHistory {
 
 	/**
 	 * 
-	 * @return String operation of {@Service History} instance
+	 * @return String operation
 	 */
 	public String getOperation() {
 		return operation;
@@ -83,7 +83,7 @@ public class ServiceHistory {
 
 	/**
 	 * 
-	 * @param operation in {@Service History} instance
+	 * @param operation : String
 	 */
 	public void setOperation(String operation) {
 		this.operation = operation;
@@ -91,7 +91,7 @@ public class ServiceHistory {
 
 	/**
 	 * 
-	 * @return int service id of {@Service History} instance
+	 * @return int service id 
 	 */
 	public int getId_service() {
 		return id_service;
@@ -99,7 +99,7 @@ public class ServiceHistory {
 
 	/**
 	 * 
-	 * @param id_service in {@Service History} instance
+	 * @param id_service : int 
 	 */
 	public void setId_service(int id_service) {
 		this.id_service = id_service;
@@ -107,7 +107,7 @@ public class ServiceHistory {
 
 	/**
 	 * 
-	 * @return int service method id of {@Service History} instance
+	 * @return int service method id
 	 */
 	public int getId_serviceMethod() {
 		return id_serviceMethod;
@@ -115,7 +115,7 @@ public class ServiceHistory {
 
 	/**
 	 * 
-	 * @param id_serviceMethod in {@Service History} instance
+	 * @param id_serviceMethod : int 
 	 */
 	public void setId_serviceMethod(int id_serviceMethod) {
 		this.id_serviceMethod = id_serviceMethod;
@@ -123,7 +123,7 @@ public class ServiceHistory {
 
 	/**
 	 * 
-	 * @return Date date of creation {@Service History} instance
+	 * @return Date date of creation
 	 */
 	public Date getDate() {
 		return date;
@@ -131,7 +131,7 @@ public class ServiceHistory {
 
 	/**
 	 * 
-	 * @param date of creation in {@Service History} instance
+	 * @param date of creation : Date
 	 */
 	public void setDate(Date date) {
 		this.date = date;

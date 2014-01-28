@@ -46,14 +46,14 @@ public class Profile implements Serializable{
 	private String mobile;
 	
 	/**
-	 * new {@Profile} instance
+	 * new {@link Profile} instance
 	 */
 	public Profile(){
 		
 	}
 	
 	/**
-	 * New {@Profile} instance with params
+	 * New {@link Profile} instance with params
 	 * @param name
 	 * @param surname
 	 * @param hobby
@@ -67,23 +67,22 @@ public class Profile implements Serializable{
 	}
 
 	/**
-	 * Get name of {@Profile} instance
-	 * @return String name
+	 * @return String name of profile
 	 */
 	public String getName() {
 		return name;
 	}
 
 	/**
-	 * Set name in {@Profile} instance
-	 * @param name
+	 * Set name
+	 * @param name : String 
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
 	/**
-	 * Get surname of {@Profile} instance
+	 * Get surname
 	 * @return String surname
 	 */
 	public String getSurname() {
@@ -91,7 +90,7 @@ public class Profile implements Serializable{
 	}
 
 	/**
-	 * Set surname in {@Profile} instance
+	 * Set surname
 	 * @param surname
 	 */
 	public void setSurname(String surname) {
@@ -100,7 +99,7 @@ public class Profile implements Serializable{
 
 	/**
 	 * 
-	 * @return String hobby of {@Profile} instance
+	 * @return String hobby of profile
 	 */
 	public String getHobby() {
 		return hobby;
@@ -108,7 +107,7 @@ public class Profile implements Serializable{
 
 	/**
 	 * 
-	 * @param hobby in {@Profile} instance
+	 * @param hobby of profile
 	 */
 	public void setHobby(String hobby) {
 		this.hobby = hobby;
@@ -116,7 +115,7 @@ public class Profile implements Serializable{
 
 	/**
 	 * 
-	 * @return String birthday of {@Profile} instance
+	 * @return String birthday of profile
 	 */
 	public String getBirthday() {
 		return birthday;
@@ -124,7 +123,7 @@ public class Profile implements Serializable{
 
 	/**
 	 * 
-	 * @param birthday in {@Profile} instance
+	 * @param birthday
 	 */
 	public void setBirthday(String birthday) {
 		this.birthday = birthday;
@@ -132,7 +131,7 @@ public class Profile implements Serializable{
 
 	/**
 	 * 
-	 * @return String url avatar of {@Profile} instance
+	 * @return String url avatar profile
 	 */
 	public String getImgAvatar() {
 		return imgAvatar;
@@ -140,7 +139,7 @@ public class Profile implements Serializable{
 
 	/**
 	 * 
-	 * @param imgAvatar, which is url avatar in {@Profile} instance
+	 * @param imgAvatar, which is url avatar
 	 */
 	public void setImgAvatar(String imgAvatar) {
 		this.imgAvatar = imgAvatar;
@@ -148,7 +147,7 @@ public class Profile implements Serializable{
 
 	/**
 	 * 
-	 * @return String address of {@Profile} instance
+	 * @return String address
 	 */
 	public String getAddress() {
 		return address;
@@ -156,7 +155,7 @@ public class Profile implements Serializable{
 
 	/**
 	 * 
-	 * @param address in {@Profile} instance
+	 * @param address
 	 */
 	public void setAddress(String address) {
 		this.address = address;
@@ -164,7 +163,7 @@ public class Profile implements Serializable{
 
 	/**
 	 * 
-	 * @return String country of {@Profile} instance
+	 * @return String country
 	 */
 	public String getCountry() {
 		return country;
@@ -172,7 +171,7 @@ public class Profile implements Serializable{
 
 	/**
 	 * 
-	 * @param country in {@Profile} instance
+	 * @param country
 	 */
 	public void setCountry(String country) {
 		this.country = country;
@@ -180,7 +179,7 @@ public class Profile implements Serializable{
 
 	/**
 	 * 
-	 * @return String interest of {@Profile} instance
+	 * @return String interest
 	 */
 	public String getInterest() {
 		return interest;
@@ -188,7 +187,7 @@ public class Profile implements Serializable{
 
 	/**
 	 * 
-	 * @param interest in {@Profile} instance
+	 * @param interest in profile
 	 */
 	public void setInterest(String interest) {
 		this.interest = interest;
@@ -196,7 +195,7 @@ public class Profile implements Serializable{
 
 	/**
 	 * 
-	 * @return String phone of {@Profile} instance
+	 * @return String phone of profile
 	 */
 	public String getPhone() {
 		return phone;
@@ -204,7 +203,7 @@ public class Profile implements Serializable{
 
 	/**
 	 * 
-	 * @param phone in {@Profile} instance
+	 * @param phone in profile
 	 */
 	public void setPhone(String phone) {
 		this.phone = phone;
@@ -212,7 +211,7 @@ public class Profile implements Serializable{
 
 	/**
 	 * 
-	 * @return String mobile phone of {@Profile} instance
+	 * @return String mobile phone of profile
 	 */
 	public String getMobile() {
 		return mobile;
@@ -220,7 +219,7 @@ public class Profile implements Serializable{
 
 	/**
 	 * 
-	 * @param mobile in {@Profile} instance
+	 * @param mobile in profile
 	 */
 	public void setMobile(String mobile) {
 		this.mobile = mobile;

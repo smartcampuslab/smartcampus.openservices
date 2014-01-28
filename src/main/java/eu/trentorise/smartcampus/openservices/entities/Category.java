@@ -43,22 +43,22 @@ public class Category {
 	private String description;
 	
 	/**
-	 * New instance of {@Category}
+	 * New instance of {@link Category}
 	 */
 	public Category(){
 		
 	}
 
 	/**
-	 * Get id of {@Category}
-	 * @return {@int} id
+	 * Get id of category
+	 * @return int id
 	 */
 	public int getId() {
 		return id;
 	}
 
 	/**
-	 * Set id of {@Category}
+	 * Set id of category
 	 * @param id
 	 */
 	public void setId(int id) {
@@ -66,7 +66,7 @@ public class Category {
 	}
 
 	/**
-	 * Get name of {@Category}
+	 * Get name of category
 	 * @return String name
 	 */
 	public String getName() {
@@ -74,7 +74,7 @@ public class Category {
 	}
 
 	/**
-	 * Set name of {@Category}
+	 * Set name of category
 	 * @param name
 	 */
 	public void setName(String name) {
@@ -82,7 +82,7 @@ public class Category {
 	}
 
 	/**
-	 * Get description of {@Category}
+	 * Get description of category
 	 * @return String description
 	 */
 	public String getDescription() {
@@ -90,7 +90,7 @@ public class Category {
 	}
 
 	/**
-	 * Set description of {@Category}
+	 * Set description of category
 	 * @param description
 	 */
 	public void setDescription(String description) {

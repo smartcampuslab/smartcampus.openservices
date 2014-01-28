@@ -33,7 +33,7 @@ public class Authentication implements Serializable {
 	private Map<String,Object> accessAttributes;
 	
 	/**
-	 * Get {@String} access protocol
+	 * Get String access protocol
 	 * @return
 	 */
 	public String getAccessProtocol() {
@@ -41,24 +41,24 @@ public class Authentication implements Serializable {
 	}
 	
 	/**
-	 * Set {@String} access protocol
-	 * @param {@String} accessProtocol
+	 * Set String access protocol
+	 * @param String accessProtocol
 	 */
 	public void setAccessProtocol(String accessProtocol) {
 		this.accessProtocol = accessProtocol;
 	}
 	
 	/**
-	 * Get {@Map<String,Object>} access attributes
-	 * @return {@Map<String,Object>} access attributes
+	 * Get Map<String,Object> access attributes
+	 * @return Map<String,Object> access attributes
 	 */
 	public Map<String, Object> getAccessAttributes() {
 		return accessAttributes;
 	}
 	
 	/**
-	 * Set {@Map<String,Object>} access attributes
-	 * @param {@Map<String,Object>} accessAttributes
+	 * Set Map<String,Object> access attributes
+	 * @param Map<String,Object> accessAttributes
 	 */
 	public void setAccessAttributes(Map<String, Object> accessAttributes) {
 		this.accessAttributes = accessAttributes;

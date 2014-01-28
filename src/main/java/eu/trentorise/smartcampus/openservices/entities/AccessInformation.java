@@ -38,7 +38,7 @@ public class AccessInformation implements Serializable{
 
 	/**
 	 * Constructor method
-	 * Create a new instance of {@AccessInformation}
+	 * Create a new instance of {@link AccessInformation}
 	 */
 	public AccessInformation(){
 		
@@ -46,7 +46,7 @@ public class AccessInformation implements Serializable{
 
 	/**
 	 * Get access policies
-	 * @return {@String} access policies
+	 * @return String access policies
 	 */
 	public String getAccessPolicies() {
 		return accessPolicies;
@@ -54,7 +54,7 @@ public class AccessInformation implements Serializable{
 
 	/**
 	 * Set access policies
-	 * @param {@String} accessPolicies
+	 * @param String accessPolicies
 	 */
 	public void setAccessPolicies(String accessPolicies) {
 		this.accessPolicies = accessPolicies;
@@ -62,7 +62,7 @@ public class AccessInformation implements Serializable{
 
 	/**
 	 * Get testing endpoint
-	 * @return {@String} testing endpoint
+	 * @return String testing endpoint
 	 */
 	public String getTestingEndpoint() {
 		return testingEndpoint;
@@ -70,7 +70,7 @@ public class AccessInformation implements Serializable{
 
 	/**
 	 * Set testing endpoint
-	 * @param {@String} testingEndpoint
+	 * @param String testingEndpoint
 	 */
 	public void setTestingEndpoint(String testingEndpoint) {
 		this.testingEndpoint = testingEndpoint;
@@ -78,7 +78,7 @@ public class AccessInformation implements Serializable{
 
 	/**
 	 * Get production endpoint
-	 * @return {@String} production endpoint
+	 * @return String production endpoint
 	 */
 	public String getProductionEndpoint() {
 		return productionEndpoint;
@@ -86,7 +86,7 @@ public class AccessInformation implements Serializable{
 
 	/**
 	 * Set production endpoint
-	 * @param {@String} productionEndpoint
+	 * @param String productionEndpoint
 	 */
 	public void setProductionEndpoint(String productionEndpoint) {
 		this.productionEndpoint = productionEndpoint;
@@ -94,7 +94,7 @@ public class AccessInformation implements Serializable{
 
 	/**
 	 * Get protocols
-	 * @return {@String} protocols
+	 * @return String protocols
 	 */
 	public String getProtocols() {
 		return protocols;
@@ -102,7 +102,7 @@ public class AccessInformation implements Serializable{
 
 	/**
 	 * Set protocols
-	 * @param {@String} protocols
+	 * @param String protocols
 	 */
 	public void setProtocols(String protocols) {
 		this.protocols = protocols;
@@ -110,7 +110,7 @@ public class AccessInformation implements Serializable{
 
 	/**
 	 * Get formats
-	 * @return {@String} formats
+	 * @return String formats
 	 */
 	public String getFormats() {
 		return formats;
@@ -118,23 +118,23 @@ public class AccessInformation implements Serializable{
 
 	/**
 	 * Set formats
-	 * @param {@String} formats
+	 * @param String formats
 	 */
 	public void setFormats(String formats) {
 		this.formats = formats;
 	}
 
 	/**
-	 * Get {@Authentication} instance
-	 * @return {@Authentication} authentication
+	 * Get {@link Authentication} instance
+	 * @return {@link Authentication} authentication
 	 */
 	public Authentication getAuthentication() {
 		return authentication;
 	}
 
 	/**
-	 * Set {@Authentication} authentication
-	 * @param {@Authentication} authentication
+	 * Set {@link Authentication} authentication
+	 * @param {@link Authentication} authentication
 	 */
 	public void setAuthentication(Authentication authentication) {
 		this.authentication = authentication;

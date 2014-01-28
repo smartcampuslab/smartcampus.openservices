@@ -36,14 +36,14 @@ public class ImplementationInfo implements Serializable{
 	private String sourceCode;
 	
 	/**
-	 * new instance of {@Implementation Info}
+	 * new instance of {@link ImplementationInfo}
 	 */
 	public ImplementationInfo(){
 		
 	}
 
 	/**
-	 * Get executive environment of {@Implementation Info} instance
+	 * Get executive environment
 	 * @return String executive environment
 	 */
 	public String getExecutionEnvironment() {
@@ -51,7 +51,7 @@ public class ImplementationInfo implements Serializable{
 	}
 
 	/**
-	 * Set executive environment in {@Implementation Info} instance
+	 * Set executive environment
 	 * @param executionEnvironment
 	 */
 	public void setExecutionEnvironment(String executionEnvironment) {
@@ -59,7 +59,7 @@ public class ImplementationInfo implements Serializable{
 	}
 
 	/**
-	 * Get source code of {@Implementation Info} instance
+	 * Get source code 
 	 * @return String source code
 	 */
 	public String getSourceCode() {
@@ -67,7 +67,7 @@ public class ImplementationInfo implements Serializable{
 	}
 
 	/**
-	 * Set source code in {@Implementation Info} instance
+	 * Set source code
 	 * @param sourceCode
 	 */
 	public void setSourceCode(String sourceCode) {
@@ -75,7 +75,7 @@ public class ImplementationInfo implements Serializable{
 	}
 
 	/**
-	 * get list of service dependencies of {@Implementation Info} instance
+	 * get list of service dependencies
 	 * @return List<Integer> service dependencies
 	 */
 	public List<Integer> getServiceDependencies() {
@@ -83,7 +83,7 @@ public class ImplementationInfo implements Serializable{
 	}
 
 	/**
-	 * Set service dependencies in {@Implementation Info} instance
+	 * Set service dependencies
 	 * @param serviceDependencies
 	 */
 	public void setServiceDependencies(List<Integer> serviceDependencies) {
@@ -91,7 +91,7 @@ public class ImplementationInfo implements Serializable{
 	}
 
 	/**
-	 * Get hosting of {@Implementation Info} instance
+	 * Get hosting
 	 * @return String hosting
 	 */
 	public String getHosting() {
@@ -99,7 +99,7 @@ public class ImplementationInfo implements Serializable{
 	}
 
 	/**
-	 * Set hosting in {@Implementation Info} instance
+	 * Set hosting
 	 * @param hosting
 	 */
 	public void setHosting(String hosting) {

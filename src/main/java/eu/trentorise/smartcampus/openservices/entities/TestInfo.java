@@ -51,7 +51,7 @@ public class TestInfo implements Serializable {
 	
 	/**
 	 * 
-	 * @return String name of {@TestInfo} instance
+	 * @return String name
 	 */
 	public String getName() {
 		return name;
@@ -59,7 +59,7 @@ public class TestInfo implements Serializable {
 	
 	/**
 	 * 
-	 * @param name in {@TestInfo} instance
+	 * @param name : String
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -67,7 +67,7 @@ public class TestInfo implements Serializable {
 	
 	/**
 	 * 
-	 * @return String description of {@TestInfo} instance
+	 * @return String description
 	 */
 	public String getDescription() {
 		return description;
@@ -75,7 +75,7 @@ public class TestInfo implements Serializable {
 	
 	/**
 	 * 
-	 * @param description in {@TestInfo} instance
+	 * @param description : String
 	 */
 	public void setDescription(String description) {
 		this.description = description;
@@ -83,7 +83,7 @@ public class TestInfo implements Serializable {
 	
 	/**
 	 * 
-	 * @return String request path of {@TestInfo} instance
+	 * @return String request path
 	 */
 	public String getRequestPath() {
 		return requestPath;
@@ -91,7 +91,7 @@ public class TestInfo implements Serializable {
 	
 	/**
 	 * 
-	 * @param requestPath in {@TestInfo} instance
+	 * @param requestPath : String
 	 */
 	public void setRequestPath(String requestPath) {
 		this.requestPath = requestPath;
@@ -99,7 +99,7 @@ public class TestInfo implements Serializable {
 	
 	/**
 	 * 
-	 * @return boolean request path editable of {@TestInfo} instance
+	 * @return if request path is editable
 	 */
 	public boolean isRequestPathEditable() {
 		return requestPathEditable;
@@ -107,7 +107,7 @@ public class TestInfo implements Serializable {
 	
 	/**
 	 * 
-	 * @param requestPathEditable in {@TestInfo} instance
+	 * @param requestPathEditable : boolean
 	 */
 	public void setRequestPathEditable(boolean requestPathEditable) {
 		this.requestPathEditable = requestPathEditable;
@@ -115,7 +115,7 @@ public class TestInfo implements Serializable {
 	
 	/**
 	 * 
-	 * @return String request body of {@TestInfo} instance
+	 * @return String request body
 	 */
 	public String getRequestBody() {
 		return requestBody;
@@ -123,7 +123,7 @@ public class TestInfo implements Serializable {
 	
 	/**
 	 * 
-	 * @param requestBody in {@TestInfo} instance
+	 * @param requestBody : String
 	 */
 	public void setRequestBody(String requestBody) {
 		this.requestBody = requestBody;
@@ -131,7 +131,7 @@ public class TestInfo implements Serializable {
 	
 	/**
 	 * 
-	 * @return boolean request body editable of {@TestInfo} instance
+	 * @return if a request body is editable
 	 */
 	public boolean isRequestBodyEditable() {
 		return requestBodyEditable;
@@ -139,7 +139,7 @@ public class TestInfo implements Serializable {
 	
 	/**
 	 * 
-	 * @param requestBodyEditable in {@TestInfo} instance
+	 * @param requestBodyEditable : boolean
 	 */
 	public void setRequestBodyEditable(boolean requestBodyEditable) {
 		this.requestBodyEditable = requestBodyEditable;
@@ -147,7 +147,7 @@ public class TestInfo implements Serializable {
 	
 	/**
 	 * 
-	 * @return String request method of {@TestInfo} instance
+	 * @return String request method 
 	 */
 	public String getRequestMethod() {
 		return requestMethod;
@@ -155,7 +155,7 @@ public class TestInfo implements Serializable {
 	
 	/**
 	 * 
-	 * @param requestMethod in {@TestInfo} instance
+	 * @param requestMethod : String
 	 */
 	public void setRequestMethod(String requestMethod) {
 		this.requestMethod = requestMethod;
@@ -163,7 +163,7 @@ public class TestInfo implements Serializable {
 	
 	/**
 	 * 
-	 * @return Map<String,String> headers of {@TestInfo} instance
+	 * @return Map<String,String> headers
 	 */
 	public Map<String, String> getHeaders() {
 		return headers;
@@ -171,7 +171,7 @@ public class TestInfo implements Serializable {
 	
 	/**
 	 * 
-	 * @param headers in {@TestInfo} instance
+	 * @param headers : Map<String,String>
 	 */
 	public void setHeaders(Map<String, String> headers) {
 		this.headers = headers;
@@ -179,7 +179,7 @@ public class TestInfo implements Serializable {
 	
 	/**
 	 * 
-	 * @return String response of {@TestInfo} instance
+	 * @return String response
 	 */
 	public String getResponse() {
 		return response;
@@ -187,7 +187,7 @@ public class TestInfo implements Serializable {
 	
 	/**
 	 * 
-	 * @param response in {@TestInfo} instance
+	 * @param response : String
 	 */
 	public void setResponse(String response) {
 		this.response = response;
