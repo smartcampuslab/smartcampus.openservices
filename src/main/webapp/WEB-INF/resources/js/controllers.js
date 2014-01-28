@@ -235,17 +235,11 @@ app.controller('viewMethodCtrl', ['$scope', '$http', '$location', '$routeParams'
 app.controller('editMethodCtrl', ['$scope', '$http', '$location', '$routeParams', 'Service', 
   function ($scope, $http, $location, $routeParams, Service) {
 
-    Service.getMethods({id: $routeParams.id},function(data){
-  		$scope.methods = data.data;
-  		console.log(data)
-  		for (var i = 0; i < $scope.methods.length; i++) {
-  			if ($routeParams.method == $scope.methods[i].id) {
-  				$scope.method = $scope.methods[i];
-  			}
-  		}
+	Service.getMethod({id: $routeParams.id},function(data){
+  		$scope.method = data.data;
      });
+	
     $scope.submit = function(){
-    	console.log('saving method');
     	Service.updateMethod($scope.method,function(){
     		$location.path('profile/services/'+$scope.method.serviceId+'/view');
     	});
