@@ -492,7 +492,6 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
          var config = $scope.service.accessInformation.authentication.accessAttributes;
          remoteapi = new RemoteApi($scope.service.accessInformation.authentication.accessProtocol);
          remoteapi.authorize(config).then(function(result){
-             console.info($scope.request.sample.headers);
              if (!$scope.request.sample.headers) {
             	 $scope.request.sample.headers = {};
              }
@@ -512,9 +511,7 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
                console.log(err);
              });
 
-        	 
         	 $scope.request.headers = result;
-             console.log($scope.request)
          });
      };
 
