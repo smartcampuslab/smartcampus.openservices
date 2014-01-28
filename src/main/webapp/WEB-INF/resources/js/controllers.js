@@ -272,13 +272,9 @@ app.controller('newTestCtrl', ['$scope', '$http', '$location', '$routeParams', '
 app.controller('editTestCtrl', ['$scope', '$http', '$location', '$routeParams', 'Service', 
  function ($scope, $http, $location, $routeParams, Service) {
    $scope.title = 'Edit';
-   Service.getMethods({id: $routeParams.id},function(data){
- 		for (var i = 0; i < data.data.length; i++) {
- 			if ($routeParams.method == data.data[i].id) {
- 				$scope.method = data.data[i];
- 				$scope.test = $scope.method.testboxProperties.tests[$routeParams.pos];
- 			}
- 		}
+   Service.getMethod({id: $routeParams.id},function(data){
+ 		$scope.method = data.data;
+ 		$scope.test = $scope.method.testboxProperties.tests[$routeParams.pos];
     });
 
    $scope.addHeader=function(){
