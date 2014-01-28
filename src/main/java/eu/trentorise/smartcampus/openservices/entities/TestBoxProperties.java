@@ -23,7 +23,7 @@ import java.util.*;
  * authentication descriptor
  * a list of tests
  * 
- * @author Giulia Canobbio
+ * @author raman
  *
  */
 public class TestBoxProperties implements Serializable{
