@@ -94,18 +94,14 @@
     </div>
     <div class="row">
         <div class="col-md-4 col-md-offset-2">
-            <div style ='background-color: #000000;height:20%;overflow-y:auto;'>
-                  <pre ><code class="language-http">{{request.sample.requestMethod}} {{request.sample.requestPath}}
+                  <pre ><code prism class="language-http">{{request.sample.requestMethod}} {{request.sample.requestPath}}
 {{request.sample.headers}}
 {{request.sample.requestBody}}</code></pre>
-            </div>
             <button ng-disabled="!checkBeforeSend()" ng-click="send()" type="button" class="btn btn-success">Send</button>
         </div>
         <div class="col-md-4">
-            <div style ='background-color: #000000;height:20%;overflow-y:auto;'>
-                <pre><code class="language-http">{{response}}
+                <pre><code prism class="language-http">{{response}}
 </code></pre>
-            </div>
         </div>
     </div>
 </div>

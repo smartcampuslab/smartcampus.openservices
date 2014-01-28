@@ -13,36 +13,34 @@ directives.directive('holder', [
   }
 ]);
 
-directives.directive('prism', ['$timeout',
-  function ($timeout) {
+directives.directive('prism', ['$timeout','$compile',
+  function ($timeout, $compile) {
     return {
       link: function (scope, element, attrs) {
-        scope.$watch('response', function (val) {
-          $timeout(function () {
-            Prism.highlightElement(element.get(0))
-          }, 0)
-        })
-
+        element.ready(function(){
+            Prism.highlightElement(element[0]);
+            $compile(element.contents())(scope);
+        });
       }
     };
   }
 ]);
 
 directives.directive('gravatar', ['Gravatar','$compile',
-                                function (Gravatar, $compile) {
-                                  return {
-                                  	
-                                    link: function (scope, element, attrs) {
-                                    	attrs.$observe('gravatar', function (email) {
-                                    		if(email){
-                                        		var html ='<img class="media-object dp img-circle" style="width: 100px;height:100px;" src="' + Gravatar.picture(120, email) + '" />';
-                                        		var e = $compile(html)(scope);
-                                                  element.replaceWith(e);
-                                    		}
+    function (Gravatar, $compile) {
+      return {
+      	
+        link: function (scope, element, attrs) {
+        	attrs.$observe('gravatar', function (email) {
+        		if(email){
+            		var html ='<img class="media-object dp img-circle" style="width: 100px;height:100px;" src="' + Gravatar.picture(120, email) + '" />';
+            		var e = $compile(html)(scope);
+                      element.replaceWith(e);
+        		}
 
-                                        });
-                                    }
-                                  };
-                                }
-                              ]);
+            });
+        }
+      };
+    }
+  ]);
 
