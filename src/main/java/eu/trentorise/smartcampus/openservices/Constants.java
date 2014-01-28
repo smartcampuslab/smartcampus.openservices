@@ -17,12 +17,19 @@
 package eu.trentorise.smartcampus.openservices;
 
 /**
- * Enumeration class for service state
+ * Enumeration class for service state.
+ * A service can be:
+ * a published service, user wants everyone to see his/her service;
+ * a deprecated service, a new version of the same service is created;
+ * an unpublished service, user creates a new service but he/she does not want to share it.
  * 
  * @author raman
  *
  */
 public class Constants {
 
+	/**
+	 * Enum object with three possible service state: PUBLISH, UNPUBLISH and DEPRECATE
+	 */
 	public enum SERVICE_STATE {PUBLISH, UNPUBLISH, DEPRECATE};
 }
