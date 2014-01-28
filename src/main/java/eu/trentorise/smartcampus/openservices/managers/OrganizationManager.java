@@ -41,8 +41,8 @@ import eu.trentorise.smartcampus.openservices.entities.UserRole;
 import eu.trentorise.smartcampus.openservices.support.GenerateKey;
 
 /**
- * Organization manager interfaces with dao
- * Retrieve, add, modify and delete organization data.
+ * Manager that retrieves, adds, modifies and deletes organization data.
+ * These operations are allowed only for logged user, who has role in organization.
  * 
  * @author raman
  *
@@ -50,25 +50,42 @@ import eu.trentorise.smartcampus.openservices.support.GenerateKey;
 @Component
 @Transactional
 public class OrganizationManager {
-
+	/**
+	 * Instance of {@link UserDao} to retrieve user data using Dao classes.
+	 */
 	@Autowired
 	private UserDao userDao;
+	/**
+	 * Instance of {@link UserRoleDao} to retrieve role of user data using Dao classes.
+	 */
 	@Autowired
 	private UserRoleDao urDao;
+	/**
+	 * Instance of {@link OrganizationDao} to retrieve organization data using Dao classes.
+	 */
 	@Autowired
 	private OrganizationDao orgDao;
+	/**
+	 * Instance of {@link ServiceDao} to retrieve service data using Dao classes.
+	 */
 	@Autowired
 	private ServiceDao serviceDao;
+	/**
+	 * Instance of {@link TemporaryLinkDao} to retrieve temporary data using Dao classes.
+	 */
 	@Autowired
 	private TemporaryLinkDao tlDao;
+	/**
+	 * Instance of {@link ServiceHistoryDao} to retrieve service history data using Dao classes.
+	 */
 	@Autowired
 	private ServiceHistoryDao shDao;
 
 
 	/**
 	 * Delete an existing organization from database
-	 * @param username: logged in user
-	 * @param orgId: organizatin id
+	 * @param username : String username of logged in user
+	 * @param orgId : int organizatin id
 	 * @return boolean: true if it is ok, else false
 	 * @throws SecurityException when user has not correct role
 	 */
@@ -113,8 +130,8 @@ public class OrganizationManager {
 	/**
 	 * Add a new organization in database
 	 * Add organization owner role to this user
-	 * @param username
-	 * @param org: Organization data
+	 * @param username : String username of user
+	 * @param org : Organization data
 	 * @return boolean: true if it is ok, else false
 	 */
 	@Transactional
@@ -142,8 +159,8 @@ public class OrganizationManager {
 
 	/**
 	 * Update an existing organization data from database
-	 * @param username
-	 * @param org: Organization data
+	 * @param username : String username of user
+	 * @param org : Organization data
 	 * @return boolean: true if it is ok, else false
 	 * @throws SecurityException when user has not correct role
 	 */
@@ -170,7 +187,7 @@ public class OrganizationManager {
 	}
 
 	/**
-	 * @param username
+	 * @param username : String username of user
 	 * @return list of organizations, where the user is org owner or data owner
 	 */
 	public List<Organization> getUserOrganizations(String username) {
@@ -186,12 +203,12 @@ public class OrganizationManager {
 	
 	/**
 	 * Invite a user to become part of an organization
-	 * User who send invitaton must have role organization owner for this organization
+	 * User who send invitation must have role organization owner for this organization
 	 * The invitation create a temporary link object with a key
-	 * @param username: user who invites new organization owner
-	 * @param org_id: organization id
-	 * @param role: role for new organization owner
-	 * @param email: of new organization owner
+	 * @param username : String, user who invites new organization owner
+	 * @param org_id : int organization id
+	 * @param role : String, role for new organization owner
+	 * @param email : String, email of new organization owner
 	 * @return String key
 	 * @throws SecurityException when user has not correct role
 	 */
@@ -224,7 +241,7 @@ public class OrganizationManager {
 	}
 
 	/**
-	 * @param org_id
+	 * @param org_id : int organization id
 	 * @return {@link Organization} instance
 	 */
 	public Organization getOrganizationById(int org_id) {
@@ -247,7 +264,7 @@ public class OrganizationManager {
 	}
 
 	/**
-	 * @param org_id
+	 * @param org_id : String organization id
 	 * @return list of {@link ServiceHistory} instances for the organization
 	 */
 	public List<ServiceHistory> getHistory(int org_id) {
@@ -261,8 +278,8 @@ public class OrganizationManager {
 	/**
 	 * New organization owner user must use its username and key to connect with organization
 	 * If it is ok, then a new user role is created and user become an organization owner
-	 * @param username: logged in user
-	 * @param key: private key of invitation
+	 * @param username : String username of logged in user
+	 * @param key : String private key of invitation
 	 * @return boolean: true if it is ok, else false
 	 * @throws SecurityException when user has not correct role
 	 * @throws EntityNotFoundException when temporary link object does not exist
@@ -295,9 +312,9 @@ public class OrganizationManager {
 	
 	/**
 	 * Remove an organization owner from organization
-	 * @param username: logged in user
-	 * @param org_id: organization id
-	 * @param user_id: user id of user we want to delete
+	 * @param username : String username of logged in user
+	 * @param org_id : int organization id
+	 * @param user_id : int user id of user we want to delete
 	 * @return boolean: true if it is ok, else false
 	 * @throws SecurityException when user has not correct role
 	 */

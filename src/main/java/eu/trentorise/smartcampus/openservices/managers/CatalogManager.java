@@ -31,6 +31,7 @@ import eu.trentorise.smartcampus.openservices.dao.MethodDao;
 import eu.trentorise.smartcampus.openservices.dao.OrganizationDao;
 import eu.trentorise.smartcampus.openservices.dao.ServiceDao;
 import eu.trentorise.smartcampus.openservices.dao.ServiceHistoryDao;
+import eu.trentorise.smartcampus.openservices.dao.UserDao;
 import eu.trentorise.smartcampus.openservices.entities.Category;
 import eu.trentorise.smartcampus.openservices.entities.Method;
 import eu.trentorise.smartcampus.openservices.entities.Organization;
@@ -39,11 +40,8 @@ import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
 import eu.trentorise.smartcampus.openservices.support.CategoryServices;
 
 /**
- * Catalog Manager
- * Component Interface with dao
- * 
- * This class retrieves data about service and organization for 
- * anonymous users
+ * Manager that retrieves data about service and organization for 
+ * all users.
  * 
  * @author Giulia Canobbio
  *
@@ -51,16 +49,29 @@ import eu.trentorise.smartcampus.openservices.support.CategoryServices;
 @Component
 @Transactional
 public class CatalogManager {
-	
+	/**
+	 * Instance of {@link ServiceDao} to retrieve service data using Dao classes.
+	 */
 	@Autowired
 	private ServiceDao serviceDao;
+	/**
+	 * Instance of {@link OrganizationDao} to retrieve organization data using Dao classes.
+	 */
 	@Autowired
 	private OrganizationDao orgDao;
+	/**
+	 * Instance of {@link MethodDao} to retrieve service method data using Dao classes.
+	 */
 	@Autowired
 	private MethodDao methodDao;
+	/**
+	 * Instance of {@link ServiceHistoryDao} to retrieve service history data using Dao classes.
+	 */
 	@Autowired
 	private ServiceHistoryDao shDao;
-	
+	/**
+	 * Instance of {@link CategoryManager} to retrieve category data.
+	 */
 	@Autowired
 	private CategoryManager categoryManager;
 	
@@ -79,7 +90,7 @@ public class CatalogManager {
 	
 	/**
 	 *  Get Service data, searching by id
-	 * @param service_id
+	 * @param service_id : int service id
 	 * @return a {@link Service} instance
 	 */
 	public Service catalogServiceById(int service_id){
@@ -99,7 +110,7 @@ public class CatalogManager {
 	/**
 	 * Get list of methods for a given Service.
 	 * Search by service id
-	 * @param service_id
+	 * @param service_id : int service id
 	 * @return all {@link Method} instances
 	 */
 	public List<Method> catalogServiceMethods(int service_id){
@@ -113,7 +124,7 @@ public class CatalogManager {
 	/**
 	 * Get list of service history for a given Service.
 	 * Search by service id
-	 * @param service_id
+	 * @param service_id : int service id
 	 * @return all {@link ServiceHistory} instances
 	 */
 	public List<ServiceHistory> catalogServiceHistory(int service_id){
@@ -126,8 +137,8 @@ public class CatalogManager {
 	
 	/**
 	 * Get list of all services.
-	 * Their name contains token
-	 * @param token
+	 * Their name contains token.
+	 * @param token : String token compared with service name
 	 * @return all {@link Service} instances
 	 */
 	public List<Service> catalogServiceSimpleSearch(String token){
@@ -140,7 +151,7 @@ public class CatalogManager {
 	
 	/**
 	 * Get list of all services, searching by category.
-	 * @param category
+	 * @param category : int category id
 	 * @return all {@link Service} instances
 	 */
 	public List<Service> catalogServiceBrowseByCategory(int category){
@@ -153,7 +164,7 @@ public class CatalogManager {
 	
 	/**
 	 * Retrieve all service of a specific organization
-	 * @param org id of organization
+	 * @param org : id of organization
 	 * @return all {@link Service} instances
 	 */
 	public List<Service> catalogServiceBrowseByOrg(int org) {
@@ -176,7 +187,7 @@ public class CatalogManager {
 
 	/**
 	 * Get list of all services, searching by tags
-	 * @param tags
+	 * @param tags : String tags for searching in service tags
 	 * @return all {@link Service} instances
 	 */
 	public List<Service> catalogServiceBrowseByTags( String tags) {
@@ -202,7 +213,7 @@ public class CatalogManager {
 	/**
 	 * Simple search for organization.
 	 * Their names contains token.
-	 * @param token
+	 * @param token : String token for comparing it with organization name
 	 * @return all {@link Organization} instances
 	 */
 	public List<Organization> catalogOrgSimpleSearch(@PathVariable String token){
@@ -215,7 +226,7 @@ public class CatalogManager {
 	
 	/**
 	 * Get list of organization searching by category
-	 * @param category
+	 * @param category : int category id
 	 * @return all {@link Organization} instances
 	 */
 	public List<Organization> catalogOrgBrowse(@PathVariable int category){
@@ -228,7 +239,7 @@ public class CatalogManager {
 
 	/**
 	 * Retrieve organization data searching by its id
-	 * @param id: organzation id
+	 * @param id : int organization id
 	 * @return {@link Organization} instance
 	 */
 	public Organization catalogOrgById(int id) {

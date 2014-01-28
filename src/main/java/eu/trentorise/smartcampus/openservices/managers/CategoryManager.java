@@ -28,32 +28,40 @@ import org.springframework.transaction.annotation.Transactional;
 import eu.trentorise.smartcampus.openservices.dao.CategoryDao;
 import eu.trentorise.smartcampus.openservices.dao.OrganizationDao;
 import eu.trentorise.smartcampus.openservices.dao.ServiceDao;
+import eu.trentorise.smartcampus.openservices.dao.UserDao;
 import eu.trentorise.smartcampus.openservices.entities.Category;
 import eu.trentorise.smartcampus.openservices.entities.Organization;
 import eu.trentorise.smartcampus.openservices.entities.Service;
 
 /**
- * Category Manager Interfaces with dao
- * Retrieve, add, modify and delete category from database
+ * Manager that retrieves, adds, modifies and deletes category from database
  * 
  * @author raman
  *
  */
 @Component
 public class CategoryManager {
-
+	/**
+	 * Instance of {@link CategoryDao} to retrieve category data using Dao classes.
+	 */
 	@Autowired
 	private CategoryDao categoryDao;
+	/**
+	 * Instance of {@link ServiceDao} to retrieve service data using Dao classes.
+	 */
 	@Autowired 
 	private ServiceDao serviceDao;
+	/**
+	 * Instance of {@link OrganizationDao} to retrieve organization data using Dao classes.
+	 */
 	@Autowired
 	private OrganizationDao organizationDao;
 
 	/**
 	 * Retrieve category data from database
 	 * searching by id
-	 * @param id: category id
-	 * @return {@link Category} instance
+	 * @param id : int category id
+	 * @return a {@link Category} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -68,7 +76,7 @@ public class CategoryManager {
 	/**
 	 * Retrieve category data from database
 	 * Searching by category name
-	 * @param name: category name
+	 * @param name : String category name
 	 * @return {@link Category} instance
 	 * @throws DataAccessException
 	 */
@@ -97,8 +105,8 @@ public class CategoryManager {
 	
 	/**
 	 * Add a new category in database
-	 * @param category: Category data
-	 * @return {@link Category} instance
+	 * @param category : {@link Category} instance
+	 * @return a added {@link Category} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -116,8 +124,8 @@ public class CategoryManager {
 	
 	/**
 	 * Modify category data from database
-	 * @param category: Category data
-	 * @return {@link Category} instance
+	 * @param category : {@link Category} instance
+	 * @return a modified {@link Category} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -136,7 +144,7 @@ public class CategoryManager {
 	
 	/**
 	 * Delete category data from database
-	 * @param id: category id
+	 * @param id : int category id
 	 * @return boolean: true if it is ok else false
 	 * @throw EntityExistsException if delete is not successful
 	 * @throws DataAccessException

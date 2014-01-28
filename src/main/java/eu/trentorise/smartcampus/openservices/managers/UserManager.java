@@ -15,18 +15,22 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.managers;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import eu.trentorise.smartcampus.openservices.dao.TemporaryLinkDao;
 import eu.trentorise.smartcampus.openservices.dao.UserDao;
+import eu.trentorise.smartcampus.openservices.entities.TemporaryLink;
 import eu.trentorise.smartcampus.openservices.entities.User;
+import eu.trentorise.smartcampus.openservices.support.GenerateKey;
 
 /**
- * User Manager
- * Interfaces with dao
- * Retrieve, add, modify, delete user data
+ * Manager that retrieves, adds, modifies and deletes user data
+ * calling dao classes.
  * 
  * @author Giulia Canobbio
  *
@@ -34,13 +38,20 @@ import eu.trentorise.smartcampus.openservices.entities.User;
 @Component
 @Transactional
 public class UserManager {
-	
+	/**
+	 * Instance of {@link UserDao} to retrieve data of user.
+	 */
 	@Autowired
 	private UserDao userDao;
+	/**
+	 * Instance of {@link TemporaryLinkManager} to retrieve data of temporary link.
+	 */
+	@Autowired
+	private TemporaryLinkDao tlDao;
 	
 	/**
 	 * Get user data by id
-	 * @param id
+	 * @param id : int id of user 
 	 * @return a {@link User} instance
 	 */
 	public User getUserById( int id){
@@ -53,7 +64,7 @@ public class UserManager {
 	
 	/**
 	 * Get user by username
-	 * @param username
+	 * @param username : String username of user
 	 * @return a {@link User} instance
 	 */
 	public User getUserByUsername(String username){
@@ -65,9 +76,9 @@ public class UserManager {
 	}
 	
 	/**
-	 * Add a new user in database
-	 * Return new user
-	 * @param user
+	 * Add a new user in database.
+	 * Retrieves new user.
+	 * @param user : {@link User} instance
 	 * @return a {@link User} instance
 	 */
 	public User createUser(User user){
@@ -82,10 +93,10 @@ public class UserManager {
 	}
 	
 	/**
-	 * Modify user data
-	 * Profile and email
-	 * @param username
-	 * @param user
+	 * Modify user data.
+	 * User can modify only profile data and email.
+	 * @param username : String username of user
+	 * @param user : {@link User} instance
 	 * @return a {@link User} instance
 	 */
 	public User modifyUserData(String username, User user){
@@ -102,16 +113,32 @@ public class UserManager {
 	
 	
 	/**
-	 * Enable user
-	 * This can be done by verifying email
-	 * @param username
-	 * @param user
+	 * Enable user.
+	 * This can be done by verifying email.
+	 * @param username : String username of user
+	 * @return a {@link User} instance of enabled user
 	 */
 	public User enableUser(String username){
-		//TODO
 		try{
 			User user = userDao.getUserByUsername(username);
 			userDao.enableUser(user.getId());
+			User userN = userDao.getUserById(user.getId());
+			return userN;
+		}catch(DataAccessException d){
+			return null;
+		}
+	}
+	
+	/**
+	 * Disable a user.
+	 * Only admin user can disable a user.
+	 * @param username : String username of user that admin wants to disable.
+	 * @return a {@link User} instance of disabled user
+	 */
+	public User disabledUser(String username){
+		try{
+			User user = userDao.getUserByUsername(username);
+			userDao.disableUser(user.getId());
 		
 			User userN = userDao.getUserById(user.getId());
 			return userN;
@@ -121,18 +148,55 @@ public class UserManager {
 	}
 	
 	/**
-	 * Disable a user
-	 * Only for admin
-	 * @param username
-	 * @return a {@link User} instance
+	 * Save in temporary link table, key and email address of user.
+	 * After doing registration, link + key value to enable his/her account is sent by email.
+	 * @param username : String username of user that we want to verify email address
+	 * @return String value, it is key value if it is ok, else it is null. In case user is enable then 
+	 * a security exception is threw.
 	 */
-	public User disabledUser(String username){
+	public String addKeyVerifyEmail(String username){
+		String key;
 		try{
 			User user = userDao.getUserByUsername(username);
-			userDao.disableUser(user.getId());
-		
-			User userN = userDao.getUserById(user.getId());
-			return userN;
+			//check if user is enable or not
+			if(user.getEnabled()==0){
+				// Generate a key
+				GenerateKey g = new GenerateKey();
+				key = g.getPriv().toString().split("@")[1];
+				//save in temporary link table
+				TemporaryLink tl = new TemporaryLink();
+				tl.setId_org(0);
+				tl.setKey(key);
+				tl.setEmail(user.getEmail());
+				tlDao.save(tl);
+				return key;
+				
+			}else{
+				throw new SecurityException();
+			}
+			
+		}catch(DataAccessException d){
+			return null;
+		}
+	}
+	
+	/**
+	 * Enable user account by checking user email and key.
+	 * After finding key in database, this object is deleted.
+	 * @param username : String username of user that wants to enable his/her account
+	 * @param key : String key sent by email for verifying email address
+	 * @return {@link User} instance of enabled account otherwise if key does not exist then EntityNotFoundException
+	 */
+	public User enableUserAfterVerification(String username, String key){
+		try{
+		User user = userDao.getUserByUsername(username);
+		TemporaryLink tl = tlDao.getTLByKey(key);
+		if(tl!=null && user.getEmail().equalsIgnoreCase(tl.getEmail()) && tl.getId_org()==0 && tl.getRole()==null){
+			tlDao.delete(key);
+			return enableUser(username);
+		}else{
+			throw new EntityNotFoundException();
+		}
 		}catch(DataAccessException d){
 			return null;
 		}
