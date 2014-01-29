@@ -440,17 +440,6 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
  	$scope.request = {};
  	Catalog.getServiceById({id:$routeParams.id}, function (data) {
          $scope.service = data.data;
-//         var testprops = {
-//        		 authentication : $scope.service.accessInformation.authentication,
-//        		 tests: [{
-//        			name : 'personal profile',
-//        			description: 'request personal profile',
-//        			requestPath: 'https://vas-dev.smartcampuslab.it/aac/basicprofile/me',
-//        			requestPathEditable: false,
-//        			requestMethod: 'GET',
-//        			headers: {'Accept':'application/json'}
-//        		 }]
-//         };
          
      	 Catalog.getOrgById({id:$scope.service.organizationId}, function (data) {
      		$scope.org = data.data;
