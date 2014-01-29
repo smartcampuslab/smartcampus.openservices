@@ -1,107 +1,21 @@
 <div class="animated fadeIn">
     <div class="row">
-        <div class="col-md-4 col-md-offset-2">
-            <h2>{{service.name}}</h2>
-            <h5>{{service.description}}</h5>
+        <div class="col-md-8 col-md-offset-2">
+			<div class="page-header">
+			  <h1>{{service.name}} <small>{{service.description}}</small></h1>
+			</div>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-2 col-md-offset-2">
-            <h4>Info</h4>
-            <hr>
-            <ul>
-                <li>organization: {{org.name}}</li>
-                <li>tags: {{service.tags}}</li>
-                <li>category: {{category.name}} </li>
-                <li>documentation: <a ng-href="{{service.documentation}}">{{service.documentation}}</a></li>
-                <li>license: {{service.license}}</li>
-                <li>version: {{service.version}}</li>
-                <li>expiration: {{service.expiration}}</li>
-            </ul>
-        </div>
-        <div class="col-md-2 col-md-offset-1">
-            <h4>Access information</h4>
-            <hr>
-            <ul>
-                <li>access policies: {{service.accessInformation.accessPolicies}}</li>
-                <li>testing endpoint: {{service.accessInformation.testingEndpoint}}</li>
-                <li>production endpoint: {{service.accessInformation.productionEndpoint}}</li>
-                <li>formats: {{service.accessInformation.formats}}</li>
-                <li>protocols: {{service.accessInformation.protocols}}</li>
-                <li>authentication: {{service.accessInformation.authentication.accessProtocol}}</li>
-            </ul>
-        </div>
-        <div class="col-md-2 col-md-offset-1">
-            <h4>Implementation</h4>
-            <hr>
-            <ul>
-                <li>execution environment: {{service.implementation.executionEnvironment}}</li>
-                <li>hosting: {{service.implementation.hosting}}</li>
-                <li>source: <a ng-href="{{service.implementation.sourceCode}}">{{service.implementation.sourceCode}}</a></li>
-            </ul>
+        <div class="col-md-8 col-md-offset-2">
+			<ul class="nav nav-tabs">
+			  <li ng-class="{active: template==='partials/services/_about.html'}"><a href="" ng-click="template = 'partials/services/_about.html'">About</a></li>
+			  <li ng-class="{active: template==='partials/services/_ac.html'}"><a href="" ng-click="template = 'partials/services/_ac.html'">Access Info</a></li>
+			  <li ng-class="{active: template==='partials/services/_implementation.html'}"><a href="" ng-click="template = 'partials/services/_implementation.html'">Implementation</a></li>
+			  <li ng-class="{active: template==='partials/services/_tests.html'}"><a href="" ng-click="template = 'partials/services/_tests.html'">Tests</a></li>
+			</ul>
         </div>
     </div>
-    <hr>
-
-    <div class="row">
-        <div class="col-md-4 col-md-offset-2">
-            <p>
-                <div class="input-group">
-                    <span class="input-group-addon">method</span>
-                    <select ng-options="method as method.name for method in methods" ng-model="request.method" class="form-control" />
-                </div>
-            </p>
-            <p>
-                <div class="input-group">
-                    <span class="input-group-addon">test</span>
-                    <select ng-options="sample as sample.name for sample in request.method.testboxProperties.tests" ng-model="request.sample" class="form-control" />
-                </div>
-            </p>
-
-        </div>
-        <div class="col-md-4">
-            <ul ng-show="request.method">
-                <li>description: {{request.method.synopsis}}</li>
-                <li>
-                    documentation: <a ng-href="{{request.method.documentation}}">{{request.method.documentation}}</a>
-                </li>
-            </ul>
-
-        </div>
-    </div>
-    <hr>
-    <div class="row">
-        <div class="col-md-4 col-md-offset-2">
-            <h4>Request:</h4>
-            <div ng-if="request.sample.requestPathEditable">
-                  <div class="form-group">
-                    <label for="path">Request path</label>
-                      <input type="text" class="form-control" id="path" ng-model="request.sample.requestPath"/>
-                  </div>
-            </div>
-            <div ng-if="request.sample.requestBodyEditable">
-                  <div class="form-group">
-                    <label for="body">Request body</label>
-                      <textarea class="form-control" id="body" ng-model="request.sample.requestBody" rows="2"/>
-                  </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div>
-                <h4>Response:</h4>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4 col-md-offset-2">
-                  <pre ><code prism class="language-http">{{request.sample.requestMethod}} {{request.sample.requestPath}}
-{{request.sample.headers}}
-{{request.sample.requestBody}}</code></pre>
-            <button ng-disabled="!checkBeforeSend()" ng-click="send()" type="button" class="btn btn-success">Send</button>
-        </div>
-        <div class="col-md-4">
-                <pre><code prism class="language-http">{{response}}
-</code></pre>
-        </div>
-    </div>
+    <div ng-include="template"></div>
+    
 </div>
