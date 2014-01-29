@@ -452,7 +452,7 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
 //        		 }]
 //         };
          
-     	 Catalog.getOrgById({id:data.organizationId}, function (data) {
+     	 Catalog.getOrgById({id:$scope.service.organizationId}, function (data) {
      		$scope.org = data.data;
      	 });
          if ($scope.service.category) {
