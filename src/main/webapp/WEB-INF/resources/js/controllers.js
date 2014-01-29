@@ -503,10 +503,11 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
                withCredentials: true
              }).success(function (data, status, headers) {
                $scope.response = 'HTTP/1.1 ' + status + '\n';
-//               for (var key in headers()) {
-//                 $scope.response += toTitleCase(key) + ': ' + headers()[key] + '\n';
-//               }
-               $scope.response += '\n' + JSON.stringify(data.data, null, 2);
+               for (var key in headers()) {
+                $scope.response += toTitleCase(key) + ': ' + headers()[key] + '\n';
+               }
+               //$scope.response ='HTTP/1.1 200 OK\nContent-Type: application/xml\nX-Response-Time: 10ms\n\n<root>\n    <status code="0">\n        Successful\n    </status>\n</root>'
+               $scope.response += '\n' + data.data;
              }).error(function (err) {
                console.log(err);
              });
