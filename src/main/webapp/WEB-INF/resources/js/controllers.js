@@ -356,17 +356,17 @@ app.controller('servicesCtrl', ['$scope', '$http', '$routeParams', 'Catalog',
 
     if ($routeParams.category) {
         Catalog.browseServiceCat({category:$routeParams.category},function (services) {
-            console.log(services);
             $scope.services = services.data;
           });
     } else if ($routeParams.org) {
         Catalog.browseServiceOrg({org:$routeParams.org},function (services) {
-            console.log(services);
             $scope.services = services.data;
           });
     } else {
         Catalog.listServices({},function (services) {
-            console.log(services);
+        	services.data.forEach(function(e){
+        		e.tags = e.tags.split(",")
+        	})
             $scope.services = services.data;
           });
     }
@@ -436,6 +436,7 @@ app.controller('cbCtrl', ['$location',
 app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', '$http', '$location', 'oAuth','RemoteApi',
    function ($scope, $routeParams, Catalog, Category, $http, $location, oAuth, RemoteApi) {
  	var remoteapi;
+ 	$scope.template = 'partials/services/_about.html';
  	$scope.request = {};
  	Catalog.getServiceById({id:$routeParams.id}, function (data) {
          $scope.service = data.data;
