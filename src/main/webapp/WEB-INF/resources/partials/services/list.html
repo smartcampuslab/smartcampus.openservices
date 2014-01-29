@@ -5,7 +5,7 @@
 			    <p>{{service.description}}</p>
 			    <div>
 					<span class="badge">Version: {{service.version}}</span>
-					<div class="pull-right">
+					<div ng-show="service.tags" class="pull-right">
 						<span ng-repeat="tag in service.tags" class="label label-success">{{tag}}</span>
 					</div>         
 				</div>
