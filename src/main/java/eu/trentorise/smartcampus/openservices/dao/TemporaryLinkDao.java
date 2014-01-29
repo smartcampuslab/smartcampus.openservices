@@ -32,13 +32,13 @@ public interface TemporaryLinkDao /*extends Repository<TemporaryLink, Long>*/{
 	 * Find a TemporaryLink data by key 
 	 * key is primary key of table TemporaryLink
 	 * @param key
-	 * @return
+	 * @return a {@link TemporaryLink} instance
 	 */
 	public TemporaryLink getTLByKey(String key) throws DataAccessException;
 	
 	/**
 	 * Save a TemporaryLink data in db
-	 * @param tl
+	 * @param tl : a {@link TemporaryLink} instance
 	 */
 	public void save(TemporaryLink tl) throws DataAccessException;
 	

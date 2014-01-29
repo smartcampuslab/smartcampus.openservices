@@ -57,9 +57,10 @@ public class TemporaryLinkDaoImpl implements TemporaryLinkDao{
 	}
 
 	/**
-	 * Retrieve temporary link data from database by key
-	 * @param String key
-	 * @return {@TemporaryLink} instance
+	 * Retrieve temporary link data from database by key,
+	 * which is a unique index.
+	 * @param key : String
+	 * @return {@link TemporaryLink} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -75,8 +76,8 @@ public class TemporaryLinkDaoImpl implements TemporaryLinkDao{
 	}
 
 	/**
-	 * Add a new temporary link in database
-	 * @param {@TemporaryLink} instance
+	 * Add a new temporary link in database.
+	 * @param tl : {@link TemporaryLink} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -88,8 +89,8 @@ public class TemporaryLinkDaoImpl implements TemporaryLinkDao{
 
 	/**
 	 * Delete an existing temporary link from database
-	 * Searching by key
-	 * @param String key
+	 * Searching by key, unique index.
+	 * @param key : String
 	 * @throws DataAccessException
 	 */
 	@Transactional

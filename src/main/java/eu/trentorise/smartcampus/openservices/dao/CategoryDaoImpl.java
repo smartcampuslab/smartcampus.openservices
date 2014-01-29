@@ -51,9 +51,9 @@ public class CategoryDaoImpl implements CategoryDao {
 	}
 
 	/**
-	 * Return {@Category} instance searching by category id
-	 * @param int category id
-	 * @return {@Category} instance
+	 * Return {@link Category} instance searching by category id
+	 * @param id : int category id
+	 * @return a {@link Category} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -63,9 +63,9 @@ public class CategoryDaoImpl implements CategoryDao {
 	}
 
 	/**
-	 * Return {@Category} instance searching by category name
-	 * @param string name
-	 * @return {@Category} instance
+	 * Return {@link Category} instance searching by category name
+	 * @param name : string name
+	 * @return a {@link Category} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -82,7 +82,7 @@ public class CategoryDaoImpl implements CategoryDao {
 	
 	/**
 	 * Return a list of all categories
-	 * @return {@Category} instance list
+	 * @return a {@link Category} instance list
 	 * @throws DataAccessException
 	 */
 	@Override
@@ -93,7 +93,7 @@ public class CategoryDaoImpl implements CategoryDao {
 
 	/**
 	 * Save a new category in database
-	 * @param {@Category} category
+	 * @param category : {@link Category} 
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -104,7 +104,7 @@ public class CategoryDaoImpl implements CategoryDao {
 
 	/**
 	 * Modify an existing category
-	 * @param {@Category} category
+	 * @param category : {@link Category}
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -116,7 +116,7 @@ public class CategoryDaoImpl implements CategoryDao {
 
 	/**
 	 * Delete an existing category from database
-	 * @param {@Category} category
+	 * @param category : {@link Category}
 	 * @throws DataAccessException
 	 */
 	@Transactional

@@ -31,86 +31,103 @@ import eu.trentorise.smartcampus.openservices.entities.*;
 public interface ServiceDao {
 
 	/**
-	 * Show all service
-	 * @return
+	 * Show all service.
+	 * @return list of {@link Service} instances
+	 * @throws DataAccessException
 	 */
 	public List<Service> showService() throws DataAccessException;
 	
 	/**
-	 * Show only published services
-	 * @return
+	 * Show only published services.
+	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
 	public List<Service> showPublishedService() throws DataAccessException;
 	
 	/**
-	 * Show all service of a given user
+	 * Show all service of a given user.
 	 * @param username
-	 * @return
+	 * @return list of {@link Service} instances
+	 * @throws DataAccessException
 	 */
 	public List<Service> showMyService(String username) throws DataAccessException;
 	
 	/**
-	 * User can interact and use a chosen service
+	 * User can interact and use a chosen service.
 	 * @param service_name
+	 * @return a {@link Service} instance
+	 * @throws DataAccessException
 	 */
 	public Service useService(String service_name) throws DataAccessException;
 	
 	/**
 	 * Create a service to an organization.
-	 * Set username as owner_id
+	 * Set user as owner.
+	 * @param service : a {@link Service} instance
+	 * @throws DataAccessException
 	 */
 	public void createService(Service service) throws DataAccessException;
 	
 	/**
-	 * Modify a service 
+	 * 
+	 * Modify a service.
+	 * @param service : a {@link Service} instance
+	 * @throws DataAccessException
 	 */
 	public void modifyService(Service service) throws DataAccessException;
 	
 	/**
-	 * Delete a service
+	 * Delete a service.
+	 * @param service : a {@link Service} instance
+	 * @throws DataAccessException
 	 */
 	public void deleteService(Service service) throws DataAccessException;
 	
 	/**
-	 * Get organization of service
+	 * Get organization of service.
 	 * @param service_id
-	 * @return
+	 * @return a {@link Organization} instance
+	 * @throws DataAccessException
 	 */
 	public Organization getOrganizationofService(int service_id) throws DataAccessException;
 	
 	/**
-	 * Get owner of service
+	 * Get owner of service.
 	 * @param service_id
-	 * @return
+	 * @return a {@link User} instance
+	 * @throws DataAccessException
 	 */
 	public User getOwnerOfService(int service_id) throws DataAccessException;
 	
 	/**
-	 * Get service by id
+	 * Get service by id.
 	 * @param service_id
-	 * @return
+	 * @return a {@link Service} instance
+	 * @throws DataAccessException
 	 */
 	public Service getServiceById(int service_id) throws DataAccessException;
 	
 	/**
-	 * Get service by owner id
+	 * Get service by owner id.
 	 * @param id_owner
-	 * @return
+	 * @return list of {@link Service} instances
+	 * @throws DataAccessException
 	 */
 	public List<Service> getServiceByIdOwner(int id_owner) throws DataAccessException;
 	
 	/**
-	 * Get service by organization id
+	 * Get service by organization id.
 	 * @param id_org
-	 * @return
+	 * @return list of {@link Service} instances
+	 * @throws DataAccessException
 	 */
 	public List<Service> getServiceByIdOrg(int id_org) throws DataAccessException;
 	
 	/**
 	 * Find services having in name the token in input
 	 * @param token
-	 * @return
+	 * @return list of {@link Service} instances
+	 * @throws DataAccessException
 	 */
 	public List<Service> searchService(String token) throws DataAccessException;
 	
@@ -118,20 +135,21 @@ public interface ServiceDao {
 	 * Browse services having input category and tags
 	 * @param category
 	 * @param tags
-	 * @return
+	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
 	public List<Service> browseService(Integer category, String tags) throws DataAccessException;
 
 	/**
 	 * @param id
-	 * @return services of the specific category
+	 * @return list {@link Service} instances in a specific category
+	 * @throws DataAccessException
 	 */
 	public List<Service> findByCategory(int id);
 
 	
 	/**
-	 * @return number of services for each category;
+	 * @return Map<Integer, Integer>: category, number of services for each category;
 	 * @throws DataAccessException
 	 */
 	public Map<Integer,Integer> findCategoryServices() throws DataAccessException;

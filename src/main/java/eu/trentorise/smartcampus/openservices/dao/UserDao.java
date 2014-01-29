@@ -30,46 +30,52 @@ import eu.trentorise.smartcampus.openservices.entities.*;
 public interface UserDao {
 	
 	/**
-	 * Get a list of users
-	 * @return
+	 * Get a list of users.
+	 * @return list of {@link User} instances
+	 * @throws DataAccessException
 	 */
 	public List<User> getUsers() throws DataAccessException;
 	
 	/**
-	 * Get a user by id
+	 * Get a user by id.
 	 * @param id
-	 * @return
+	 * @return a {@link User} instance
+	 * @throws DataAccessException
 	 */
 	public User getUserById(int id) throws DataAccessException;
 	
 	/**
-	 * Get a user by username, which is not null and unique
+	 * Get a user by username, which is not null and unique.
 	 * @param username
-	 * @return
+	 * @return a {@link User} instance
+	 * @throws DataAccessException
 	 */
 	public User getUserByUsername(String username) throws DataAccessException;
 	
 	/**
-	 * Modify User data
-	 * @param user
+	 * Modify User data.
+	 * @param user_id : int
+	 * @param user : a {@link User} instance
 	 * @throws DataAccessException
 	 */
 	public void modifyUser(int user_id, User user) throws DataAccessException;
 	
 	/**
-	 * Add a new user
-	 * @param user
+	 * Add a new user.
+	 * @param user : a {@link User} instance
+	 * @throws DataAccessException
 	 */
 	public void addUser(User user) throws DataAccessException;
 	
 	/**
-	 * disable a user
+	 * disable a user.
 	 * @param id
+	 * @throws DataAccessException
 	 */
 	public void disableUser(int user_id) throws DataAccessException;
 	
 	/**
-	 * Enable user
+	 * Enable user.
 	 * @param user_id
 	 * @throws DataAccessException
 	 */

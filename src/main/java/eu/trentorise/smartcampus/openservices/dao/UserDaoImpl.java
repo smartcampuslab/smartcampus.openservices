@@ -60,7 +60,7 @@ public class UserDaoImpl implements UserDao{
 
 	/**
 	 * Retrieve all user data from database
-	 * @return list of {@User} instance
+	 * @return list of {@link User} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -77,8 +77,8 @@ public class UserDaoImpl implements UserDao{
 
 	/**
 	 * Retrieve user data by user id
-	 * @param int user id
-	 * @return {@User} instance
+	 * @param id : int user id
+	 * @return {@link User} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -89,8 +89,8 @@ public class UserDaoImpl implements UserDao{
 
 	/**
 	 * Retrieve user data by username
-	 * @param String username
-	 * @return {@User} instance
+	 * @param username : String
+	 * @return {@link User} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -109,8 +109,8 @@ public class UserDaoImpl implements UserDao{
 	/**
 	 * Modify an existing user profile from database
 	 * if password is different (not null) then save new password in database
-	 * @param int user id
-	 * @param {@User} user
+	 * @param user_id : int
+	 * @param user : {@link User} instance with modified fields
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -131,7 +131,7 @@ public class UserDaoImpl implements UserDao{
 
 	/**
 	 * Add a new user to database
-	 * @param {@User} user
+	 * @param user : {@link User} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -145,7 +145,7 @@ public class UserDaoImpl implements UserDao{
 
 	/**
 	 * Disable a user
-	 * @param int user id
+	 * @param user_id : int
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -159,7 +159,7 @@ public class UserDaoImpl implements UserDao{
 	
 	/**
 	 * Enable a user
-	 * @param int user id
+	 * @param user_id : int
 	 * @throws DataAccessException
 	 */
 	@Transactional

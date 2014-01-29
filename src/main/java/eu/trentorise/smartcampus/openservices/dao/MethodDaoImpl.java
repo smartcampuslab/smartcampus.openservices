@@ -58,8 +58,8 @@ public class MethodDaoImpl implements MethodDao{
 
 	/**
 	 * Retrieve method from database searching by method id
-	 * @param int method id
-	 * @return {@Method} instance
+	 * @param id : int method id
+	 * @return a {@link Method} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -70,8 +70,8 @@ public class MethodDaoImpl implements MethodDao{
 
 	/**
 	 * Retrieve method from database searching by method name
-	 * @param String method name
-	 * @return {@Method} instance
+	 * @param name : String method name
+	 * @return a {@link Method} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -89,8 +89,8 @@ public class MethodDaoImpl implements MethodDao{
 	/**
 	 * Retrieve list of methods for a service.
 	 * Search methods by service id
-	 * @param int service id
-	 * @return a list of {@Method} instance
+	 * @param service_id : int service id
+	 * @return a list of {@link Method} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -105,7 +105,7 @@ public class MethodDaoImpl implements MethodDao{
 
 	/**
 	 * Add a new method in database
-	 * @param {@Method} instance
+	 * @param method : {@link Method} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -116,7 +116,7 @@ public class MethodDaoImpl implements MethodDao{
 
 	/**
 	 * Modify an existing method from database
-	 * @param {@Method} instance
+	 * @param method : {@link Method} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -128,7 +128,7 @@ public class MethodDaoImpl implements MethodDao{
 
 	/**
 	 * Delete an existing method from database
-	 * @param {@Method} instance
+	 * @param method : {@link Method} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional

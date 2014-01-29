@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import eu.trentorise.smartcampus.openservices.entities.Organization;
 import eu.trentorise.smartcampus.openservices.entities.Service;
 import eu.trentorise.smartcampus.openservices.entities.User;
+import eu.trentorise.smartcampus.openservices.managers.CatalogManager;
 
 /**
  * Service Dao Implementation
@@ -44,17 +45,25 @@ public class ServiceDaoImpl implements ServiceDao{
 	
 	@PersistenceContext(unitName="JpaPersistenceUnit")
 	protected EntityManager entityManager;
-	
+	/**
+	 * Instance of {@link UserDao} to retrieve user data.
+	 */
 	@Autowired
 	private UserDao userDao;
+	/**
+	 * Instance of {@link OrganizationDao} to retrieve organization data.
+	 */
 	@Autowired
 	private OrganizationDao orgDao;
+	/**
+	 * Instance of {@link UserRoleDao} to retrieve role of user data.
+	 */
 	@Autowired
 	private UserRoleDao urDao;	
 	
 	/**
 	 * 
-	 * @return entity manager
+	 * @return instance of entity manager
 	 */
 	public EntityManager getEntityManager() {
 		return entityManager;
@@ -71,7 +80,7 @@ public class ServiceDaoImpl implements ServiceDao{
 	/**
 	 * Retrieve all service data from database
 	 * Publish, Unpublish and Deprecated service.
-	 * @return List of {@Service} instance
+	 * @return List of {@link Service} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -84,7 +93,7 @@ public class ServiceDaoImpl implements ServiceDao{
 	
 	/**
 	 * Retrieve all service data but unpublished from database
-	 * @return List of {@Service} instance
+	 * @return List of {@link Service} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -97,8 +106,8 @@ public class ServiceDaoImpl implements ServiceDao{
 
 	/**
 	 * Retrieve all user's service from database
-	 * @param String username
-	 * @return List of {@Service} instance
+	 * @param username : String username
+	 * @return List of {@link Service} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -117,8 +126,8 @@ public class ServiceDaoImpl implements ServiceDao{
 	/**
 	 * Retrieve service data from database
 	 * Searching by service name
-	 * @param String service name
-	 * @return {@Service} instance
+	 * @param service_name : String service name
+	 * @return {@link Service} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -135,7 +144,7 @@ public class ServiceDaoImpl implements ServiceDao{
 
 	/**
 	 * Add a new service in database
-	 * @param {@Service} service
+	 * @param service : {@link Service}
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -146,7 +155,7 @@ public class ServiceDaoImpl implements ServiceDao{
 
 	/**
 	 * Modify an existing service from database
-	 * @param {@Service} service
+	 * @param service : {@link Service} 
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -157,7 +166,7 @@ public class ServiceDaoImpl implements ServiceDao{
 
 	/**
 	 * Delete an existing service from database
-	 * @param {@Service} service
+	 * @param service : {@link Service}
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -169,8 +178,8 @@ public class ServiceDaoImpl implements ServiceDao{
 	/**
 	 * Retrieve organization data for a particular service
 	 * Search by service id
-	 * @param int service id
-	 * @return {@Organization} instance
+	 * @param service_id : int service id
+	 * @return {@link Organization} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -182,8 +191,8 @@ public class ServiceDaoImpl implements ServiceDao{
 	
 	/**
 	 * Retrieve user data for a particular service in which user is owner
-	 * @param int service id
-	 * @return {@User} instance
+	 * @param service_id : int service id
+	 * @return {@link User} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -195,8 +204,8 @@ public class ServiceDaoImpl implements ServiceDao{
 
 	/**
 	 * Find service by its id
-	 * @param int service id
-	 * @return {@Service} instance
+	 * @param service_id : int service id
+	 * @return {@link Service} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -207,8 +216,8 @@ public class ServiceDaoImpl implements ServiceDao{
 
 	/**
 	 * Find a service by its owner
-	 * @param int service owner id
-	 * @return {@Service} instance
+	 * @param id_owner : int service owner id
+	 * @return {@link Service} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -222,8 +231,8 @@ public class ServiceDaoImpl implements ServiceDao{
 
 	/**
 	 * Find a service by its organization id
-	 * @param int organization id
-	 * @return {@Service} instance
+	 * @param id_org : int organization id
+	 * @return {@link Service} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -238,8 +247,8 @@ public class ServiceDaoImpl implements ServiceDao{
 	/**
 	 * Retrieve all services but unpublished one
 	 * Search by a token in name
-	 * @param String token
-	 * @return a list of {@Service} instance
+	 * @param token : String token
+	 * @return a list of {@link Service} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -253,9 +262,9 @@ public class ServiceDaoImpl implements ServiceDao{
 
 	/**
 	 * Browse all services but unpublished one by category and tags
-	 * @param int category id
-	 * @param String tags
-	 * @return list of {@Service} instance
+	 * @param category : int category id
+	 * @param tags : String tags
+	 * @return list of {@link Service} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -282,8 +291,8 @@ public class ServiceDaoImpl implements ServiceDao{
 
 	/**
 	 * Retrieve services by category
-	 * @param int category id
-	 * @return list of {@Service} instance
+	 * @param id : int category id
+	 * @return list of {@link Service} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional

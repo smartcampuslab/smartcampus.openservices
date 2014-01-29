@@ -58,8 +58,8 @@ public class UserRoleDaoImpl implements UserRoleDao{
 
 	/**
 	 * Retrieve all user role of a specified user
-	 * @param int user id
-	 * @return list of {@UserRole} instances
+	 * @param id_user : int
+	 * @return list of {@link UserRole} instances
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -72,9 +72,9 @@ public class UserRoleDaoImpl implements UserRoleDao{
 	}
 
 	/**
-	 * Retrieve all user role for a specific organization
-	 * @param int organization id
-	 * @return list of {@UserRole} instances
+	 * Retrieve all user role for a specific organization.
+	 * @param id_org : int organization id
+	 * @return list of {@link UserRole} instances
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -87,10 +87,10 @@ public class UserRoleDaoImpl implements UserRoleDao{
 	}
 
 	/**
-	 * Add a new role for a user in an organization
-	 * @param int user id
-	 * @param int organization id
-	 * @param String role
+	 * Add a new role for a user in an organization.
+	 * @param user_id : int user id
+	 * @param org_id : int organization id
+	 * @param role : String user's role
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -103,8 +103,8 @@ public class UserRoleDaoImpl implements UserRoleDao{
 
 	/**
 	 * Retrieve all roles for a user
-	 * @param int user id
-	 * @return list of roles
+	 * @param user_id : int user id
+	 * @return String list of user's roles
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -126,9 +126,9 @@ public class UserRoleDaoImpl implements UserRoleDao{
 	
 	/**
 	 * Retrieve user's role in a specific organization
-	 * @param int user id
-	 * @param int organization id
-	 * @return {@UserRole} instances
+	 * @param user_id : int
+	 * @param org_id : int organization id
+	 * @return a {@link UserRole} instances
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -144,10 +144,10 @@ public class UserRoleDaoImpl implements UserRoleDao{
 	}
 
 	/**
-	 * Delete an existing user's role
+	 * Delete an existing user's role.
 	 * This can happend because organization is deleted
-	 * or user is removed from an organization
-	 * @param {@UserRole} instances
+	 * or user is removed from an organization.
+	 * @param ur : {@link UserRole} instances
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -158,11 +158,11 @@ public class UserRoleDaoImpl implements UserRoleDao{
 	}
 
 	/**
-	 * Retrieve all user's role data.
+	 * Retrieve all user's role data to know in which organization user has the wanted role.
 	 * Searching by user id and role.
-	 * @param int user id
-	 * @param String role
-	 * @return list of {@UserRole} instances
+	 * @param user_id : int
+	 * @param role : String
+	 * @return list of {@link UserRole} instances
 	 * @throws DataAccessException
 	 */
 	@Transactional

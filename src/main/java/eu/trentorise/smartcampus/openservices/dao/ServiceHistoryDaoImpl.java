@@ -58,8 +58,8 @@ public class ServiceHistoryDaoImpl implements ServiceHistoryDao{
 
 	/**
 	 * Retrieve service history by its id
-	 * @param int service history id
-	 * @return {@ServiceHistory} instance
+	 * @param id : int service history id
+	 * @return {@link ServiceHistory} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -71,8 +71,8 @@ public class ServiceHistoryDaoImpl implements ServiceHistoryDao{
 
 	/**
 	 * Retrieve service history by service id
-	 * @param int service id
-	 * @return list of {@ServiceHistory} instance
+	 * @param service_id : int service id
+	 * @return list of {@link ServiceHistory} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -87,7 +87,7 @@ public class ServiceHistoryDaoImpl implements ServiceHistoryDao{
 
 	/**
 	 * Add a new service history instance in database
-	 * @param {@ServiceHistory} instance
+	 * @param serviceHistory : {@link ServiceHistory} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -99,7 +99,7 @@ public class ServiceHistoryDaoImpl implements ServiceHistoryDao{
 
 	/**
 	 * Modify an existing service history instance in database
-	 * @param {@ServiceHistory} instance
+	 * @param serviceHistory : {@link ServiceHistory} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -111,7 +111,7 @@ public class ServiceHistoryDaoImpl implements ServiceHistoryDao{
 
 	/**
 	 * Delete an existing service history instance in database
-	 * @param {@ServiceHistory} instance
+	 * @param serviceHistory : {@link ServiceHistory} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -123,7 +123,8 @@ public class ServiceHistoryDaoImpl implements ServiceHistoryDao{
 
 	/**
 	 * Retrieve service history by organization id
-	 * @param list of {@ServiceHistory} instance
+	 * @param org_id : int organization id
+	 * @return list of {@link ServiceHistory} instances for given organization
 	 * @throws DataAccessException
 	 */
 	@Transactional

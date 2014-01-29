@@ -30,9 +30,9 @@ import eu.trentorise.smartcampus.openservices.entities.Category;
 public interface CategoryDao {
 	
 	/**
-	 * Get {@link Category} data by id (primary key)
+	 * Get {@link Category} data by id (primary key).
 	 * @param id
-	 * @return
+	 * @return a {@link Category} instance
 	 * @throws DataAccessException
 	 */
 	public Category getCategoryById(int id) throws DataAccessException;
@@ -41,7 +41,7 @@ public interface CategoryDao {
 	 * Get Category data by name
 	 * name is unique
 	 * @param name
-	 * @return
+	 * @return a {@link Category} instance
 	 * @throws DataAccessException
 	 */
 	public Category getCategoryByName(String name) throws DataAccessException;
@@ -54,23 +54,23 @@ public interface CategoryDao {
 	
 	/**
 	 * Add new Category
-	 * @param Category
+	 * @param category : {@link Category} instance
 	 * @throws DataAccessException
 	 */
-	public void addCategory(Category Category) throws DataAccessException;
+	public void addCategory(Category category) throws DataAccessException;
 	
 	/**
 	 * Modify a Category
-	 * @param Category
+	 * @param category : a {@link Category} instance
 	 * @throws DataAccessException
 	 */
-	public void modifyCategory(Category Category) throws DataAccessException;
+	public void modifyCategory(Category category) throws DataAccessException;
 	
 	/**
 	 * Delete a Category
-	 * @param Category
+	 * @param category : a {@link Category} instance
 	 * @throws DataAccessException
 	 */
-	public void deleteCategory(Category Category) throws DataAccessException;
+	public void deleteCategory(Category category) throws DataAccessException;
 
 }

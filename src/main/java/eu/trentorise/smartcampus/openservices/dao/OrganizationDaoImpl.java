@@ -58,7 +58,7 @@ public class OrganizationDaoImpl implements OrganizationDao{
 
 	/**
 	 * Retrieve all organization data from database
-	 * @return List of {@Organization} instance
+	 * @return List of {@link Organization} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -71,8 +71,8 @@ public class OrganizationDaoImpl implements OrganizationDao{
 
 	/**
 	 * Retrieve user's organizations data from database
-	 * @param int user id
-	 * @return List of {@Organization} instance
+	 * @param id_user : int user id
+	 * @return List of {@link Organization} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -88,8 +88,8 @@ public class OrganizationDaoImpl implements OrganizationDao{
 	
 	/**
 	 * Find organization by its id
-	 * @param int organization id
-	 * @return {@Organization} instance
+	 * @param org_id : int organization id
+	 * @return a {@link Organization} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -101,8 +101,8 @@ public class OrganizationDaoImpl implements OrganizationDao{
 	
 	/**
 	 * Find organization by name
-	 * @param String organization name
-	 * @return {@Organization} instance
+	 * @param org_name : String organization name
+	 * @return a {@link Organization} instance
 	 * @throws DataAccessException
 	 */
 	@Override
@@ -119,7 +119,7 @@ public class OrganizationDaoImpl implements OrganizationDao{
 
 	/**
 	 * Add a new organization
-	 * @param {@Organization} instance
+	 * @param org : {@link Organization} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -130,7 +130,7 @@ public class OrganizationDaoImpl implements OrganizationDao{
 
 	/**
 	 * Modify an existing organization from database
-	 * @param {@Organization} instance
+	 * @param org : {@link Organization} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -143,7 +143,7 @@ public class OrganizationDaoImpl implements OrganizationDao{
 
 	/**
 	 * Delete an existing organziation from database
-	 * @param {@Organization} instance
+	 * @param org : int organization id
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -156,8 +156,8 @@ public class OrganizationDaoImpl implements OrganizationDao{
 
 	/**
 	 * Find all organization where user is an organization owner
-	 * @param int organization owner id
-	 * @return List of {@Organization} instance
+	 * @param owner_id : int organization owner id
+	 * @return List of {@link Organization} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -175,8 +175,8 @@ public class OrganizationDaoImpl implements OrganizationDao{
 	/**
 	 * Retrieve organization where its name contains a token.
 	 * Simple search
-	 * @param String token
-	 * @return List of {@Organization} instance
+	 * @param token : String token
+	 * @return List of {@link Organization} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -191,9 +191,9 @@ public class OrganizationDaoImpl implements OrganizationDao{
 
 	/**
 	 * Browse organization by category OR geography
-	 * @param int category id
-	 * @param String geography
-	 * @return List of {@Organization} instance
+	 * @param category : int category id
+	 * @param geography : String geography
+	 * @return List of {@link Organization} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -218,8 +218,8 @@ public class OrganizationDaoImpl implements OrganizationDao{
 
 	/**
 	 * Find organization by category
-	 * @param int category id
-	 * @return List of {@Organization} instance
+	 * @param id : int category id
+	 * @return List of {@link Organization} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional

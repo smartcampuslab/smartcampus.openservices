@@ -29,25 +29,28 @@ import eu.trentorise.smartcampus.openservices.entities.UserRole;
 public interface UserRoleDao {
 	
 	/**
-	 * Get a list of User_Role data by user id
+	 * Get a list of User_Role data by user id.
 	 * @param id_user
-	 * @return
+	 * @return list of {@link UserRole} instances
+	 * @throws DataAccessException
 	 */
 	public List<UserRole> getUserRoleByIdUser(int id_user) throws DataAccessException;
 	
 	/**
-	 * Get a list of User_Role data by organization id
+	 * Get a list of User_Role data by organization id.
 	 * @param id_org
-	 * @return
+	 * @return list of {@link UserRole} instances
+	 * @throws DataAccessException
 	 */
 	public List<UserRole> getUserRoleByIdOrg(int id_org) throws DataAccessException;
 	
 	/**
-	 * Get list of role of a user in User_Role
-	 * ROLE_ORGOWNER
-	 * ROLE_SERVICEOWNER
+	 * Get list of role of a user in User_Role, which can be:
+	 * ROLE_ORGOWNER and 
+	 * ROLE_SERVICEOWNER.
 	 * @param user_id
-	 * @return
+	 * @return string list of user'roles
+	 * @throws DataAccessException
 	 */
 	public List<String> getRoleOfUser(int user_id) throws DataAccessException;
 	
@@ -55,18 +58,24 @@ public interface UserRoleDao {
 	 * Get role of a user in a given organization
 	 * @param user_id
 	 * @param org_id
-	 * @return
+	 * @return a {@link UserRole} instance
+	 * @throws DataAccessException
 	 */
 	public UserRole getRoleOfUser(int user_id, int org_id) throws DataAccessException;
 	
 	/**
 	 * Create a new User_Role data
+	 * @param user_id
+	 * @param org_id
+	 * @param role
+	 * @throws DataAccessException
 	 */
 	public void createUserRole(int user_id, int org_id, String role) throws DataAccessException;
 	
 	/**
 	 * Delete a User_Role data
-	 * @param ur
+	 * @param ur : {@link UserRole} instance
+	 * @throws DataAccessException
 	 */
 	public void deleteUserRole(UserRole ur) throws DataAccessException;
 	
@@ -74,7 +83,7 @@ public interface UserRoleDao {
 	 * Get a list of User_Role data where user has id and his/her role is role.
 	 * @param user_id
 	 * @param role
-	 * @return
+	 * @return a list of {@link UserRole} instances
 	 * @throws DataAccessException
 	 */
 	public List<UserRole> getUserRoleByIdRole(int user_id, String role) throws DataAccessException;
