@@ -204,7 +204,7 @@ public class UserController {
 	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE or NOT FOUND) and 
 	 * error message (if status is SERIVCE UNAVAILABLE or NOT FOUND).
 	 */
-	@RequestMapping(value = "/add/enable/{username},{key}", method = RequestMethod.POST, consumes="application/json") 
+	@RequestMapping(value = "/add/enable/{username}/{key}", method = RequestMethod.PUT) 
 	@ResponseBody
 	public ResponseObject enableUser(@PathVariable String username, @PathVariable String key){
 		logger.info("-- User enable --");
@@ -222,7 +222,6 @@ public class UserController {
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			responseObject.setError("Wrong key.");
 		}
-		//TODO
 		return responseObject;
 	}
 	
