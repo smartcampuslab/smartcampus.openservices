@@ -16,8 +16,8 @@
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="smtp.gmail.com"></property>
 		<property name="port" value="25"></property>
-		<property name="username" value="toinsert@gmail.com"></property>
-		<property name="password" value="toinsert"></property>
+		<property name="username" value="username"></property>
+		<property name="password" value="password"></property>
 		<property name="javaMailProperties">
 			<props>
 				<prop key="mail.transport.protocol">smtp</prop>
@@ -29,10 +29,20 @@
 	</bean>
 	
 	 <!-- You can have some pre-configured messagess also which are ready to send -->
-    <bean id="preConfiguredMessage" class="org.springframework.mail.SimpleMailMessage">
+    <bean id="preConfMessage" class="org.springframework.mail.SimpleMailMessage">
         <!--<property name="to" value="toinsert@gmail.com"></property>-->
-        <property name="from" value="toinsert@gmail.com"></property>
+        <property name="from" value="g.canobbio@gmail.com"></property>
         <property name="subject" value="Welcome to OpenService!!"/>
     </bean>
-		
+    
+    <bean id="applicationMailer" class="eu.trentorise.smartcampus.openservices.support.ApplicationMailer">
+    <property name="mailSender" ref="mailSender"></property>
+    <property name="preConfiguredMessage" ref="preConfMessage"></property>
+    </bean>
+    
+    <!-- Upload file -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="300000"/> <!-- Max size in bytes. -->
+	</bean>
+    
 </beans>
