@@ -166,7 +166,7 @@ public class UserDaoImpl implements UserDao{
 	@Override
 	public void enableUser(int user_id) throws DataAccessException{
 		User oldUser = getUserById(user_id);
-		oldUser.setEnabled(0);
+		oldUser.setEnabled(1);
 		getEntityManager().merge(oldUser);
 	}
 

@@ -26,7 +26,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import eu.trentorise.smartcampus.openservices.entities.Category;
-import eu.trentorise.smartcampus.openservices.entities.Service;
 
 /**
  * Category Dao Implementation 
