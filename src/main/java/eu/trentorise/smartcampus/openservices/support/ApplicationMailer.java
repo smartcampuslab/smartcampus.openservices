@@ -29,10 +29,18 @@ import org.springframework.stereotype.Service;
 @Service("mailService")
 public class ApplicationMailer {
 	
-	@Autowired
+	//@Autowired
 	private MailSender mailSender;
-	@Autowired
+	//@Autowired
 	private SimpleMailMessage preConfiguredMessage;
+	
+	public void setMailSender(MailSender mailSender) {
+		this.mailSender = mailSender;
+	}
+	
+	public void setPreConfiguredMessage(SimpleMailMessage preConfiguredMessage) {
+		this.preConfiguredMessage = preConfiguredMessage;
+	}
 	
 	/**
 	 * Send a message with input parameters
@@ -56,5 +64,23 @@ public class ApplicationMailer {
 		SimpleMailMessage mailMessage = new SimpleMailMessage(preConfiguredMessage);
 		mailMessage.setText(message);
 		mailSender.send(mailMessage);
+	}
+	
+	/**
+	 * Send an email with all input parameters
+	 * @param from
+	 * @param to
+	 * @param subject
+	 * @param msg
+	 */
+	public void sendMail2(String from, String to, String subject, String msg) {
+		 
+		SimpleMailMessage message = new SimpleMailMessage();
+ 
+		message.setFrom(from);
+		message.setTo(to);
+		message.setSubject(subject);
+		message.setText(msg);
+		mailSender.send(message);	
 	}
 }
