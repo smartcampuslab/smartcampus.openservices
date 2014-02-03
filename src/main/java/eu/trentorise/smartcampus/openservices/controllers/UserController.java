@@ -53,6 +53,11 @@ public class UserController {
 	 */
 	@Autowired
 	private UserManager userManager;
+	/**
+	 * Instance of {@link ApplicationMailer} to send email.
+	 */
+	@Autowired
+	private ApplicationMailer mailer;
 	
 	/*
 	 * USER REST WEB SERVICE
@@ -174,7 +179,7 @@ public class UserController {
 			// return link
 			String link = "<host>/api/user/add/enable/"+user.getUsername()+","+ s;
 			// send it via email to user
-			ApplicationMailer mailer = new ApplicationMailer();
+			//ApplicationMailer mailer = new ApplicationMailer();
 			mailer.sendMail(user.getEmail(),
 					"[OpenService] Welcome "+ user.getUsername(), 
 					"Welcome "+user.getUsername()+"! For activating your account goes to following link: "+link);

@@ -167,6 +167,7 @@ public class HomeController {
 	 * @throws IllegalArgumentException
 	 * @throws IllegalAccessException
 	 */
+	/*
 	@RequestMapping()
 	public String error(@CookieValue(value="value", required=false) String value, 
 			@CookieValue(value="user", required=false) String user, HttpServletRequest request, HttpServletResponse response) 
@@ -200,10 +201,10 @@ public class HomeController {
 					SecurityContextHolder.getContext().setAuthentication(authentication);
 				}
 			}
-		}*/
+		}/
 		response.setStatus(404);
 		return home(request, response);
-	}
+	}*/
 	
 	/**
 	 * Login view which is in this case home jsp.

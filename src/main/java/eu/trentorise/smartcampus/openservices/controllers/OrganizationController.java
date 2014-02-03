@@ -58,6 +58,11 @@ public class OrganizationController {
 	 */
 	@Autowired
 	private OrganizationManager organizationManager;
+	/**
+	 * Instance of {@link ApplicationMailer} to send email.
+	 */
+	@Autowired
+	private ApplicationMailer mailer;
 	
 	/*
 	 * Rest web service for Organization
@@ -291,7 +296,7 @@ public class OrganizationController {
 
 			// TODO: generalize template
 			// send it via email to user
-			ApplicationMailer mailer = new ApplicationMailer();
+			//ApplicationMailer mailer = new ApplicationMailer();
 			mailer.sendMail(
 					email,
 					"[OpenService] Invitation to organization",
