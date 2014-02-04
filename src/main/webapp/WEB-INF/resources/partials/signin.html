@@ -16,8 +16,8 @@
             <span class="span-or">or</span>
         </div>
         <form role="form" ng-submit="signin()">
-        	<div ng-show="unauthorized" class="alert alert-danger">
-            	Wrong credentials
+        	<div ng-show="error" class="alert alert-danger">
+            	{{error}}
 			</div>
             <div class="form-group">
                 <input type="username" class="form-control" id="username" placeholder="Username" ng-model="user.j_username">
@@ -28,6 +28,6 @@
             <button type="submit" class="btn btn-default btn-block">Sign In</button>
         </form>
         <br>
-        <a class="pull-right" href="signup">Register here</a>
+        <a class="btn btn-info pull-right" href="signup">Register here</a>
     </div>
 </div>

@@ -52,8 +52,8 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope',
           $cookieStore.remove('user');
           $cookieStore.put('user',$rootScope.currentUser);
           success(user)
-        }).error(function(){
-        	error(true);
+        }).error(function(data){
+        	error(data.error);
         });
       },
       logout: function (success, error) {
