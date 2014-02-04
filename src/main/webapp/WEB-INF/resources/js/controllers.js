@@ -20,7 +20,7 @@ app.controller('signinCtrl', ['$scope', '$location', 'Auth',
       Auth.login($scope.user, function () {
         $location.path('profile');
       },function(error){
-    	  $scope.unauthorized = error;
+    	  $scope.error = error;
       }
       
       );
@@ -33,8 +33,10 @@ app.controller('signUpCtrl', ['$scope', '$location', 'User',
 	$scope.user = new User();
     $scope.submit = function () {
     	$scope.user.$save($scope.user,function(){
-    		$location.path('signin')
-    	})
+    		$location.path('signin');
+    	},function(data){
+    		$scope.error = data.data.error;
+    	});
     };
 }
 ]);
