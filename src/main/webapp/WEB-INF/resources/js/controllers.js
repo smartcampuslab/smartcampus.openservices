@@ -77,10 +77,10 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
     };
 
     $scope.submit = function () {
-            $scope.user.$update($scope.user, function() {
-            	console.log('user updated')
-                $location.path('profile')
-            });
+    	User.update($scope.user, function() {
+        	console.log('user updated')
+            $location.path('profile')
+        });
     };
 
     User.getInfo({}, function(data) {
@@ -435,7 +435,7 @@ app.controller('cbCtrl', ['$location',
 
 app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', '$http', '$location', 'oAuth','RemoteApi',
    function ($scope, $routeParams, Catalog, Category, $http, $location, oAuth, RemoteApi) {
- 	var remoteapi;
+ 	$scope.remoteapi;
  	$scope.template = 'partials/services/_about.html';
  	$scope.request = {};
  	Catalog.getServiceById({id:$routeParams.id}, function (data) {
@@ -480,8 +480,8 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
      
      $scope.send = function () {
          var config = $scope.service.accessInformation.authentication.accessAttributes;
-         remoteapi = new RemoteApi($scope.service.accessInformation.authentication.accessProtocol);
-         remoteapi.authorize(config).then(function(result){
+         $scope.remoteapi = new RemoteApi($scope.service.accessInformation.authentication.accessProtocol);
+         $scope.remoteapi.authorize(config).then(function(result){
              if (!$scope.request.sample.headers) {
             	 $scope.request.sample.headers = {};
              }
