@@ -66,8 +66,8 @@ public class TemporaryLinkDaoImpl implements TemporaryLinkDao{
 	@Transactional
 	@Override
 	public TemporaryLink getTLByKey(String key) throws DataAccessException {
-		Query q = getEntityManager().createQuery("FROM TemporaryLink T WHERE T.key = :token")
-				.setParameter("token", key);
+		Query q = getEntityManager().createQuery("FROM TemporaryLink Tl WHERE Tl.key=:key")
+				.setParameter("key", key);
 		List<TemporaryLink> ltl = q.getResultList();
 		if(ltl.size()==0){
 			return null;
