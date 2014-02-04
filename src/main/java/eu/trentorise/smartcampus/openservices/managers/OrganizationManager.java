@@ -103,13 +103,17 @@ public class OrganizationManager {
 				}
 				// delete services
 				List<Service> serviceList = serviceDao.getServiceByIdOrg(orgId);
-				for (Service s : serviceList) {
-					serviceDao.deleteService(s);
+				if(serviceList!=null){
+					for (Service s : serviceList) {
+						serviceDao.deleteService(s);
+					}
 				}
 				// delete history
 				List<ServiceHistory> shList = shDao.getServiceHistoryByOrgId(orgId);
-				for(ServiceHistory sh: shList){
-					shDao.deleteServiceHistory(sh);
+				if(shList!=null){
+					for(ServiceHistory sh: shList){
+						shDao.deleteServiceHistory(sh);
+					}
 				}
 				// delete org
 				orgDao.deleteOrganization(orgId);
