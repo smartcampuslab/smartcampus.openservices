@@ -45,6 +45,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import eu.trentorise.smartcampus.openservice.test.resttemplate.RestClient;
@@ -91,16 +92,19 @@ public class UserControllerTest {
 		input.setUsername("testEmailError");
 		input.setPassword("provaTest");
 		input.setEmail("provaTest@prova");
-		
-		ResponseObject response = restTemplate.postForObject(BASE_URL+"/add", input, ResponseObject.class);
-		assertNull("No user here",response.getData());
+		try{
+			ResponseObject response = restTemplate.postForObject(BASE_URL+"/add", input, ResponseObject.class);
+			assertNull("No user here",response.getData());
+		}catch(HttpClientErrorException e){
+			assertTrue("Not 403", e.getStatusCode().toString().equalsIgnoreCase("403"));
+		}
 	}
 	
 	@Test
 	public void testLogin() throws Exception{
 		log.info("* Test User REST: /perform_login - STARTING");
 		// Login - Authenticate user
-		/*HttpHeaders headers = new HttpHeaders();
+		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
 		// Create the request body as a MultiValueMap
@@ -109,9 +113,9 @@ public class UserControllerTest {
 		body.add("j_password", "123456");
 		// Note the body object as first parameter!
 		HttpEntity<?> httpEntity = new HttpEntity<Object>(body, headers);
-		*//*ResponseEntity<User> response = restTemplate.exchange(
+		ResponseEntity<ResponseObject> response = restTemplate.exchange(
 				"http://localhost:8080/openservice/perform_login",
-				HttpMethod.POST, httpEntity, User.class);
+				HttpMethod.POST, httpEntity, ResponseObject.class);
 
 		log.info("## ResponseEntity Headers: " + response.getHeaders() + " ##");
 		log.info("## ResponseEntity Body: " + response.getBody() + " ##");
@@ -122,25 +126,13 @@ public class UserControllerTest {
 
 		//Get user data
 		HttpEntity<?> httpEntity2 = new HttpEntity<Object>(null, response.getHeaders());
-		ResponseEntity<User> response2 = restTemplate.exchange(
+		ResponseEntity<ResponseObject> response2 = restTemplate.exchange(
 				"http://localhost:8080/openservice/welcome",
-				HttpMethod.GET, httpEntity2, User.class);
+				HttpMethod.GET, httpEntity2, ResponseObject.class);
 		
 		log.info("##2 ResponseEntity Headers: " + response2.getHeaders() + " ##");
 		log.info("##2 ResponseEntity Body: " + response2.getBody() + " ##");
 		log.info("##2 Status code: " + response2.getStatusCode());
-		*/
-		/*
-		User result = restTemplate.postForObject("http://localhost:8080/openservice/perform_login", body, User.class);
-		System.out.println(result);
-		*/
-		
-		RestClient client = new RestClient();
-		client.setApplicationPath("openservice");
-		String url = client.login("sara", "sara");
-		ResponseEntity<ResponseObject> user = client.template().getForEntity(BASE_URL+"/my", ResponseObject.class);
-		
-		System.out.println(user);
 	}
 	
 	@Test
@@ -167,18 +159,5 @@ public class UserControllerTest {
 
 		assertTrue("Location contains loginfailed", response.getHeaders().getLocation().toString().contains("loginfailed"));
 	}
-	
-	/*@Test
-	public void getUserData() throws Exception{
-		log.info("* Test Catalog REST: /my - STARTING");
-		UserDetails userDetails = customUserDetails.loadUserByUsername("sara");
-		Authentication auth = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(),
-				userDetails.getAuthorities());
-		SecurityContextHolder.getContext().setAuthentication(auth);
-		//get user data
-		User user = restTemplate.getForObject(BASE_URL+"/my", User.class, new Object[]{});
-		assertNotNull("No user data", user);
-		
-	}*/
 
 }
