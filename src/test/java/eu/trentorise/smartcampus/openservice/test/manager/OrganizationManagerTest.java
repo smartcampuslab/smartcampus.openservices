@@ -19,6 +19,8 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
+import javax.persistence.Query;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,8 +32,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
 import eu.trentorise.smartcampus.openservices.dao.OrganizationDao;
+import eu.trentorise.smartcampus.openservices.dao.UserRoleDao;
 import eu.trentorise.smartcampus.openservices.entities.Organization;
 import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
+import eu.trentorise.smartcampus.openservices.entities.UserRole;
 import eu.trentorise.smartcampus.openservices.managers.OrganizationManager;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -45,6 +49,8 @@ public class OrganizationManagerTest {
 		private OrganizationManager orgManager;
 		@Autowired
 		private OrganizationDao orgDao;
+		@Autowired
+		private UserRoleDao urDao;
 		
 		private String username;
 		private Organization org;
@@ -91,13 +97,21 @@ public class OrganizationManagerTest {
 		
 		@Test
 		public void testCreateInvitationAndAddOwner(){
+			log.info("TEST - Create abd Add organization owner");
 			//get org id
 			Organization newOrg = orgDao.getOrganizationByName(org.getName());
 			org.setId(newOrg.getId());// db assigned it
-			String token = orgManager.createInvitation(username, org.getId(), "ROLE_ORGOWNER", "g.canobbio@gmail.com");
+			
+			//create invitation
+			log.info("1 - Create invitation");
+			String token = orgManager.createInvitation(username, org.getId(), "ROLE_ORGOWNER", "giulia@giulia.it");
 			assertNotNull("No string token",token);
 			log.info(token);
-			orgManager.addOwner("giulia", token);
+			
+			//add owner
+			log.info("2 - Add owner");
+			boolean result = orgManager.addOwner("giulia", token);
+			assertTrue("Add owner failed", result == true);
 		}
 		
 		@Test

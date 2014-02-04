@@ -60,31 +60,31 @@ public class UserManagerTest {
 	@Test
 	public void testCreateAndFoundUser(){
 		log.info("TEST - Create new user "+user.getUsername());
-		//create User
-		User newUser = userManager.createUser(user);
-		assertNotNull("No user created", newUser);
-		user.setId(newUser.getId());//get user id from database
-		log.info("New user "+newUser.getUsername()+", with id "+newUser.getId());
+		//check if already exists
+		User checkUser = userManager.getUserByUsername(user.getUsername());
+		if(checkUser==null){
+			// create User
+			User newUser = userManager.createUser(user);
+			assertNotNull("No user created", newUser);
+			user.setId(newUser.getId());// get user id from database
+			log.info("New user " + newUser.getUsername() + ", with id "
+					+ newUser.getId());
+
+			// getById
+			User foundUser = userManager.getUserById(newUser.getId());
+			assertNotNull("New user found by id ", foundUser);
+			log.info("New user found by id: " + foundUser.getUsername());
+
+			// getByUsername
+			User foundUser2 = userManager.getUserByUsername(newUser
+					.getUsername());
+			assertNotNull("New user found by username", foundUser2);
+			log.info("New user found by username: " + foundUser2.getUsername());
+		}
+		else{
+			assertNotNull("User found by username",checkUser);
+		}
 		
-		//getById
-		User foundUser = userManager.getUserById(newUser.getId());
-		assertNotNull("New user found by id ", foundUser);
-		log.info("New user found by id: "+foundUser.getUsername());
-		
-		//getByUsername
-		User foundUser2 = userManager.getUserByUsername(newUser.getUsername());
-		assertNotNull("New user found by username",foundUser2);
-		log.info("New user found by username: "+foundUser2.getUsername());
-		
-	}
-	
-	//enable user
-	@Test
-	public void testEnableUser(){
-		log.info("TEST - Enable new user "+user.getUsername());
-		User enabledUser = userManager.enableUser(user.getUsername());
-		assertNotNull("No user to enable",enabledUser);
-		log.info("New user enable "+enabledUser.getUsername());
 	}
 	
 	//modify
@@ -97,6 +97,30 @@ public class UserManagerTest {
 		log.info("New user modified "+modifiedUser.getUsername()+" with new email "+modifiedUser.getEmail());
 	}
 	
+	@Test
+	public void testVerifyUserEmail(){
+		log.info("TEST - Email test");
+		User user = userManager.getUserByUsername("@TestUser");
+		log.info("User "+user.getUsername()+" and email "+user.getEmail());
+		String s = userManager.addKeyVerifyEmail(user.getUsername());
+		
+		/*String link = "http://localhost:8080/api/user/add/enable/"+user.getUsername()+","+ s;
+		//ApplicationMailer mailer = new ApplicationMailer();
+		mailer.sendMail2("g.canobbio@gmail.com","g.canobbio@gmail.com",
+				"[OpenService] Welcome "+ user.getUsername(), 
+				"Welcome "+user.getUsername()+"! For activating your account goes to following link: "+link);
+		*/
+		//enable user after verification
+		
+		log.info("Key "+s);
+		assertTrue("No key", s!=null);
+		
+		User enableUser = userManager.enableUserAfterVerification(user.getUsername(), s);
+		log.info("Enabled user: "+enableUser.getUsername()+", value enabled: "+enableUser.getEnabled());
+		assertTrue("User exists", enableUser!=null);
+		assertTrue("Enabled == 0", enableUser.getEnabled()==1);
+	}
+	
 	//disadble user
 	@Test
 	public void testDisableUser(){
@@ -104,6 +128,18 @@ public class UserManagerTest {
 		User enabledUser = userManager.disabledUser(user.getUsername());
 		assertNotNull("No user to enable",enabledUser);
 		log.info("New user enable "+enabledUser.getUsername());
+	}
+	
+	//enable user
+	@Test
+	public void testEnableUser(){
+		log.info("TEST - Enable new user "+user.getUsername());
+		User enabledUser = userManager.enableUser(user.getUsername());
+		assertNotNull("No user to enable",enabledUser);
+		log.info("New user enable "+enabledUser.getUsername());
+		
+		//disable
+		this.testDisableUser();
 	}
 
 }
