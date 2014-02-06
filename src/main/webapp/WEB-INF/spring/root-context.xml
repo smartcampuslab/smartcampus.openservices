@@ -5,8 +5,8 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	 http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 	
-	<!-- Root Context: defines shared resources visible to all other web components -->
-	<import resource="spring-mysql.xml"/>
+	<!-- Root Context: defines shared resources visible to all other web components 
+	<import resource="spring-mysql.xml"/> -->
 	
 	<bean id="jdbcUserService" class="eu.trentorise.smartcampus.openservices.securitymodel.CustomUserDetailsService" /> 
 	<bean id="bCryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
