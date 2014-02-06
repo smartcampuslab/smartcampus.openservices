@@ -55,7 +55,10 @@ import eu.trentorise.smartcampus.openservices.entities.User;
 import eu.trentorise.smartcampus.openservices.securitymodel.CustomUserDetailsService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(value= {"file:src/main/webapp/WEB-INF/spring/root-context.xml","file:src/main/webapp/WEB-INF/spring/spring-security.xml","file:src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml"})
+@ContextConfiguration(value= {"file:src/main/webapp/WEB-INF/spring/root-context.xml",
+		"file:src/main/webapp/WEB-INF/spring/spring-security.xml",
+		"file:src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml",
+		"file:src/main/webapp/WEB-INF/spring/spring-embedded-db.xml"})
 @TransactionConfiguration(transactionManager="transactionManager", defaultRollback=false)
 public class UserControllerTest {
 	
