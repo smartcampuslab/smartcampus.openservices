@@ -32,7 +32,10 @@ import eu.trentorise.smartcampus.openservices.entities.User;
 import eu.trentorise.smartcampus.openservices.managers.UserManager;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(value= {"file:src/main/webapp/WEB-INF/spring/root-context.xml","file:src/main/webapp/WEB-INF/spring/spring-security.xml","file:src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml"})
+@ContextConfiguration(value= {"file:src/main/webapp/WEB-INF/spring/root-context.xml",
+		"file:src/main/webapp/WEB-INF/spring/spring-security.xml",
+		"file:src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml",
+		"file:src/main/webapp/WEB-INF/spring/spring-embedded-db.xml"})
 @TransactionConfiguration(transactionManager="transactionManager", defaultRollback=false)
 public class UserManagerTest {
 	// Log
@@ -50,10 +53,10 @@ public class UserManagerTest {
 		user.setPassword("test");
 		user.setEmail("testJunit@test.it");
 		
-		Profile profile = new Profile();
+		/*Profile profile = new Profile();
 		profile.setCountry("Italy");
 		user.setProfile(profile);
-		
+		*/
 		user.setRole("ROLE_NORMAL");
 	}
 	

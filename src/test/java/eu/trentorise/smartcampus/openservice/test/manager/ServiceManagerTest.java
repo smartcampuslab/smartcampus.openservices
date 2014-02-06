@@ -39,7 +39,10 @@ import eu.trentorise.smartcampus.openservices.entities.TestInfo;
 import eu.trentorise.smartcampus.openservices.managers.ServiceManager;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(value= {"file:src/main/webapp/WEB-INF/spring/root-context.xml","file:src/main/webapp/WEB-INF/spring/spring-security.xml","file:src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml"})
+@ContextConfiguration(value= {"file:src/main/webapp/WEB-INF/spring/root-context.xml",
+		"file:src/main/webapp/WEB-INF/spring/spring-security.xml",
+		"file:src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml",
+		"file:src/main/webapp/WEB-INF/spring/spring-embedded-db.xml"})
 @TransactionConfiguration(transactionManager="transactionManager", defaultRollback=false)
 public class ServiceManagerTest {
 	
@@ -66,15 +69,16 @@ public class ServiceManagerTest {
 		service.setCategory(4);//@Test category
 		service.setVersion("0.1");
 		service.setCreatorId(1);//user sara
-		service.setOrganizationId(6);//bla organization
+		service.setOrganizationId(1);//bla organization
 		
 		method = new Method();
 		method.setName("@Test Method");
 		method.setSynopsis("A test manager method");
 		method.setDocumentation("Bla bla bla");
 		
-		TestBoxProperties prop = new TestBoxProperties();
+		/*TestBoxProperties prop = new TestBoxProperties();
 		method.setTestboxProprieties(prop);
+		*/
 		
 		log.info("Set up - END");
 	}
@@ -84,6 +88,7 @@ public class ServiceManagerTest {
 		log.info("TEST - Create new service ");
 		boolean result = serviceManager.createService(username, service);
 		assertEquals(true,result);
+		log.info("Service added: "+service.getName());
 		//retrieve id from database
 		Service newService = serviceDao.useService(service.getName());
 		assertNotNull("No new service", newService);
@@ -101,11 +106,12 @@ public class ServiceManagerTest {
 		service.setDescription("@Test update description");
 		boolean result = serviceManager.updateService(username, service);
 		assertEquals(true, result);
+		log.info("Service update "+service.getName());
 		//retrieve service from db
 		Service modifiedService = serviceDao.useService(service.getName());
 		assertNotNull("No modified service");
 		assertEquals(service.getId(),modifiedService.getId());
-		assertNotSame(service.getDescription(), modifiedService.getDescription());
+		assertNotSame(newService.getDescription(), modifiedService.getDescription());
 		log.info("Modified service "+modifiedService.getName()+" with id "+modifiedService.getId());
 	}
 	
@@ -148,7 +154,7 @@ public class ServiceManagerTest {
 		boolean result = serviceManager.addMethod(username, method);
 		assertTrue("No service method added",result==true);
 	}
-	
+	/*
 	@Test
 	public void testUpdateMethod(){
 		log.info("TEST Add new service method");
@@ -181,7 +187,7 @@ public class ServiceManagerTest {
 		result = serviceManager.deleteTest(username, method.getId(), 0);
 		assertTrue("No test for service method deleted",result==true);
 	}
-	
+	*/
 	@Test
 	public void testDeleteMethod(){
 		log.info("TEST Add new service method");
