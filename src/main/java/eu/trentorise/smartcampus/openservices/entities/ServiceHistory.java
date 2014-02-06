@@ -47,7 +47,7 @@ public class ServiceHistory {
 	private int id_service;
 	@Column(name="id_serviceMethod")
 	private int id_serviceMethod;
-	@Column(name="date")
+	@Column(name="\"date\"")
 	private Date date;
 	
 	/**
