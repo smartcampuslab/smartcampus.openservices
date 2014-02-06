@@ -276,6 +276,14 @@
 			<scope>test</scope>
 		</dependency>
 		
+		<!-- Driver for embedded database -->
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>2.2.8</version><!-- ${hsqldb.version} -->
+			<scope>test</scope>
+		</dependency>
+		
 	</dependencies>
 	<build>
 		<plugins>
