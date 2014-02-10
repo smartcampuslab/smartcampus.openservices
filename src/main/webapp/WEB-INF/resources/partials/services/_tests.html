@@ -6,6 +6,9 @@
                 <div class="input-group">
                     <span class="input-group-addon">Method</span>
                     <select ng-options="method as method.name for method in methods" ng-model="request.method" class="form-control" />
+                    <span class="input-group-btn">
+                        <a ng-href="{{request.method.documentation}}" ng-disabled="!request.method" type="button" class="btn btn-default">Doc</a>
+                    </span>
                 </div>
                 <!-- /input-group -->
             </div>
@@ -17,6 +20,7 @@
                     <span class="input-group-btn">
                         <button ng-disabled="!checkBeforeSend()" ng-click="send()" type="button" class="btn btn-success">Send</button>
                     </span>
+
                 </div>
                 <!-- /input-group -->
                 <div ng-if="request.sample.requestPathEditable">
