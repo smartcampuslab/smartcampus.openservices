@@ -29,7 +29,12 @@ public class FileController {
 	 */
 	private ResponseObject responseObject;
 	
-	@RequestMapping(params = "upload/{organizationId}", method = RequestMethod.POST)
+	@RequestMapping(value="home")
+	public String fileShow(){
+		return "file";
+	}
+	
+	@RequestMapping(value = "upload/{organizationId}", method = RequestMethod.POST)
 	public @ResponseBody ResponseObject uploadFile(@PathVariable int organizationId, @RequestParam("file") MultipartFile file) {
 		logger.info("-- FILE -- Uploading file ...");
 		responseObject = new ResponseObject();
@@ -60,7 +65,7 @@ public class FileController {
 		return responseObject;
 	}
 	
-	@RequestMapping(params = "download/{organizationId}", method = RequestMethod.GET)
+	@RequestMapping(value = "download/{organizationId}", method = RequestMethod.GET)
 	public @ResponseBody ResponseObject downloadFile(@PathVariable int organizationId, HttpServletResponse response) {
 		logger.info("-- FILE -- Uploading file ...");
 		responseObject = new ResponseObject();
