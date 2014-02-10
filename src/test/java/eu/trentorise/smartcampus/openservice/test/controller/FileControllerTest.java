@@ -86,27 +86,29 @@ public class FileControllerTest {
 				new HttpEntity<Object>(mvm, headers), ResponseObject.class);
 		*/
 		log.info("***** Before post");
-		/*ResponseEntity<ResponseObject> respEnt = restTemplate.postForEntity(BASE_URL+"/upload/1", mvm,ResponseObject.class);
+		ResponseEntity<ResponseObject> respEnt = restTemplate.postForEntity(BASE_URL+"/upload/1", mvm,ResponseObject.class);
 		
 		log.info("Headers: "+respEnt.getHeaders());
-		log.info("Body: "+respEnt.getBody());
+		log.info("Body data: "+respEnt.getBody().getData()+", status: "+respEnt.getBody().getStatus()
+				+", error: "+respEnt.getBody().getError());
 		log.info("Status: "+respEnt.getStatusCode());
-		*/
+		
 		//- OR --
-
+		/*
 		// Set the headers...
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Content-Type", "multipart/form-data"); 
 		//headers.set("Accept", "text/plain");
 
 		ResponseObject result = restTemplate.exchange(
-			BASE_URL+"/upload/1",
+			BASE_URL+"/upload/{organizationId}",
 		    HttpMethod.POST,
 		    new HttpEntity<MultiValueMap<String, Object>>(mvm, headers),
-		    ResponseObject.class
+		    ResponseObject.class,
+		    1
 		).getBody();
 		
 		log.info("ResponseObject: "+result);
-	
+		*/
 	}
 }
