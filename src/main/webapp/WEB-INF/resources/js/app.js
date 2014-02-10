@@ -15,7 +15,7 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
                         return $q.reject(response);
                     }
                 }
-            }
+            };
         });
 
         $routeProvider.
