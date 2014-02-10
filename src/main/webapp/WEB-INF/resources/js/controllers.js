@@ -185,7 +185,7 @@ app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Servi
                 $scope.service.expiration = new Date($scope.service.expiration).getTime();
             }
             Service.update($scope.service, function () {
-                $location.path('profile');
+                $location.path('profile/services/' + $routeParams.id + '/view');
             });
         };
     }
