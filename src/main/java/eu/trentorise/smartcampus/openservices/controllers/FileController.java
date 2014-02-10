@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 
 @Controller
-@RequestMapping(value="/api/file")
+@RequestMapping(value="/api/file/")
 public class FileController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(FileController.class);
