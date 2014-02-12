@@ -38,7 +38,8 @@ public class FileController {
 	public @ResponseBody ResponseObject uploadFile(@PathVariable int organizationId, @RequestParam("file") MultipartFile file) {
 		logger.info("-- FILE -- Uploading file ...");
 		responseObject = new ResponseObject();
-		if(!file.isEmpty()){
+		if(!file.isEmpty() && file!=null){
+			logger.info("File "+file);
 			try {
 				file.transferTo(new File("src/main/webapp/uploadedFile/"+organizationId+"/"
 						+ file.getOriginalFilename()));
@@ -103,7 +104,7 @@ public class FileController {
 		
 		//-- OR --
 		try{
-			FileSystemResource fsr = new FileSystemResource("/Users/Giulia/Desktop/uploadedFile/"+organizationId+"/*");
+			FileSystemResource fsr = new FileSystemResource("src/main/webapp/uploadedFile/"+organizationId+"/*");
 			responseObject.setData(fsr);
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 		} catch (Throwable e) {
