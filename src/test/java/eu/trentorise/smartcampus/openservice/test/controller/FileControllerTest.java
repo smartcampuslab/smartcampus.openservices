@@ -67,7 +67,7 @@ public class FileControllerTest {
 		log.info("* Test Catalog REST: /upload - STARTING");
 		
 		//try create a File
-		File file = new File("/Users/Giulia/Desktop/uploadedFile/test/test.txt");
+		File file = new File("/Users/Giulia/Pictures/Black-Wallpapers-14.jpg");
 
 		//Resource logo = new ClassPathResource("/Users/Giulia/Pictures/Black-Wallpapers-14.jpg");
 		MultiValueMap<String, Object> mvm = new LinkedMultiValueMap<String, Object>();
