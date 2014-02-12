@@ -40,7 +40,7 @@ public class FileController {
 		responseObject = new ResponseObject();
 		if(!file.isEmpty()){
 			try {
-				file.transferTo(new File("/Users/Giulia/Desktop/uploadedFile/"+organizationId+"/"
+				file.transferTo(new File("src/main/webapp/uploadedFile/"+organizationId+"/"
 						+ file.getOriginalFilename()));
 				responseObject.setData(file.getOriginalFilename());
 				responseObject.setStatus(HttpServletResponse.SC_OK);
