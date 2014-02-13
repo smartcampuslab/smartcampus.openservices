@@ -77,7 +77,7 @@ public class FileControllerTest {
 		log.info("Can read: "+file.canRead());
 		mvm.add("file", new FileSystemResource(file));//logo
 		
-		log.info("***** Before post");
+		log.info("***** POST txt file");
 		ResponseEntity<ResponseObject> respEnt = restTemplate.postForEntity(BASE_URL+"/upload/1", mvm,ResponseObject.class);
 		
 		log.info("Headers: "+respEnt.getHeaders());
@@ -89,11 +89,29 @@ public class FileControllerTest {
 		assertTrue("Error in uploading", respEnt.getBody().getStatus()==HttpServletResponse.SC_OK);
 		assertNull("Error exists", respEnt.getBody().getError());
 		
+		//upload a jpg
+		File file2 = new File("src/test/resources/sample.jpg");
+		mvm.clear();
+		mvm.add("file", new FileSystemResource(file2));
+		
+		log.info("***** POST jpg file");
+		ResponseEntity<ResponseObject> respEnt2 = restTemplate.postForEntity(BASE_URL+"/upload/1", mvm,ResponseObject.class);
+		
+		log.info("Headers: "+respEnt2.getHeaders());
+		log.info("Body data: "+respEnt2.getBody().getData()+", status: "+respEnt2.getBody().getStatus()
+				+", error: "+respEnt2.getBody().getError());
+		log.info("Status: "+respEnt2.getStatusCode());
+		
+		assertNotNull("File not found", respEnt2.getBody().getData());
+		assertTrue("Error in uploading", respEnt2.getBody().getStatus()==HttpServletResponse.SC_OK);
+		assertNull("Error exists", respEnt2.getBody().getError());
+		
 	}
 	
 	@Test
 	public void testDownloadFile(){
 		log.info("* Test File REST: /download - STARTING");
+		log.info("Download txt file");
 		ResponseObject respEnt = restTemplate.getForObject(BASE_URL+"/download/1/test/txt", ResponseObject.class);
 		
 		log.info("Data: "+respEnt.getData()+", status: "+respEnt.getStatus()
@@ -102,5 +120,15 @@ public class FileControllerTest {
 		assertNotNull("File not found", respEnt.getData());
 		assertTrue("Error in download", respEnt.getStatus()==HttpServletResponse.SC_OK);
 		assertNull("Error exists", respEnt.getError());
+		
+		log.info("Download jpg file");
+		ResponseObject respEnt2 = restTemplate.getForObject(BASE_URL+"/download/1/sample/jpg", ResponseObject.class);
+		
+		log.info("Data: "+respEnt2.getData()+", status: "+respEnt2.getStatus()
+				+", error: "+respEnt2.getError());
+		
+		assertNotNull("File not found", respEnt2.getData());
+		assertTrue("Error in download", respEnt2.getStatus()==HttpServletResponse.SC_OK);
+		assertNull("Error exists", respEnt2.getError());
 	}
 }
