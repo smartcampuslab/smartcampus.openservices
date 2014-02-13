@@ -3,6 +3,7 @@ package eu.trentorise.smartcampus.openservices.controllers;
 import java.io.File;
 import java.io.IOException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
@@ -35,14 +36,25 @@ public class FileController {
 	}
 	
 	@RequestMapping(value = "upload/{organizationId}", method = RequestMethod.POST)
-	public @ResponseBody ResponseObject uploadFile(@PathVariable int organizationId, @RequestParam("file") MultipartFile file) {
+	public @ResponseBody ResponseObject uploadFile(@PathVariable int organizationId, @RequestParam("file") MultipartFile file,
+			HttpServletRequest request) {
 		logger.info("-- FILE -- Uploading file ...");
 		responseObject = new ResponseObject();
+		logger.info("Request Real Path: "+request.getSession().getServletContext().getRealPath("/"));
 		if(!file.isEmpty() && file!=null){
 			logger.info("File "+file);
 			try {
-				file.transferTo(new File("src/main/webapp/uploadedFile/"+organizationId+"/"
-						+ file.getOriginalFilename()));
+				//src/main/webapp/uploadedFile/
+				File f = new File("/Users/Giulia/Desktop/uploadedFile/"+organizationId+"/"
+						+ file.getOriginalFilename());
+				//check if this exists
+				if(!f.exists()){
+					logger.info("Directory does not exist, then creating...");
+					if(f.mkdirs()){
+						logger.info("Directory created successfully");
+					}
+				}
+				file.transferTo(f);
 				responseObject.setData(file.getOriginalFilename());
 				responseObject.setStatus(HttpServletResponse.SC_OK);
 				logger.info("-- File uploaded correctly --");
@@ -68,7 +80,7 @@ public class FileController {
 	
 	@RequestMapping(value = "download/{organizationId}", method = RequestMethod.GET)
 	public @ResponseBody ResponseObject downloadFile(@PathVariable int organizationId, HttpServletResponse response) {
-		logger.info("-- FILE -- Uploading file ...");
+		logger.info("-- FILE -- Download file ...");
 		responseObject = new ResponseObject();
 		/*
 		FileInputStream inputStream = null;
@@ -104,12 +116,16 @@ public class FileController {
 		
 		//-- OR --
 		try{
-			FileSystemResource fsr = new FileSystemResource("src/main/webapp/uploadedFile/"+organizationId+"/*");
+			File f = new File("/Users/Giulia/Desktop/uploadedFile/"+organizationId+"/*.*");
+			FileSystemResource fsr = new FileSystemResource(f);
 			responseObject.setData(fsr);
 			responseObject.setStatus(HttpServletResponse.SC_OK);
+			logger.info("Download successfully");
 		} catch (Throwable e) {
+			logger.info("Download error");
 			responseObject.setError("File not found");
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			e.printStackTrace();
 		}
 		
 		return responseObject;

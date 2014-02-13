@@ -17,8 +17,11 @@ package eu.trentorise.smartcampus.openservice.test.controller;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.File;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -64,27 +67,16 @@ public class FileControllerTest {
 	
 	@Test
 	public void testUploadFile() throws Exception{
-		log.info("* Test Catalog REST: /upload - STARTING");
+		log.info("* Test File REST: /upload - STARTING");
 		
 		//try create a File
 		File file = new File("src/test/resources/test.txt");
 
-		//Resource logo = new ClassPathResource("/Users/Giulia/Pictures/Black-Wallpapers-14.jpg");
 		MultiValueMap<String, Object> mvm = new LinkedMultiValueMap<String, Object>();
-		//FileSystemResource logo = new FileSystemResource("/Users/Giulia/Pictures/Black-Wallpapers-14.jpg");
-		//log.info("****** "+logo.getFilename());
-		//log.info("****** "+logo.getFile());
 		log.info("file absolute path: "+file.getAbsolutePath());
+		log.info("Can read: "+file.canRead());
 		mvm.add("file", new FileSystemResource(file));//logo
 		
-		/*//headers
-		HttpHeaders headers = new HttpHeaders();
-		headers.set("Content-Type", "multipart/form-data");
-		//headers.set("Accept", "text/plain");
-
-		ResponseEntity<ResponseObject> respEnt = restTemplate.exchange(BASE_URL+"/upload/1", HttpMethod.POST, 
-				new HttpEntity<Object>(mvm, headers), ResponseObject.class);
-		*/
 		log.info("***** Before post");
 		ResponseEntity<ResponseObject> respEnt = restTemplate.postForEntity(BASE_URL+"/upload/1", mvm,ResponseObject.class);
 		
@@ -93,22 +85,22 @@ public class FileControllerTest {
 				+", error: "+respEnt.getBody().getError());
 		log.info("Status: "+respEnt.getStatusCode());
 		
-		//- OR --
-		/*
-		// Set the headers...
-		HttpHeaders headers = new HttpHeaders();
-		headers.set("Content-Type", "multipart/form-data"); 
-		//headers.set("Accept", "text/plain");
-
-		ResponseObject result = restTemplate.exchange(
-			BASE_URL+"/upload/{organizationId}",
-		    HttpMethod.POST,
-		    new HttpEntity<MultiValueMap<String, Object>>(mvm, headers),
-		    ResponseObject.class,
-		    1
-		).getBody();
+		assertNotNull("File not found", respEnt.getBody().getData());
+		assertTrue("Error in uploading", respEnt.getBody().getStatus()==HttpServletResponse.SC_OK);
+		assertNull("Error exists", respEnt.getBody().getError());
 		
-		log.info("ResponseObject: "+result);
-		*/
+	}
+	
+	@Test
+	public void testDownloadFile(){
+		log.info("* Test File REST: /download - STARTING");
+		ResponseObject respEnt = restTemplate.getForObject(BASE_URL+"/download/1", ResponseObject.class);
+		
+		log.info("Data: "+respEnt.getData()+", status: "+respEnt.getStatus()
+				+", error: "+respEnt.getError());
+		
+		assertNotNull("File not found", respEnt.getData());
+		assertTrue("Error in download", respEnt.getStatus()==HttpServletResponse.SC_OK);
+		assertNull("Error exists", respEnt.getError());
 	}
 }
