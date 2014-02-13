@@ -45,8 +45,9 @@ public class FileController {
 			logger.info("File "+file);
 			try {
 				//src/main/webapp/uploadedFile/
-				File f = new File("/Users/Giulia/Desktop/uploadedFile/"+organizationId+"/"
+				File f = new File("/uploadedFile/"+organizationId+"/"
 						+ file.getOriginalFilename());
+				logger.info("Absolute path: "+f.getAbsolutePath());
 				//check if this exists
 				if(!f.exists()){
 					logger.info("Directory does not exist, then creating...");
@@ -116,7 +117,7 @@ public class FileController {
 		
 		//-- OR --
 		try{
-			File f = new File("/Users/Giulia/Desktop/uploadedFile/"+organizationId+"/*.*");
+			File f = new File("/uploadedFile/"+organizationId+"/*.*");
 			FileSystemResource fsr = new FileSystemResource(f);
 			responseObject.setData(fsr);
 			responseObject.setStatus(HttpServletResponse.SC_OK);
@@ -126,7 +127,13 @@ public class FileController {
 			responseObject.setError("File not found");
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			e.printStackTrace();
-		}
+		}/*
+		catch (NullPointerException n){
+			logger.info("Download error - NullPointerException");
+			responseObject.setError("File not found");
+			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			n.printStackTrace();
+		}*/
 		
 		return responseObject;
 	}
