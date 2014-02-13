@@ -1,6 +1,7 @@
 package eu.trentorise.smartcampus.openservices.controllers;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -79,61 +80,34 @@ public class FileController {
 		return responseObject;
 	}
 	
-	@RequestMapping(value = "download/{organizationId}", method = RequestMethod.GET)
-	public @ResponseBody ResponseObject downloadFile(@PathVariable int organizationId, HttpServletResponse response) {
+	@RequestMapping(value = "download/{organizationId}/{filename}/{extension}", method = RequestMethod.GET)
+	public @ResponseBody ResponseObject downloadFile(@PathVariable int organizationId, @PathVariable String filename, 
+			@PathVariable String extension, HttpServletResponse response) {
 		logger.info("-- FILE -- Download file ...");
 		responseObject = new ResponseObject();
-		/*
-		FileInputStream inputStream = null;
-		try {
-			inputStream = new FileInputStream("/Users/Giulia/Desktop/uploadedFile/"+organizationId+"/*");
-
-			response.setHeader("Content-Disposition",
-					"attachment; filename=test.txt");
-
-			try {
-				int c;
-				while ((c = inputStream.read()) != -1) {
-					response.getWriter().write(c);
-				}
-			} finally {
-				if (inputStream != null)
-					inputStream.close();
-				response.getWriter().close();
-			}
-			responseObject.setStatus(HttpServletResponse.SC_OK);
-
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			responseObject.setError("File not found");
-			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-		} // read the file
-		catch (IOException e) {
-			responseObject.setError("Problem in writing file");
-			responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
-		}
-		*/
+		logger.info("Org id: "+organizationId+", filename: "+filename+", extension: "+extension);
 		
-		//-- OR --
 		try{
-			File f = new File("/uploadedFile/"+organizationId+"/*.*");
-			FileSystemResource fsr = new FileSystemResource(f);
-			responseObject.setData(fsr);
-			responseObject.setStatus(HttpServletResponse.SC_OK);
-			logger.info("Download successfully");
+			File f = new File("/uploadedFile/"+organizationId+"/"+filename+"."+extension);
+			if(!f.exists()){
+				logger.info("File does not exist");
+				responseObject.setError("File does not exist");
+				responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			}
+			else{
+				//FileSystemResource fsr = new FileSystemResource(f);
+				logger.info("File exists");
+				//pass file and not filesystemresource due to message converters error.
+				responseObject.setData(f);
+				responseObject.setStatus(HttpServletResponse.SC_OK);
+				logger.info("Download successfully");
+			}
 		} catch (Throwable e) {
 			logger.info("Download error");
 			responseObject.setError("File not found");
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			e.printStackTrace();
-		}/*
-		catch (NullPointerException n){
-			logger.info("Download error - NullPointerException");
-			responseObject.setError("File not found");
-			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			n.printStackTrace();
-		}*/
+		}
 		
 		return responseObject;
 	}

@@ -94,7 +94,7 @@ public class FileControllerTest {
 	@Test
 	public void testDownloadFile(){
 		log.info("* Test File REST: /download - STARTING");
-		ResponseObject respEnt = restTemplate.getForObject(BASE_URL+"/download/1", ResponseObject.class);
+		ResponseObject respEnt = restTemplate.getForObject(BASE_URL+"/download/1/test/txt", ResponseObject.class);
 		
 		log.info("Data: "+respEnt.getData()+", status: "+respEnt.getStatus()
 				+", error: "+respEnt.getError());
