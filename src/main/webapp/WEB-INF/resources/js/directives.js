@@ -49,3 +49,19 @@ directives.directive('gravatar', ['Gravatar', '$compile',
         };
     }
 ]);
+
+directives.directive('fileselect', ['$parse',
+    function ($parse) {
+        return function (scope, elem, attr) {
+            var fn = $parse(attr['fileselect']);
+            elem.bind('change', function (evt) {
+                scope.$apply(function () {
+                    fn(scope, {
+                        files: evt.target.files[0],
+                        $event: evt
+                    });
+                });
+            });
+        };
+    }
+]);

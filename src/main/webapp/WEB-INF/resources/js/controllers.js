@@ -364,6 +364,9 @@ app.controller('newOrgCtrl', ['$scope', '$http', '$location', 'Org', 'Category',
 app.controller('editOrgCtrl', ['$scope', '$http', '$location', '$routeParams', 'Org', 'Category',
     function ($scope, $http, $location, $routeParams, Org, Category) {
         $scope.title = 'Edit';
+        $scope.onFile = function (file) {
+            $scope.file = file;
+        };
         Org.getById({
             id: $routeParams.id
         }, function (org) {
@@ -373,6 +376,21 @@ app.controller('editOrgCtrl', ['$scope', '$http', '$location', '$routeParams', '
             $scope.categories = data.data;
         });
         $scope.submit = function () {
+            $http({
+                method: 'POST',
+                url: 'api/file',
+                headers: {
+                    'Content-Type': false
+                },
+                transformRequest: function () {
+                    var formData = new FormData();
+                    formData.append('file', $scope.file);
+                    return formData;
+                }
+            }).success(function (data) {
+
+            });
+
             Org.update($scope.org, function () {
                 $location.path('profile');
             });
