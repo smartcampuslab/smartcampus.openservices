@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +25,11 @@ import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 
 @Controller
 @RequestMapping(value="/api/file/")
+@PropertySource("classpath:openservice.properties")
 public class FileController {
+	
+	@Autowired
+	private Environment env;
 	
 	private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 	/**
@@ -40,13 +47,17 @@ public class FileController {
 	public @ResponseBody ResponseObject uploadFile(@PathVariable int organizationId, @RequestParam("file") MultipartFile file,
 			HttpServletRequest request) {
 		logger.info("-- FILE -- Uploading file ...");
+		
+		
+		String dirFile = env.getProperty("filedir");
+		
 		responseObject = new ResponseObject();
 		logger.info("Request Real Path: "+request.getSession().getServletContext().getRealPath("/"));
 		if(!file.isEmpty() && file!=null){
 			logger.info("File "+file);
 			try {
 				//src/main/webapp/uploadedFile/
-				File f = new File("/uploadedFile/"+organizationId+"/"
+				File f = new File(dirFile+organizationId+"/"
 						+ file.getOriginalFilename());
 				logger.info("Absolute path: "+f.getAbsolutePath());
 				//check if this exists
@@ -87,8 +98,10 @@ public class FileController {
 		responseObject = new ResponseObject();
 		logger.info("Org id: "+organizationId+", filename: "+filename+", extension: "+extension);
 		
+		String dirFile = env.getProperty("filedir");
+		
 		try{
-			File f = new File("/uploadedFile/"+organizationId+"/"+filename+"."+extension);
+			File f = new File(dirFile+organizationId+"/"+filename+"."+extension);
 			if(!f.exists()){
 				logger.info("File does not exist");
 				responseObject.setError("File does not exist");
