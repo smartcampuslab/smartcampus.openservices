@@ -130,5 +130,6 @@ public class FileControllerTest {
 		assertNotNull("File not found", respEnt2.getData());
 		assertTrue("Error in download", respEnt2.getStatus()==HttpServletResponse.SC_OK);
 		assertNull("Error exists", respEnt2.getError());
+		
 	}
 }
