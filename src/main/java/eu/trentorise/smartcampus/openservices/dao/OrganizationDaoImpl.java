@@ -235,6 +235,15 @@ public class OrganizationDaoImpl implements OrganizationDao{
 		List<Organization> orgs = q.getResultList();
 		return orgs;
 	}
+
+	/**
+	 * Count organization
+	 */
+	@Transactional
+	@Override
+	public Long countOrganization() throws DataAccessException {
+		return (Long) getEntityManager().createQuery("SELECT COUNT(org) FROM Organization org").getSingleResult();
+	}
 	
 	
 }

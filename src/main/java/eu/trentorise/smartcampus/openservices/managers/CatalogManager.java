@@ -288,5 +288,13 @@ public class CatalogManager {
 	public Long countService(){
 		return serviceDao.countService();
 	}
+	
+	/**
+	 * 
+	 * @return number of organizations saved in database
+	 */
+	public Long countOrg(){
+		return orgDao.countOrganization();
+	}
 
 }

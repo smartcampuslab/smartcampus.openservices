@@ -114,4 +114,11 @@ public interface OrganizationDao {
 	 */
 	public List<Organization> findByCategory(int id) throws DataAccessException;
 	
+	/**
+	 * 
+	 * @return number of organization saved in database
+	 * @throws DataAccessException
+	 */
+	public Long countOrganization() throws DataAccessException;
+	
 }
