@@ -1,15 +1,23 @@
 <div class="row animated fadeIn">
     <div class="col-md-6 col-md-offset-3">
-			<div ng-repeat="service in services" class="col-md-12">
-			    <h1><a ng-href="services/{{service.id}}">{{service.name}}</a></h1>
-			    <p>{{service.description}}</p>
-			    <div>
-					<span class="badge">Version: {{service.version}}</span>
-					<div ng-show="service.tags" class="pull-right">
-						<i class="fa fa-tags"></i> <span ng-repeat="tag in service.tags" class="label label-success">{{tag}}</span>
-					</div>         
-				</div>
-		    <hr>
-			</div>     
-	</div>
+        <div ng-repeat="service in services" class="col-md-12">
+            <h1><a ng-href="services/{{service.id}}">{{service.name}}</a>
+            </h1>
+            <p>{{service.description}}</p>
+            <div>
+                <span class="badge">Version: {{service.version}}</span>
+                <div ng-show="service.tags" class="pull-right">
+                    <i class="fa fa-tags"></i> 
+                    <span ng-repeat="tag in service.tags" class="label label-success">{{tag}}</span>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <ul class="pager">
+            <li ng-class="{disabled: start <= 0}"><a ng-click="page('prev')" href="">Previous</a>
+            </li>
+            <li><a ng-click="page('next')" href="">Next</a>
+            </li>
+        </ul>
+    </div>
 </div>

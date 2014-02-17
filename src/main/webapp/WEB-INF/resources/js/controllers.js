@@ -109,7 +109,7 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
 
 app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service', 'Org', 'Category',
     function ($scope, $http, $location, Service, Org, Category) {
-        $scope.protocols = ["OAuth", "OpenID", "Public"];
+        $scope.protocols = ['OAuth', 'OpenID', 'Public'];
         $scope.accessInformation = {
             authentication: {
                 accessProtocol: null,
@@ -412,6 +412,9 @@ app.controller('categoriesCtrl', ['$scope', '$http', '$location', 'Catalog',
 
 app.controller('servicesCtrl', ['$scope', '$http', '$routeParams', 'Catalog',
     function ($scope, $http, $routeParams, Catalog) {
+        $scope.start = 0;
+        $scope.end = 9;
+
         if ( !! $scope.categoryActive) {
             $scope.categoryActive = undefined;
         }
@@ -429,7 +432,11 @@ app.controller('servicesCtrl', ['$scope', '$http', '$routeParams', 'Catalog',
                 $scope.services = services.data;
             });
         } else {
-            Catalog.listServices({}, function (services) {
+            Catalog.listServices({
+                start: $scope.start,
+                end: $scope.end,
+                sort: 'name'
+            }, function (services) {
                 services.data.forEach(function (e) {
                     e.tags = e.tags.split(',');
                 });
@@ -438,6 +445,31 @@ app.controller('servicesCtrl', ['$scope', '$http', '$routeParams', 'Catalog',
         }
 
         $scope.servicesActive = [];
+
+        $scope.page = function (direction) {
+
+            if (direction === 'next') {
+                $scope.start += 10;
+                $scope.end += 10;
+            } else {
+                if ($scope.start > 0) {
+                    $scope.start -= 10;
+                    $scope.end -= 10;
+                }
+
+            }
+
+            Catalog.listServices({
+                start: $scope.start,
+                end: $scope.end,
+                sort: 'name'
+            }, function (services) {
+                services.data.forEach(function (e) {
+                    e.tags = e.tags.split(',');
+                });
+                $scope.services = services.data;
+            });
+        };
 
         $scope.isServiceActive = function (service) {
             return $scope.servicesActive.indexOf(service) > -1;

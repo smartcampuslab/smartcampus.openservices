@@ -144,7 +144,7 @@ services.factory('Catalog', ['$resource',
         return $resource('/api/catalog', {}, {
             listServices: {
                 method: 'GET',
-                url: 'api/catalog/service',
+                url: 'api/catalog/service/:start/:end/:sort',
             },
             getServiceById: {
                 method: 'GET',
