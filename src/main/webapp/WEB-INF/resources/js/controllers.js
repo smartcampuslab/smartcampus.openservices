@@ -398,6 +398,15 @@ app.controller('editOrgCtrl', ['$scope', '$http', '$location', '$routeParams', '
     }
 ]);
 
+app.controller('editOrgMembersCtrl', ['$scope', '$http', '$location', 'Org',
+    function ($scope, $http, $location, Org) {
+
+        $scope.serviceCount = function (i) {
+            return $scope.categoryData.services[i];
+        };
+    }
+]);
+
 app.controller('categoriesCtrl', ['$scope', '$http', '$location', 'Catalog',
     function ($scope, $http, $location, Catalog) {
         Catalog.browseAllServiceCat({}, function (data) {

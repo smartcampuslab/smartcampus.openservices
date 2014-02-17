@@ -134,6 +134,11 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
             templateUrl: 'partials/profile/organizations/edit.html',
             access: access.ROLE_NORMAL
         }).
+        when('/profile/organizations/:id/members', {
+            controller: 'editOrgMembersCtrl',
+            templateUrl: 'partials/profile/organizations/members/show.html',
+            access: access.ROLE_NORMAL
+        }).
         otherwise({
             redirectTo: '/'
         });
