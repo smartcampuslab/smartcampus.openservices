@@ -128,7 +128,7 @@ public class OrganizationManagerTest {
 		
 		@Test
 		public void testGetOrgList(){
-			List<Organization> orgs = orgManager.getOrganizations();
+			List<Organization> orgs = orgManager.getOrganizations(0,3,"name");
 			assertNotNull("No organization", orgs);
 			assertTrue("Organization list is empty", orgs.size()>0);
 		}

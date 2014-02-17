@@ -67,7 +67,8 @@ public class CatalagControllerTest {
 	public void testServicesPublishDepracate() throws Exception{
 		log.info("* Test Catalog REST: /service - STARTING");
 		//ListService searchService 
-		ResponseObject searchService= restTemplate.getForObject(BASE_URL+"/service", ResponseObject.class, new Object[]{});
+		ResponseObject searchService= restTemplate.getForObject(BASE_URL+"/service/0/2/name", 
+				ResponseObject.class, new Object[]{});
 		System.out.println("RESPONSEOBJECT: "+searchService.getData()+", "+searchService.getStatus()+", "
 				+searchService.getError());
 		assertNotNull("No service for this simple search", searchService);
@@ -81,7 +82,7 @@ public class CatalagControllerTest {
 		//publish service
 		log.info("Find published service data..");
 		//found publish or deprecate services
-		List<Service> services = catalog.catalogServices();
+		List<Service> services = catalog.catalogServices(0,4,"name");
 		
 		if(services!=null && services.size()>0){
 			ResponseObject searchService = restTemplate.getForObject(BASE_URL+"/service/"+services.get(0).getId(), 
@@ -95,7 +96,8 @@ public class CatalagControllerTest {
 		log.info("Not find unpublished service data..");
 		//search in published and deprecated services - found some missing number. - TODO
 		try{
-			ResponseObject unpublService = restTemplate.getForObject(BASE_URL+"/service/4", ResponseObject.class, new Object[]{});
+			ResponseObject unpublService = restTemplate.getForObject(BASE_URL+"/service/4", ResponseObject.class, 
+					new Object[]{});
 			assertNull("Service is not unpublish", unpublService.getData());
 		}catch(HttpClientErrorException e){
 			log.info("Status code "+e.getStatusCode());
@@ -107,7 +109,8 @@ public class CatalagControllerTest {
 	public void testServiceMethods() throws Exception{
 		log.info("* Test Catalog REST: /service/methods/{service_id} - STARTING");
 		try{
-			ResponseObject searchService = restTemplate.getForObject(BASE_URL+"/service/methods/1", ResponseObject.class, new Object[]{});
+			ResponseObject searchService = restTemplate.getForObject(BASE_URL+"/service/methods/1",
+					ResponseObject.class, new Object[]{});
 			assertNotNull("No service for this simple search", searchService);
 			assertTrue("Empty", searchService.getData()!=null);
 		}catch(HttpClientErrorException e){
@@ -119,7 +122,8 @@ public class CatalagControllerTest {
 	public void testServiceHistory() throws Exception{
 		log.info("* Test Catalog REST: /service/history/{service_id} - STARTING");
 		try{
-			ResponseObject searchService = restTemplate.getForObject(BASE_URL+"/service/history/1", ResponseObject.class, new Object[]{});
+			ResponseObject searchService = restTemplate.getForObject(BASE_URL+"/service/history/1", 
+					ResponseObject.class, new Object[]{});
 			assertNotNull("No service for this simple search", searchService);
 			log.info("Data "+searchService.getData());
 			//assertTrue("Empty", searchService.getData()==null);
@@ -132,7 +136,8 @@ public class CatalagControllerTest {
 	public void testServiceSimpleSearch() throws Exception{
 		log.info("* Test Catalog REST: /service/search/{token} - STARTING");
 		String token = "b"; 
-		ResponseObject searchService = restTemplate.getForObject(BASE_URL+"/service/search/"+token, ResponseObject.class, new Object[]{});
+		ResponseObject searchService = restTemplate.getForObject(BASE_URL+"/service/search/"+token+"/0/5/id", 
+				ResponseObject.class, new Object[]{});
 		assertNotNull("No service for this simple search", searchService.getData());
 	}
 	
@@ -145,7 +150,7 @@ public class CatalagControllerTest {
 			List<Category> category = categories.getCategories();
 		
 			ResponseObject searchService = restTemplate.getForObject(BASE_URL+"/service/browse/category/"
-				+category.get(0).getId(), ResponseObject.class, new Object[]{});
+				+category.get(0).getId()+"/0/5/id", ResponseObject.class, new Object[]{});
 			assertNotNull("No service for this search by category", searchService.getData());
 		}
 	}
@@ -155,7 +160,8 @@ public class CatalagControllerTest {
 		log.info("** Test Catalog REST: /service/browse/tags/{tags} - STARTING ...");
 		String token = "b"; 
 		try{
-			ResponseObject searchService = restTemplate.getForObject(BASE_URL+"/service/browse/tags/"+token, ResponseObject.class, new Object[]{});
+			ResponseObject searchService = restTemplate.getForObject(BASE_URL+"/service/browse/tags/"+token+"/0/5/id", 
+					ResponseObject.class, new Object[]{});
 			assertNotNull("No service for this search by tags", searchService.getData());
 			assertTrue("List is empty", searchService.getData()!=null);
 		}catch(HttpClientErrorException e){
@@ -167,7 +173,8 @@ public class CatalagControllerTest {
 	public void testOrg() throws Exception{
 		log.info("** Test Catalog REST: /org - STARTING ...");
 		String token = "a"; 
-		ResponseObject searchOrg = restTemplate.getForObject(BASE_URL+"/org", ResponseObject.class, new Object[]{});
+		ResponseObject searchOrg = restTemplate.getForObject(BASE_URL+"/org/0/5/name", 
+				ResponseObject.class, new Object[]{});
 		assertNotNull("No organization for this simple search", searchOrg.getData());
 
 	}
@@ -176,7 +183,8 @@ public class CatalagControllerTest {
 	public void testOrgSimpleSearch() throws Exception{
 		log.info("** Test Catalog REST: /org/search/{token} - STARTING ...");
 		String token = "a"; 
-		ResponseObject searchOrg = restTemplate.getForObject(BASE_URL+"/org/search/"+token, ResponseObject.class, new Object[]{});
+		ResponseObject searchOrg = restTemplate.getForObject(BASE_URL+"/org/search/"+token+"/0/5/id", 
+				ResponseObject.class, new Object[]{});
 		assertNotNull("No organization for this simple search", searchOrg.getData());
 	}
 
@@ -188,8 +196,8 @@ public class CatalagControllerTest {
 		if(categories!=null && categories.getCategories().size()>0){
 			List<Category> category = categories.getCategories();
 			try{
-				ResponseObject searchOrg = restTemplate.getForObject(BASE_URL+"/org/browse/category/"+category.get(0).getId(), 
-						ResponseObject.class, new Object[]{});
+				ResponseObject searchOrg = restTemplate.getForObject(BASE_URL+"/org/browse/category/"+
+						category.get(0).getId()+"/0/5/id", ResponseObject.class, new Object[]{});
 				assertNotNull("No service for this search by category", searchOrg);
 				assertTrue("Organization name is not Amazon1", searchOrg.getData().toString().contains("Amazon1"));
 				assertTrue("Organization category contains", searchOrg.getData()!=null);
