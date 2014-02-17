@@ -98,9 +98,10 @@ public class ServiceDaoImpl implements ServiceDao{
 	 */
 	@Transactional
 	@Override
-	public List<Service> showPublishedService() throws DataAccessException {
-		Query q = getEntityManager().createQuery("FROM Service S WHERE S.state!='UNPUBLISH'");
-		List<Service> s = q.getResultList();
+	public List<Service> showPublishedService(int firstResult, int maxResult, String param_order) 
+			throws DataAccessException {
+		Query q = getEntityManager().createQuery("FROM Service S WHERE S.state!='UNPUBLISH' ORDER BY S."+param_order);
+		List<Service> s = q.setFirstResult(firstResult).setMaxResults(maxResult).getResultList();
 		return s;
 	}
 

@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import eu.trentorise.smartcampus.openservices.entities.*;
 
@@ -28,8 +29,10 @@ import eu.trentorise.smartcampus.openservices.entities.*;
  * @author Giulia Canobbio
  *
  */
-public interface ServiceDao {
+public interface ServiceDao{ //extends JpaRepository<Service, Integer>{
 
+	
+	
 	/**
 	 * Show all service.
 	 * @return list of {@link Service} instances
@@ -42,7 +45,8 @@ public interface ServiceDao {
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
-	public List<Service> showPublishedService() throws DataAccessException;
+	public List<Service> showPublishedService(int firstResult, int maxResult, String param_order) 
+			throws DataAccessException;
 	
 	/**
 	 * Show all service of a given user.

@@ -22,6 +22,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -79,10 +82,13 @@ public class CatalogManager {
 	 * Get list of published and deprecated services
 	 * @return all {@link Service} instances
 	 */
-	public List<Service> catalogServices(){
+	public List<Service> catalogServices(int firstResult, int maxResult, String param_order){
 		try{
-			return serviceDao.showPublishedService();
-			
+			return serviceDao.showPublishedService(firstResult,maxResult, param_order);
+			/*PageRequest pageReq = new PageRequest(page, size, Direction.ASC, "name");
+			Page<Service> s =  serviceDao.findAll(pageReq);
+			return s.getContent();
+			*/		
 		}catch(DataAccessException d){
 			return null;
 		}

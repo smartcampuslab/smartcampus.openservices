@@ -61,12 +61,13 @@ public class CatalogController {
 	 * @return {@link ResponseObject} with list of published and deprecated services data, status (OK or NOT FOUND) and 
 	 * error message (if status is NOT FOUND).
 	 */
-	@RequestMapping(value="/service", method = RequestMethod.GET, produces="application/json")
+	@RequestMapping(value="/service/{firstResult}/{maxResult}/{param_order}", method = RequestMethod.GET, produces="application/json")
 	@ResponseBody
-	public ResponseObject catalogServices(HttpServletResponse response){
+	public ResponseObject catalogServices(@PathVariable int firstResult, @PathVariable int maxResult, 
+			@PathVariable String param_order, HttpServletResponse response){
 		logger.info("-- Service Catalog Publish Service --");
 		//ListService lserv = new ListService();
-		List<Service> services = catalogManager.catalogServices();
+		List<Service> services = catalogManager.catalogServices(firstResult,maxResult, param_order);
 		//lserv.setServices(catalogManager.catalogServices());
 		responseObject = new ResponseObject();
 		if(services==null || services.size()==0){
