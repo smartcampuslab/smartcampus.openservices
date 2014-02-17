@@ -27,6 +27,7 @@ public class ResponseObject {
 	private Object data;
 	private int status;
 	private String error;
+	private Long totalNumber;
 	
 	/**
 	 * New {@link ResponseObject} instance
@@ -81,6 +82,22 @@ public class ResponseObject {
 	 */
 	public void setError(String error) {
 		this.error = error;
+	}
+	
+	/**
+	 * 
+	 * @return tota number : int
+	 */
+	public Long getTotalNumber() {
+		return totalNumber;
+	}
+
+	/**
+	 * 
+	 * @param totalNumber : int
+	 */
+	public void setTotalNumber(Long totalNumber) {
+		this.totalNumber = totalNumber;
 	}
 
 }

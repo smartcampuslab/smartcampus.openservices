@@ -77,7 +77,7 @@ public class CatalogController {
 		}else{
 			responseObject.setData(services);
 			responseObject.setStatus(HttpServletResponse.SC_OK);
-			responseObject.setError(""+catalogManager.countService());
+			responseObject.setTotalNumber(catalogManager.countService());
 		}
 		return responseObject;
 	}
@@ -183,6 +183,7 @@ public class CatalogController {
 		else{
 			responseObject.setData(services);
 			responseObject.setStatus(HttpServletResponse.SC_OK);
+			responseObject.setTotalNumber(catalogManager.countService());
 		}
 		return responseObject;
 	}
@@ -210,6 +211,7 @@ public class CatalogController {
 		else{
 			responseObject.setData(services);
 			responseObject.setStatus(HttpServletResponse.SC_OK);
+			responseObject.setTotalNumber(catalogManager.countService());
 		}
 		return responseObject;
 	}
@@ -262,6 +264,7 @@ public class CatalogController {
 		else{
 			responseObject.setData(services);
 			responseObject.setStatus(HttpServletResponse.SC_OK);
+			responseObject.setTotalNumber(catalogManager.countService());
 		}
 		return responseObject;
 	}
