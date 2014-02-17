@@ -67,7 +67,7 @@ public class CatalagControllerTest {
 	public void testServicesPublishDepracate() throws Exception{
 		log.info("* Test Catalog REST: /service - STARTING");
 		//ListService searchService 
-		ResponseObject searchService= restTemplate.getForObject(BASE_URL+"/service/0/2/name", 
+		ResponseObject searchService= restTemplate.getForObject(BASE_URL+"/service/0/2/id", 
 				ResponseObject.class, new Object[]{});
 		System.out.println("RESPONSEOBJECT: "+searchService.getData()+", "+searchService.getStatus()+", "
 				+searchService.getError());
@@ -82,7 +82,7 @@ public class CatalagControllerTest {
 		//publish service
 		log.info("Find published service data..");
 		//found publish or deprecate services
-		List<Service> services = catalog.catalogServices(0,4,"name");
+		List<Service> services = catalog.catalogServices(0,4,"id");
 		
 		if(services!=null && services.size()>0){
 			ResponseObject searchService = restTemplate.getForObject(BASE_URL+"/service/"+services.get(0).getId(), 
