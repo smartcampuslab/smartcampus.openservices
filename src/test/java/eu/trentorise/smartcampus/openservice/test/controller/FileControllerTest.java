@@ -70,10 +70,10 @@ public class FileControllerTest {
 		log.info("* Test File REST: /upload - STARTING");
 		
 		//try create a File
-		File file = new File("src/test/resources/test.txt");
+		//File file = new File("src/test/resources/test.txt");
 
 		MultiValueMap<String, Object> mvm = new LinkedMultiValueMap<String, Object>();
-		log.info("file absolute path: "+file.getAbsolutePath());
+		/*log.info("file absolute path: "+file.getAbsolutePath());
 		log.info("Can read: "+file.canRead());
 		mvm.add("file", new FileSystemResource(file));//logo
 		
@@ -88,10 +88,11 @@ public class FileControllerTest {
 		assertNotNull("File not found", respEnt.getBody().getData());
 		assertTrue("Error in uploading", respEnt.getBody().getStatus()==HttpServletResponse.SC_OK);
 		assertNull("Error exists", respEnt.getBody().getError());
-		
+		*/
 		//upload a jpg
 		File file2 = new File("src/test/resources/sample.jpg");
-		mvm.clear();
+		log.info("file absolute path: "+file2.getAbsolutePath());
+		//mvm.clear();
 		mvm.add("file", new FileSystemResource(file2));
 		
 		log.info("***** POST jpg file");
@@ -111,8 +112,8 @@ public class FileControllerTest {
 	@Test
 	public void testDownloadFile(){
 		log.info("* Test File REST: /download - STARTING");
-		log.info("Download txt file");
-		ResponseObject respEnt = restTemplate.getForObject(BASE_URL+"/download/1/test/txt", ResponseObject.class);
+		/*log.info("Download txt file");
+		ResponseObject respEnt = restTemplate.getForObject(BASE_URL+"/download/1", ResponseObject.class);
 		
 		log.info("Data: "+respEnt.getData()+", status: "+respEnt.getStatus()
 				+", error: "+respEnt.getError());
@@ -120,9 +121,9 @@ public class FileControllerTest {
 		assertNotNull("File not found", respEnt.getData());
 		assertTrue("Error in download", respEnt.getStatus()==HttpServletResponse.SC_OK);
 		assertNull("Error exists", respEnt.getError());
-		
+		*/
 		log.info("Download jpg file");
-		ResponseObject respEnt2 = restTemplate.getForObject(BASE_URL+"/download/1/sample/jpg", ResponseObject.class);
+		ResponseObject respEnt2 = restTemplate.getForObject(BASE_URL+"/download/1", ResponseObject.class);
 		
 		log.info("Data: "+respEnt2.getData()+", status: "+respEnt2.getStatus()
 				+", error: "+respEnt2.getError());

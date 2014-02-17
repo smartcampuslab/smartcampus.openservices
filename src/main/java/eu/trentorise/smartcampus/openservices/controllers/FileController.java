@@ -91,17 +91,17 @@ public class FileController {
 		return responseObject;
 	}
 	
-	@RequestMapping(value = "download/{organizationId}/{filename}/{extension}", method = RequestMethod.GET)
-	public @ResponseBody ResponseObject downloadFile(@PathVariable int organizationId, @PathVariable String filename, 
-			@PathVariable String extension, HttpServletResponse response) {
+	@RequestMapping(value = "download/{organizationId}", method = RequestMethod.GET)
+	public @ResponseBody ResponseObject downloadFile(@PathVariable int organizationId, /*@PathVariable String filename, 
+			@PathVariable String extension, */HttpServletResponse response) {
 		logger.info("-- FILE -- Download file ...");
 		responseObject = new ResponseObject();
-		logger.info("Org id: "+organizationId+", filename: "+filename+", extension: "+extension);
+		logger.info("Org id: "+organizationId);//+", filename: "+filename+", extension: "+extension);
 		
 		String dirFile = env.getProperty("filedir");
 		
 		try{
-			File f = new File(dirFile+organizationId+"/"+filename+"."+extension);
+			File f = new File(dirFile+organizationId);//+"/"+filename+"."+extension);
 			if(!f.exists()){
 				logger.info("File does not exist");
 				responseObject.setError("File does not exist");
@@ -111,7 +111,7 @@ public class FileController {
 				//FileSystemResource fsr = new FileSystemResource(f);
 				logger.info("File exists");
 				//pass file and not filesystemresource due to message converters error.
-				responseObject.setData(f);
+				responseObject.setData(new File(dirFile+organizationId+"/"+f.listFiles()[0].getName()));
 				responseObject.setStatus(HttpServletResponse.SC_OK);
 				logger.info("Download successfully");
 			}
