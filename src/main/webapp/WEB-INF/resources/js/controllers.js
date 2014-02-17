@@ -437,6 +437,7 @@ app.controller('servicesCtrl', ['$scope', '$http', '$routeParams', 'Catalog',
                 end: $scope.end,
                 sort: 'name'
             }, function (services) {
+                $scope.total = services.totalNumber;
                 services.data.forEach(function (e) {
                     e.tags = e.tags.split(',');
                 });
@@ -449,8 +450,11 @@ app.controller('servicesCtrl', ['$scope', '$http', '$routeParams', 'Catalog',
         $scope.page = function (direction) {
 
             if (direction === 'next') {
-                $scope.start += 10;
-                $scope.end += 10;
+                if ($scope.end < $scope.total) {
+                    $scope.start += 10;
+                    $scope.end += 10;
+                }
+
             } else {
                 if ($scope.start > 0) {
                     $scope.start -= 10;
