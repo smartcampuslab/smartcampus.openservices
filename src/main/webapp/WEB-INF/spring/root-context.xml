@@ -31,7 +31,7 @@
 	 <!-- You can have some pre-configured messagess also which are ready to send -->
     <bean id="preConfMessage" class="org.springframework.mail.SimpleMailMessage">
         <!--<property name="to" value="toinsert@gmail.com"></property>-->
-        <property name="from" value="g.canobbio@gmail.com"></property>
+        <property name="from" value="email"></property>
         <property name="subject" value="Welcome to OpenService!!"/>
     </bean>
     

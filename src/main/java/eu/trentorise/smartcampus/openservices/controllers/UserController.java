@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -58,6 +59,11 @@ public class UserController {
 	 */
 	@Autowired
 	private ApplicationMailer mailer;
+	/**
+	 * Instance of {@link Environment} to get all variables in properties file
+	 */
+	@Autowired
+	private Environment env;
 	
 	/*
 	 * USER REST WEB SERVICE
@@ -177,7 +183,8 @@ public class UserController {
 			String s = userManager.addKeyVerifyEmail(user.getUsername());
 			if(s!=null){
 			// return link
-			String link = "<host>/api/user/add/enable/"+user.getUsername()+","+ s;
+			String host = env.getProperty("host");
+			String link = host+"api/user/add/enable/"+user.getUsername()+","+ s;
 			// send it via email to user
 			//ApplicationMailer mailer = new ApplicationMailer();
 			mailer.sendMail(user.getEmail(),

@@ -32,15 +32,17 @@ import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 @PropertySource("classpath:openservice.properties")
 public class FileController {
 	
-	@Autowired
-	private Environment env;
-	
 	private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 	/**
 	 * {@link ResponseObject} Response object contains requested data, 
 	 * status of response and if necessary a custom error message.
 	 */
 	private ResponseObject responseObject;
+	/**
+	 * Instance of {@link Environment} to get all variables in properties file
+	 */
+	@Autowired
+	private Environment env;
 	
 	@RequestMapping(value="home")
 	public String fileShow(){

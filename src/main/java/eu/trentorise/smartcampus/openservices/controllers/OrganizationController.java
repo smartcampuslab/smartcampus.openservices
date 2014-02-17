@@ -23,12 +23,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import eu.trentorise.smartcampus.openservices.entities.Organization;
@@ -36,6 +38,7 @@ import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
 import eu.trentorise.smartcampus.openservices.managers.OrganizationManager;
 import eu.trentorise.smartcampus.openservices.support.ApplicationMailer;
+import eu.trentorise.smartcampus.openservices.support.EmailValidator;
 
 /**
  * Controller that retrieves, adds, modifies and deletes organization data for authenticated users.
@@ -63,6 +66,11 @@ public class OrganizationController {
 	 */
 	@Autowired
 	private ApplicationMailer mailer;
+	/**
+	 * Instance of {@link Environment} to get all variables in properties file
+	 */
+	@Autowired
+	private Environment env;
 	
 	/*
 	 * Rest web service for Organization
@@ -281,38 +289,48 @@ public class OrganizationController {
 	 * @return {@link ResponseObject} with status (OK or UNAUTHORIZED) and 
 	 * error message (if status is UNAUTHORIZED).
 	 */
-	@RequestMapping(value = "/manage/owner/{org_id}/{role}/{email}", method = RequestMethod.POST)
+	@RequestMapping(value = "/manage/owner", method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseObject orgManageOwnerData(@PathVariable int org_id, @PathVariable String role, 
-			@PathVariable String email){
+	public ResponseObject orgManageOwnerData(@RequestBody int org_id, @RequestBody String email){
 		logger.info("-- Manage Organization Owner --");
 		//Get username
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		responseObject = new ResponseObject();
-		try {
-			String s = organizationManager.createInvitation(username, org_id, role, email);
-			// return link
-			String link = "<host>/org/manage/owner/add/" + s;
+		//validate email
+		EmailValidator ev = new EmailValidator();
+		if(ev.validate(email)){
+			try {
+				String s = organizationManager.createInvitation(username,
+						org_id, "ROLE_ORGOWNER", email);
+				// return link
+				String host = env.getProperty("host");
+				String link = host+"org/manage/owner/add/" + s;
 
-			// TODO: generalize template
-			// send it via email to user
-			//ApplicationMailer mailer = new ApplicationMailer();
-			mailer.sendMail(
-					email,
-					"[OpenService] Invitation to organization",
-					username
-							+ " has invited you to become an organization owner of "
-							+ organizationManager.getOrganizationById(org_id)
-									.getName()
-							+ ". If you are not a user of OpenService, "
-							+ "please sign up and become part of our community. "
-							+ "Please check the following link to accept, if you are already a user: "
-							+ link);
-			// TODO
-			responseObject.setStatus(HttpServletResponse.SC_OK);
-		} catch (SecurityException s) {
-			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			responseObject.setError("User cannot invite other users to an organization");
+				// TODO: generalize template
+				// send it via email to user
+				// ApplicationMailer mailer = new ApplicationMailer();
+				mailer.sendMail(
+						email,
+						"[OpenService] Invitation to organization",
+						username
+								+ " has invited you to become an organization owner of "
+								+ organizationManager.getOrganizationById(
+										org_id).getName()
+								+ ". If you are not a user of OpenService, "
+								+ "please sign up and become part of our community. "
+								+ "Please check the following link to accept, if you are already a user: "
+								+ link);
+				// TODO
+				responseObject.setStatus(HttpServletResponse.SC_OK);
+			} catch (SecurityException s) {
+				responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				responseObject.setError("User cannot invite other users to an organization");
+			}
+		}
+		else{
+			//wrong email address - not valid
+			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			responseObject.setError("Not valid email address");
 		}
 		
 		return responseObject;
