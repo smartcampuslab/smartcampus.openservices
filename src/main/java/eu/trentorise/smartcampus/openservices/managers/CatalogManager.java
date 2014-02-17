@@ -280,5 +280,13 @@ public class CatalogManager {
 		
 		return res;
 	}
+	
+	/**
+	 * 
+	 * @return number of services saved in database
+	 */
+	public Long countService(){
+		return serviceDao.countService();
+	}
 
 }

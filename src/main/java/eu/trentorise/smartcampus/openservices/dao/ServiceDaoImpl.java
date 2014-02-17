@@ -331,4 +331,10 @@ public class ServiceDaoImpl implements ServiceDao{
 		return res;
 	}
 
+	@Transactional
+	@Override
+	public Long countService() throws DataAccessException {
+		return (Long) getEntityManager().createQuery("SELECT COUNT(s) FROM Service s").getSingleResult();
+	}
+
 }
