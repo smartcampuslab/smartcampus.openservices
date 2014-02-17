@@ -1,9 +1,13 @@
 package eu.trentorise.smartcampus.openservices.controllers;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -111,7 +115,22 @@ public class FileController {
 				//FileSystemResource fsr = new FileSystemResource(f);
 				logger.info("File exists");
 				//pass file and not filesystemresource due to message converters error.
-				responseObject.setData(new File(dirFile+organizationId+"/"+f.listFiles()[0].getName()));
+				//responseObject.setData(new File(dirFile+organizationId+"/"+f.listFiles()[0].getName()));
+				
+				/*InputStream is = this.getClass().getResourceAsStream(dirFile+organizationId+"/"+f.listFiles()[0].getName());
+				BufferedImage img = ImageIO.read(is);
+				ByteArrayOutputStream bao = new ByteArrayOutputStream();
+				ImageIO.write(img, "jpg", bao);
+				responseObject.setData(bao.toByteArray());
+				*/
+				BufferedImage img = ImageIO.read(new File(dirFile+organizationId+"/"+f.listFiles()[0].getName()));
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				ImageIO.write(img, "jpeg", baos);
+				baos.flush();
+				byte[] imageInByte = baos.toByteArray();
+				baos.close();
+				
+				responseObject.setData(imageInByte);
 				responseObject.setStatus(HttpServletResponse.SC_OK);
 				logger.info("Download successfully");
 			}
