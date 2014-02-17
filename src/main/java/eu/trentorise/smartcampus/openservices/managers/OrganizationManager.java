@@ -259,9 +259,9 @@ public class OrganizationManager {
 	/**
 	 * @return all {@link Organization} instances
 	 */
-	public List<Organization> getOrganizations() {
+	public List<Organization> getOrganizations(int firstResult, int maxResult, String param_order) {
 		try{
-			return orgDao.showOrganizations();
+			return orgDao.showOrganizations(firstResult, maxResult, param_order);
 		}catch(DataAccessException d){
 			return null;
 		}

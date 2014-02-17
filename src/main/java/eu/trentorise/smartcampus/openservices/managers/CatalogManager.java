@@ -147,9 +147,9 @@ public class CatalogManager {
 	 * @param token : String token compared with service name
 	 * @return all {@link Service} instances
 	 */
-	public List<Service> catalogServiceSimpleSearch(String token){
+	public List<Service> catalogServiceSimpleSearch(String token, int firstResult, int maxResult, String param_order){
 		try{
-			return serviceDao.searchService(token);
+			return serviceDao.searchService(token, firstResult, maxResult, param_order);
 		}catch(DataAccessException d){
 			return null;
 		}
@@ -160,9 +160,9 @@ public class CatalogManager {
 	 * @param category : int category id
 	 * @return all {@link Service} instances
 	 */
-	public List<Service> catalogServiceBrowseByCategory(int category){
+	public List<Service> catalogServiceBrowseByCategory(int category, int firstResult, int maxResult, String param_order){
 		try{
-			return serviceDao.browseService(category, null);
+			return serviceDao.browseService(category, null, firstResult, maxResult, param_order);
 		}catch(DataAccessException d){
 			return null;
 		}
@@ -196,9 +196,9 @@ public class CatalogManager {
 	 * @param tags : String tags for searching in service tags
 	 * @return all {@link Service} instances
 	 */
-	public List<Service> catalogServiceBrowseByTags( String tags) {
+	public List<Service> catalogServiceBrowseByTags(String tags, int firstResult, int maxResult, String param_order) {
 		try{
-			return serviceDao.browseService(null, tags);
+			return serviceDao.browseService(null, tags, firstResult, maxResult, param_order);
 		}catch(DataAccessException d){
 			return null;
 		}
@@ -208,9 +208,9 @@ public class CatalogManager {
 	 * Get list of organizations
 	 * @return all {@link Organization} instances
 	 */
-	public List<Organization> catalogOrg(){
+	public List<Organization> catalogOrg( int firstResult, int maxResult,  String param_order){
 		try{
-			return orgDao.showOrganizations();
+			return orgDao.showOrganizations(firstResult, maxResult, param_order);
 		}catch(DataAccessException d){
 			return null;
 		}
@@ -222,9 +222,9 @@ public class CatalogManager {
 	 * @param token : String token for comparing it with organization name
 	 * @return all {@link Organization} instances
 	 */
-	public List<Organization> catalogOrgSimpleSearch(@PathVariable String token){
+	public List<Organization> catalogOrgSimpleSearch(String token, int firstResult, int maxResult,  String param_order){
 		try{
-			return orgDao.searchOrganization(token);
+			return orgDao.searchOrganization(token, firstResult, maxResult, param_order);
 		}catch(DataAccessException d){
 			return null;
 		}
@@ -235,9 +235,9 @@ public class CatalogManager {
 	 * @param category : int category id
 	 * @return all {@link Organization} instances
 	 */
-	public List<Organization> catalogOrgBrowse(@PathVariable int category){
+	public List<Organization> catalogOrgBrowse(int category, int firstResult, int maxResult,  String param_order){
 		try{
-			return orgDao.browseOrganization(category,null);
+			return orgDao.browseOrganization(category,null, firstResult, maxResult, param_order);
 		}catch(DataAccessException d){
 			return null;
 		}

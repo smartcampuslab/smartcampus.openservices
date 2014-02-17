@@ -130,7 +130,7 @@ public class OrganizationController {
 	@ResponseBody
 	public ResponseObject getOrganizations(HttpServletResponse response){
 		logger.info("-- View organization list --");
-		List<Organization> orgs = organizationManager.getOrganizations();
+		List<Organization> orgs = organizationManager.getOrganizations(0, 100000000, "name");
 		responseObject = new ResponseObject();
 		if(orgs==null || orgs.size()==0){
 			responseObject.setError("No organization in database");

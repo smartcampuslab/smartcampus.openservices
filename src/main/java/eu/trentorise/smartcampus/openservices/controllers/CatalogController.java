@@ -67,7 +67,7 @@ public class CatalogController {
 			@PathVariable String param_order, HttpServletResponse response){
 		logger.info("-- Service Catalog Publish Service --");
 		//ListService lserv = new ListService();
-		List<Service> services = catalogManager.catalogServices(firstResult,maxResult, param_order);
+		List<Service> services = catalogManager.catalogServices(firstResult,maxResult,param_order);
 		//lserv.setServices(catalogManager.catalogServices());
 		responseObject = new ResponseObject();
 		if(services==null || services.size()==0){
@@ -168,11 +168,12 @@ public class CatalogController {
 	 * @return {@link ResponseObject} with list of service data, status (OK or NOT FOUND) and 
 	 * error message (if status is NOT FOUND).
 	 */
-	@RequestMapping(value = "/service/search/{token}", method = RequestMethod.GET, produces="application/json") 
+	@RequestMapping(value = "/service/search/{token}/{firstResult}/{maxResult}/{param_order}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
-	public ResponseObject catalogServiceSimpleSearch(@PathVariable String token, HttpServletResponse response){
+	public ResponseObject catalogServiceSimpleSearch(@PathVariable String token, @PathVariable int firstResult,
+			@PathVariable int maxResult, @PathVariable String param_order, HttpServletResponse response){
 		logger.info("-- Service Catalog simple search --");
-		List<Service> services = catalogManager.catalogServiceSimpleSearch(token);
+		List<Service> services = catalogManager.catalogServiceSimpleSearch(token, firstResult, maxResult, param_order);
 		responseObject=new ResponseObject();
 		if(services==null || services.size()==0){
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -194,11 +195,12 @@ public class CatalogController {
 	 * @return {@link ResponseObject} with list of service data, status (OK or NOT FOUND) and 
 	 * error message (if status is NOT FOUND).
 	 */
-	@RequestMapping(value = "/service/browse/category/{category}", method = RequestMethod.GET, produces="application/json") 
+	@RequestMapping(value = "/service/browse/category/{category}/{firstResult}/{maxResult}/{param_order}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
-	public ResponseObject catalogServiceBrowseByCategory(@PathVariable int category, HttpServletResponse response){
+	public ResponseObject catalogServiceBrowseByCategory(@PathVariable int category, @PathVariable int firstResult,
+			@PathVariable int maxResult, @PathVariable String param_order, HttpServletResponse response){
 		logger.info("-- Service Catalog browse (category) --");
-		List<Service> services = catalogManager.catalogServiceBrowseByCategory(category);
+		List<Service> services = catalogManager.catalogServiceBrowseByCategory(category, firstResult, maxResult, param_order);
 		responseObject=new ResponseObject();
 		if(services==null || services.size()==0){
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -245,11 +247,12 @@ public class CatalogController {
 	 * @return {@link ResponseObject} with list of service data, status (OK or NOT FOUND) and 
 	 * error message (if status is NOT FOUND).
 	 */
-	@RequestMapping(value = "/service/browse/tags/{tags}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/service/browse/tags/{tags}/{firstResult}/{maxResult}/{param_order}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public ResponseObject catalogServiceBrowseByTags(@PathVariable String tags, HttpServletResponse response) {
+	public ResponseObject catalogServiceBrowseByTags(@PathVariable String tags, @PathVariable int firstResult,
+			@PathVariable int maxResult, @PathVariable String param_order, HttpServletResponse response) {
 		logger.info("-- Service Catalog browse (category) --");
-		List<Service> services = catalogManager.catalogServiceBrowseByTags(tags);
+		List<Service> services = catalogManager.catalogServiceBrowseByTags(tags, firstResult, maxResult, param_order);
 		responseObject = new ResponseObject();
 		if(services==null || services.size()==0){
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -276,11 +279,12 @@ public class CatalogController {
 	 * @return {@link ResponseObject} with list of organization data, status (OK or NOT FOUND) and 
 	 * error message (if status is NOT FOUND).
 	 */
-	@RequestMapping(value="/org", method = RequestMethod.GET, produces="application/json")
+	@RequestMapping(value="/org/{firstResult}/{maxResult}/{param_order}", method = RequestMethod.GET, produces="application/json")
 	@ResponseBody
-	public ResponseObject catalogOrg(HttpServletResponse response){
+	public ResponseObject catalogOrg(@PathVariable int firstResult, @PathVariable int maxResult, 
+			@PathVariable String param_order, HttpServletResponse response){
 		logger.info("-- Organization Catalog data --");
-		List<Organization> orgs = catalogManager.catalogOrg();
+		List<Organization> orgs = catalogManager.catalogOrg(firstResult, maxResult, param_order);
 		responseObject = new ResponseObject();
 		if(orgs==null || orgs.size()==0){
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -329,11 +333,12 @@ public class CatalogController {
 	 * @return {@link ResponseObject} with list of organization data, status (OK or NOT FOUND) and 
 	 * error message (if status is NOT FOUND).
 	 */
-	@RequestMapping(value = "/org/search/{token}", method = RequestMethod.GET, produces="application/json") 
+	@RequestMapping(value = "/org/search/{token}/{firstResult}/{maxResult}/{param_order}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
-	public ResponseObject catalogOrgSimpleSearch(@PathVariable String token, HttpServletResponse response){
+	public ResponseObject catalogOrgSimpleSearch(@PathVariable String token, @PathVariable int firstResult, 
+			@PathVariable int maxResult, @PathVariable String param_order, HttpServletResponse response){
 		logger.info("-- Organization Catalog simple search --");
-		List<Organization> orgs = catalogManager.catalogOrgSimpleSearch(token);
+		List<Organization> orgs = catalogManager.catalogOrgSimpleSearch(token, firstResult, maxResult, param_order);
 		responseObject = new ResponseObject();
 		if(orgs==null || orgs.size()==0){
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -355,11 +360,12 @@ public class CatalogController {
 	 * @return {@link ResponseObject} with list of organization data, status (OK or NOT FOUND) and 
 	 * error message (if status is NOT FOUND).
 	 */
-	@RequestMapping(value = "/org/browse/category/{category}", method = RequestMethod.GET, produces="application/json") 
+	@RequestMapping(value = "/org/browse/category/{category}/{firstResult}/{maxResult}/{param_order}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
-	public ResponseObject catalogOrgBrowse(@PathVariable int category, HttpServletResponse response){
+	public ResponseObject catalogOrgBrowse(@PathVariable int category, @PathVariable int firstResult, 
+			@PathVariable int maxResult, @PathVariable String param_order, HttpServletResponse response){
 		logger.info("-- Organization Catalog browse --");
-		List<Organization> orgs = catalogManager.catalogOrgBrowse(category);
+		List<Organization> orgs = catalogManager.catalogOrgBrowse(category, firstResult, maxResult, param_order);
 		responseObject = new ResponseObject();
 		if(orgs==null || orgs.size()==0){
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);

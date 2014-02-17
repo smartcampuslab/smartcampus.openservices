@@ -133,7 +133,8 @@ public interface ServiceDao{ //extends JpaRepository<Service, Integer>{
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
-	public List<Service> searchService(String token) throws DataAccessException;
+	public List<Service> searchService(String token, int firstResult, int maxResult, String param_order) 
+			throws DataAccessException;
 	
 	/**
 	 * Browse services having input category and tags
@@ -142,7 +143,8 @@ public interface ServiceDao{ //extends JpaRepository<Service, Integer>{
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
-	public List<Service> browseService(Integer category, String tags) throws DataAccessException;
+	public List<Service> browseService(Integer category, String tags, int firstResult, int maxResult, String param_order) 
+			throws DataAccessException;
 
 	/**
 	 * @param id

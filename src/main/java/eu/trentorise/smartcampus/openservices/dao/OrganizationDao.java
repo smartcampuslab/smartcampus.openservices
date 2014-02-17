@@ -34,7 +34,8 @@ public interface OrganizationDao {
 	 * Show all organization in database.
 	 * @return list of {@link Organization} instances
 	 */
-	public List<Organization> showOrganizations() throws DataAccessException;
+	public List<Organization> showOrganizations(int firstResult, int maxResult,  String param_order) 
+			throws DataAccessException;
 	
 	/**
 	 * Show my organizations.
@@ -92,7 +93,8 @@ public interface OrganizationDao {
 	 * @return list of {@link Organization} instances
 	 * @throws DataAccessException
 	 */
-	public List<Organization> searchOrganization(String token) throws DataAccessException;
+	public List<Organization> searchOrganization(String token, int firstResult, int maxResult, String param_order) 
+			throws DataAccessException;
 	
 	/**
 	 * Browse Organization using filters:
@@ -103,7 +105,8 @@ public interface OrganizationDao {
 	 * @return list of {@link Organization} instances
 	 * @throws DataAccessException
 	 */
-	public List<Organization> browseOrganization(Integer category, String geography) throws DataAccessException;
+	public List<Organization> browseOrganization(Integer category, String geography, int firstResult, int maxResult,  
+			String param_order) throws DataAccessException;
 
 	/**
 	 * @param id

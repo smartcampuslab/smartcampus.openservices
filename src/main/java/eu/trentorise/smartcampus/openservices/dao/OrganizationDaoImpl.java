@@ -63,9 +63,10 @@ public class OrganizationDaoImpl implements OrganizationDao{
 	 */
 	@Transactional
 	@Override
-	public List<Organization> showOrganizations() throws DataAccessException {
-		Query q = getEntityManager().createQuery("FROM Organization");
-		List<Organization> os = q.getResultList();
+	public List<Organization> showOrganizations(int firstResult, int maxResult,  String param_order) 
+			throws DataAccessException {
+		Query q = getEntityManager().createQuery("FROM Organization Org ORDER BY Org."+param_order);
+		List<Organization> os = q.setFirstResult(firstResult).setMaxResults(maxResult).getResultList();
 		return os;
 	}
 
@@ -181,11 +182,12 @@ public class OrganizationDaoImpl implements OrganizationDao{
 	 */
 	@Transactional
 	@Override
-	public List<Organization> searchOrganization(String token)
+	public List<Organization> searchOrganization(String token, int firstResult, int maxResult, String param_order)
 			throws DataAccessException {
-		Query q = getEntityManager().createQuery("FROM Organization Org WHERE Org.name LIKE :token")
+		Query q = getEntityManager().createQuery("FROM Organization Org WHERE Org.name LIKE :token " +
+				"ORDER BY Org."+param_order)
 				.setParameter("token", "%"+token+"%");
-		List<Organization> orgs = q.getResultList();
+		List<Organization> orgs = q.setFirstResult(firstResult).setMaxResults(maxResult).getResultList();
 		return orgs;
 	}
 
@@ -198,21 +200,24 @@ public class OrganizationDaoImpl implements OrganizationDao{
 	 */
 	@Transactional
 	@Override
-	public List<Organization> browseOrganization(Integer category, String geography) throws DataAccessException {
+	public List<Organization> browseOrganization(Integer category, String geography, int firstResult, int maxResult,  
+			String param_order) throws DataAccessException {
 		//TODO check what geography is
 		Query q = null;
 		if(category!=null && geography==null){
-			q = getEntityManager().createQuery("FROM Organization Org WHERE Org.category=:category")
+			q = getEntityManager().createQuery("FROM Organization Org WHERE Org.category=:category " +
+					"ORDER BY Org."+param_order)
 					.setParameter("category", category);
 		}
 		else if(category==null && geography!=null){
 			
 		}
 		else if(category!=null && geography!=null){
-			q = getEntityManager().createQuery("FROM Organization Org WHERE Org.category=:category")
+			q = getEntityManager().createQuery("FROM Organization Org WHERE Org.category=:category "+
+					"ORDER BY Org."+param_order)
 					.setParameter("category", category);
 		}
-		List<Organization> orgs = q.getResultList();
+		List<Organization> orgs = q.setFirstResult(firstResult).setMaxResults(maxResult).getResultList();
 		return orgs;
 	}
 

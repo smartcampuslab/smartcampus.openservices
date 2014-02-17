@@ -254,10 +254,12 @@ public class ServiceDaoImpl implements ServiceDao{
 	 */
 	@Transactional
 	@Override
-	public List<Service> searchService(String token) throws DataAccessException{
-		Query q = getEntityManager().createQuery("FROM Service S WHERE S.name LIKE :token AND S.state!='UNPUBLISH'")
+	public List<Service> searchService(String token, int firstResult, int maxResult, String param_order) 
+			throws DataAccessException{
+		Query q = getEntityManager().createQuery("FROM Service S WHERE S.name LIKE :token AND S.state!='UNPUBLISH' " +
+				"ORDER BY S."+param_order)
 				.setParameter("token", "%"+token+"%");
-		List<Service> s = q.getResultList();
+		List<Service> s = q.setFirstResult(firstResult).setMaxResults(maxResult).getResultList();
 		return s;
 	}
 
@@ -270,23 +272,26 @@ public class ServiceDaoImpl implements ServiceDao{
 	 */
 	@Transactional
 	@Override
-	public List<Service> browseService(Integer category, String tags) throws DataAccessException {
+	public List<Service> browseService(Integer category, String tags, int firstResult, int maxResult, String param_order)
+			throws DataAccessException {
 		Query q = null;
 		if(category!=null && tags!=null){
 			q = getEntityManager().createQuery("FROM Service S WHERE S.category=:category AND " +
-				"S.tags LIKE :tags AND S.state!='UNPUBLISH'")
+				"S.tags LIKE :tags AND S.state!='UNPUBLISH' ORDER BY S."+param_order)
 				.setParameter("category", category)
 				.setParameter("tags", "%"+tags+"%");
 		}
 		else if(category==null && tags!=null){
-			q = getEntityManager().createQuery("FROM Service S WHERE S.tags LIKE :tags AND S.state!='UNPUBLISH'")
+			q = getEntityManager().createQuery("FROM Service S WHERE S.tags LIKE :tags AND S.state!='UNPUBLISH' " +
+					"ORDER BY S."+param_order)
 					.setParameter("tags", "%"+tags+"%");
 		}
 		else if(category!=null && tags==null){
-			q = getEntityManager().createQuery("FROM Service S WHERE S.category=:category AND S.state!='UNPUBLISH'")
+			q = getEntityManager().createQuery("FROM Service S WHERE S.category=:category AND S.state!='UNPUBLISH' " +
+					"ORDER BY S."+param_order)
 					.setParameter("category", category);
 		}
-		List<Service> s = q.getResultList();
+		List<Service> s = q.setFirstResult(firstResult).setMaxResults(maxResult).getResultList();
 		return s;
 	}
 
