@@ -81,9 +81,7 @@
   <script src="js/vendor/bootstrap.min.js"></script>
   <script src="js/vendor/holder.js"></script>
   <script src="js/vendor/prism.js"></script>
-  <script src="js/vendor/datepicker.js">
-  $.fn.datepicker.defaults.format = "mm/dd/yyyy";
-  </script>
+  <script src="js/vendor/datepicker.js"></script>
   
   <script src="js/vendor/angular.min.js"></script>
   <script src="js/vendor/angular-route.min.js"></script>
