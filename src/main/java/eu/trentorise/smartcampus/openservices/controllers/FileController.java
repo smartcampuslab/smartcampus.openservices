@@ -137,6 +137,9 @@ public class FileController {
 				BufferedImage img = ImageIO.read(image);
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				String format = new MimetypesFileTypeMap().getContentType(image);
+				if(format.equalsIgnoreCase("application/octet-stream")){
+					format="image/jpeg";
+				}
 				logger.info("Format image: "+format+" and split: "+format.split("/")[1]);
 				ImageIO.write(img,format.split("/")[1], baos);
 				baos.flush();
