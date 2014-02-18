@@ -62,6 +62,21 @@ public class FileController {
 		if(!file.isEmpty() && file!=null){
 			logger.info("File "+file);
 			try {
+				//check directory if exists
+				File dir = new File(dirFile+organizationId);
+				if(dir.exists()){
+					//check if there is a file
+					logger.info(".. Directory already exists..");
+					if(dir.listFiles()[0].exists()){
+						//delete file
+						if(dir.listFiles()[0].delete()){
+							logger.info(".. Deleting file ..");
+						}
+						else{
+							logger.info(".. Error in deleting ..");
+						}
+					}
+				}
 				//src/main/webapp/uploadedFile/
 				File f = new File(dirFile+organizationId+"/"
 						+ file.getOriginalFilename());
