@@ -11,6 +11,11 @@
                     </span>
                 </div>
                 <!-- /input-group -->
+                <div ng-if="request.method != null">
+					        <br>
+					        <h5>Method name: {{request.method.name}}</h5>
+                  <h5>Method description: {{request.method.synopsis}}</h5>
+                </div>
             </div>
             <!-- /.col-lg-6 -->
             <div class="col-lg-6">
@@ -20,9 +25,12 @@
                     <span class="input-group-btn">
                         <button ng-disabled="!checkBeforeSend()" ng-click="send()" type="button" class="btn btn-success">Send</button>
                     </span>
-
                 </div>
                 <!-- /input-group -->
+                <div ng-if="request.sample != null">
+                  <h5>Test name: {{request.sample.name}}</h5>
+                  <h5>Test description: {{request.sample.description}}</h5>
+                </div>
                 <div ng-if="request.sample.requestPathEditable">
                     <div class="form-group">
                         <label for="path">Request path</label>
