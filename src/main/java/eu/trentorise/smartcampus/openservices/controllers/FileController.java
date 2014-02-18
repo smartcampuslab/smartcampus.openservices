@@ -1,24 +1,16 @@
 package eu.trentorise.smartcampus.openservices.controllers;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 import javax.activation.MimetypesFileTypeMap;
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import eu.trentorise.smartcampus.openservices.entities.Organization;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
+import eu.trentorise.smartcampus.openservices.managers.OrganizationManager;
 
 @Controller
 @RequestMapping(value="/api/file/")
@@ -35,6 +29,11 @@ import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 public class FileController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(FileController.class);
+	/**
+	 * Instance of {@link OrganizationManager}
+	 */
+	@Autowired
+	private OrganizationManager orgManager;
 	/**
 	 * {@link ResponseObject} Response object contains requested data, 
 	 * status of response and if necessary a custom error message.
@@ -52,10 +51,9 @@ public class FileController {
 	}
 	
 	@RequestMapping(value = "upload/{organizationId}", method = RequestMethod.POST)
-	public @ResponseBody ResponseObject uploadFile(@PathVariable int organizationId, @RequestParam("file") MultipartFile file,
-			HttpServletRequest request) {
+	public @ResponseBody ResponseObject uploadFile(@PathVariable int organizationId, 
+			@RequestParam("file") MultipartFile file, HttpServletRequest request) {
 		logger.info("-- FILE -- Uploading file ...");
-		
 		
 		String dirFile = env.getProperty("filedir");
 		
@@ -66,6 +64,7 @@ public class FileController {
 		if(!file.isEmpty() && file!=null){
 			//logger.info("File "+file);
 			try {
+				/*
 				//check directory if exists
 				File dir = new File(dirFile+organizationId);
 				if(dir.exists()){
@@ -80,8 +79,7 @@ public class FileController {
 							logger.info(".. Error in deleting ..");
 						}
 					}
-				}
-				//src/main/webapp/uploadedFile/
+				}*/
 				File f = new File(dirFile+organizationId+"/"
 						+ file.getOriginalFilename());
 				logger.info("Absolute path: "+f.getAbsolutePath());
@@ -96,6 +94,16 @@ public class FileController {
 				responseObject.setData(file.getOriginalFilename());
 				responseObject.setStatus(HttpServletResponse.SC_OK);
 				logger.info("-- File uploaded correctly --");
+				
+				//Save new logo relative path in organization
+				// /images/org_id/file.getOriginalFilename()
+				boolean result = orgManager.updateLogo("sara", organizationId, "/images/"+organizationId+
+						"/"+file.getOriginalFilename());
+				if(result){
+					logger.info(".. Organization logo update ");
+				}else{
+					logger.info(".. Failed to save logo in db... ");
+				}
 				
 				String format = new MimetypesFileTypeMap().getContentType(f);
 				logger.info(".. Checking image format... "+format);
@@ -119,10 +127,9 @@ public class FileController {
 		}
 		return responseObject;
 	}
-	
+	/*
 	@RequestMapping(value = "download/{organizationId}", method = RequestMethod.GET)
-	public @ResponseBody ResponseObject downloadFile(@PathVariable int organizationId, /*@PathVariable String filename, 
-			@PathVariable String extension, */HttpServletResponse response) {
+	public @ResponseBody ResponseObject downloadFile(@PathVariable int organizationId, HttpServletResponse response) {
 		logger.info("-- FILE -- Download file ...");
 		responseObject = new ResponseObject();
 		logger.info("Org id: "+organizationId);//+", filename: "+filename+", extension: "+extension);
@@ -144,10 +151,7 @@ public class FileController {
 				BufferedImage img = ImageIO.read(image);
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				String format = new MimetypesFileTypeMap().getContentType(image);
-				//TODO
-				/*if(format.equalsIgnoreCase("application/octet-stream")){
-					format="image/jpeg";
-				}*/
+
 				logger.info("Format image: "+format+" and split: "+format.split("/")[1]);
 				ImageIO.write(img,format.split("/")[1], baos);
 				baos.flush();
@@ -167,6 +171,6 @@ public class FileController {
 		}
 		
 		return responseObject;
-	}
+	}*/
 
 }

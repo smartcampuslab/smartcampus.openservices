@@ -24,6 +24,8 @@
 	<resources mapping="/fonts/**" location="/WEB-INF/resources/fonts/" order="-1"/>
 	<resources mapping="/js/**" location="/WEB-INF/resources/js/" order="-1"/>
 	<resources mapping="/partials/**" location="/WEB-INF/resources/partials/" order="-1"/>
+	<!-- Images uploaded by organization users -->
+	<resources mapping="/images/**" location="/WEB-INF/resources/uploadedFile/" order="-1" />
 	<default-servlet-handler/>
 	
 	<!-- Enables the Spring MVC @Controller programming model -->

@@ -142,7 +142,6 @@ public class ServiceManager {
 			s.setExpiration(service.getExpiration());
 			s.setImplementation(service.getImplementation());
 			s.setLicense(service.getLicense());
-			//s.setState(service.getState());
 			s.setVersion(service.getVersion());
 			serviceDao.modifyService(s);
 
