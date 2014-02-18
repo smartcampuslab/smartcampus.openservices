@@ -319,6 +319,10 @@ services.factory('Org', ['$resource',
             deleteOwner: {
                 method: 'POST',
                 url: 'api/org/manage/owner/delete'
+            },
+            getFile: {
+                method: 'GET',
+                url: 'api/file/download/:id'
             }
         });
     }
