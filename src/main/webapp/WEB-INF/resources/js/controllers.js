@@ -377,19 +377,20 @@ app.controller('editOrgCtrl', ['$scope', '$http', '$location', '$routeParams', '
         });
         $scope.submit = function () {
             if ($scope.file) {
-                Org.update($scope.org, function () {
-                    $http({
-                        method: 'POST',
-                        url: 'api/file/upload/' + $scope.org.id,
-                        headers: {
-                            'Content-Type': false
-                        },
-                        transformRequest: function () {
-                            var formData = new FormData();
-                            formData.append('file', $scope.file);
-                            return formData;
-                        }
-                    }).success(function () {
+                $http({
+                    method: 'POST',
+                    url: 'api/file/upload/' + $scope.org.id,
+                    headers: {
+                        'Content-Type': false
+                    },
+                    transformRequest: function () {
+                        var formData = new FormData();
+                        formData.append('file', $scope.file);
+                        return formData;
+                    }
+                }).success(function () {
+                    $scope.org.logo = 'images/' + $scope.org.id + '/' + $scope.file.name;
+                    Org.update($scope.org, function () {
                         $location.path('profile');
                     });
 
@@ -456,9 +457,9 @@ app.controller('servicesCtrl', ['$scope', '$http', '$routeParams', 'Catalog',
                 $scope.total = services.totalNumber;
                 services.data.forEach(function (e) {
                     if (e.tags) {
-                    	e.tags = e.tags.split(',');
+                        e.tags = e.tags.split(',');
                     } else {
-                    	e.tags= [];
+                        e.tags = [];
                     }
                 });
                 $scope.services = services.data;
@@ -514,11 +515,11 @@ app.controller('servicesCtrl', ['$scope', '$http', '$routeParams', 'Catalog',
 
 app.controller('organizationsCtrl', ['$scope', '$http', '$routeParams', 'Catalog',
     function ($scope, $http, $routeParams, Catalog) {
-	    $scope.start = 0;
-	    $scope.end = 9;
-	    $scope.sort = 'name';
-
-	    Catalog.listOrgs({start:$scope.start,end:$scope.end,sort:$scope.sort}, function (data) {
+        Catalog.listOrgs({
+            start: 0,
+            end: 20,
+            sort: 'name'
+        }, function (data) {
             $scope.orgs = data.data;
         });
     }
