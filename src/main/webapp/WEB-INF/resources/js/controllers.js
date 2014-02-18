@@ -376,24 +376,31 @@ app.controller('editOrgCtrl', ['$scope', '$http', '$location', '$routeParams', '
             $scope.categories = data.data;
         });
         $scope.submit = function () {
-            $http({
-                method: 'POST',
-                url: 'api/file/upload/' + $scope.org.id,
-                headers: {
-                    'Content-Type': false
-                },
-                transformRequest: function () {
-                    var formData = new FormData();
-                    formData.append('file', $scope.file);
-                    return formData;
-                }
-            }).success(function (data) {
+            if ($scope.file) {
+                Org.update($scope.org, function () {
+                    $http({
+                        method: 'POST',
+                        url: 'api/file/upload/' + $scope.org.id,
+                        headers: {
+                            'Content-Type': false
+                        },
+                        transformRequest: function () {
+                            var formData = new FormData();
+                            formData.append('file', $scope.file);
+                            return formData;
+                        }
+                    }).success(function () {
+                        $location.path('profile');
+                    });
 
-            });
+                });
 
-            Org.update($scope.org, function () {
-                $location.path('profile');
-            });
+            } else {
+                Org.update($scope.org, function () {
+                    $location.path('profile');
+                });
+            }
+
         };
     }
 ]);
