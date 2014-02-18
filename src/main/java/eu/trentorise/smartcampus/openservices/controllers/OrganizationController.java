@@ -305,22 +305,12 @@ public class OrganizationController {
 				// return link
 				String host = env.getProperty("host");
 				String link = host+"org/manage/owner/add/" + s;
-
-				// TODO: generalize template
 				// send it via email to user
-				// ApplicationMailer mailer = new ApplicationMailer();
 				mailer.sendMail(
 						email,
-						"[OpenService] Invitation to organization",
-						username
-								+ " has invited you to become an organization owner of "
-								+ organizationManager.getOrganizationById(
-										org_id).getName()
-								+ ". If you are not a user of OpenService, "
-								+ "please sign up and become part of our community. "
-								+ "Please check the following link to accept, if you are already a user: "
-								+ link);
-				// TODO
+						env.getProperty("org.message.object")+" "
+								+organizationManager.getOrganizationById(org_id).getName(),
+						username+" "+env.getProperty("org.message.body")+ " "+ link);
 				responseObject.setStatus(HttpServletResponse.SC_OK);
 			} catch (SecurityException s) {
 				responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

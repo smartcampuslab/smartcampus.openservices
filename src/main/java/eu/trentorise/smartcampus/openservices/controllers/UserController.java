@@ -186,10 +186,9 @@ public class UserController {
 			String host = env.getProperty("host");
 			String link = host+"api/user/add/enable/"+user.getUsername()+","+ s;
 			// send it via email to user
-			//ApplicationMailer mailer = new ApplicationMailer();
 			mailer.sendMail(user.getEmail(),
-					"[OpenService] Welcome "+ user.getUsername(), 
-					"Welcome "+user.getUsername()+"! For activating your account goes to following link: "+link);
+					env.getProperty("user.message.object")+" "+user.getUsername(), 
+					env.getProperty("user.message.body")+" "+link);
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 			}
 			else{
