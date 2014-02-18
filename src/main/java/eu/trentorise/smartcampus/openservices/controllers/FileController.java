@@ -133,10 +133,11 @@ public class FileController {
 				logger.info("File exists");
 				
 				File image = new File(dirFile+organizationId+"/"+f.listFiles()[0].getName());
+				logger.info("File name: "+image.getName());
 				BufferedImage img = ImageIO.read(image);
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				String format = new MimetypesFileTypeMap().getContentType(image);
-				//logger.info("Format image: "+format+" and split: "+format.split("/")[1]);
+				logger.info("Format image: "+format+" and split: "+format.split("/")[1]);
 				ImageIO.write(img,format.split("/")[1], baos);
 				baos.flush();
 				//byte[] imageInByte = baos.toByteArray();
