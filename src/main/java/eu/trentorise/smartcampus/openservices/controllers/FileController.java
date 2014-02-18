@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,9 +138,10 @@ public class FileController {
 				BufferedImage img = ImageIO.read(image);
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				String format = new MimetypesFileTypeMap().getContentType(image);
-				if(format.equalsIgnoreCase("application/octet-stream")){
+				//TODO
+				/*if(format.equalsIgnoreCase("application/octet-stream")){
 					format="image/jpeg";
-				}
+				}*/
 				logger.info("Format image: "+format+" and split: "+format.split("/")[1]);
 				ImageIO.write(img,format.split("/")[1], baos);
 				baos.flush();
