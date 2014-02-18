@@ -94,6 +94,10 @@ public class FileController {
 				responseObject.setData(file.getOriginalFilename());
 				responseObject.setStatus(HttpServletResponse.SC_OK);
 				logger.info("-- File uploaded correctly --");
+				
+				String format = new MimetypesFileTypeMap().getContentType(f);
+				logger.info(".. Checking image format... "+format);
+				
 			} catch (IllegalStateException e) {
 				logger.info("-- Error in uploading file, server error --");
 				e.printStackTrace();
