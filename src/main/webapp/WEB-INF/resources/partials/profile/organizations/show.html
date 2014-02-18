@@ -4,6 +4,7 @@
         <div class="col-md-12">
             <div class="panel panel-default" ng-repeat="org in orgs">
                 <div class="panel-body">
+                    <img ng-src="api/file/download/{{org.id}}">
                     <strong>{{org.name}}</strong>
                     <em>{{org.description}}</em>
                     <button type="button" data-toggle="tooltip" title="Delete organization" class="pull-right btn btn-default btn-sm" ng-click="deleteOrg($index)"><i class="fa fa-trash-o"></i>
