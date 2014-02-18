@@ -59,10 +59,12 @@ public class FileController {
 		
 		String dirFile = env.getProperty("filedir");
 		
+		logger.info("Multipart file content type: "+file.getContentType());
+		
 		responseObject = new ResponseObject();
 		logger.info("Request Real Path: "+request.getSession().getServletContext().getRealPath("/"));
 		if(!file.isEmpty() && file!=null){
-			logger.info("File "+file);
+			//logger.info("File "+file);
 			try {
 				//check directory if exists
 				File dir = new File(dirFile+organizationId);
