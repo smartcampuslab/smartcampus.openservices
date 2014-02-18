@@ -455,7 +455,11 @@ app.controller('servicesCtrl', ['$scope', '$http', '$routeParams', 'Catalog',
             }, function (services) {
                 $scope.total = services.totalNumber;
                 services.data.forEach(function (e) {
-                    e.tags = e.tags.split(',');
+                    if (e.tags) {
+                    	e.tags = e.tags.split(',');
+                    } else {
+                    	e.tags= [];
+                    }
                 });
                 $scope.services = services.data;
             });
@@ -510,7 +514,11 @@ app.controller('servicesCtrl', ['$scope', '$http', '$routeParams', 'Catalog',
 
 app.controller('organizationsCtrl', ['$scope', '$http', '$routeParams', 'Catalog',
     function ($scope, $http, $routeParams, Catalog) {
-        Catalog.listOrgs({}, function (data) {
+	    $scope.start = 0;
+	    $scope.end = 9;
+	    $scope.sort = 'name';
+
+	    Catalog.listOrgs({start:$scope.start,end:$scope.end,sort:$scope.sort}, function (data) {
             $scope.orgs = data.data;
         });
     }

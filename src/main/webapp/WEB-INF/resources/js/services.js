@@ -180,7 +180,7 @@ services.factory('Catalog', ['$resource',
             },
             listOrgs: {
                 method: 'GET',
-                url: 'api/catalog/org'
+                url: 'api/catalog/org/:start/:end/:sort'
             },
             getOrgById: {
                 method: 'GET',
