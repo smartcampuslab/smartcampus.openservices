@@ -145,10 +145,11 @@ public class FileController {
 				logger.info("Format image: "+format+" and split: "+format.split("/")[1]);
 				ImageIO.write(img,format.split("/")[1], baos);
 				baos.flush();
-				//byte[] imageInByte = baos.toByteArray();
+				byte[] imageInByte = baos.toByteArray();
+				
 				baos.close();
 				
-				responseObject.setData(format+";base64,"+baos.toString());
+				responseObject.setData(format+";base64,"+new String(Base64.encodeBase64(imageInByte,false)));
 				responseObject.setStatus(HttpServletResponse.SC_OK);
 				logger.info("Download successfully");
 			}
