@@ -177,21 +177,11 @@ public class OrganizationManager {
 			UserRole ur = urDao.getRoleOfUser(user.getId(), org.getId());
 			if (ur != null && ur.getRole().equalsIgnoreCase("ROLE_ORGOWNER")) {
 				// TODO which values can be modified by user?
-				if(org.getDescription()!=null){
-					o.setDescription(org.getDescription());
-				}
-				if(org.getActivityArea()!=null){
-					o.setActivityArea(org.getActivityArea());
-				}
-				if(org.getCategory()!=0){
-					o.setCategory(org.getCategory());
-				}
-				if(org.getContacts()!=null){
-					o.setContacts(org.getContacts());
-				}
-				if(org.getLogo()!=null){
-					o.setLogo(org.getLogo());
-				}
+				o.setDescription(org.getDescription());
+				o.setActivityArea(org.getActivityArea());
+				o.setCategory(org.getCategory());
+				o.setContacts(org.getContacts());
+				o.setLogo(org.getLogo());
 				orgDao.modifyOrganization(o);
 				return true;
 			} else {
@@ -349,20 +339,6 @@ public class OrganizationManager {
 		} catch (DataAccessException d) {
 			return false;
 		}
-	}
-	
-	/**
-	 * Update logo of organization
-	 * @param username
-	 * @param org_id
-	 * @param logo
-	 * @return
-	 */
-	public boolean updateLogo(String username, int org_id, String logo){
-		Organization org = new Organization();
-		org.setId(org_id);
-		org.setLogo(logo);
-		return updateOrganization(username, org);
 	}
 
 }
