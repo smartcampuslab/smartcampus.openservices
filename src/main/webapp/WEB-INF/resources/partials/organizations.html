@@ -1,16 +1,18 @@
 <div class="row">
   <div class="col-md-8 col-md-offset-2">
-      <div class="col-md-3 thumbnail" ng-repeat="org in orgs">
-        <div class="text-center">
-          <img class="img-rounded" data-src="holder.js/114x114" holder alt="Generic placeholder image">
-        </div>
-        <div>
-            <h4>
-              <a href="organizations/{{org.id}}" >{{org.name}}</a>
-            </h4>
-            <p>{{org.description}}</p>
-        </div>
+    <div class="col-md-3 thumbnail" ng-repeat="org in orgs">
+      <div class="text-center">
+        <a ng-href="organizations/{{org.id}}" class="thumbnail">
+          <img ng-src="{{org.logo}}">
+        </a>
       </div>
-      <div class="clearfix visible-md"></div>
+      <div>
+        <h4>
+          <a href="organizations/{{org.id}}">{{org.name}}</a>
+        </h4>
+        <p>{{org.description}}</p>
+      </div>
+    </div>
+    <div class="clearfix visible-md"></div>
   </div>
 </div>
