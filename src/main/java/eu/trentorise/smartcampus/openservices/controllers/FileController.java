@@ -97,13 +97,13 @@ public class FileController {
 				
 				//Save new logo relative path in organization
 				// /images/org_id/file.getOriginalFilename()
-				boolean result = orgManager.updateLogo("sara", organizationId, "/images/"+organizationId+
+				/*boolean result = orgManager.updateLogo("sara", organizationId, "/images/"+organizationId+
 						"/"+file.getOriginalFilename());
 				if(result){
 					logger.info(".. Organization logo update ");
 				}else{
 					logger.info(".. Failed to save logo in db... ");
-				}
+				}*/
 				
 				String format = new MimetypesFileTypeMap().getContentType(f);
 				logger.info(".. Checking image format... "+format);
