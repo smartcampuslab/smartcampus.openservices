@@ -378,7 +378,7 @@ app.controller('editOrgCtrl', ['$scope', '$http', '$location', '$routeParams', '
         $scope.submit = function () {
             $http({
                 method: 'POST',
-                url: 'api/file/' + $scope.org.id,
+                url: 'api/file/upload/' + $scope.org.id,
                 headers: {
                     'Content-Type': false
                 },
