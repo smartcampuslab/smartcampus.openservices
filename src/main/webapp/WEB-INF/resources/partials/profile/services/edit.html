@@ -112,11 +112,15 @@
                     <label for="protocol">Protocol</label>
                     <select ng-options="protocol for protocol in protocols" id="protocol" class="form-control" ng-model="accessInformation.authentication.accessProtocol" />
                 </div>
-                <div ng-show="accessInformation.authentication.accessProtocol === 'OAuth'">
+                <div ng-show="accessInformation.authentication.accessProtocol === 'OAuth2'">
                     <form name="form" class="css-form" novalidate>
                         <div class="form-group">
                             <label for="clientid">Client ID</label>
                             <input type="text" class="form-control" id="clientid" placeholder="fcb1cb23-12a3-1234-1f23-12a3f45e6789" ng-model="accessInformation.authentication.accessAttributes.client_id" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="clientid">Client Secret</label>
+                            <input type="text" class="form-control" id="clientid" placeholder="fcb1cb23-12a3-1234-1f23-12a3f45e6789" ng-model="accessInformation.authentication.accessAttributes.client_secret">
                         </div>
                         <div class="form-group">
                             <label for="scope">Scope (comma separated)</label>
@@ -124,15 +128,15 @@
                         </div>
                         <div class="form-group">
                             <label for="responsetype">Response Type</label>
-                            <input type="text" class="form-control" id="responsetype" placeholder="token" ng-model="accessInformation.authentication.accessAttributes.response_type" required>
+                            <select ng-options="response_type for response_type in ['token','code']" id="responsetype" class="form-control" ng-model="accessInformation.authentication.accessAttributes.response_type" required/>
                         </div>
                         <div class="form-group">
                             <label for="authurl">Authorization URL</label>
-                            <input type="text" class="form-control" id="authurl" placeholder="https://vas-dev.smartcampuslab.it/aac/eauth/authorize" ng-model="accessInformation.authentication.accessAttributes.authorizationUrl" required>
+                            <input type="text" class="form-control" id="authurl" placeholder="https://vas-dev.smartcampuslab.it/aac/eauth/authorize" ng-model="accessInformation.authentication.accessAttributes.authorizationUrl">
                         </div>
                         <div class="form-group">
                             <label for="granttype">Grant Type</label>
-                            <input type="text" class="form-control" id="granttype" placeholder="implicit" ng-model="accessInformation.authentication.accessAttributes.grant_type" required>
+                            <select ng-options="grant_type for grant_type in ['implicit','authorization_code','client_credentials']" id="responsetype" class="form-control" ng-model="accessInformation.authentication.accessAttributes.grant_type" required/>
                         </div>
                     </form>
                 </div>
@@ -140,7 +144,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" ng-click="cancel()" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" ng-click="keep()" ng-disabled="form.$invalid" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+                <button type="button" ng-click="keep()"  class="btn btn-primary" data-dismiss="modal">Save changes</button>
             </div>
         </div>
         <!-- /.modal-content -->

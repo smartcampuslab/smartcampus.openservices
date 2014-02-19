@@ -33,6 +33,8 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 
 /**
+ * Abstract implementation of the {@link TestBoxAuthHandler} interface.
+ * Provides helper methods for HTTP call executions
  * @author raman
  *
  */
@@ -99,10 +101,11 @@ public abstract class AbstractTestBoxAuthHandler implements TestBoxAuthHandler {
 		final HttpResponse resp;
 		final HttpGet get = new HttpGet(url);
 
-		for (String key : headers.keySet()) {
-			get.setHeader(key, headers.get(key));
+		if (headers != null) {
+			for (String key : headers.keySet()) {
+				get.setHeader(key, headers.get(key));
+			}
 		}
-
 		try {
 			resp = getHttpClient().execute(get);
 			String response = EntityUtils.toString(resp.getEntity(),DEFAULT_CHARSET);

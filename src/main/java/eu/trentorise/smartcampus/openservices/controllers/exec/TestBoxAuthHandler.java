@@ -22,11 +22,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * Handler for the TestBox execution. 
+ * Provides methods for authorization handling and actual test execution
  * @author raman
  *
  */
 public interface TestBoxAuthHandler {
 
+	/**
+	 * Test box parameters with the request method, URL, body, custom headers, and credentials
+	 * @author raman
+	 *
+	 */
 	public static class TestBoxParams {
 		String requestMethod;
 		String requestUrl;
@@ -53,6 +60,7 @@ public interface TestBoxAuthHandler {
 	void onAuthorized(HttpServletRequest request, HttpServletResponse response) throws TestBoxException;
 	
 	/**
+	 * Perform actual test
 	 * @param request 
 	 * @param params
 	 * @param accessAttributes

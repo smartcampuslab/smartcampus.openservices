@@ -46,7 +46,6 @@ import eu.trentorise.smartcampus.openservices.support.CategoryServices;
  *
  */
 @Component
-@Transactional
 public class CatalogManager {
 	/**
 	 * Instance of {@link ServiceDao} to retrieve service data using Dao classes.

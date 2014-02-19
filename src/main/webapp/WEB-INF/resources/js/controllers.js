@@ -272,7 +272,7 @@ app.controller('viewMethodCtrl', ['$scope', '$http', '$location', '$routeParams'
     function ($scope, $http, $location, $routeParams, Service) {
 
         Service.getMethod({
-            id: $routeParams.id
+            id: $routeParams.method
         }, function (data) {
             $scope.method = data.data;
         });
@@ -292,7 +292,7 @@ app.controller('editMethodCtrl', ['$scope', '$http', '$location', '$routeParams'
     function ($scope, $http, $location, $routeParams, Service) {
 
         Service.getMethod({
-            id: $routeParams.id
+            id: $routeParams.method
         }, function (data) {
             $scope.method = data.data;
         });
@@ -334,7 +334,7 @@ app.controller('editTestCtrl', ['$scope', '$http', '$location', '$routeParams', 
     function ($scope, $http, $location, $routeParams, Service) {
         $scope.title = 'Edit';
         Service.getMethod({
-            id: $routeParams.id
+            id: $routeParams.method
         }, function (data) {
             $scope.method = data.data;
             $scope.test = $scope.method.testboxProperties.tests[$routeParams.pos];
@@ -622,6 +622,12 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
             });
         }
 
+        $scope.formatJson = function(j) {
+        	if (!j) return '';
+            var obj = JSON.parse(j);
+        	return JSON.stringify(obj, undefined, 2);
+        };
+        
         $scope.checkBeforeSend = function () {
             //remoteapi.ready ? true : false
             if ($scope.request.method && $scope.request.sample && $scope.request.sample.requestPath && $scope.request.sample.requestMethod) {
@@ -649,7 +655,7 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
                     for (var key in headers()) {
                         $scope.response += toTitleCase(key) + ': ' + headers()[key] + '\n';
                     }
-                    $scope.response += '\n' + data.data;
+                    $scope.response += '\n' + $scope.formatJson(data.data);
                 });
 
                 $scope.request.headers = result;

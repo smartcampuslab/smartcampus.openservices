@@ -18,35 +18,33 @@ package eu.trentorise.smartcampus.openservices.controllers.exec;
 
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.stereotype.Component;
 
 /**
- * Container for the {@link TestBoxAuthHandler} implementations
+ * Implementation of the REST service calls without any authentication required.
  * @author raman
  *
  */
-@Component
-public class TestBoxAuthHandlerFactory {
-
-	@Autowired
-	private Map<String, TestBoxAuthHandler> handlers;
-	/**
-	 * @return the handlers
-	 */
-	public Map<String, TestBoxAuthHandler> getHandlers() {
-		return handlers;
+@Component("Public")
+public class PublicTestBoxAuthHandler extends AbstractTestBoxAuthHandler {
+	
+	@Override
+	public void authorize(HttpServletRequest request, HttpServletResponse response, Map<String, Object> accessAttributes) throws TestBoxException {
+		throw new TestBoxException("Not supported for Public access");
 	}
 
-	/**
-	 * @param handlers the handlers to set
-	 */
-	public void setHandlers(Map<String, TestBoxAuthHandler> handlers) {
-		this.handlers = handlers;
+	@Override
+	public void onAuthorized(HttpServletRequest request, HttpServletResponse response) throws TestBoxException {
+		throw new TestBoxException("Not supported for Public access");
 	}
 
-	public TestBoxAuthHandler getHandler(String name) {
-		return handlers.get(name);
-	}
 
+
+	@Override
+	public TestResponse performTest(HttpServletRequest request, TestBoxParams params, Map<String, Object> accessAttributes) throws TestBoxException {
+		return execute(params);
+	}
 }

@@ -28,7 +28,6 @@ import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.util.EntityUtils;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import eu.trentorise.smartcampus.openservices.Utils;
@@ -38,7 +37,6 @@ import eu.trentorise.smartcampus.openservices.Utils;
  *
  */
 @Component("OAuth2")
-@PropertySource("classpath:openservice.properties")
 public class OAuth2TestBoxAuthHandler extends AbstractTestBoxAuthHandler {
 	
 	@Override
