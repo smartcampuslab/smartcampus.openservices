@@ -22,8 +22,11 @@ package eu.trentorise.smartcampus.openservices.controllers.exec;
  */
 public class TestRequest {
 
+	private String name;
 	private String requestUrl;
 	private String requestBody;
+	private Object credentials;
+	
 	/**
 	 * @return the requestBody
 	 */
@@ -48,4 +51,29 @@ public class TestRequest {
 	public void setRequestUrl(String requestUrl) {
 		this.requestUrl = requestUrl;
 	}
+	/**
+	 * @return the credentials
+	 */
+	public Object getCredentials() {
+		return credentials;
+	}
+	/**
+	 * @param credentials the credentials to set
+	 */
+	public void setCredentials(Object credentials) {
+		this.credentials = credentials;
+	}
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 }

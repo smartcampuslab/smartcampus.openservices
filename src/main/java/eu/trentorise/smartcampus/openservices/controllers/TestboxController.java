@@ -49,8 +49,8 @@ import eu.trentorise.smartcampus.openservices.entities.TestInfo;
  * @author raman
  *
  */
-@Controller
-@RequestMapping(value="/api/testbox")
+//@Controller
+//@RequestMapping(value="/api/testbox")
 public class TestboxController {
 	/**
 	 * {@link ResponseObject} Response object contains requested data, 

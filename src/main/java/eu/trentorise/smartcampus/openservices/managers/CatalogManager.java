@@ -22,19 +22,15 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import eu.trentorise.smartcampus.openservices.Constants.SERVICE_STATE;
 import eu.trentorise.smartcampus.openservices.dao.MethodDao;
 import eu.trentorise.smartcampus.openservices.dao.OrganizationDao;
 import eu.trentorise.smartcampus.openservices.dao.ServiceDao;
 import eu.trentorise.smartcampus.openservices.dao.ServiceHistoryDao;
-import eu.trentorise.smartcampus.openservices.dao.UserDao;
+import eu.trentorise.smartcampus.openservices.entities.Authentication;
 import eu.trentorise.smartcampus.openservices.entities.Category;
 import eu.trentorise.smartcampus.openservices.entities.Method;
 import eu.trentorise.smartcampus.openservices.entities.Organization;
@@ -84,7 +80,7 @@ public class CatalogManager {
 	 */
 	public List<Service> catalogServices(int firstResult, int maxResult, String param_order){
 		try{
-			return serviceDao.showPublishedService(firstResult,maxResult, param_order);
+			return cleanAuthenticationData(serviceDao.showPublishedService(firstResult,maxResult, param_order));
 			/*PageRequest pageReq = new PageRequest(page, size, Direction.ASC, "name");
 			Page<Service> s =  serviceDao.findAll(pageReq);
 			return s.getContent();
@@ -94,6 +90,45 @@ public class CatalogManager {
 		}
 	}
 	
+	private List<Service> cleanAuthenticationData(List<Service> services) {
+		if (services != null) {
+			for (Service s : services) {
+				cleanAuthenticationData(s);
+			}
+		}
+		return services;
+	}
+	private Service cleanAuthenticationData(Service s) {
+		if (s == null) return null;
+		if (s.getAccessInformation() != null) {
+			Authentication a = s.getAccessInformation().getAuthentication();
+			if (a != null) {
+				a.setAccessAttributes(null);
+			}
+		}
+		return s;
+	}
+	private List<Method> cleanMethodAuthenticationData(List<Method> methods) {
+		if (methods != null) {
+			for (Method m : methods) {
+				cleanMethodAuthenticationData(m);
+			}
+		}
+		return methods;
+	}
+
+	private Method cleanMethodAuthenticationData(Method m) {
+		if (m == null) return null;
+		if (m.getTestboxProperties() != null) {
+			Authentication a = m.getTestboxProperties().getAuthenticationDescriptor();
+			if (a != null) {
+				a.setAccessAttributes(null);
+			}
+		}
+		return m;
+	}
+
+
 	/**
 	 *  Get Service data, searching by id
 	 * @param service_id : int service id
@@ -110,7 +145,7 @@ public class CatalogManager {
 		catch(DataAccessException d){
 			s = null;
 		}
-		return s;
+		return cleanAuthenticationData(s);
 	}
 	
 	/**
@@ -121,7 +156,7 @@ public class CatalogManager {
 	 */
 	public List<Method> catalogServiceMethods(int service_id){
 		try{
-			return methodDao.getMethodByServiceId(service_id);			
+			return cleanMethodAuthenticationData(methodDao.getMethodByServiceId(service_id));			
 		}catch(DataAccessException e){
 			return null;
 		}

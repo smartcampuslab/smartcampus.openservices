@@ -18,6 +18,7 @@ package eu.trentorise.smartcampus.openservices.controllers;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
@@ -30,9 +31,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import eu.trentorise.smartcampus.openservices.Utils;
 import eu.trentorise.smartcampus.openservices.entities.Organization;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
@@ -291,7 +292,7 @@ public class OrganizationController {
 	 */
 	@RequestMapping(value = "/manage/owner", method = RequestMethod.POST)//, consumes="application/json")
 	@ResponseBody
-	public ResponseObject orgManageOwnerData(@RequestParam int org_id, @RequestParam String email){
+	public ResponseObject orgManageOwnerData(@RequestBody int org_id, @RequestBody String email, HttpServletRequest req){
 		logger.info("-- Manage Organization Owner --");
 		//Get username
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -303,7 +304,7 @@ public class OrganizationController {
 				String s = organizationManager.createInvitation(username,
 						org_id, "ROLE_ORGOWNER", email);
 				// return link
-				String host = env.getProperty("host");
+				String host = Utils.getAppURL(req); //env.getProperty("host");
 				String link = host+"org/manage/owner/add/" + s;
 				// send it via email to user
 				mailer.sendMail(env.getProperty("email.username"),

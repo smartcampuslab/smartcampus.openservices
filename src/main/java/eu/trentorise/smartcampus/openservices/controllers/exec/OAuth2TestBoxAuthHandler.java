@@ -16,9 +16,11 @@
 
 package eu.trentorise.smartcampus.openservices.controllers.exec;
 
+import java.io.IOException;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -26,38 +28,95 @@ import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.util.EntityUtils;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
+
+import eu.trentorise.smartcampus.openservices.Utils;
 
 /**
  * @author raman
  *
  */
+@Component("OAuth2")
+@PropertySource("classpath:openservice.properties")
 public class OAuth2TestBoxAuthHandler extends AbstractTestBoxAuthHandler {
+	
+	@Override
+	public void authorize(HttpServletRequest request, HttpServletResponse response, Map<String, Object> accessAttributes) throws TestBoxException {
+		String grantType = (String)accessAttributes.get("grant_type"); 
+		String clientId = (String)accessAttributes.get("client_id");
+		String scope = (String) accessAttributes.get("scope");
+		String url = null;
+		String authURL = (String)accessAttributes.get("authorizationUrl");
+		String callbackURL = Utils.getAppURL(request);
+		if (!callbackURL.endsWith("/")) {
+			callbackURL += "/";
+		}
+		callbackURL += "api/testbox/authorized";
+		
+		if ("implicit".equals(grantType)) {
+			url = generateAuthorizationURI(authURL, "token", clientId, callbackURL, scope, null);
+		}
+		else if ("authorization_code".equals(grantType)) {
+			url = generateAuthorizationURI(authURL, "code", clientId, callbackURL, scope, null);
+		} else {
+			throw new TestBoxException("Incorrect authorize request: check configuration");
+		}
+		try {
+			response.sendRedirect(url);
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new TestBoxException("Failure performing redirect");
+		}
+	}
 
-	@Autowired
-	@Value("${oauth.callback.url}")
-	private String callbackURL;
+	@Override
+	public void onAuthorized(HttpServletRequest request, HttpServletResponse response) throws TestBoxException {
+		// TODO if code parameter is present exchange it for token and reply with token
+		try {
+			response.sendRedirect("/api/testbox/authorize/success");
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new TestBoxException("Failure performing redirect");
+		}
+	}
+
+
 
 	@Override
 	public TestResponse performTest(HttpServletRequest request, TestBoxParams params, Map<String, Object> accessAttributes) throws TestBoxException {
+		// check the grant type: in case of client credentials generate token, otherwise take token from params
 		String grantType = (String)accessAttributes.get("grant_type"); 
-		String clientId = (String)accessAttributes.get("client_id");
-		String clientSecret = (String)accessAttributes.get("client_secret");
-		String authUrl = (String)accessAttributes.get("authorizationUrl");
+		String token = null;
 		if ("implicit".equals(grantType)) {
-			// TODO do forward
+			token = extractAccessToken(params);
 		}
 		if ("authorization_code".equals(grantType)) {
-			// TODO do forward
+			token = extractAccessToken(params);
 		}
 		if ("client_credentials".equals(grantType)) {
-			String token = generateClientToken(authUrl, clientId, clientSecret);
-			params.requestHeaders.put("Authorization", "Bearer "+token);
-			return execute(params);
+			String clientId = (String)accessAttributes.get("client_id");
+			String clientSecret = (String)accessAttributes.get("client_secret");
+			String authUrl = (String)accessAttributes.get("authorizationUrl");
+			token = generateClientToken(authUrl, clientId, clientSecret);
 		}
-		// TODO Auto-generated method stub
-		return null;
+		params.requestHeaders.put("Authorization", "Bearer "+token);
+		return execute(params);
+	}
+
+	@SuppressWarnings("unchecked")
+	private String extractAccessToken(TestBoxParams params)
+			throws TestBoxException {
+		String token;
+		Map<String, ?> map = (Map<String, ?>) params.credentials;
+		if (map == null) {
+			throw new TestBoxException("Missing access credentials");
+		}
+		token = (String) map.get("access_token");
+		if (token == null) {
+			throw new TestBoxException("Missing access token");
+		}
+		return token;
 	}
 
 	private String generateAuthorizationURI(String authURL, String responseType, String clientId, String redirectUri, String scope, String state) {

@@ -18,12 +18,17 @@ package eu.trentorise.smartcampus.openservices.controllers.exec;
 
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 /**
  * @author raman
  *
  */
+@Component
 public class TestBoxAuthHandlerFactory {
 
+	@Autowired
 	private Map<String, TestBoxAuthHandler> handlers;
 	/**
 	 * @return the handlers

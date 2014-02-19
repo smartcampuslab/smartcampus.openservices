@@ -126,7 +126,7 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
 
 app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service', 'Org', 'Category',
     function ($scope, $http, $location, Service, Org, Category) {
-        $scope.protocols = ['OAuth', 'OpenID', 'Public'];
+        $scope.protocols = ['OAuth2', 'OpenID', 'Public'];
         $scope.accessInformation = {
             authentication: {
                 accessProtocol: null,
@@ -162,7 +162,7 @@ app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service', 'Or
 
 app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Service', 'Org', 'Category',
     function ($scope, $routeParams, $location, Service, Org, Category) {
-        $scope.protocols = ['OAuth', 'OpenID', 'Public'];
+        $scope.protocols = ['OAuth2', 'OpenID', 'Public'];
         $scope.accessInformation = {
             authentication: {
                 accessProtocol: null,
@@ -559,30 +559,30 @@ app.controller('organizationCtrl', ['$scope', '$http', '$routeParams', 'Catalog'
     }
 ]);
 
-app.controller('cbCtrl', ['$location',
-    function ($location) {
-        function parseKeyValue(keyValue) {
-            var obj = {}, key_value, key;
-            angular.forEach((keyValue || '').split('&'), function (keyValue) {
-                if (keyValue) {
-                    key_value = keyValue.split('=');
-                    key = decodeURIComponent(key_value[0]);
-                    obj[key] = angular.isDefined(key_value[1]) ? decodeURIComponent(key_value[1]) : true;
-                }
-            });
-            return obj;
-        }
+//app.controller('cbCtrl', ['$location',
+//    function ($location) {
+//        function parseKeyValue(keyValue) {
+//            var obj = {}, key_value, key;
+//            angular.forEach((keyValue || '').split('&'), function (keyValue) {
+//                if (keyValue) {
+//                    key_value = keyValue.split('=');
+//                    key = decodeURIComponent(key_value[0]);
+//                    obj[key] = angular.isDefined(key_value[1]) ? decodeURIComponent(key_value[1]) : true;
+//                }
+//            });
+//            return obj;
+//        }
+//
+//        var queryString = $location.url().substring(10); // preceding slash omitted
+//        var params = parseKeyValue(queryString);
+//
+//        window.opener.postMessage(params, '*');
+//        window.close();
+//    }
+//]);
 
-        var queryString = $location.url().substring(10); // preceding slash omitted
-        var params = parseKeyValue(queryString);
-
-        window.opener.postMessage(params, '*');
-        window.close();
-    }
-]);
-
-app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', '$http', '$location', 'oAuth', 'RemoteApi',
-    function ($scope, $routeParams, Catalog, Category, $http, $location, oAuth, RemoteApi) {
+app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', '$http', '$location', 'RemoteApi',
+    function ($scope, $routeParams, Catalog, Category, $http, $location, RemoteApi) {
         $scope.remoteapi;
         $scope.template = 'partials/services/_about.html';
         $scope.request = {};
@@ -632,24 +632,23 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
         };
 
         $scope.send = function () {
-            var config = $scope.service.accessInformation.authentication.accessAttributes;
             $scope.remoteapi = new RemoteApi($scope.service.accessInformation.authentication.accessProtocol);
-            $scope.remoteapi.authorize(config).then(function (result) {
-                if (!$scope.request.sample.headers) {
-                    $scope.request.sample.headers = {};
-                }
-                _.extend($scope.request.sample.headers, result);
+            $scope.remoteapi.authorize($scope.request.method.id).then(function (result) {
+            	var req  = {
+            			name:$scope.request.sample.name, 
+            			requestUrl:$scope.request.sample.requestPath,
+            			requestBody:$scope.request.sample.requestBody,
+            			credentials:result};
                 $http({
                     method: 'POST',
-                    url: 'api/testbox',
-                    data: $scope.request.sample,
+                    url: 'api/testbox/test/'+$scope.request.method.id,
+                    data: req,
                     withCredentials: true
                 }).success(function (data, status, headers) {
                     $scope.response = 'HTTP/1.1 ' + status + '\n';
                     for (var key in headers()) {
                         $scope.response += toTitleCase(key) + ': ' + headers()[key] + '\n';
                     }
-                    //$scope.response ='HTTP/1.1 200 OK\nContent-Type: application/xml\nX-Response-Time: 10ms\n\n<root>\n    <status code="0">\n        Successful\n    </status>\n</root>'
                     $scope.response += '\n' + data.data;
                 });
 

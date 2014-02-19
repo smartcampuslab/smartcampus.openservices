@@ -14,17 +14,30 @@
  *    limitations under the License.
  ******************************************************************************/
 
-package eu.trentorise.smartcampus.openservices.controllers.exec;
+package eu.trentorise.smartcampus.openservices;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import javax.servlet.http.HttpServletRequest;
 
 /**
+ * Helper methods
  * @author raman
  *
  */
-@Controller
-@RequestMapping(value="/api/testbox/oauth2")
-public class OAuth2TestBoxController {
+public class Utils {
+
+	/**
+	 * Construct the root address of the app using virtual host if any
+	 * @param req
+	 * @return
+	 */
+	public static String getAppURL(HttpServletRequest req) {
+		String res = req.getScheme()+"://"+ req.getServerName();
+		if (req.getServerPort() != 80  && req.getServerPort() != 443) {
+			res +=":"+req.getServerPort();
+		}
+		res += "/"+req.getContextPath();
+		if (!res.endsWith("/")) res += "/";
+		return res;
+	}
 
 }

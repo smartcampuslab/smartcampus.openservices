@@ -19,6 +19,7 @@ package eu.trentorise.smartcampus.openservices.controllers.exec;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author raman
@@ -31,8 +32,26 @@ public interface TestBoxAuthHandler {
 		String requestUrl;
 		String requestBody;
 		Map<String,String> requestHeaders;
+		Object credentials;
 	}
 
+	/**
+	 * Handle authorization for the specific authentication data and request
+	 * @param request
+	 * @param response
+	 * @param accessAttributes
+	 * @throws TestBoxException
+	 */
+	void authorize(HttpServletRequest request, HttpServletResponse response, Map<String, Object> accessAttributes) throws TestBoxException;
+	
+	/**
+	 * Handle the authorization result callback
+	 * @param request
+	 * @param response
+	 * @throws TestBoxException
+	 */
+	void onAuthorized(HttpServletRequest request, HttpServletResponse response) throws TestBoxException;
+	
 	/**
 	 * @param request 
 	 * @param params

@@ -110,7 +110,7 @@ public class ServiceController {
 		List<Service> services = serviceManager.getServices();
 		responseObject = new ResponseObject();
 		if(services==null || services.size()==0){
-			responseObject.setError("No service availables");
+			responseObject.setError("No services available");
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
