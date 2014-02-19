@@ -289,9 +289,9 @@ public class OrganizationController {
 	 * @return {@link ResponseObject} with status (OK or UNAUTHORIZED) and 
 	 * error message (if status is UNAUTHORIZED).
 	 */
-	@RequestMapping(value = "/manage/owner", method = RequestMethod.POST, consumes="application/json")
+	@RequestMapping(value = "/manage/owner", method = RequestMethod.POST)//, consumes="application/json")
 	@ResponseBody
-	public ResponseObject orgManageOwnerData(@RequestBody int org_id, @RequestBody String email){
+	public ResponseObject orgManageOwnerData(@RequestParam int org_id, @RequestParam String email){
 		logger.info("-- Manage Organization Owner --");
 		//Get username
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
