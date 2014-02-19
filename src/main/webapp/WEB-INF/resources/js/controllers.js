@@ -13,8 +13,10 @@ app.controller('navCtrl', ['$scope', '$http', 'Auth', '$location',
     }
 ]);
 
-app.controller('breadCtrl', ['$rootScope',
-    function ($rootScope) {}
+app.controller('breadCtrl', ['$rootScope', '$location', '$rootScope',
+    function ($scope, $location, $rootScope) {
+        $scope.location = $rootScope.location;
+    }
 ]);
 
 app.controller('signinCtrl', ['$scope', '$location', 'Auth',
@@ -644,5 +646,15 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
             });
         };
 
+    }
+]);
+
+app.controller('editOrgMembersCtrl', ['$scope', 'Org', '$routeParams',
+    function ($scope, Org, $routeParams) {
+        Org.getMembers({
+            id: $routeParams.id
+        }, function (data) {
+            $scope.members = data.data;
+        })
     }
 ]);

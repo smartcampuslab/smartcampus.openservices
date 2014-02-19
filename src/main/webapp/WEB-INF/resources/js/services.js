@@ -323,6 +323,10 @@ services.factory('Org', ['$resource',
             getFile: {
                 method: 'GET',
                 url: 'api/file/download/:id'
+            },
+            getMembers: {
+                method: 'GET',
+                url: 'api/org/members/:id'
             }
         });
     }
