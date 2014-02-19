@@ -1,33 +1,33 @@
 <div id="signin" class="row">
-    <div class="col-md-4 col-md-offset-4">
-        <div class="row">
-            <div class="col-md-4">
-                <a ng-click="signin('fb')" href="#" class="btn btn-lg btn-primary btn-block disabled"><i class="fa fa-facebook"></i></a>
-            </div>
-            <div class="col-md-4">
-                <a href="#" class="btn btn-lg btn-danger btn-block disabled"><i class="fa fa-google-plus"></i></a>
-            </div>
-            <div class="col-md-4">
-                <a href="#" class="btn btn-lg btn-info btn-block disabled"><i class="fa fa-twitter"></i></a>
-            </div>
-        </div>
-        <div class="login-or">
-            <hr class="hr-or">
-            <span class="span-or">or</span>
-        </div>
-        <form role="form" ng-submit="signin()">
-        	<div ng-show="error" class="alert alert-danger">
-            	{{error}}
-			</div>
-            <div class="form-group">
-                <input type="username" class="form-control" id="username" placeholder="Username" ng-model="user.j_username">
-            </div>
-            <div class="form-group">
-                <input type="password" class="form-control" id="password" placeholder="Password" ng-model="user.j_password">
-            </div>
-            <button type="submit" class="btn btn-default btn-block">Sign In</button>
-        </form>
-        <br>
-        <a class="btn btn-info pull-right" href="signup">Register here</a>
+  <div class="col-md-6 col-md-offset-3">
+    <div class="row">
+      <div class="col-md-4">
+        <a ng-click="signin('fb')" href="#" class="btn btn-lg btn-primary btn-block disabled"><i class="fa fa-facebook"></i></a>
+      </div>
+      <div class="col-md-4">
+        <a href="#" class="btn btn-lg btn-danger btn-block disabled"><i class="fa fa-google-plus"></i></a>
+      </div>
+      <div class="col-md-4">
+        <a href="#" class="btn btn-lg btn-info btn-block disabled"><i class="fa fa-twitter"></i></a>
+      </div>
     </div>
+    <div class="login-or">
+      <hr class="hr-or">
+      <span class="span-or">or</span>
+    </div>
+    <form role="form" ng-submit="signin()">
+      <div ng-show="error" class="alert alert-danger">
+        {{error}}
+      </div>
+      <div class="form-group">
+        <input type="username" class="form-control" id="username" placeholder="Username" ng-model="user.j_username">
+      </div>
+      <div class="form-group">
+        <input type="password" class="form-control" id="password" placeholder="Password" ng-model="user.j_password">
+      </div>
+      <button type="submit" class="btn btn-default btn-block">Sign In</button>
+    </form>
+    <br>
+    <a class="btn btn-info pull-right" href="signup">Register here</a>
+  </div>
 </div>

@@ -27,8 +27,8 @@
 </head>
 
 <body>
-  <div id="wrap">
-    <nav class="navbar navbar-default" role="navigation">
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
           <span class="sr-only">Toggle navigation</span>
@@ -36,12 +36,12 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#">Open Services</a>
+        <a class="navbar-brand" href="#">Smart Campus</a>
       </div>
 
-      <div ng-controller="navCtrl" class="collapse navbar-collapse">
+      <div ng-controller="navCtrl" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-          <li><a href="#">Whishlist</a>
+          <li class="active"><a href="#">Whishlist</a>
           </li>
           <li><a href="#">Apps</a>
           </li>
@@ -49,32 +49,33 @@
           </li>
           <li><a href="categories">Categories</a>
           </li>
-          <li><a href="organizations">Organizations</a>
-          </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li ng-show="currentUser.role.title === 'public'"><a href="signin">Sign in</a> 
+          <li ng-show="currentUser.role.title === 'public'|| _.isEmpty(currentUser)"><a href="signin">Sign in</a> 
           </li>
           <li ng-show="currentUser.role.title === 'ROLE_NORMAL' || currentUser.role.title === 'ROLE_ADMIN'" class="dropdown">
-	    	        <a class="dropdown-toggle" data-toggle="dropdown">Menu <b class="caret"></b></a>
-	    	        <ul class="dropdown-menu">
-	    	          <li><a href="profile">Profile</a></li>
-	    	          <li class="divider"></li>
-	    	          <li><a ng-click="logout()" href="#">Logout</a></li>
-	    	        </ul>
-	    	      </li>
+            <a class="dropdown-toggle" data-toggle="dropdown">Menu <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><a href="profile">Profile</a>
+              </li>
+              <li class="divider"></li>
+              <li><a ng-click="logout()" href="#">Logout</a>
+              </li>
+            </ul>
+          </li>
         </ul>
       </div>
-      <!-- /.navbar-collapse -->
-    </nav>
-    <ol ng-controller="breadCtrl" ng-hide="location === '/'" class="breadcrumb">
-      <li><a href="#">Home</a></li>
-      <li><a href="#">Library</a></li>
-      <li class="active">Data</li>
-    </ol>
-        <div class="view" ng-view></div>
+    </div>
+    <!-- /.navbar-collapse -->
+  </nav>
+  <ol ng-controller="breadCtrl" ng-hide="location === '/'" class="breadcrumb">
+    <li ng-repeat="location in path">
+      <a href="#">Home</a>
+    </li>
+  </ol>
+  <div class="container">
+    <div class="view" ng-view></div>
   </div>
-
 
   <div id="footer">
     <div class="container">
