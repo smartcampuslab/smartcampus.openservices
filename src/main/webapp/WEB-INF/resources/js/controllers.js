@@ -389,7 +389,7 @@ app.controller('editOrgCtrl', ['$scope', '$http', '$location', '$routeParams', '
                         return formData;
                     }
                 }).success(function () {
-                    $scope.org.logo = 'images/' + $scope.org.id + '/' + $scope.file.name;
+                    $scope.org.logo = 'upload/' + $scope.org.id + '/' + $scope.file.name;
                     Org.update($scope.org, function () {
                         $location.path('profile');
                     });

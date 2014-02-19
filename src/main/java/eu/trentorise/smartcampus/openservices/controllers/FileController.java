@@ -1,6 +1,7 @@
 package eu.trentorise.smartcampus.openservices.controllers;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 
 import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import eu.trentorise.smartcampus.openservices.entities.Organization;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.managers.OrganizationManager;
 
@@ -60,7 +60,8 @@ public class FileController {
 		logger.info("Multipart file content type: "+file.getContentType());
 		
 		responseObject = new ResponseObject();
-		logger.info("Request Real Path: "+request.getSession().getServletContext().getRealPath("/"));
+		String realPath = request.getSession().getServletContext().getRealPath("/images");
+		logger.info("Request Real Path: "+realPath);
 		if(!file.isEmpty() && file!=null){
 			//logger.info("File "+file);
 			try {
@@ -80,8 +81,7 @@ public class FileController {
 						}
 					}
 				}*/
-				File f = new File(dirFile+organizationId+"/"
-						+ file.getOriginalFilename());
+				File f = new File(dirFile+"/" +organizationId+"/" + file.getOriginalFilename());
 				logger.info("Absolute path: "+f.getAbsolutePath());
 				//check if this exists
 				if(!f.exists()){
