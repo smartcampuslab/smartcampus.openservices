@@ -68,11 +68,13 @@
     </div>
     <!-- /.navbar-collapse -->
   </nav>
-  <ol ng-controller="breadCtrl" ng-hide="location === '/'" class="breadcrumb">
-    <li ng-repeat="location in path">
-      <a href="#">Home</a>
-    </li>
-  </ol>
+  <div class="container-fluid" id="bread">
+    <ol ng-controller="breadCtrl" ng-hide="location === '/'" class="breadcrumb">
+      <li ng-repeat="location in path">
+        <a href="#">Home</a>
+      </li>
+    </ol>
+  </div>
   <div class="container">
     <div class="view" ng-view></div>
   </div>
