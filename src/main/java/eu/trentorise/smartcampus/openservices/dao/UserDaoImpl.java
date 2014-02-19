@@ -175,7 +175,7 @@ public class UserDaoImpl implements UserDao{
 	public boolean isEmailAlreadyUse(String email) throws DataAccessException {
 		Query q = getEntityManager().createQuery("FROM User WHERE email=:email")
 				.setParameter("email", email);
-		if((User)q.getResultList().get(0) != null){
+		if(q.getResultList().size()>0 && (User)q.getResultList().get(0) != null){
 			return true;
 		}
 		return false;
