@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import eu.trentorise.smartcampus.openservices.entities.Organization;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
+import eu.trentorise.smartcampus.openservices.entities.User;
 import eu.trentorise.smartcampus.openservices.managers.OrganizationManager;
 import eu.trentorise.smartcampus.openservices.support.ApplicationMailer;
 import eu.trentorise.smartcampus.openservices.support.EmailValidator;
@@ -395,6 +396,28 @@ public class OrganizationController {
 			responseObject.setError("User cannot delete another owner from organization");
 			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		}
+		return responseObject;
+	}
+	
+	/**
+	 * Retrieves members of organization
+	 * @param organization_id : int 
+	 * @return {@link ResponseObject} with status (OK or INTERNAL SERVER ERROR) and 
+	 * error message (if status is INTERNAL SERVER ERROR).
+	 */
+	@RequestMapping(value = "/members/{organization_id}", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseObject orgMembers(@PathVariable int organization_id){
+		responseObject = new ResponseObject();
+		List<User> members = organizationManager.organizationMembers(organization_id);
+		if(members!=null){
+			responseObject.setData(members);
+			responseObject.setStatus(HttpServletResponse.SC_OK);
+			
+		}else{
+			responseObject.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			responseObject.setError("Connection problem");
 		}
 		return responseObject;
 	}

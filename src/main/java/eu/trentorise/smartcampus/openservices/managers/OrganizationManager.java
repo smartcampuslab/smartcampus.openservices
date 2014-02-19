@@ -340,5 +340,27 @@ public class OrganizationManager {
 			return false;
 		}
 	}
+	
+	/**
+	 * Retrieve members of an organization.
+	 * Search by organization id
+	 * @param org_id
+	 * @return instances of {@link User}
+	 */
+	public List<User> organizationMembers(int org_id){
+		List<User> members = new ArrayList<User>();
+		try{
+			List<UserRole> urlist = urDao.getUserRoleByIdOrg(org_id);
+			User u;
+			for (int i = 0; i < urlist.size(); i++) {
+				u = userDao.getUserById(urlist.get(i).getId_user());
+				u.setPassword(null);
+				members.add(u);
+			}
+		}catch(DataAccessException d){
+			
+		}
+		return members;
+	}
 
 }
