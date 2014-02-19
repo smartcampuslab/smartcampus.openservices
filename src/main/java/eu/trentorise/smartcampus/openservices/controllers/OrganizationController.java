@@ -374,9 +374,9 @@ public class OrganizationController {
 	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE or UNAUTHORIZED) and 
 	 * error message (if status is SERVICE UNAVAILABLE or UNAUTHORIZED).
 	 */
-	@RequestMapping(value = "/manage/owner/delete/{org_id},{user_id}", method = RequestMethod.POST)
+	@RequestMapping(value = "/manage/owner/delete", method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseObject orgManageDeleteOwnerData(@PathVariable int org_id, @PathVariable int user_id, 
+	public ResponseObject orgManageDeleteOwnerData(@RequestBody int org_id, @RequestBody int user_id, 
 			HttpServletResponse response){
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		//Delete connection between user and organization, where user has role ROLE_ORGOWNER
