@@ -170,4 +170,15 @@ public class UserDaoImpl implements UserDao{
 		getEntityManager().merge(oldUser);
 	}
 
+	@Transactional
+	@Override
+	public boolean isEmailAlreadyUse(String email) throws DataAccessException {
+		Query q = getEntityManager().createQuery("FROM User WHERE email=:email")
+				.setParameter("email", email);
+		if((User)q.getResultList().get(0) != null){
+			return true;
+		}
+		return false;
+	}
+
 }

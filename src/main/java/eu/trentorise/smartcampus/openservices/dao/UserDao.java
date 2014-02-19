@@ -80,5 +80,13 @@ public interface UserDao {
 	 * @throws DataAccessException
 	 */
 	public void enableUser(int user_id) throws DataAccessException;
+	
+	/**
+	 * Check if user's email is unique
+	 * @param email
+	 * @return
+	 * @throws DataAccessException
+	 */
+	public boolean isEmailAlreadyUse(String email) throws DataAccessException;
 
 }

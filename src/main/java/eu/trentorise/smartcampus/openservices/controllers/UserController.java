@@ -158,7 +158,7 @@ public class UserController {
 					response.setStatus(HttpServletResponse.SC_CREATED);
 				}
 				else{
-					responseObject.setError("Connection problem with database");
+					responseObject.setError("Connection problem with database or duplicate email");
 					responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 					response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 				}

@@ -82,14 +82,17 @@ public class UserManager {
 	 * @return a {@link User} instance
 	 */
 	public User createUser(User user){
-		user.setEnabled(0);
-		user.setRole("ROLE_NORMAL");
-		try{
-			userDao.addUser(user);
-			return userDao.getUserByUsername(user.getUsername());
-		}catch(DataAccessException d){
-			return null;
+		if(!userDao.isEmailAlreadyUse(user.getEmail())){
+			user.setEnabled(0);
+			user.setRole("ROLE_NORMAL");
+			try{
+				userDao.addUser(user);
+				return userDao.getUserByUsername(user.getUsername());
+			}catch(DataAccessException d){
+				return null;
+			}
 		}
+		return null;
 	}
 	
 	/**
