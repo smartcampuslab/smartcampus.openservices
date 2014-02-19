@@ -13,6 +13,10 @@ app.controller('navCtrl', ['$scope', '$http', 'Auth', '$location',
     }
 ]);
 
+app.controller('breadCtrl', ['$rootScope',
+    function ($rootScope) {}
+]);
+
 app.controller('signinCtrl', ['$scope', '$location', 'Auth',
     function ($scope, $location, Auth) {
 

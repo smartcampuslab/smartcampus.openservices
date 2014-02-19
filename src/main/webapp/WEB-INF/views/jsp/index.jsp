@@ -67,8 +67,14 @@
       </div>
       <!-- /.navbar-collapse -->
     </nav>
-    <div class="view" ng-view></div>
+    <ol ng-controller="breadCtrl" ng-hide="location === '/'" class="breadcrumb">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Library</a></li>
+      <li class="active">Data</li>
+    </ol>
+        <div class="view" ng-view></div>
   </div>
+
 
   <div id="footer">
     <div class="container">

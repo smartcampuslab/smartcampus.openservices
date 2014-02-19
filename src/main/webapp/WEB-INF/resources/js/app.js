@@ -152,7 +152,7 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
 
     $rootScope.$on('$routeChangeStart', function (event, next) {
         history.push($location.$$path);
-        $rootScope.error = null;
+        $rootScope.location = next.originalPath;
         if (!Auth.authorize(next.access)) {
             if (!Auth.isLoggedIn() || value === false) {
                 $location.path('/signin');
