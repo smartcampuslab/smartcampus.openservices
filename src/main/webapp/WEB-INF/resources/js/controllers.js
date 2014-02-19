@@ -655,6 +655,11 @@ app.controller('editOrgMembersCtrl', ['$scope', 'Org', '$routeParams',
             id: $routeParams.id
         }, function (data) {
             $scope.members = data.data;
-        })
+        });
+
+        $scope.invite = function () {
+            $scope.friend.id = $routeParams.id;
+            Org.addOwner($scope.friend);
+        };
     }
 ]);

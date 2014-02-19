@@ -1,10 +1,18 @@
 <div class="row">
     <div class="col-md-8 col-md-offset-2">
-        <div class="panel panel-default" ng-repeat="members in members">
-            <div class="panel-body">
-                <img gravatar="{{member.email}}" size="40" />{{org.name}} {{org.surname}}
-                <em>{{org.username}}</em>
-            </div>
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Invite a friend" ng-model="friend.email">
+            <span class="input-group-btn">
+                <button ng-disabled="!friend.email" ng-click="invite()" type="button" class="btn btn-success">Invite</button>
+            </span>
         </div>
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-md-2" ng-repeat="member in members">
+        <a href="#">
+            <img gravatar="{{member.email}}" size="120" />
+        </a>
     </div>
 </div>
