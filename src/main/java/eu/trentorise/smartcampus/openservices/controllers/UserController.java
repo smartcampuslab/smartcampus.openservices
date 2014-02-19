@@ -186,7 +186,8 @@ public class UserController {
 			String host = env.getProperty("host");
 			String link = host+"api/user/add/enable/"+user.getUsername()+","+ s;
 			// send it via email to user
-			mailer.sendMail(user.getEmail(),
+			mailer.sendMail(env.getProperty("email.username"),
+					user.getEmail(),
 					env.getProperty("user.message.object")+" "+user.getUsername(), 
 					env.getProperty("user.message.body")+" "+link);
 			responseObject.setStatus(HttpServletResponse.SC_OK);

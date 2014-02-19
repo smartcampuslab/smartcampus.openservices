@@ -306,7 +306,7 @@ public class OrganizationController {
 				String host = env.getProperty("host");
 				String link = host+"org/manage/owner/add/" + s;
 				// send it via email to user
-				mailer.sendMail(
+				mailer.sendMail(env.getProperty("email.username"),
 						email,
 						env.getProperty("org.message.object")+" "
 								+organizationManager.getOrganizationById(org_id).getName(),

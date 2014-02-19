@@ -24,25 +24,18 @@
 		<property name="password" value="${email.password}"></property>
 		<property name="javaMailProperties">
 			<props>
-				<prop key="mail.transport.protocol">${email.protocol}</prop>
+				<!-- <prop key="mail.transport.protocol">smtp</prop>
 				<prop key="mail.smtp.auth">true</prop>
-				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>  -->
 				<prop key="mail.debug">true</prop>
+				<prop key="mail.smtp.localhost">${email.localhost}</prop>
 			</props>
 		</property>
 	</bean>
-	
-	 <!-- You can have some pre-configured messagess also which are ready to send -->
-    <bean id="preConfMessage" class="org.springframework.mail.SimpleMailMessage">
-        <!--<property name="to" value="toinsert@gmail.com"></property>-->
-        <property name="from" value="email"></property>
-        <property name="subject" value="Welcome to OpenService!!"/>
-    </bean>
     
     <bean id="applicationMailer" class="eu.trentorise.smartcampus.openservices.support.ApplicationMailer">
-    <property name="mailSender" ref="mailSender"></property>
-    <property name="preConfiguredMessage" ref="preConfMessage"></property>
-    </bean>
+    	<property name="mailSender" ref="mailSender"></property>
+   	</bean>
     
 <!--     Upload file -->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
