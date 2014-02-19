@@ -15,7 +15,18 @@ app.controller('navCtrl', ['$scope', '$http', 'Auth', '$location',
 
 app.controller('breadCtrl', ['$rootScope', '$location', '$rootScope',
     function ($scope, $location, $rootScope) {
-        $scope.location = $rootScope.location;
+        // $scope.$watch('loc', function (val) {
+        //     if (val) {
+        //         var ar = val.split('/');
+        //         ar.map(function (e) {
+        //             console.log(e.charAt(0).toUpperCase())
+        //             e.charAt(0).toUpperCase() + e.slice(1);
+        //         });
+        //         console.log(ar)
+        //     }
+
+        //     $scope.location
+        // });
     }
 ]);
 
@@ -658,8 +669,8 @@ app.controller('editOrgMembersCtrl', ['$scope', 'Org', '$routeParams',
         });
 
         $scope.invite = function () {
-            $scope.friend.id = $routeParams.id;
-            Org.addOwner($scope.friend);
+            $scope.friend.org_id = $routeParams.id;
+            Org.addOwner($.param($scope.friend));
         };
     }
 ]);

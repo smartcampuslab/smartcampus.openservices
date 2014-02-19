@@ -314,7 +314,10 @@ services.factory('Org', ['$resource',
             },
             addOwner: {
                 method: 'POST',
-                url: 'api/org/manage/owner'
+                url: 'api/org/manage/owner',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
             },
             deleteOwner: {
                 method: 'POST',
