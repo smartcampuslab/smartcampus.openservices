@@ -358,7 +358,7 @@ public class OrganizationManager {
 				members.add(u);
 			}
 		}catch(DataAccessException d){
-			members = null;
+			return null;
 		}
 		return members;
 	}
