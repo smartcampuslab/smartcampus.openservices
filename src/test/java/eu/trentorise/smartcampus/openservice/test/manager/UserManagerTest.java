@@ -118,7 +118,7 @@ public class UserManagerTest {
 		log.info("Key "+s);
 		assertTrue("No key", s!=null);
 		
-		User enableUser = userManager.enableUserAfterVerification(user.getUsername(), s);
+		User enableUser = userManager.enableUserAfterVerification(/*user.getUsername(),*/ s);
 		log.info("Enabled user: "+enableUser.getUsername()+", value enabled: "+enableUser.getEnabled());
 		assertTrue("User exists", enableUser!=null);
 		assertTrue("Enabled == 0", enableUser.getEnabled()==1);
