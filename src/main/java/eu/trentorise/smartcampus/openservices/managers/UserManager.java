@@ -190,13 +190,15 @@ public class UserManager {
 	 * @param key : String key sent by email for verifying email address
 	 * @return {@link User} instance of enabled account otherwise if key does not exist then EntityNotFoundException
 	 */
-	public User enableUserAfterVerification(String username, String key){
+	public User enableUserAfterVerification(/*String username,*/ String key){
 		try{
-		User user = userDao.getUserByUsername(username);
+		//User user = userDao.getUserByUsername(username);
 		TemporaryLink tl = tlDao.getTLByKey(key);
-		if(tl!=null && user.getEmail().equalsIgnoreCase(tl.getEmail()) && tl.getId_org()==0 && tl.getRole()==null){
+		if(tl!=null /*&& user.getEmail().equalsIgnoreCase(tl.getEmail()) */ 
+				&& tl.getId_org()==0 && tl.getRole()==null){
+			User user = userDao.getUserByEmail(tl.getEmail());
 			tlDao.delete(key);
-			return enableUser(username);
+			return enableUser(/*username*/user.getUsername());
 		}else{
 			throw new EntityNotFoundException();
 		}

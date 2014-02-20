@@ -84,9 +84,17 @@ public interface UserDao {
 	/**
 	 * Check if user's email is unique
 	 * @param email
-	 * @return
+	 * @return boolean value: true if email is already in user, false otherwise.
 	 * @throws DataAccessException
 	 */
 	public boolean isEmailAlreadyUse(String email) throws DataAccessException;
+	
+	/**
+	 * Retrieve user by username
+	 * @param username
+	 * @return an instance of {@link User}
+	 * @throws DataAccessException
+	 */
+	public User getUserByEmail(String email) throws DataAccessException;
 
 }

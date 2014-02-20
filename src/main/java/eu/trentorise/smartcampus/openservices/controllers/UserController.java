@@ -189,7 +189,7 @@ public class UserController {
 			if(s!=null){
 			// return link
 			String host = Utils.getAppURL(req);//env.getProperty("host");
-			String link = host+"api/user/add/enable/"+user.getUsername()+"/"+ s;
+			String link = host+"api/user/add/enable/"/*+user.getUsername()+"/"*/+ s;
 			// send it via email to user
 			mailer.sendMail(env.getProperty("email.username"),
 					user.getEmail(),
@@ -216,13 +216,13 @@ public class UserController {
 	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE or NOT FOUND) and 
 	 * error message (if status is SERIVCE UNAVAILABLE or NOT FOUND).
 	 */
-	@RequestMapping(value = "/add/enable/{username}/{key}", method = RequestMethod.GET) 
+	@RequestMapping(value = "/add/enable/{key}", method = RequestMethod.GET) 
 	@ResponseBody
-	public ResponseObject enableUser(@PathVariable String username, @PathVariable String key){
+	public ResponseObject enableUser(/*@PathVariable String username,*/ @PathVariable String key){
 		logger.info("-- User enable --");
 		responseObject = new ResponseObject();
 		try{
-			User enabledUser = userManager.enableUserAfterVerification(username, key);
+			User enabledUser = userManager.enableUserAfterVerification(/*username,*/ key);
 			if(enabledUser!=null){
 				enabledUser.setPassword(null);
 				responseObject.setData(enabledUser);

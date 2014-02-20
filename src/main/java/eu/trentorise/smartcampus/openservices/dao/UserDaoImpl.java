@@ -181,4 +181,16 @@ public class UserDaoImpl implements UserDao{
 		return false;
 	}
 
+	@Transactional
+	@Override
+	public User getUserByEmail(String email) throws DataAccessException {
+		Query q = getEntityManager().createQuery("FROM User WHERE email=:email")
+				.setParameter("email", email);
+		List<User> users = q.getResultList();
+		if(users.size()==0){
+			return null;
+		}
+		else return users.get(0);
+	}
+
 }
