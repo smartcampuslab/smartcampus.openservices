@@ -16,6 +16,7 @@
 package eu.trentorise.smartcampus.openservices.controllers;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
@@ -26,6 +27,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import eu.trentorise.smartcampus.openservices.Utils;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.entities.User;
 import eu.trentorise.smartcampus.openservices.managers.UserManager;
@@ -133,7 +135,8 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
-	public ResponseObject createUser(@RequestBody User user, HttpServletResponse response){
+	public ResponseObject createUser(@RequestBody User user, HttpServletRequest req,
+			HttpServletResponse response){
 		logger.info("-- Add user data --");
 		//Check username
 		User userDB = userManager.getUserByUsername(user.getUsername());
@@ -156,7 +159,7 @@ public class UserController {
 					responseObject.setData(newUser);
 					responseObject.setStatus(HttpServletResponse.SC_CREATED);
 					//verify email
-					verifyEmail(newUser);
+					verifyEmail(newUser, req);
 					response.setStatus(HttpServletResponse.SC_CREATED);
 				}
 				else{
@@ -178,14 +181,14 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/add/verify", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
-	public ResponseObject verifyEmail(@RequestBody User user){
+	public ResponseObject verifyEmail(@RequestBody User user, HttpServletRequest req){
 		logger.info("-- User verify email --");
 		responseObject = new ResponseObject();
 		try {
 			String s = userManager.addKeyVerifyEmail(user.getUsername());
 			if(s!=null){
 			// return link
-			String host = env.getProperty("host");
+			String host = Utils.getAppURL(req);//env.getProperty("host");
 			String link = host+"api/user/add/enable/"+user.getUsername()+"/"+ s;
 			// send it via email to user
 			mailer.sendMail(env.getProperty("email.username"),
