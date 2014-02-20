@@ -15,7 +15,7 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.support;
 
-public class MyObject {
+public class UserInvitation {
 
 	private int org_id;
 	private int user_id;

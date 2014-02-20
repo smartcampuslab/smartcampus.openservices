@@ -15,14 +15,12 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.controllers;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import eu.trentorise.smartcampus.openservices.Constants.ROLES;
 import eu.trentorise.smartcampus.openservices.Utils;
 import eu.trentorise.smartcampus.openservices.entities.Organization;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
@@ -43,7 +42,7 @@ import eu.trentorise.smartcampus.openservices.entities.User;
 import eu.trentorise.smartcampus.openservices.managers.OrganizationManager;
 import eu.trentorise.smartcampus.openservices.support.ApplicationMailer;
 import eu.trentorise.smartcampus.openservices.support.EmailValidator;
-import eu.trentorise.smartcampus.openservices.support.MyObject;
+import eu.trentorise.smartcampus.openservices.support.UserInvitation;
 
 /**
  * Controller that retrieves, adds, modifies and deletes organization data for authenticated users.
@@ -295,7 +294,7 @@ public class OrganizationController {
 	 */
 	@RequestMapping(value = "/manage/owner", method = RequestMethod.POST)//, consumes="application/json")
 	@ResponseBody
-	public ResponseObject orgManageOwnerData(@RequestBody MyObject data,
+	public ResponseObject orgManageOwnerData(@RequestBody UserInvitation data,
 			HttpServletRequest req){
 		logger.info("-- Manage Organization Owner --");
 		String email = data.getEmail();
@@ -309,7 +308,7 @@ public class OrganizationController {
 		if(ev.validate(email)){
 			try {
 				String s = organizationManager.createInvitation(username,
-						org_id, "ROLE_ORGOWNER", email);
+						org_id, ROLES.ROLE_ORGOWNER.toString(), email);
 				// return link
 				String host = Utils.getAppURL(req); //env.getProperty("host");
 				String link = host+"api/org/manage/owner/add/" + s;
@@ -383,7 +382,7 @@ public class OrganizationController {
 	 */
 	@RequestMapping(value = "/manage/owner/delete", method = RequestMethod.POST, consumes="application/json")
 	@ResponseBody
-	public ResponseObject orgManageDeleteOwnerData(@RequestBody MyObject data, 
+	public ResponseObject orgManageDeleteOwnerData(@RequestBody UserInvitation data, 
 			HttpServletResponse response){
 		int org_id = data.getOrg_id();
 		int user_id  = data.getUser_id();

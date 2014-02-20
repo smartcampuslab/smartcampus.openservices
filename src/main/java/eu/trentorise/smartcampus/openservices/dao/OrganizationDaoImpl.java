@@ -25,6 +25,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import eu.trentorise.smartcampus.openservices.Constants.ROLES;
 import eu.trentorise.smartcampus.openservices.entities.Organization;
 
 /**
@@ -167,7 +168,7 @@ public class OrganizationDaoImpl implements OrganizationDao{
 			throws DataAccessException {
 		Query q = getEntityManager().createQuery("FROM Organization Org WHERE Org.id IN " +
 				"( SELECT Ur.id_org FROM UserRole Ur " +
-				"WHERE Ur.id_user=:id_user AND Ur.role='ROLE_ORGOWNER')")
+				"WHERE Ur.id_user=:id_user AND Ur.role='"+ROLES.ROLE_ORGOWNER+"')")
 				.setParameter("id_user", owner_id);
 		List<Organization> orgs = q.getResultList();
 		return orgs;

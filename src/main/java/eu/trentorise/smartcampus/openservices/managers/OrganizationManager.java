@@ -18,6 +18,7 @@ package eu.trentorise.smartcampus.openservices.managers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -26,6 +27,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import eu.trentorise.smartcampus.openservices.Constants.ROLES;
 import eu.trentorise.smartcampus.openservices.dao.OrganizationDao;
 import eu.trentorise.smartcampus.openservices.dao.ServiceDao;
 import eu.trentorise.smartcampus.openservices.dao.ServiceHistoryDao;
@@ -38,7 +40,6 @@ import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
 import eu.trentorise.smartcampus.openservices.entities.TemporaryLink;
 import eu.trentorise.smartcampus.openservices.entities.User;
 import eu.trentorise.smartcampus.openservices.entities.UserRole;
-import eu.trentorise.smartcampus.openservices.support.GenerateKey;
 
 /**
  * Manager that retrieves, adds, modifies and deletes organization data.
@@ -95,7 +96,7 @@ public class OrganizationManager {
 			User user = userDao.getUserByUsername(username);
 			// check user role
 			UserRole ur = urDao.getRoleOfUser(user.getId(), orgId);
-			if (ur != null && ur.getRole().equalsIgnoreCase("ROLE_ORGOWNER")) {
+			if (ur != null && ur.getRole().equalsIgnoreCase(ROLES.ROLE_ORGOWNER.toString())) {
 				// delete user roles
 				List<UserRole> list = urDao.getUserRoleByIdOrg(orgId);
 				for (UserRole urElem : list) {
@@ -148,7 +149,7 @@ public class OrganizationManager {
 				orgDao.createOrganization(org);
 				// add UserRole
 				urDao.createUserRole(org.getCreatorId(), org.getId(),
-						"ROLE_ORGOWNER");
+						ROLES.ROLE_ORGOWNER.toString());
 				// check if this new organizatione exist
 				if (orgDao.getOrganizationByName(org.getName()) != null) {
 					return true;
@@ -175,7 +176,7 @@ public class OrganizationManager {
 			Organization o = orgDao.getOrganizationById(org.getId());
 			// check user role
 			UserRole ur = urDao.getRoleOfUser(user.getId(), org.getId());
-			if (ur != null && ur.getRole().equalsIgnoreCase("ROLE_ORGOWNER")) {
+			if (ur != null && ur.getRole().equalsIgnoreCase(ROLES.ROLE_ORGOWNER.toString())) {
 				// TODO which values can be modified by user?
 				o.setDescription(org.getDescription());
 				o.setActivityArea(org.getActivityArea());
@@ -224,11 +225,10 @@ public class OrganizationManager {
 			// check user role
 			Organization org = orgDao.getOrganizationById(org_id);
 			UserRole ur = urDao.getRoleOfUser(user.getId(), org.getId());
-			if (ur != null && ur.getRole().equalsIgnoreCase("ROLE_ORGOWNER")) {
+			if (ur != null && ur.getRole().equalsIgnoreCase(ROLES.ROLE_ORGOWNER.toString())) {
 
 				// Generate a key
-				GenerateKey g = new GenerateKey();
-				String s = g.getPriv().toString().split("@")[1];
+				String s = UUID.randomUUID().toString();
 
 				// saved in a temporary table
 				TemporaryLink entity = new TemporaryLink();
@@ -329,8 +329,8 @@ public class OrganizationManager {
 			// Check user role
 			User user = userDao.getUserByUsername(username);
 			UserRole userRole = urDao.getRoleOfUser(user.getId(), org_id);
-			if (userRole.getRole().equalsIgnoreCase("ROLE_ORGOWNER")) {
-				UserRole ur = new UserRole(user_id, org_id, "ROLE_ORGOWNER");
+			if (userRole.getRole().equalsIgnoreCase(ROLES.ROLE_ORGOWNER.toString())) {
+				UserRole ur = new UserRole(user_id, org_id, ROLES.ROLE_ORGOWNER.toString());
 				urDao.deleteUserRole(ur);
 				return true;
 			} else {

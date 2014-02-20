@@ -15,6 +15,8 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.managers;
 
+import java.util.UUID;
+
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +24,11 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import eu.trentorise.smartcampus.openservices.Constants.ROLES;
 import eu.trentorise.smartcampus.openservices.dao.TemporaryLinkDao;
 import eu.trentorise.smartcampus.openservices.dao.UserDao;
 import eu.trentorise.smartcampus.openservices.entities.TemporaryLink;
 import eu.trentorise.smartcampus.openservices.entities.User;
-import eu.trentorise.smartcampus.openservices.support.GenerateKey;
 
 /**
  * Manager that retrieves, adds, modifies and deletes user data
@@ -84,7 +86,7 @@ public class UserManager {
 	public User createUser(User user){
 		if(!userDao.isEmailAlreadyUse(user.getEmail())){
 			user.setEnabled(0);
-			user.setRole("ROLE_NORMAL");
+			user.setRole(ROLES.ROLE_NORMAL.toString());
 			try{
 				userDao.addUser(user);
 				return userDao.getUserByUsername(user.getUsername());
@@ -164,8 +166,7 @@ public class UserManager {
 			//check if user is enable or not
 			if(user.getEnabled()==0){
 				// Generate a key
-				GenerateKey g = new GenerateKey();
-				key = g.getPriv().toString().split("@")[1];
+				key = UUID.randomUUID().toString();
 				//save in temporary link table
 				TemporaryLink tl = new TemporaryLink();
 				tl.setId_org(0);

@@ -32,4 +32,8 @@ public class Constants {
 	 * Enum object with three possible service state: PUBLISH, UNPUBLISH and DEPRECATE
 	 */
 	public enum SERVICE_STATE {PUBLISH, UNPUBLISH, DEPRECATE};
+	/**
+	 * Roles enum
+	 */
+	public enum ROLES {ROLE_ORGOWNER, ROLE_NORMAL, ROLE_SERVICEOWNER};
 }

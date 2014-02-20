@@ -35,10 +35,11 @@ import javax.persistence.*;
 public class TemporaryLink {
 	
 	@Id
+	@GeneratedValue
 	private int id;
 	@Column(name="id_org")
 	private int id_org;
-	@Column(name="\"key\"")
+	@Column(name="\"key\"",columnDefinition="LONGTEXT")
 	private String key;
 	@Column(name="email")
 	private String email;
