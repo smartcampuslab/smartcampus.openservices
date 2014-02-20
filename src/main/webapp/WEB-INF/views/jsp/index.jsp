@@ -49,6 +49,8 @@
           </li>
           <li><a href="categories">Categories</a>
           </li>
+          <li><a href="organizations">Organizations</a>
+          </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li ng-show="currentUser.role.title === 'public'|| _.isEmpty(currentUser)"><a href="signin">Sign in</a> 
