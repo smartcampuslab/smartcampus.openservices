@@ -680,6 +680,11 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
                         $scope.response += toTitleCase(key) + ': ' + headers()[key] + '\n';
                     }
                     $scope.response += '\n' + $scope.formatJson(data.data);
+                }).error(function (data, status, headers) {
+                	$scope.response = 'HTTP/1.1 ' + status + '\n';
+                	if (data) {
+                		$scope.response += data.data;
+                	}
                 });
 
                 $scope.request.headers = result;

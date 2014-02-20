@@ -47,4 +47,13 @@ public class TestBoxException extends Exception {
 	public TestBoxException(Exception e) {
 		super(e);
 	}
+
+	/**
+	 * @param i
+	 * @param string
+	 */
+	public TestBoxException(int i, String string) {
+		super(string);
+		status = i;
+	}
 }
