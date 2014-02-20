@@ -15,12 +15,14 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.controllers;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,7 @@ import eu.trentorise.smartcampus.openservices.entities.User;
 import eu.trentorise.smartcampus.openservices.managers.OrganizationManager;
 import eu.trentorise.smartcampus.openservices.support.ApplicationMailer;
 import eu.trentorise.smartcampus.openservices.support.EmailValidator;
+import eu.trentorise.smartcampus.openservices.support.MyObject;
 
 /**
  * Controller that retrieves, adds, modifies and deletes organization data for authenticated users.
@@ -292,8 +295,12 @@ public class OrganizationController {
 	 */
 	@RequestMapping(value = "/manage/owner", method = RequestMethod.POST)//, consumes="application/json")
 	@ResponseBody
-	public ResponseObject orgManageOwnerData(@RequestBody int org_id, @RequestBody String email, HttpServletRequest req){
+	public ResponseObject orgManageOwnerData(@RequestBody MyObject data,
+			HttpServletRequest req){
 		logger.info("-- Manage Organization Owner --");
+		String email = data.getEmail();
+		int org_id = data.getOrg_id();
+		logger.info("Data: "+email+", "+org_id);
 		//Get username
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		responseObject = new ResponseObject();
@@ -376,8 +383,11 @@ public class OrganizationController {
 	 */
 	@RequestMapping(value = "/manage/owner/delete", method = RequestMethod.POST, consumes="application/json")
 	@ResponseBody
-	public ResponseObject orgManageDeleteOwnerData(@RequestBody int org_id, @RequestBody int user_id, 
+	public ResponseObject orgManageDeleteOwnerData(@RequestBody MyObject data, 
 			HttpServletResponse response){
+		int org_id = data.getOrg_id();
+		int user_id  = data.getUser_id();
+		
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		//Delete connection between user and organization, where user has role ROLE_ORGOWNER
 		try {
