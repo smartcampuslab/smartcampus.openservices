@@ -24,11 +24,11 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
             templateUrl: 'partials/home.html',
             access: access.public
         }).
-//        when('/callback', {
-//            controller: 'cbCtrl',
-//            templateUrl: 'partials/cb.html',
-//            access: access.public
-//        }).
+        //        when('/callback', {
+        //            controller: 'cbCtrl',
+        //            templateUrl: 'partials/cb.html',
+        //            access: access.public
+        //        }).
         when('/services', {
             controller: 'servicesCtrl',
             templateUrl: 'partials/services/list.html',
@@ -72,6 +72,16 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
         when('/signup', {
             controller: 'signUpCtrl',
             templateUrl: 'partials/signup.html',
+            access: access.public
+        }).
+        when('/reset', {
+            controller: 'resetCtrl',
+            templateUrl: 'partials/reset.html',
+            access: access.public
+        }).
+        when('/activate/:key', {
+            controller: 'activateCtrl',
+            templateUrl: 'partials/activate.html',
             access: access.public
         }).
         when('/profile', {
@@ -135,13 +145,14 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
             access: access.ROLE_NORMAL
         }).
         when('/profile/organizations/:id/members', {
-            controller: 'editOrgMembersCtrl',
+            controller: 'showOrgMembersCtrl',
             templateUrl: 'partials/profile/organizations/members/show.html',
             access: access.ROLE_NORMAL
         }).
         otherwise({
             redirectTo: '/'
         });
+
     }
 ]).run(function ($rootScope, $location, Auth, $routeParams, $cookieStore) {
     var history = [];
@@ -152,7 +163,7 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
 
     $rootScope.$on('$routeChangeStart', function (event, next) {
         history.push($location.$$path);
-        $rootScope.location = next.originalPath;
+        $rootScope.loc = $location.path();
         if (!Auth.authorize(next.access)) {
             if (!Auth.isLoggedIn() || value === false) {
                 $location.path('/signin');

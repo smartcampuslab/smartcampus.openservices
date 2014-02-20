@@ -84,24 +84,9 @@ services.factory('User', ['$resource',
                 method: 'GET',
                 url: 'api/user/my'
             },
-            create: {
-                method: 'POST',
-                url: '/api/user/add'
-            },
-            verify: {
-                method: 'POST',
-                url: '/api/user/add/verify',
-                params: {
-                    user: {}
-                }
-            },
             enable: {
-                method: 'POST',
-                url: '/api/user/add/enable'
-            },
-            disable: {
                 method: 'GET',
-                url: '/api/user/disable/:email'
+                url: 'api/user/add/enable/:key'
             },
             save: {
                 method: 'POST',

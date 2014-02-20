@@ -67,6 +67,16 @@ app.controller('resetCtrl', ['$scope', '$location', 'User',
     }
 ]);
 
+app.controller('activateCtrl', ['$scope', '$routeParams', 'User',
+    function ($scope, $routeParams, User) {
+        User.enable({
+            key: $routeParams.key
+        }, function () {
+            $scope.confirm = 'Your account is active, you can ';
+        });
+    }
+]);
+
 app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service', 'Org',
     function ($scope, $http, $location, User, Service, Org) {
         $scope.template = 'partials/profile/_details.html';
