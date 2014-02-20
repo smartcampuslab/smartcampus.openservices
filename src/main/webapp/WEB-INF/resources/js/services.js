@@ -314,14 +314,11 @@ services.factory('Org', ['$resource',
             },
             addOwner: {
                 method: 'POST',
-                url: 'api/org/manage/owner',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
+                url: 'api/org/manage/owner'
             },
             deleteOwner: {
                 method: 'POST',
-                url: 'api/org/manage/owner/delete/:id/:userId}'
+                url: 'api/org/manage/owner/delete/:id/:userId'
             },
             getFile: {
                 method: 'GET',

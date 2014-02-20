@@ -622,12 +622,12 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
             });
         }
 
-        $scope.formatJson = function(j) {
-        	if (!j) return '';
+        $scope.formatJson = function (j) {
+            if (!j) return '';
             var obj = JSON.parse(j);
-        	return JSON.stringify(obj, undefined, 2);
+            return JSON.stringify(obj, undefined, 2);
         };
-        
+
         $scope.checkBeforeSend = function () {
             //remoteapi.ready ? true : false
             if ($scope.request.method && $scope.request.sample && $scope.request.sample.requestPath && $scope.request.sample.requestMethod) {
@@ -640,14 +640,15 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
         $scope.send = function () {
             $scope.remoteapi = new RemoteApi($scope.service.accessInformation.authentication.accessProtocol);
             $scope.remoteapi.authorize($scope.request.method.id).then(function (result) {
-            	var req  = {
-            			name:$scope.request.sample.name, 
-            			requestUrl:$scope.request.sample.requestPath,
-            			requestBody:$scope.request.sample.requestBody,
-            			credentials:result};
+                var req = {
+                    name: $scope.request.sample.name,
+                    requestUrl: $scope.request.sample.requestPath,
+                    requestBody: $scope.request.sample.requestBody,
+                    credentials: result
+                };
                 $http({
                     method: 'POST',
-                    url: 'api/testbox/test/'+$scope.request.method.id,
+                    url: 'api/testbox/test/' + $scope.request.method.id,
                     data: req,
                     withCredentials: true
                 }).success(function (data, status, headers) {
@@ -665,7 +666,7 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
     }
 ]);
 
-app.controller('editOrgMembersCtrl', ['$scope', 'Org', '$routeParams',
+app.controller('showOrgMembersCtrl', ['$scope', 'Org', '$routeParams',
     function ($scope, Org, $routeParams) {
         Org.getMembers({
             id: $routeParams.id
@@ -675,7 +676,7 @@ app.controller('editOrgMembersCtrl', ['$scope', 'Org', '$routeParams',
 
         $scope.invite = function () {
             $scope.friend.org_id = $routeParams.id;
-            Org.addOwner($.param($scope.friend));
+            Org.addOwner($scope.friend);
         };
     }
 ]);
