@@ -58,6 +58,15 @@ app.controller('signUpCtrl', ['$scope', '$location', 'User',
     }
 ]);
 
+app.controller('resetCtrl', ['$scope', '$location', 'User',
+    function ($scope, $location, User) {
+        $scope.user = new User();
+        $scope.submit = function () {
+
+        };
+    }
+]);
+
 app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service', 'Org',
     function ($scope, $http, $location, User, Service, Org) {
         $scope.template = 'partials/profile/_details.html';
