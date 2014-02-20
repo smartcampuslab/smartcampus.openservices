@@ -72,7 +72,11 @@ app.controller('activateCtrl', ['$scope', '$routeParams', 'User',
         User.enable({
             key: $routeParams.key
         }, function () {
-            $scope.confirm = 'Your account is active, you can ';
+            $scope.active = true;
+
+        }, function () {
+            $scope.active = false;
+
         });
     }
 ]);

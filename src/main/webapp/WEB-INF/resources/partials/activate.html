@@ -1,6 +1,8 @@
 <div id="signup" class="row animated fadeIn">
-  <div class="col-md-6 col-md-offset-3">
-    <h2>{{confirm}}<a href="signin">sign in</a>
+  <div class="col-md-8 col-md-offset-2">
+    <h2 ng-show="active">Your account is active, you can <a href="signin">sign in</a>
+    </h2>
+    <h2 ng-show="!active">Something went wrong, <a href="resend">resend the activation code</a></a>
     </h2>
   </div>
 </div>
