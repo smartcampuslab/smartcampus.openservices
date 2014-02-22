@@ -24,11 +24,13 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import eu.trentorise.smartcampus.openservices.Utils;
 import eu.trentorise.smartcampus.openservices.Constants.ROLES;
 import eu.trentorise.smartcampus.openservices.dao.TemporaryLinkDao;
 import eu.trentorise.smartcampus.openservices.dao.UserDao;
 import eu.trentorise.smartcampus.openservices.entities.TemporaryLink;
 import eu.trentorise.smartcampus.openservices.entities.User;
+import eu.trentorise.smartcampus.openservices.support.ApplicationMailer;
 
 /**
  * Manager that retrieves, adds, modifies and deletes user data
@@ -50,6 +52,11 @@ public class UserManager {
 	 */
 	@Autowired
 	private TemporaryLinkDao tlDao;
+	/**
+	 * Instance of {@link ApplicationMailer} to send email.
+	 */
+	@Autowired
+	private ApplicationMailer mailer;
 	
 	/**
 	 * Get user data by id
@@ -83,12 +90,22 @@ public class UserManager {
 	 * @param user : {@link User} instance
 	 * @return a {@link User} instance
 	 */
-	public User createUser(User user){
+	public User createUser(User user, String host, String from, String object,
+			String message){
 		if(!userDao.isEmailAlreadyUse(user.getEmail())){
 			user.setEnabled(0);
 			user.setRole(ROLES.ROLE_NORMAL.toString());
 			try{
 				userDao.addUser(user);
+				//key + send via email
+				String s = addKeyVerifyEmail(user.getUsername());
+				if(s!=null){
+					// return link
+					String link = host+"api/user/add/enable/"+ s;
+					// send it via email to user
+					mailer.sendMail(from,user.getEmail(),object+""+user.getUsername(),
+							message+" "+link);
+				}
 				return userDao.getUserByUsername(user.getUsername());
 			}catch(DataAccessException d){
 				return null;
@@ -172,7 +189,7 @@ public class UserManager {
 				tl.setId_org(0);
 				tl.setKey(key);
 				tl.setEmail(user.getEmail());
-				tlDao.save(tl);
+				tlDao.save(tl);				
 				return key;
 				
 			}else{

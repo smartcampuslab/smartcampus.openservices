@@ -23,6 +23,7 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
@@ -42,6 +43,8 @@ public class UserManagerTest {
 	private Logger log = LoggerFactory.getLogger(UserManagerTest.class);
 	@Autowired
 	private UserManager userManager;
+	@Autowired
+	private Environment env;
 	
 	private User user;
 	
@@ -67,7 +70,9 @@ public class UserManagerTest {
 		User checkUser = userManager.getUserByUsername(user.getUsername());
 		if(checkUser==null){
 			// create User
-			User newUser = userManager.createUser(user);
+			User newUser = userManager.createUser(user,"http://localhost:8080/openservice/",
+					env.getProperty("email.username"),
+					env.getProperty("user.message.object"),env.getProperty("user.message.body"));
 			assertNotNull("No user created", newUser);
 			user.setId(newUser.getId());// get user id from database
 			log.info("New user " + newUser.getUsername() + ", with id "

@@ -154,12 +154,14 @@ public class UserController {
 				response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 			}
 			else{
-				User newUser = userManager.createUser(user);
+				String host = Utils.getAppURL(req);//env.getProperty("host");
+				User newUser = userManager.createUser(user, host, env.getProperty("email.username"),
+						env.getProperty("user.message.object"),env.getProperty("user.message.body"));
 				if(newUser!=null){
 					responseObject.setData(newUser);
 					responseObject.setStatus(HttpServletResponse.SC_CREATED);
 					//verify email
-					verifyEmail(newUser, req);
+					//verifyEmail(newUser, req);
 					response.setStatus(HttpServletResponse.SC_CREATED);
 				}
 				else{
