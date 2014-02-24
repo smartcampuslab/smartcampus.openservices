@@ -35,7 +35,7 @@ public class Utils {
 		if (req.getServerPort() != 80  && req.getServerPort() != 443) {
 			res +=":"+req.getServerPort();
 		}
-		res += "/"+req.getContextPath();
+		res += req.getContextPath();//"/"+
 		if (!res.endsWith("/")) res += "/";
 		return res;
 	}

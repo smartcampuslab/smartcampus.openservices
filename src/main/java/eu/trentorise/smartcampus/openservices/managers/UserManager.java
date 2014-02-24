@@ -101,7 +101,7 @@ public class UserManager {
 				String s = addKeyVerifyEmail(user.getUsername());
 				if(s!=null){
 					// return link
-					String link = host+"api/user/add/enable/"+ s;
+					String link = host+"enable/"+ s;
 					// send it via email to user
 					mailer.sendMail(from,user.getEmail(),object+""+user.getUsername(),
 							message+" "+link);
