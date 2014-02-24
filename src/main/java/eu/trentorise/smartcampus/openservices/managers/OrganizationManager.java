@@ -354,7 +354,7 @@ public class OrganizationManager {
 			User u;
 			for (int i = 0; i < urlist.size(); i++) {
 				u = userDao.getUserById(urlist.get(i).getId_user());
-				//u.setPassword(null);
+				u.setPassword("");
 				members.add(u);
 			}
 		}catch(DataAccessException d){
