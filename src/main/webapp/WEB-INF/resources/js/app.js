@@ -79,9 +79,9 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
             templateUrl: 'partials/reset.html',
             access: access.public
         }).
-        when('/activate/:key', {
-            controller: 'activateCtrl',
-            templateUrl: 'partials/activate.html',
+        when('/enable/:key', {
+            controller: 'enableCtrl',
+            templateUrl: 'partials/enable.html',
             access: access.public
         }).
         when('/profile', {

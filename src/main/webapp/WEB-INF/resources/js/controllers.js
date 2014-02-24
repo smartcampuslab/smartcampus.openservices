@@ -67,7 +67,7 @@ app.controller('resetCtrl', ['$scope', '$location', 'User',
     }
 ]);
 
-app.controller('activateCtrl', ['$scope', '$routeParams', 'User',
+app.controller('enableCtrl', ['$scope', '$routeParams', 'User',
     function ($scope, $routeParams, User) {
         User.enable({
             key: $routeParams.key
@@ -681,10 +681,10 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
                     }
                     $scope.response += '\n' + $scope.formatJson(data.data);
                 }).error(function (data, status, headers) {
-                	$scope.response = 'HTTP/1.1 ' + status + '\n';
-                	if (data) {
-                		$scope.response += data.data;
-                	}
+                    $scope.response = 'HTTP/1.1 ' + status + '\n';
+                    if (data) {
+                        $scope.response += data.data;
+                    }
                 });
 
                 $scope.request.headers = result;
