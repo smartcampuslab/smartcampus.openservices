@@ -344,7 +344,7 @@ public class OrganizationController {
 	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE, NOT FOUND or UNAUTHORIZED) and 
 	 * error message (if status is SERVICE UNAVAILABLE, NOT FOUND or UNAUTHORIZED).
 	 */
-	@RequestMapping(value = "/manage/owner/add/{key}", method = RequestMethod.POST)
+	@RequestMapping(value = "/manage/owner/add/{key}", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseObject orgManageAddOwnerData(@PathVariable String key, HttpServletResponse response){
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();

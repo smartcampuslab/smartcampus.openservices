@@ -191,7 +191,7 @@ public class UserController {
 			if(s!=null){
 			// return link
 			String host = Utils.getAppURL(req);//env.getProperty("host");
-			String link = host+"api/user/add/enable/"/*+user.getUsername()+"/"*/+ s;
+			String link = host+"enable/"/*+user.getUsername()+"/"*/+ s;//api/user/add/enable/
 			// send it via email to user
 			mailer.sendMail(env.getProperty("email.username"),
 					user.getEmail(),
