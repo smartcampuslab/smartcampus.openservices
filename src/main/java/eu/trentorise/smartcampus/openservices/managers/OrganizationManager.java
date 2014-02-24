@@ -330,8 +330,8 @@ public class OrganizationManager {
 			User user = userDao.getUserByUsername(username);
 			UserRole userRole = urDao.getRoleOfUser(user.getId(), org_id);
 			if (userRole.getRole().equalsIgnoreCase(ROLES.ROLE_ORGOWNER.toString())) {
-				UserRole ur = new UserRole(user_id, org_id, ROLES.ROLE_ORGOWNER.toString());
-				urDao.deleteUserRole(ur);
+				//UserRole ur = new UserRole(user_id, org_id, ROLES.ROLE_ORGOWNER.toString());
+				urDao.deleteUserRole(urDao.getRoleOfUser(user_id, org_id));
 				return true;
 			} else {
 				throw new SecurityException();

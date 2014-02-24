@@ -347,6 +347,7 @@ public class OrganizationController {
 	@RequestMapping(value = "/manage/owner/add/{key}", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseObject orgManageAddOwnerData(@PathVariable String key, HttpServletResponse response){
+		logger.info("-- Add organization members by key --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		responseObject = new ResponseObject();
 		try {
@@ -384,6 +385,7 @@ public class OrganizationController {
 	@ResponseBody
 	public ResponseObject orgManageDeleteOwnerData(@RequestBody UserInvitation data, 
 			HttpServletResponse response){
+		logger.info("-- Delete organization members --");
 		int org_id = data.getOrg_id();
 		int user_id  = data.getUser_id();
 		
@@ -418,6 +420,7 @@ public class OrganizationController {
 	@RequestMapping(value = "/members/{organization_id}", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseObject orgMembers(@PathVariable int organization_id){
+		logger.info("-- Retrieve organization members --");
 		responseObject = new ResponseObject();
 		List<User> members = organizationManager.organizationMembers(organization_id);
 		if(members!=null){
