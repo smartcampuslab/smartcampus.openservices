@@ -81,6 +81,20 @@ app.controller('enableCtrl', ['$scope', '$routeParams', 'User',
     }
 ]);
 
+app.controller('enableOrgCtrl', ['$scope', '$routeParams', 'Org', '$location',
+    function ($scope, $routeParams, Org, $location) {
+        Org.enable({
+            key: $routeParams.key
+        }, function () {
+            $location.path('profile');
+
+        }, function () {
+            $scope.active = false;
+
+        });
+    }
+]);
+
 app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service', 'Org',
     function ($scope, $http, $location, User, Service, Org) {
         $scope.template = 'partials/profile/_details.html';
@@ -705,6 +719,15 @@ app.controller('showOrgMembersCtrl', ['$scope', 'Org', '$routeParams',
         $scope.invite = function () {
             $scope.friend.org_id = $routeParams.id;
             Org.addOwner($scope.friend);
+        };
+
+        $scope.remove = function (i) {
+            Org.deleteOwner({
+                user_id: $scope.members[i].id,
+                org_id: $routeParams.id
+            }, function () {
+                $scope.members.splice(i, 1);
+            });
         };
     }
 ]);

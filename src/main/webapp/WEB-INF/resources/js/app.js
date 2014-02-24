@@ -84,6 +84,11 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
             templateUrl: 'partials/enable.html',
             access: access.public
         }).
+        when('/org/enable/:key', {
+            controller: 'enableOrgCtrl',
+            templateUrl: 'partials/enableOrg.html',
+            access: access.ROLE_NORMAL
+        }).
         when('/profile', {
             controller: 'profileCtrl',
             templateUrl: 'partials/profile/show.html',

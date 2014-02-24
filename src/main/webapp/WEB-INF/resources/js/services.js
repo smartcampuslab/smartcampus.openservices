@@ -303,7 +303,7 @@ services.factory('Org', ['$resource',
             },
             deleteOwner: {
                 method: 'POST',
-                url: 'api/org/manage/owner/delete/:id/:userId'
+                url: 'api/org/manage/owner/delete'
             },
             getFile: {
                 method: 'GET',
@@ -312,6 +312,10 @@ services.factory('Org', ['$resource',
             getMembers: {
                 method: 'GET',
                 url: 'api/org/members/:id'
+            },
+            enable: {
+                method: 'GET',
+                url: 'api/org/manage/owner/add/:key'
             }
         });
     }
