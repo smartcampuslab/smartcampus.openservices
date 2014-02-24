@@ -311,7 +311,7 @@ public class OrganizationController {
 						org_id, ROLES.ROLE_ORGOWNER.toString(), email);
 				// return link
 				String host = Utils.getAppURL(req); //env.getProperty("host");
-				String link = host+"api/org/manage/owner/add/" + s;
+				String link = host+"org/enable/" + s;//api/org/manage/owner/add/
 				// send it via email to user
 				mailer.sendMail(env.getProperty("email.username"),
 						email,
