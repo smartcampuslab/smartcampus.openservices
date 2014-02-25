@@ -20,6 +20,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,6 +45,7 @@ import eu.trentorise.smartcampus.openservices.managers.CategoryManager;
 @RequestMapping(value="/api/category")
 public class CategoryController {
 	
+	private static final Logger logger = LoggerFactory.getLogger(CategoryController.class);
 	/**
 	 * {@link ResponseObject} Response object contains requested data, 
 	 * status of response and if necessary a custom error message.
@@ -63,6 +66,7 @@ public class CategoryController {
 	 */
 	@RequestMapping(value="/{category}", method=RequestMethod.GET)
 	public @ResponseBody ResponseObject getCategoryById(@PathVariable int category, HttpServletResponse response) {
+		logger.info("-- Cateogry by id --");
 		responseObject = new ResponseObject();
 		Category cat = categoryManager.getCategoryById(category);
 		if(cat!=null){
@@ -84,6 +88,7 @@ public class CategoryController {
 	 */
 	@RequestMapping(method=RequestMethod.GET)
 	public @ResponseBody ResponseObject getCategories(HttpServletResponse response) {
+		logger.info("-- Cateogry List --");
 		responseObject = new ResponseObject();
 		List<Category> cat = categoryManager.getCategories();
 		if(cat!=null){
@@ -106,6 +111,7 @@ public class CategoryController {
 	 */
 	@RequestMapping(value="/add", method=RequestMethod.POST, consumes="application/json")
 	public @ResponseBody ResponseObject createCategory(@RequestBody Category category, HttpServletResponse response) {
+		logger.info("-- New Cateogry --");
 		responseObject = new ResponseObject();
 		Category cat = categoryManager.addCategory(category);
 		if(cat!=null){
@@ -128,6 +134,7 @@ public class CategoryController {
 	 */
 	@RequestMapping(value="/modify", method=RequestMethod.PUT, consumes="application/json")
 	public @ResponseBody ResponseObject modifyCategory(@RequestBody Category category, HttpServletResponse response) {
+		logger.info("-- Modify Category --");
 		responseObject = new ResponseObject();
 		Category cat = categoryManager.modifyCategory(category);
 		if(cat!=null){
@@ -150,6 +157,7 @@ public class CategoryController {
 	 */
 	@RequestMapping(value="/delete/{id}", method=RequestMethod.DELETE)
 	public ResponseObject deleteCategory(@PathVariable int category, HttpServletResponse response) {
+		logger.info("-- Delete Cateogry by id --");
 		responseObject = new ResponseObject();
 		boolean cat = categoryManager.deleteCategory(category);
 		if(cat){
