@@ -333,6 +333,7 @@ public class OrganizationManager {
 	 * @param user_id : int user id of user we want to delete
 	 * @return boolean: true if it is ok, else false
 	 * @throws SecurityException when user has not correct role
+	 * @throws UnsupportedOperationException when users try to delete themselves
 	 */
 	public boolean deleteOrgUser(String username, int org_id, int user_id) {
 		try {
