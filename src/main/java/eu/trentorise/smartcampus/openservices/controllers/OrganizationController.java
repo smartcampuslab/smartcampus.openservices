@@ -43,6 +43,7 @@ import eu.trentorise.smartcampus.openservices.entities.User;
 import eu.trentorise.smartcampus.openservices.managers.OrganizationManager;
 import eu.trentorise.smartcampus.openservices.support.ApplicationMailer;
 import eu.trentorise.smartcampus.openservices.support.EmailValidator;
+import eu.trentorise.smartcampus.openservices.support.Members;
 import eu.trentorise.smartcampus.openservices.support.UserInvitation;
 
 /**
@@ -427,7 +428,7 @@ public class OrganizationController {
 	public ResponseObject orgMembers(@PathVariable int organization_id){
 		logger.info("-- Retrieve organization members --");
 		responseObject = new ResponseObject();
-		Map<String, String> members = organizationManager.organizationMembers(organization_id);
+		List<Members> members = organizationManager.organizationMembers(organization_id);
 		if(members!=null && !members.isEmpty()){
 			responseObject.setData(members);
 			responseObject.setStatus(HttpServletResponse.SC_OK);
