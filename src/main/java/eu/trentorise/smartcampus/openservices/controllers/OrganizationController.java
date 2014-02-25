@@ -424,7 +424,7 @@ public class OrganizationController {
 		logger.info("-- Retrieve organization members --");
 		responseObject = new ResponseObject();
 		Map<String, String> members = organizationManager.organizationMembers(organization_id);
-		if(members!=null){
+		if(members!=null && !members.isEmpty()){
 			responseObject.setData(members);
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 			
