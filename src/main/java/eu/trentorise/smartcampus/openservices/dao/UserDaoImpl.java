@@ -118,7 +118,8 @@ public class UserDaoImpl implements UserDao{
 	public void modifyUser(int user_id, User user) throws DataAccessException{
 		User oldUser = getUserById(user_id);
 		//new password
-		if(user.getPassword()!=null && !oldUser.getPassword().equalsIgnoreCase(user.getPassword())){
+		if(user.getPassword()!=null && !user.getPassword().equalsIgnoreCase("") 
+				&& !oldUser.getPassword().equalsIgnoreCase(user.getPassword())){
 			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 			String encodedPassword = ((BCryptPasswordEncoder) passwordEncoder)
 					.encode(user.getPassword());
