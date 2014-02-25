@@ -16,6 +16,7 @@
 package eu.trentorise.smartcampus.openservices.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
@@ -422,7 +423,7 @@ public class OrganizationController {
 	public ResponseObject orgMembers(@PathVariable int organization_id){
 		logger.info("-- Retrieve organization members --");
 		responseObject = new ResponseObject();
-		List<User> members = organizationManager.organizationMembers(organization_id);
+		Map<String, String> members = organizationManager.organizationMembers(organization_id);
 		if(members!=null){
 			responseObject.setData(members);
 			responseObject.setStatus(HttpServletResponse.SC_OK);

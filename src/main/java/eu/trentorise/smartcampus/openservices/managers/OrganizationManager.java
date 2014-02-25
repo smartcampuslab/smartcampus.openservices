@@ -17,7 +17,9 @@
 package eu.trentorise.smartcampus.openservices.managers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.persistence.EntityNotFoundException;
@@ -351,15 +353,14 @@ public class OrganizationManager {
 	 * @param org_id
 	 * @return instances of {@link User}
 	 */
-	public List<User> organizationMembers(int org_id){
-		List<User> members = new ArrayList<User>();
+	public Map<String, String> organizationMembers(int org_id){
+		Map<String, String> members = new HashMap<String, String>();
 		try{
 			List<UserRole> urlist = urDao.getUserRoleByIdOrg(org_id);
 			User u;
 			for (int i = 0; i < urlist.size(); i++) {
 				u = userDao.getUserById(urlist.get(i).getId_user());
-				//u.setPassword("");
-				members.add(u);
+				members.put(u.getUsername(), u.getEmail());
 			}
 		}catch(DataAccessException d){
 			return null;
