@@ -222,6 +222,7 @@ public class OrganizationManager {
 	public String createInvitation(String username, int org_id, String role, String email) throws SecurityException {
 		try {
 			User user = userDao.getUserByUsername(username);
+			System.out.println("User data: "+user.getUsername()+", "+user.getPassword());
 			// check user role
 			Organization org = orgDao.getOrganizationById(org_id);
 			UserRole ur = urDao.getRoleOfUser(user.getId(), org.getId());
@@ -238,6 +239,9 @@ public class OrganizationManager {
 				entity.setEmail(email);
 				tlDao.save(entity);
 
+				User prova = userDao.getUserByUsername(username);
+				System.out.println("After tl save, username: "+prova.getUsername()+", "+prova.getPassword());
+				
 				return s;
 			}
 			throw new SecurityException();
@@ -354,7 +358,7 @@ public class OrganizationManager {
 			User u;
 			for (int i = 0; i < urlist.size(); i++) {
 				u = userDao.getUserById(urlist.get(i).getId_user());
-				u.setPassword("");
+				//u.setPassword("");
 				members.add(u);
 			}
 		}catch(DataAccessException d){
