@@ -368,10 +368,12 @@ public class OrganizationManager {
 		try{
 			List<UserRole> urlist = urDao.getUserRoleByIdOrg(org_id);
 			User u;
+			Members m = new Members();
 			for (int i = 0; i < urlist.size(); i++) {
 				u = userDao.getUserById(urlist.get(i).getId_user());
-				members.get(i).setUsername(u.getUsername());
-				members.get(i).setEmail(u.getEmail());
+				m.setUsername(u.getUsername());
+				m.setEmail(u.getEmail());
+				members.add(m);
 			}
 		}catch(DataAccessException d){
 			return null;
