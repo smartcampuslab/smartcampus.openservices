@@ -408,6 +408,10 @@ public class OrganizationController {
 			responseObject.setError("User cannot delete another owner from organization");
 			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		} catch(UnsupportedOperationException u){
+			responseObject.setError("User cannot delete herself/himself");
+			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		}
 		return responseObject;
 	}

@@ -22,12 +22,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.naming.OperationNotSupportedException;
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.NotSupportedException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.mchange.rmi.NotAuthorizedException;
 
 import eu.trentorise.smartcampus.openservices.Constants.ROLES;
 import eu.trentorise.smartcampus.openservices.dao.OrganizationDao;
@@ -336,8 +340,12 @@ public class OrganizationManager {
 			User user = userDao.getUserByUsername(username);
 			UserRole userRole = urDao.getRoleOfUser(user.getId(), org_id);
 			if (userRole.getRole().equalsIgnoreCase(ROLES.ROLE_ORGOWNER.toString())) {
-				//UserRole ur = new UserRole(user_id, org_id, ROLES.ROLE_ORGOWNER.toString());
-				urDao.deleteUserRole(urDao.getRoleOfUser(user_id, org_id));
+				//no auto-delete
+				if(user.getId()!=user_id){
+					urDao.deleteUserRole(urDao.getRoleOfUser(user_id, org_id));
+				}else{
+					throw new UnsupportedOperationException();
+				}
 				return true;
 			} else {
 				throw new SecurityException();
