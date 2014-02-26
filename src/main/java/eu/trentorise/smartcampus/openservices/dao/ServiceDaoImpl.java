@@ -359,14 +359,14 @@ public class ServiceDaoImpl implements ServiceDao{
 	@Transactional
 	@Override
 	public Long countServiceCategorySearch(int category) throws DataAccessException {
-		return (Long) getEntityManager().createQuery("FROM Service S WHERE S.category=:category AND S.state!='UNPUBLISH' ")
+		return (Long) getEntityManager().createQuery("SELECT COUNT(s) FROM Service S WHERE S.category=:category AND S.state!='UNPUBLISH' ")
 				.setParameter("category", category).getSingleResult();
 	}
 	
 	@Transactional
 	@Override
 	public Long countServiceTagsSearch(String tags) throws DataAccessException {
-		return (Long) getEntityManager().createQuery("FROM Service S WHERE S.tags LIKE :tags AND S.state!='UNPUBLISH' ")
+		return (Long) getEntityManager().createQuery("SELECT COUNT(s) FROM Service S WHERE S.tags LIKE :tags AND S.state!='UNPUBLISH' ")
 				.setParameter("tags", "%"+tags+"%").getSingleResult();
 	}
 
