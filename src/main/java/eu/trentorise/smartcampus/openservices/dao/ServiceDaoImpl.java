@@ -331,10 +331,33 @@ public class ServiceDaoImpl implements ServiceDao{
 		return res;
 	}
 
+	/**
+	 * Count all services saved in database with state different from unpublish
+	 */
 	@Transactional
 	@Override
 	public Long countService() throws DataAccessException {
-		return (Long) getEntityManager().createQuery("SELECT COUNT(s) FROM Service s WHERE s.state!='UNPUBLISH'").getSingleResult();
+		return (Long) getEntityManager().createQuery("SELECT COUNT(s) FROM Service s WHERE s.state!='UNPUBLISH'").
+				getSingleResult();
+	}
+
+	@Transactional
+	@Override
+	public Long countServiceSimpleSearch(String token) throws DataAccessException {
+		return (Long) getEntityManager().createQuery("SELECT COUNT(s) FROM Service s WHERE s.name LIKE :token AND s.state!='UNPUBLISH'")
+				.setParameter("token", "%"+token+"%").getSingleResult();
+	}
+
+	@Override
+	public Long countServiceCategorySearch() throws DataAccessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Long countServiceTagsSearch() throws DataAccessException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

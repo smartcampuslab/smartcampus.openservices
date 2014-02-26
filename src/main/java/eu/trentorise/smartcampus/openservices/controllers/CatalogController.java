@@ -183,7 +183,7 @@ public class CatalogController {
 		else{
 			responseObject.setData(services);
 			responseObject.setStatus(HttpServletResponse.SC_OK);
-			responseObject.setTotalNumber(catalogManager.countService());
+			responseObject.setTotalNumber(catalogManager.countServiceSimpleSearch(token));
 		}
 		return responseObject;
 	}
@@ -408,6 +408,12 @@ public class CatalogController {
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 		}
 		return responseObject;
+	}
+	
+	@RequestMapping(value="/search", method=RequestMethod.GET)
+	@ResponseBody
+	public void catalogSearch(){
+		
 	}
 	
 }

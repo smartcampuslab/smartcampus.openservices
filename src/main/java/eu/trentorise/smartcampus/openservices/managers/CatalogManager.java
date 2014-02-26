@@ -325,10 +325,36 @@ public class CatalogManager {
 	
 	/**
 	 * 
+	 * @param token : String
+	 * @return number of services retrieved by simple search
+	 */
+	public Long countServiceSimpleSearch(String token){
+		return serviceDao.countServiceSimpleSearch(token);
+	}
+	
+	public Long countServiceCategorySearch(){
+		return serviceDao.countServiceCategorySearch();
+	}
+	
+	public Long countServiceTagsSearch(){
+		return serviceDao.countServiceTagsSearch();
+	}
+	
+	/**
+	 * 
 	 * @return number of organizations saved in database
 	 */
 	public Long countOrg(){
 		return orgDao.countOrganization();
 	}
+	/*
+	public Long countOrgSimpleSearch(){
+		return orgDao.countOrgSimpleSearch();
+	}
+	
+	public Long countOrgCategorySearch(){
+		return orgDao.countOrgCategorySearch;
+	}
+	*/
 
 }

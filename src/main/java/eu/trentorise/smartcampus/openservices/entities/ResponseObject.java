@@ -86,7 +86,7 @@ public class ResponseObject {
 	
 	/**
 	 * 
-	 * @return tota number : int
+	 * @return tota number : Long
 	 */
 	public Long getTotalNumber() {
 		return totalNumber;
@@ -94,7 +94,7 @@ public class ResponseObject {
 
 	/**
 	 * 
-	 * @param totalNumber : int
+	 * @param totalNumber : Long
 	 */
 	public void setTotalNumber(Long totalNumber) {
 		this.totalNumber = totalNumber;

@@ -166,5 +166,18 @@ public interface ServiceDao{ //extends JpaRepository<Service, Integer>{
 	 * @throws DataAccessException
 	 */
 	public Long countService() throws DataAccessException;
+
+	/**
+	 * 
+	 * @param token : String
+	 * @return number of services retrieved by simple search
+	 * @throws DataAccessException
+	 */
+	public Long countServiceSimpleSearch(String token) throws DataAccessException;
+
+	
+	public Long countServiceCategorySearch() throws DataAccessException;
+
+	public Long countServiceTagsSearch() throws DataAccessException;
 	
 }
