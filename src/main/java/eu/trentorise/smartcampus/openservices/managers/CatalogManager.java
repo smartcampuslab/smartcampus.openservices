@@ -332,12 +332,31 @@ public class CatalogManager {
 		return serviceDao.countServiceSimpleSearch(token);
 	}
 	
+	/**
+	 * 
+	 * @param id_org : organization id
+	 * @return number of services retrieved by organization search
+	 */
 	public Long countServiceByOrgSearch(int id_org){
 		return serviceDao.countServiceByOrgSearch(id_org);
 	}
 	
-	public Long countServiceTagsSearch(){
-		return serviceDao.countServiceTagsSearch();
+	/**
+	 * 
+	 * @param tags : String ex. tag1,tag2
+	 * @return number of services retrieved by tags search
+	 */
+	public Long countServiceByTagsSearch(String tags){
+		return serviceDao.countServiceTagsSearch(tags);
+	}
+	
+	/**
+	 * 
+	 * @param category : int category id
+	 * @return number of services retrieved by category search
+	 */
+	public Long countServiceByCategorySearch(int category){
+		return serviceDao.countServiceCategorySearch(category);
 	}
 	
 	/**

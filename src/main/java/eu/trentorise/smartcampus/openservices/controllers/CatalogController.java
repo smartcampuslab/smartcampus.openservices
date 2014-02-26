@@ -211,7 +211,7 @@ public class CatalogController {
 		else{
 			responseObject.setData(services);
 			responseObject.setStatus(HttpServletResponse.SC_OK);
-			responseObject.setTotalNumber(catalogManager.countService());
+			responseObject.setTotalNumber(catalogManager.countServiceByCategorySearch(category));
 		}
 		return responseObject;
 	}
@@ -266,7 +266,7 @@ public class CatalogController {
 		else{
 			responseObject.setData(services);
 			responseObject.setStatus(HttpServletResponse.SC_OK);
-			responseObject.setTotalNumber(catalogManager.countService());
+			responseObject.setTotalNumber(catalogManager.countServiceByTagsSearch(tags));
 		}
 		return responseObject;
 	}
