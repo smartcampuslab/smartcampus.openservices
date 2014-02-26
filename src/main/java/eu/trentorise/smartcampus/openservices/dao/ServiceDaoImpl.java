@@ -349,6 +349,7 @@ public class ServiceDaoImpl implements ServiceDao{
 				.setParameter("token", "%"+token+"%").getSingleResult();
 	}
 
+	@Transactional
 	@Override
 	public Long countServiceByOrgSearch(int id_org) throws DataAccessException {
 		return (Long) getEntityManager().createQuery("SELECT COUNT(s) FROM Service S WHERE S.organizationId=:id_org")
