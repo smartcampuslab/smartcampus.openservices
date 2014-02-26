@@ -488,7 +488,10 @@ app.controller('categoryCtrl', ['$scope', '$http', '$location', 'Catalog', '$rou
         $scope.end = 9;
         $scope.update = function () {
             Catalog.browseServiceCat({
-                category: $routeParams.category
+                category: $routeParams.category,
+                start: $scope.start,
+                end: $scope.end,
+                sort: 'name'
             }, function (services) {
                 $scope.total = services.totalNumber;
                 services.data.forEach(function (e) {
