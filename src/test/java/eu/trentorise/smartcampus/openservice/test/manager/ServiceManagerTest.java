@@ -30,12 +30,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
 import eu.trentorise.smartcampus.openservices.Constants;
-import eu.trentorise.smartcampus.openservices.dao.MethodDao;
-import eu.trentorise.smartcampus.openservices.dao.ServiceDao;
-import eu.trentorise.smartcampus.openservices.entities.Method;
-import eu.trentorise.smartcampus.openservices.entities.Service;
-import eu.trentorise.smartcampus.openservices.entities.TestBoxProperties;
-import eu.trentorise.smartcampus.openservices.entities.TestInfo;
+import eu.trentorise.smartcampus.openservices.dao.*;
+import eu.trentorise.smartcampus.openservices.entities.*;
 import eu.trentorise.smartcampus.openservices.managers.ServiceManager;
 
 @RunWith(SpringJUnit4ClassRunner.class)

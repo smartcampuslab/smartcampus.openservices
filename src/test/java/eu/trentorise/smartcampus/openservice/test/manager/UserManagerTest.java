@@ -28,7 +28,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
-import eu.trentorise.smartcampus.openservices.entities.Profile;
 import eu.trentorise.smartcampus.openservices.entities.User;
 import eu.trentorise.smartcampus.openservices.managers.UserManager;
 

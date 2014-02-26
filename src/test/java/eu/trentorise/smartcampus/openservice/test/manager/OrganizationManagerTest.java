@@ -19,8 +19,6 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
-import javax.persistence.Query;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,11 +29,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
-import eu.trentorise.smartcampus.openservices.dao.OrganizationDao;
-import eu.trentorise.smartcampus.openservices.dao.UserRoleDao;
-import eu.trentorise.smartcampus.openservices.entities.Organization;
-import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
-import eu.trentorise.smartcampus.openservices.entities.UserRole;
+import eu.trentorise.smartcampus.openservices.dao.*;
+import eu.trentorise.smartcampus.openservices.entities.*;
 import eu.trentorise.smartcampus.openservices.managers.OrganizationManager;
 
 @RunWith(SpringJUnit4ClassRunner.class)
