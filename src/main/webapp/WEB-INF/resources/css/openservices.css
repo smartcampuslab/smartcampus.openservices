@@ -153,6 +153,9 @@ a {
     padding-left: 0px;
     padding-right: 0px;
 }
+#search {
+    margin-top: 60px;
+}
 #members {
     margin-top: 4%;
 }
