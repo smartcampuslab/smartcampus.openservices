@@ -45,7 +45,7 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
             access: access.public
         }).
         when('/categories/:category', {
-            controller: 'servicesCtrl',
+            controller: 'categoryCtrl',
             templateUrl: 'partials/services/list.html',
             access: access.public
         }).
@@ -59,8 +59,8 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
             templateUrl: 'partials/organization.html',
             access: access.public
         }).
-        when('/organizations/:org/services', {
-            controller: 'servicesCtrl',
+        when('/organizations/:id/services', {
+            controller: 'organizationServicesCtrl',
             templateUrl: 'partials/services/list.html',
             access: access.public
         }).

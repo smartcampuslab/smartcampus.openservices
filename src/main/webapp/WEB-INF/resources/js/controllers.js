@@ -471,9 +471,53 @@ app.controller('editOrgMembersCtrl', ['$scope', '$http', '$location', 'Org',
 
 app.controller('categoriesCtrl', ['$scope', '$http', '$location', 'Catalog',
     function ($scope, $http, $location, Catalog) {
+
         Catalog.browseAllServiceCat({}, function (data) {
             $scope.categoryData = data.data;
         });
+
+        $scope.serviceCount = function (i) {
+            return $scope.categoryData.services[i];
+        };
+    }
+]);
+
+app.controller('categoryCtrl', ['$scope', '$http', '$location', 'Catalog', '$routeParams',
+    function ($scope, $http, $location, Catalog, $routeParams) {
+        $scope.start = 0;
+        $scope.end = 9;
+        $scope.update = function () {
+            Catalog.browseServiceCat({
+                category: $routeParams.category
+            }, function (services) {
+                $scope.total = services.totalNumber;
+                services.data.forEach(function (e) {
+                    if (e.tags) {
+                        e.tags = e.tags.split(',');
+                    } else {
+                        e.tags = [];
+                    }
+                });
+                $scope.services = services.data;
+            });
+        };
+        $scope.update();
+
+        $scope.next = function () {
+            if ($scope.end < $scope.total) {
+                $scope.start += 10;
+                $scope.end += 10;
+                $scope.update();
+            }
+        };
+
+        $scope.prev = function () {
+            if ($scope.start > 0) {
+                $scope.start -= 10;
+                $scope.end -= 10;
+                $scope.update();
+            }
+        };
 
         $scope.serviceCount = function (i) {
             return $scope.categoryData.services[i];
@@ -489,20 +533,7 @@ app.controller('servicesCtrl', ['$scope', '$http', '$routeParams', 'Catalog',
         if ( !! $scope.categoryActive) {
             $scope.categoryActive = undefined;
         }
-
-        if ($routeParams.category) {
-            Catalog.browseServiceCat({
-                category: $routeParams.category
-            }, function (services) {
-                $scope.services = services.data;
-            });
-        } else if ($routeParams.org) {
-            Catalog.browseServiceOrg({
-                org: $routeParams.org
-            }, function (services) {
-                $scope.services = services.data;
-            });
-        } else {
+        $scope.update = function () {
             Catalog.listServices({
                 start: $scope.start,
                 end: $scope.end,
@@ -518,36 +549,25 @@ app.controller('servicesCtrl', ['$scope', '$http', '$routeParams', 'Catalog',
                 });
                 $scope.services = services.data;
             });
-        }
+        };
+        $scope.update();
 
         $scope.servicesActive = [];
 
-        $scope.page = function (direction) {
-
-            if (direction === 'next') {
-                if ($scope.end < $scope.total) {
-                    $scope.start += 10;
-                    $scope.end += 10;
-                }
-
-            } else {
-                if ($scope.start > 0) {
-                    $scope.start -= 10;
-                    $scope.end -= 10;
-                }
-
+        $scope.next = function () {
+            if ($scope.end < $scope.total) {
+                $scope.start += 10;
+                $scope.end += 10;
+                $scope.update();
             }
+        };
 
-            Catalog.listServices({
-                start: $scope.start,
-                end: $scope.end,
-                sort: 'name'
-            }, function (services) {
-                services.data.forEach(function (e) {
-                    e.tags = e.tags.split(',');
-                });
-                $scope.services = services.data;
-            });
+        $scope.prev = function () {
+            if ($scope.start > 0) {
+                $scope.start -= 10;
+                $scope.end -= 10;
+                $scope.update();
+            }
         };
 
         $scope.isServiceActive = function (service) {
@@ -596,27 +616,45 @@ app.controller('organizationCtrl', ['$scope', '$http', '$routeParams', 'Catalog'
     }
 ]);
 
-//app.controller('cbCtrl', ['$location',
-//    function ($location) {
-//        function parseKeyValue(keyValue) {
-//            var obj = {}, key_value, key;
-//            angular.forEach((keyValue || '').split('&'), function (keyValue) {
-//                if (keyValue) {
-//                    key_value = keyValue.split('=');
-//                    key = decodeURIComponent(key_value[0]);
-//                    obj[key] = angular.isDefined(key_value[1]) ? decodeURIComponent(key_value[1]) : true;
-//                }
-//            });
-//            return obj;
-//        }
-//
-//        var queryString = $location.url().substring(10); // preceding slash omitted
-//        var params = parseKeyValue(queryString);
-//
-//        window.opener.postMessage(params, '*');
-//        window.close();
-//    }
-//]);
+app.controller('organizationServicesCtrl', ['$scope', '$http', '$routeParams', 'Catalog',
+    function ($scope, $http, $routeParams, Catalog) {
+        $scope.start = 0;
+        $scope.end = 9;
+        $scope.update = function () {
+            Catalog.browseServiceOrg({
+                org: $routeParams.id
+            }, function (services) {
+                $scope.total = services.totalNumber;
+                services.data.forEach(function (e) {
+                    if (e.tags) {
+                        e.tags = e.tags.split(',');
+                    } else {
+                        e.tags = [];
+                    }
+                });
+                $scope.services = services.data;
+            });
+        };
+
+        $scope.update();
+
+        $scope.next = function () {
+            if ($scope.end < $scope.total) {
+                $scope.start += 10;
+                $scope.end += 10;
+                $scope.update();
+            }
+        };
+
+        $scope.prev = function () {
+            if ($scope.start > 0) {
+                $scope.start -= 10;
+                $scope.end -= 10;
+                $scope.update();
+            }
+        };
+    }
+]);
 
 app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', '$http', '$location', 'RemoteApi',
     function ($scope, $routeParams, Catalog, Category, $http, $location, RemoteApi) {

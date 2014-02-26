@@ -14,9 +14,9 @@
             <hr>
         </div>
         <ul class="pager">
-            <li ng-class="{disabled: start <= 0}"><a ng-click="page('prev')" href="">Previous</a>
+            <li ng-class="{disabled: start <= 0}"><a ng-click="next()" href="">Previous</a>
             </li>
-            <li ng-class="{disabled: end >= total}"><a ng-click="page('next')" href="">Next</a>
+            <li ng-class="{disabled: end >= total}"><a ng-click="prev()" href="">Next</a>
             </li>
         </ul>
     </div>
