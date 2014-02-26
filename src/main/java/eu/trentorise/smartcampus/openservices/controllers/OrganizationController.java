@@ -302,34 +302,43 @@ public class OrganizationController {
 		String email = data.getEmail();
 		int org_id = data.getOrg_id();
 		logger.info("Data: "+email+", "+org_id);
-		//Get username
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		responseObject = new ResponseObject();
-		//validate email
-		EmailValidator ev = new EmailValidator();
-		if(ev.validate(email)){
-			try {
-				String s = organizationManager.createInvitation(username,
-						org_id, ROLES.ROLE_ORGOWNER.toString(), email);
-				// return link
-				String host = Utils.getAppURL(req); //env.getProperty("host");
-				String link = host+"org/enable/" + s;//api/org/manage/owner/add/
-				// send it via email to user
-				mailer.sendMail(env.getProperty("email.username"),
-						email,
-						env.getProperty("org.message.object")+" "
-								+organizationManager.getOrganizationById(org_id).getName(),
-						username+" "+env.getProperty("org.message.body")+ " "+ link);
-				responseObject.setStatus(HttpServletResponse.SC_OK);
-			} catch (SecurityException s) {
-				responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-				responseObject.setError("User cannot invite other users to an organization");
+		
+		if(org_id!=0 && (!email.equalsIgnoreCase("") || email!=null) ){
+			// Get username
+			String username = SecurityContextHolder.getContext().getAuthentication().getName();
+			responseObject = new ResponseObject();
+			// validate email
+			EmailValidator ev = new EmailValidator();
+			if (ev.validate(email)) {
+				try {
+					String s = organizationManager.createInvitation(username,
+							org_id, ROLES.ROLE_ORGOWNER.toString(), email);
+					// return link
+					String host = Utils.getAppURL(req); // env.getProperty("host");
+					String link = host + "org/enable/" + s;// api/org/manage/owner/add/
+					// send it via email to user
+					mailer.sendMail(
+							env.getProperty("email.username"),
+							email,
+							env.getProperty("org.message.object")
+									+ " "
+									+ organizationManager.getOrganizationById(
+											org_id).getName(), username + " "
+									+ env.getProperty("org.message.body") + " "
+									+ link);
+					responseObject.setStatus(HttpServletResponse.SC_OK);
+				} catch (SecurityException s) {
+					responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+					responseObject.setError("User cannot invite other users to an organization");
+				}
+			} else {
+				// wrong email address - not valid
+				responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				responseObject.setError("Not valid email address");
 			}
-		}
-		else{
-			//wrong email address - not valid
+		}else{
 			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			responseObject.setError("Not valid email address");
+			responseObject.setError("Wrong input data: missing organization id or email");
 		}
 		
 		return responseObject;
@@ -380,8 +389,8 @@ public class OrganizationController {
 	 * @param user_id : int user id
 	 * @param response : : {@link HttpServletResponse} which returns status of response OK, SERVICE UNAVAILABLE 
 	 * or UNAUTHORIZED
-	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE or UNAUTHORIZED) and 
-	 * error message (if status is SERVICE UNAVAILABLE or UNAUTHORIZED).
+	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE, BAD REQUEST or UNAUTHORIZED) and 
+	 * error message (if status is SERVICE UNAVAILABLE, BAD REQUEST or UNAUTHORIZED).
 	 */
 	@RequestMapping(value = "/manage/owner/delete", method = RequestMethod.POST, consumes="application/json")
 	@ResponseBody
@@ -391,28 +400,34 @@ public class OrganizationController {
 		int org_id = data.getOrg_id();
 		int user_id  = data.getUser_id();
 		
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		//Delete connection between user and organization, where user has role ROLE_ORGOWNER
-		try {
-			boolean result = organizationManager.deleteOrgUser(username,
-					org_id, user_id);
-			responseObject = new ResponseObject();
-			if (result) {
-				responseObject.setStatus(HttpServletResponse.SC_OK);
-				response.setStatus(HttpServletResponse.SC_OK);
-			} else {
-				responseObject.setError("Connection problem with database");
-				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
-				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+		if(user_id!=0 && org_id!=0){
+			String username = SecurityContextHolder.getContext().getAuthentication().getName();
+			// Delete connection between user and organization, where user has role ROLE_ORGOWNER
+			try {
+				boolean result = organizationManager.deleteOrgUser(username,
+						org_id, user_id);
+				responseObject = new ResponseObject();
+				if (result) {
+					responseObject.setStatus(HttpServletResponse.SC_OK);
+					response.setStatus(HttpServletResponse.SC_OK);
+				} else {
+					responseObject.setError("Connection problem with database");
+					responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+					response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				}
+			} catch (SecurityException s) {
+				responseObject.setError("User cannot delete another owner from organization");
+				responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			} catch (UnsupportedOperationException u) {
+				responseObject.setError("User cannot delete herself/himself");
+				responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			}
-		} catch (SecurityException s) {
-			responseObject.setError("User cannot delete another owner from organization");
-			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-		} catch(UnsupportedOperationException u){
-			responseObject.setError("User cannot delete herself/himself");
-			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		}else{
+			responseObject.setError("Wrong data input: Missing organization id or user id");
+			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return responseObject;
 	}
