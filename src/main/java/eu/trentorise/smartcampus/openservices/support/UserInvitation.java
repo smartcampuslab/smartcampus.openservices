@@ -20,22 +20,46 @@ public class UserInvitation {
 	private int org_id;
 	private int user_id;
 	private String email;
-	
+	/**
+	 * 
+	 * @return organization id : int
+	 */
 	public int getOrg_id() {
 		return org_id;
 	}
+	/**
+	 * 
+	 * @param org_id : int
+	 */
 	public void setOrg_id(int org_id) {
 		this.org_id = org_id;
 	}
+	/**
+	 * 
+	 * @return user id : int
+	 */
 	public int getUser_id() {
 		return user_id;
 	}
+	/**
+	 * 
+	 * @param user_id : int
+	 */
 	public void setUser_id(int user_id) {
 		this.user_id = user_id;
 	}
+	/**
+	 * 
+	 * @return email : String
+	 */
 	public String getEmail() {
 		return email;
 	}
+	
+	/**
+	 * 
+	 * @param email : String
+	 */
 	public void setEmail(String email) {
 		this.email = email;
 	}
