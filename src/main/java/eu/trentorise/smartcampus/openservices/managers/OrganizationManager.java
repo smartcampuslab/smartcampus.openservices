@@ -110,7 +110,7 @@ public class OrganizationManager {
 					urDao.deleteUserRole(urElem);
 				}
 				// delete services
-				List<Service> serviceList = serviceDao.getServiceByIdOrg(orgId);
+				List<Service> serviceList = serviceDao.getServiceByIdOrg(orgId,0,0,"name");
 				if(serviceList!=null){
 					for (Service s : serviceList) {
 						serviceDao.deleteService(s);

@@ -207,10 +207,10 @@ public class CatalogManager {
 	 * @param org : id of organization
 	 * @return all {@link Service} instances
 	 */
-	public List<Service> catalogServiceBrowseByOrg(int org) {
+	public List<Service> catalogServiceBrowseByOrg(int org, int firstResult, int maxResult,String param_order) {
 		List<Service> s = new ArrayList<Service>();
 		try {
-			s = serviceDao.getServiceByIdOrg(org);
+			s = serviceDao.getServiceByIdOrg(org,firstResult, maxResult, param_order);
 			if (s != null) {
 				for (Iterator<Service> iterator = s.iterator(); iterator.hasNext();) {
 					Service service = iterator.next();
@@ -332,8 +332,8 @@ public class CatalogManager {
 		return serviceDao.countServiceSimpleSearch(token);
 	}
 	
-	public Long countServiceCategorySearch(){
-		return serviceDao.countServiceCategorySearch();
+	public Long countServiceByOrgSearch(int id_org){
+		return serviceDao.countServiceByOrgSearch(id_org);
 	}
 	
 	public Long countServiceTagsSearch(){

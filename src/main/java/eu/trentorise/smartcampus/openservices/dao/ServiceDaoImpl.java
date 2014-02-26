@@ -238,10 +238,11 @@ public class ServiceDaoImpl implements ServiceDao{
 	 */
 	@Transactional
 	@Override
-	public List<Service> getServiceByIdOrg(int id_org) throws DataAccessException{
-		Query q = getEntityManager().createQuery("FROM Service S WHERE S.organizationId=:id_org")
+	public List<Service> getServiceByIdOrg(int id_org, int firstResult,int maxResult, String param_order) 
+			throws DataAccessException{
+		Query q = getEntityManager().createQuery("FROM Service S WHERE S.organizationId=:id_org ORDER BY S."+param_order)
 				.setParameter("id_org", id_org);
-		List<Service> s = q.getResultList();
+		List<Service> s = q.setFirstResult(firstResult).setMaxResults(maxResult).getResultList();
 		return s;
 	}
 
@@ -349,9 +350,9 @@ public class ServiceDaoImpl implements ServiceDao{
 	}
 
 	@Override
-	public Long countServiceCategorySearch() throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+	public Long countServiceByOrgSearch(int id_org) throws DataAccessException {
+		return (Long) getEntityManager().createQuery("SELECT COUNT(s) FROM Service S WHERE S.organizationId=:id_org")
+				.setParameter("id_org", id_org).getSingleResult();
 	}
 
 	@Override

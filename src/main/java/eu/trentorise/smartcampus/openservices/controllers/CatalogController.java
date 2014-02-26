@@ -224,11 +224,12 @@ public class CatalogController {
 	 * @return {@link ResponseObject} with list of service data, status (OK or NOT FOUND) and 
 	 * error message (if status is NOT FOUND).
 	 */
-	@RequestMapping(value = "/service/browse/org/{org}", method = RequestMethod.GET, produces="application/json") 
+	@RequestMapping(value = "/service/browse/org/{org}/{firstResult}/{maxResult}/{param_order}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
-	public ResponseObject catalogServiceBrowseByOrg(@PathVariable int org, HttpServletResponse response){
+	public ResponseObject catalogServiceBrowseByOrg(@PathVariable int org, @PathVariable int firstResult,
+			@PathVariable int maxResult, @PathVariable String param_order, HttpServletResponse response){
 		logger.info("-- Service Catalog browse (org) --");
-		List<Service> services = catalogManager.catalogServiceBrowseByOrg(org);
+		List<Service> services = catalogManager.catalogServiceBrowseByOrg(org, firstResult, maxResult, param_order);
 		responseObject=new ResponseObject();
 		if(services==null || services.size()==0){
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -238,6 +239,7 @@ public class CatalogController {
 		else{
 			responseObject.setData(services);
 			responseObject.setStatus(HttpServletResponse.SC_OK);
+			responseObject.setTotalNumber(catalogManager.countServiceByOrgSearch(org));
 		}
 		return responseObject;
 	}

@@ -122,14 +122,21 @@ public interface ServiceDao{ //extends JpaRepository<Service, Integer>{
 	/**
 	 * Get service by organization id.
 	 * @param id_org
+	 * @param firstResult
+	 * @param maxResult
+	 * @param param_order
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
-	public List<Service> getServiceByIdOrg(int id_org) throws DataAccessException;
+	public List<Service> getServiceByIdOrg(int id_org, int firstResult, int maxResult, String param_order) 
+			throws DataAccessException;
 	
 	/**
 	 * Find services having in name the token in input
 	 * @param token
+	 * @param firstResult
+	 * @param maxResult
+	 * @param param_order
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
@@ -175,8 +182,12 @@ public interface ServiceDao{ //extends JpaRepository<Service, Integer>{
 	 */
 	public Long countServiceSimpleSearch(String token) throws DataAccessException;
 
-	
-	public Long countServiceCategorySearch() throws DataAccessException;
+	/**
+	 * @param id_org
+	 * @return number of services retrieved by searching by organization id
+	 * @throws DataAccessException
+	 */
+	public Long countServiceByOrgSearch(int id_org) throws DataAccessException;
 
 	public Long countServiceTagsSearch() throws DataAccessException;
 	
