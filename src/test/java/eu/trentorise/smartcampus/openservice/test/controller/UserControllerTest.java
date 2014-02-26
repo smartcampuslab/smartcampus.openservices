@@ -18,28 +18,17 @@ package eu.trentorise.smartcampus.openservice.test.controller;
 
 import static junit.framework.Assert.*; 
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.TestingAuthenticationToken;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.dao.ReflectionSaltSource;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
@@ -48,11 +37,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import eu.trentorise.smartcampus.openservice.test.resttemplate.RestClient;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
-import eu.trentorise.smartcampus.openservices.entities.Service;
 import eu.trentorise.smartcampus.openservices.entities.User;
-import eu.trentorise.smartcampus.openservices.securitymodel.CustomUserDetailsService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(value= {"file:src/main/webapp/WEB-INF/spring/root-context.xml",

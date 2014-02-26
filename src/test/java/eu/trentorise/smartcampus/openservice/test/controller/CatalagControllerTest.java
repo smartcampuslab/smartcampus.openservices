@@ -17,14 +17,11 @@ package eu.trentorise.smartcampus.openservice.test.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import eu.trentorise.smartcampus.openservices.entities.*;
@@ -37,10 +34,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
-import static junit.framework.Assert.assertEquals;  
-import static junit.framework.Assert.assertNotNull;  
-import static junit.framework.Assert.assertNull;  
-import static junit.framework.Assert.assertTrue; 
+import static junit.framework.Assert.*; 
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(value= {"file:src/main/webapp/WEB-INF/spring/root-context.xml",
