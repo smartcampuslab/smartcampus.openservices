@@ -153,7 +153,7 @@ services.factory('Catalog', ['$resource',
             },
             browseServiceOrg: {
                 method: 'GET',
-                url: 'api/catalog/service/browse/org/:org',
+                url: 'api/catalog/service/browse/org/:org/:start/:end/:sort',
             },
             browseAllServiceCat: {
                 method: 'GET',
@@ -552,3 +552,33 @@ services.factory('Gravatar', ['$http', '$rootScope',
         }
     }
 ]);
+
+services.service('Page', function () {
+    this.next = function (start, end, sort) {
+        if (end < total) {
+            start += 10;
+            end += 10;
+
+            Catalog.browseServiceOrg({
+                org: $routeParams.id,
+                start: $scope.start,
+                end: $scope.end,
+                sort: 'name'
+            }, function (services) {
+                $scope.total = services.totalNumber;
+                services.data.forEach(function (e) {
+                    if (e.tags) {
+                        e.tags = e.tags.split(',');
+                    } else {
+                        e.tags = [];
+                    }
+                });
+                $scope.services = services.data;
+            });
+        }
+    };
+
+    this.prev = function (start, end, sort) {
+        return "Hello, World!"
+    };
+});

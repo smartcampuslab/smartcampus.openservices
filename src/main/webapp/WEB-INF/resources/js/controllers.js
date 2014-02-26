@@ -622,7 +622,10 @@ app.controller('organizationServicesCtrl', ['$scope', '$http', '$routeParams', '
         $scope.end = 9;
         $scope.update = function () {
             Catalog.browseServiceOrg({
-                org: $routeParams.id
+                org: $routeParams.id,
+                start: $scope.start,
+                end: $scope.end,
+                sort: 'name'
             }, function (services) {
                 $scope.total = services.totalNumber;
                 services.data.forEach(function (e) {
