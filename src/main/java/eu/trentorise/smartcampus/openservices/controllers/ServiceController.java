@@ -500,7 +500,7 @@ public class ServiceController {
 	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value="/method/{method_id}", method = RequestMethod.GET, produces="application/json")
-	public @ResponseBody ResponseObject getMethodData(@PathVariable int method_id){
+	public @ResponseBody ResponseObject getMethodData(@PathVariable int method_id, HttpServletResponse response){
 		responseObject = new ResponseObject();
 		Method method = serviceManager.getMethodById(method_id);
 		if(method!=null){
@@ -509,6 +509,7 @@ public class ServiceController {
 		}else{
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			responseObject.setError("No method with this id");
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
 		return responseObject;
 	}

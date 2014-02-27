@@ -74,7 +74,8 @@ public class TestboxController {
 	 * @throws TestBoxException
 	 */
 	@RequestMapping(method=RequestMethod.POST)
-	public @ResponseBody ResponseObject/*String*/ performTest(HttpServletRequest req, @RequestBody TestInfo test) throws TestBoxException {
+	public @ResponseBody ResponseObject/*String*/ performTest(HttpServletRequest req, @RequestBody TestInfo test,
+			HttpServletResponse response) throws TestBoxException {
 		responseObject = new ResponseObject();
 		
 		if ("GET".equals(test.getRequestMethod())) {
@@ -99,6 +100,7 @@ public class TestboxController {
 		}
 		responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		responseObject.setError(new TestBoxException(HttpStatus.SC_BAD_REQUEST)+"");
+		response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		return responseObject;
 	}
 	

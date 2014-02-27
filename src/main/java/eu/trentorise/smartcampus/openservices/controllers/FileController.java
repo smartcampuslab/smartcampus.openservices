@@ -52,7 +52,8 @@ public class FileController {
 	
 	@RequestMapping(value = "upload/{organizationId}", method = RequestMethod.POST)
 	public @ResponseBody ResponseObject uploadFile(@PathVariable int organizationId, 
-			@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+			@RequestParam("file") MultipartFile file, HttpServletRequest request,
+			HttpServletResponse response) {
 		logger.info("-- FILE -- Uploading file ...");
 		
 		String dirFile = env.getProperty("filedir");
@@ -113,17 +114,21 @@ public class FileController {
 				e.printStackTrace();
 				responseObject.setError("Problem in uploading the file.");
 				responseObject.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
+				response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
+				
 			} catch (IOException e) {
 				logger.info("-- Error in uploading file, problem in reading --");
 				e.printStackTrace();
 				responseObject.setError("Error: Cannot read file.");
 				responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			}
 		}
 		else{
 			logger.info("-- Error in uploading file, file not found --");
 			responseObject.setError("File not found");
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
 		return responseObject;
 	}

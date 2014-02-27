@@ -183,7 +183,7 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/add/verify", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
-	public ResponseObject verifyEmail(@RequestBody User user, HttpServletRequest req){
+	public ResponseObject verifyEmail(@RequestBody User user, HttpServletRequest req, HttpServletResponse response){
 		logger.info("-- User verify email --");
 		responseObject = new ResponseObject();
 		try {
@@ -202,10 +202,12 @@ public class UserController {
 			else{
 				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 				responseObject.setError("Service is not available, therefore verification is failed.");
+				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 			}
 		} catch (SecurityException s) {
 			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			responseObject.setError("Your account is already enabled.");
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		}
 		responseObject.setStatus(HttpServletResponse.SC_OK);
 		return responseObject;
@@ -220,7 +222,8 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/add/enable/{key}", method = RequestMethod.GET) 
 	@ResponseBody
-	public ResponseObject enableUser(/*@PathVariable String username,*/ @PathVariable String key){
+	public ResponseObject enableUser(/*@PathVariable String username,*/ @PathVariable String key, 
+			HttpServletResponse response){
 		logger.info("-- User enable --");
 		responseObject = new ResponseObject();
 		try{
@@ -232,10 +235,12 @@ public class UserController {
 			}else{
 				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 				responseObject.setError("Connection problem with database.");
+				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 			}
 		}catch(EntityNotFoundException e){
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			responseObject.setError("Your key is wrong");
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
 		return responseObject;
 	}

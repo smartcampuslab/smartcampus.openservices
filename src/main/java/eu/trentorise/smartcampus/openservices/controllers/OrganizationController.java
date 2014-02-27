@@ -297,7 +297,7 @@ public class OrganizationController {
 	@RequestMapping(value = "/manage/owner", method = RequestMethod.POST)//, consumes="application/json")
 	@ResponseBody
 	public ResponseObject orgManageOwnerData(@RequestBody UserInvitation data,
-			HttpServletRequest req){
+			HttpServletRequest req, HttpServletResponse response){
 		logger.info("-- Manage Organization Owner --");
 		String email = data.getEmail();
 		int org_id = data.getOrg_id();
@@ -330,15 +330,18 @@ public class OrganizationController {
 				} catch (SecurityException s) {
 					responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 					responseObject.setError("User cannot invite other users to an organization");
+					response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 				}
 			} else {
 				// wrong email address - not valid
 				responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				responseObject.setError("Not valid email address");
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			}
 		}else{
 			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			responseObject.setError("Wrong input data: missing organization id or email");
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 		
 		return responseObject;
@@ -440,7 +443,7 @@ public class OrganizationController {
 	 */
 	@RequestMapping(value = "/members/{organization_id}", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseObject orgMembers(@PathVariable int organization_id){
+	public ResponseObject orgMembers(@PathVariable int organization_id, HttpServletResponse response){
 		logger.info("-- Retrieve organization members --");
 		responseObject = new ResponseObject();
 		List<Members> members = organizationManager.organizationMembers(organization_id);
@@ -451,6 +454,7 @@ public class OrganizationController {
 		}else{
 			responseObject.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			responseObject.setError("Connection problem");
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		}
 		return responseObject;
 	}
