@@ -60,7 +60,7 @@
   <div ng-hide="loc[0] === ''" class="container-fluid" id="bread">
     <ol ng-controller="breadCtrl" ng-hide="location === '/'" class="breadcrumb">
       <li ng-repeat="location in loc">
-        <a href="#">{{location}}</a>
+        <a ng-href="{{loc.slice(0,$index+1).join('/')}}">{{location}}</a>
       </li>
     </ol>
   </div>
