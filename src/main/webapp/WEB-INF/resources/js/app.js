@@ -24,11 +24,6 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
             templateUrl: 'partials/home.html',
             access: access.public
         }).
-        //        when('/callback', {
-        //            controller: 'cbCtrl',
-        //            templateUrl: 'partials/cb.html',
-        //            access: access.public
-        //        }).
         when('/services', {
             controller: 'servicesCtrl',
             templateUrl: 'partials/services/list.html',
@@ -170,6 +165,7 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
         history.push($location.$$path);
 
         $rootScope.loc = $location.path().split('/');
+        $rootScope.loc.splice(0, 1);
         if (!Auth.authorize(next.access)) {
             if (!Auth.isLoggedIn() || value === false) {
                 $location.path('/signin');
