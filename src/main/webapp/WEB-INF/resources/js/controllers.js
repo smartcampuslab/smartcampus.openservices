@@ -3,44 +3,33 @@ app.controller('homeCtrl', [
     function () {}
 ]);
 
-app.controller('navCtrl', ['$scope', '$http', 'Auth', '$location',
-    function ($scope, $http, Auth, $location) {
+app.controller('navCtrl', ['$scope', 'Auth', '$location', '$rootScope',
+    function ($scope, Auth, $location, $rootScope) {
         if (!Auth.isLoggedIn()) {
-            $scope.template = 'partials/nav/_signin.html';
+            $rootScope.navtemplate = 'partials/nav/_signin.html';
         } else {
-            $scope.template = 'partials/nav/_menu.html';
+            $rootScope.navtemplate = 'partials/nav/_menu.html';
         }
 
         $scope.logout = function () {
             Auth.logout(function () {
+                $rootScope.navtemplate = 'partials/nav/_signin.html';
                 $location.path('/');
             });
         };
     }
 ]);
 
-app.controller('breadCtrl', ['$rootScope', '$location', '$rootScope',
-    function ($scope, $location, $rootScope) {
-        // $scope.$watch('loc', function (val) {
-        //     if (val) {
-        //         var ar = val.split('/');
-        //         ar.map(function (e) {
-        //             console.log(e.charAt(0).toUpperCase())
-        //             e.charAt(0).toUpperCase() + e.slice(1);
-        //         });
-        //         console.log(ar)
-        //     }
-
-        //     $scope.location
-        // });
-    }
+app.controller('breadCtrl', [
+    function () {}
 ]);
 
-app.controller('signinCtrl', ['$scope', '$location', 'Auth',
-    function ($scope, $location, Auth) {
+app.controller('signinCtrl', ['$scope', '$location', 'Auth', '$rootScope',
+    function ($scope, $location, Auth, $rootScope) {
 
         $scope.signin = function () {
             Auth.login($scope.user, function () {
+                    $rootScope.navtemplate = 'partials/nav/_menu.html';
                     $location.path('profile');
                 }, function (error) {
                     $scope.error = error;
