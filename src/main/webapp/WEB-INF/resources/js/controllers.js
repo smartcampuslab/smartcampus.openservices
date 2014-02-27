@@ -1,10 +1,16 @@
 'use strict';
-app.controller('homeCtrl', ['$scope', '$http',
-    function ($scope, $http) {}
+app.controller('homeCtrl', [
+    function () {}
 ]);
 
 app.controller('navCtrl', ['$scope', '$http', 'Auth', '$location',
     function ($scope, $http, Auth, $location) {
+        if (!Auth.isLoggedIn()) {
+            $scope.template = 'partials/nav/_signin.html';
+        } else {
+            $scope.template = 'partials/nav/_menu.html';
+        }
+
         $scope.logout = function () {
             Auth.logout(function () {
                 $location.path('/');

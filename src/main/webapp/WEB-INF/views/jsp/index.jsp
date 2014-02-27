@@ -50,19 +50,8 @@
           <li ng-class="{active: loc[1] === 'organizations'}"><a href="organizations">Organizations</a>
           </li>
         </ul>
-        <ul class="nav navbar-nav navbar-right">
-          <li ng-show="currentUser.role.title === 'public'|| _.isEmpty(currentUser)"><a href="signin">Sign in</a> 
-          </li>
-          <li ng-show="currentUser.role.title === 'ROLE_NORMAL' || currentUser.role.title === 'ROLE_ADMIN'" class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown">Menu <b class="caret"></b></a>
-            <ul class="dropdown-menu">
-              <li><a href="profile">Profile</a>
-              </li>
-              <li class="divider"></li>
-              <li><a ng-click="logout()" href="#">Logout</a>
-              </li>
-            </ul>
-          </li>
+                <ul ng-include="template" class="nav navbar-nav navbar-right">
+
         </ul>
       </div>
     </div>
@@ -87,7 +76,7 @@
   </div>
   
   <script src="js/vendor/underscore.min.js"></script>
-  <script src="js/vendor/jquery-2.0.3.min.js"></script>
+  <script src="js/vendor/jquery-2.1.0.min.js"></script>
   <script src="js/vendor/bootstrap.min.js"></script>
   <script src="js/vendor/holder.js"></script>
   <script src="js/vendor/prism.js"></script>
