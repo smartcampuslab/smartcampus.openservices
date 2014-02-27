@@ -20,9 +20,7 @@
   <link rel="stylesheet" href="css/font-awesome.min.css" />
   <link rel="stylesheet" href="css/animate.min.css" />
   <link rel="stylesheet" href="css/prism.css" /> 
-  <link rel="stylesheet" href="css/datepicker3.css" />
-  <link rel="stylesheet" href="css/snap.css" />
-  
+  <link rel="stylesheet" href="css/datepicker3.css" />  
   
 </head>
 
@@ -94,7 +92,6 @@
   <script src="js/vendor/holder.js"></script>
   <script src="js/vendor/prism.js"></script>
   <script src="js/vendor/datepicker.js"></script>
-  <script src="js/vendor/snap.svg-min.js"></script>
   
   <script src="js/vendor/angular.min.js"></script>
   <script src="js/vendor/angular-route.min.js"></script>
