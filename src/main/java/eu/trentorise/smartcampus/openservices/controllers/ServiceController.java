@@ -85,7 +85,7 @@ public class ServiceController {
 		responseObject = new ResponseObject();
 		if(services==null || services.size()==0){
 			//response.getWriter().println("No service for this user");
-			responseObject.setError("No service for this user");
+			responseObject.setError("You have zero service");
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
@@ -110,7 +110,7 @@ public class ServiceController {
 		List<Service> services = serviceManager.getServices();
 		responseObject = new ResponseObject();
 		if(services==null || services.size()==0){
-			responseObject.setError("No services available");
+			responseObject.setError("There is no available service");
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
@@ -137,7 +137,7 @@ public class ServiceController {
 		Service service = serviceManager.getServiceById(service_id);
 		responseObject = new ResponseObject();
 		if(service==null){
-			responseObject.setError("No service with this id");
+			responseObject.setError("There is no service with this id");
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
@@ -164,7 +164,7 @@ public class ServiceController {
 		List<Method> m = serviceManager.getServiceMethodsByServiceId(service_id);
 		responseObject = new ResponseObject();
 		if(m==null || m.size()==0){
-			responseObject.setError("No methods for this service");
+			responseObject.setError("There is no method for this service");
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
@@ -191,7 +191,7 @@ public class ServiceController {
 		List<ServiceHistory> sh = serviceManager.getServiceHistoryByServiceId(service_id);
 		responseObject = new ResponseObject();
 		if(sh==null || sh.size()==0){
-			responseObject.setError("No history for this service or this service does not exist");
+			responseObject.setError("There is no history for this service");
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
@@ -234,7 +234,7 @@ public class ServiceController {
 					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				}
 			} catch (SecurityException s) {
-				responseObject.setError("Unauthorized user");
+				responseObject.setError("You are not allowed to create a new service for this organization");
 				responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			}
@@ -276,7 +276,7 @@ public class ServiceController {
 				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 			}
 		}catch(SecurityException s){
-			responseObject.setError("User must be invitated to this organizaiton");
+			responseObject.setError("User must be a member of this organizaiton");
 			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		}

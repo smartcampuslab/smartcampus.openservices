@@ -97,7 +97,7 @@ public class OrganizationController {
 		responseObject = new ResponseObject();
 		if(org==null){
 			//response.getWriter().println("No organization for this id");
-			responseObject.setError("No organization for this id");
+			responseObject.setError("There is no organization with this id");
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}else{
@@ -122,7 +122,7 @@ public class OrganizationController {
 		List<Organization> orgs = organizationManager.getUserOrganizations(username);
 		responseObject = new ResponseObject();
 		if(orgs==null || orgs.size()==0){
-			responseObject.setError("No organization for this user");
+			responseObject.setError("You have zero organization.");
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
@@ -147,7 +147,7 @@ public class OrganizationController {
 		List<Organization> orgs = organizationManager.getOrganizations(0, 100000000, "name");
 		responseObject = new ResponseObject();
 		if(orgs==null || orgs.size()==0){
-			responseObject.setError("No organization in database");
+			responseObject.setError("There is no organization");
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
@@ -174,7 +174,7 @@ public class OrganizationController {
 		List<ServiceHistory> history = organizationManager.getHistory(org_id);
 		responseObject = new ResponseObject();
 		if(history==null || history.size()==0){
-			responseObject.setError("No history found for this organization");
+			responseObject.setError("There is no history for this organization");
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
@@ -205,7 +205,7 @@ public class OrganizationController {
 			response.setStatus(HttpServletResponse.SC_CREATED);
 		}
 		else{
-			responseObject.setError("Already existing organization, change name");
+			responseObject.setError("This organization name is already in use, change it");
 			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			//response.setHeader("Error", "Wrong fields value or duplicate entries");
@@ -371,11 +371,11 @@ public class OrganizationController {
 				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 			}
 		} catch (EntityNotFoundException e) {
-			responseObject.setError("Wrong or unexisting key");
+			responseObject.setError("Your key is wrong or unexisting");
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		} catch(SecurityException s){
-			responseObject.setError("Unauthorized user");
+			responseObject.setError("You are not allowed");
 			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		}
@@ -416,7 +416,7 @@ public class OrganizationController {
 					response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 				}
 			} catch (SecurityException s) {
-				responseObject.setError("User cannot delete another owner from organization");
+				responseObject.setError("You are not allowed to delete another owner from this organization");
 				responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			} catch (UnsupportedOperationException u) {

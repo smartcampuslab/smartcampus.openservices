@@ -73,7 +73,7 @@ public class CategoryController {
 			responseObject.setData(cat);
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 		}else{
-			responseObject.setError("Connection problem or no category found");
+			responseObject.setError("No category found with this id");
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
@@ -95,7 +95,7 @@ public class CategoryController {
 			responseObject.setData(cat);
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 		}else{
-			responseObject.setError("Connection problem or no categories found");
+			responseObject.setError("There is no category");
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
@@ -118,7 +118,7 @@ public class CategoryController {
 			responseObject.setData(cat);
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 		}else{
-			responseObject.setError("Connection problem or no added category found");
+			responseObject.setError("Problem in adding a new category.");
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
@@ -141,7 +141,7 @@ public class CategoryController {
 			responseObject.setData(cat);
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 		}else{
-			responseObject.setError("Connection problem or no modified category found");
+			responseObject.setError("The category was not modified.");
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
@@ -164,7 +164,7 @@ public class CategoryController {
 			responseObject.setData(cat);
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 		}else{
-			responseObject.setError("Connection problem");
+			responseObject.setError("Category was not deleted.");
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}

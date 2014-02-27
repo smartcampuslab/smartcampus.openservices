@@ -201,11 +201,11 @@ public class UserController {
 			}
 			else{
 				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
-				responseObject.setError("Verification of user email not successful - Service Unavailable.");
+				responseObject.setError("Service is not available, therefore verification is failed.");
 			}
 		} catch (SecurityException s) {
 			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			responseObject.setError("Verification of user email not successful - Your account is already enabled.");
+			responseObject.setError("Your account is already enabled.");
 		}
 		responseObject.setStatus(HttpServletResponse.SC_OK);
 		return responseObject;
@@ -235,7 +235,7 @@ public class UserController {
 			}
 		}catch(EntityNotFoundException e){
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			responseObject.setError("Wrong key.");
+			responseObject.setError("Your key is wrong");
 		}
 		return responseObject;
 	}
