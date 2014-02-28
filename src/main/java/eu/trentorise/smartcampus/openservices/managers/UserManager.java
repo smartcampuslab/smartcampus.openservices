@@ -110,8 +110,9 @@ public class UserManager {
 			}catch(DataAccessException d){
 				return null;
 			}
+		}else{
+			throw new SecurityException();
 		}
-		return null;
 	}
 	
 	/**
