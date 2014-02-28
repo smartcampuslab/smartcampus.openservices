@@ -16,9 +16,7 @@
 
 package eu.trentorise.smartcampus.openservices.managers;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -26,19 +24,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import eu.trentorise.smartcampus.openservices.Constants.SERVICE_STATE;
-import eu.trentorise.smartcampus.openservices.dao.MethodDao;
-import eu.trentorise.smartcampus.openservices.dao.OrganizationDao;
-import eu.trentorise.smartcampus.openservices.dao.ServiceDao;
-import eu.trentorise.smartcampus.openservices.dao.ServiceHistoryDao;
-import eu.trentorise.smartcampus.openservices.dao.UserDao;
-import eu.trentorise.smartcampus.openservices.dao.UserRoleDao;
-import eu.trentorise.smartcampus.openservices.entities.Method;
-import eu.trentorise.smartcampus.openservices.entities.Service;
-import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
-import eu.trentorise.smartcampus.openservices.entities.TestBoxProperties;
-import eu.trentorise.smartcampus.openservices.entities.TestInfo;
-import eu.trentorise.smartcampus.openservices.entities.User;
-import eu.trentorise.smartcampus.openservices.entities.UserRole;
+import eu.trentorise.smartcampus.openservices.dao.*;
+import eu.trentorise.smartcampus.openservices.entities.*;
 
 /**
  * Manager that retrieves, adds, modifies and deletes Service data from database.
@@ -91,6 +78,7 @@ public class ServiceManager {
 	 */
 	@Transactional
 	public boolean createService(String username, Service service) {
+		//TODO
 		try {
 			User user = userDao.getUserByUsername(username);
 			UserRole ur = urDao.getRoleOfUser(user.getId(), service.getOrganizationId());
@@ -123,7 +111,7 @@ public class ServiceManager {
 	 */
 	@Transactional
 	public boolean updateService(String username, Service service) {
-		
+		//TODO
 		try {
 			User user = userDao.getUserByUsername(username);
 

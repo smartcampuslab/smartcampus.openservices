@@ -15,12 +15,9 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.Table;
+import java.util.List;
+
+import javax.persistence.*;
 
 /**
  * Service Entity for service table
@@ -57,8 +54,9 @@ public class Service {
 	private int organizationId;
 	@Column(name="description")
 	private String description;
-	@Column(name="tags")
+	/*@Column(name="tags")
 	private String tags;
+	*/
 	@Column(name="category")
 	private int category;
 	@Column(name="license")
@@ -78,6 +76,9 @@ public class Service {
 	@Column(name="implementation")
 	@Lob
 	private ImplementationInfo implementation;
+	
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy="id_service")
+	private List<Tag> tags;
 	
 	/**
 	 * New {@link Service} instance
@@ -138,18 +139,18 @@ public class Service {
 	 * 
 	 * @return String tags
 	 */
-	public String getTags() {
+	/*public String getTags() {
 		return tags;
 	}
-
+	*/
 	/**
 	 * 
 	 * @param tags : String
 	 */
-	public void setTags(String tags) {
+	/*public void setTags(String tags) {
 		this.tags = tags;
 	}
-
+	*/
 	/**
 	 * 
 	 * @return int category
@@ -308,5 +309,21 @@ public class Service {
 	 */
 	public void setImplementation(ImplementationInfo implementation) {
 		this.implementation = implementation;
+	}
+	
+	/**
+	 * 
+	 * @return list of {@link Tag} instances
+	 */
+	public List<Tag> getTags() {
+		return tags;
+	}
+
+	/**
+	 * 
+	 * @param tags : list of {@link Tag} instances
+	 */
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
 	}
 }
