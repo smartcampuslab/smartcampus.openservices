@@ -13,25 +13,6 @@ directives.directive('holder', [
     }
 ]);
 
-directives.directive('prism', ['$compile',
-    function ($compile) {
-        return {
-            link: function (scope, element, attrs) {
-                element.ready(function () {
-                    Prism.highlightElement(element[0]);
-                    $compile(element.contents())(scope);
-                });
-
-                scope.$watch('response', function (val) {
-                    if (val) {
-                        Prism.highlightElement(element[0]);
-                    }
-                })
-            }
-        };
-    }
-]);
-
 directives.directive('gravatar', ['Gravatar', '$compile',
     function (Gravatar, $compile) {
         return {

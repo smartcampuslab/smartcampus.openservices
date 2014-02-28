@@ -713,6 +713,16 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
             }
         };
 
+        $scope.$watch('request', function (val) {
+            if (val.sample) {
+                $scope.req = val.sample.requestMethod + ' ' + val.sample.requestPath + ' HTTP/1.1\n';
+                for (var key in val.sample.headers) {
+                    $scope.req += toTitleCase(key) + ': ' + val.sample.headers[key] + '\n';
+                }
+                $scope.req += '\n' + val.sample.requestBody;
+            }
+        }, true);
+
         $scope.send = function () {
             $scope.remoteapi = new RemoteApi($scope.service.accessInformation.authentication.accessProtocol);
             $scope.remoteapi.authorize($scope.request.method.id).then(function (result) {

@@ -1,7 +1,7 @@
 'use strict';
-var app = angular.module('openservices', ['ngRoute', 'ngCookies', 'openservices.directives', 'openservices.services']);
-app.config(['$routeProvider', '$locationProvider', '$httpProvider',
-    function ($routeProvider, $locationProvider, $httpProvider) {
+var app = angular.module('openservices', ['ngRoute', 'ngCookies', 'openservices.directives', 'openservices.services', 'hljs']);
+app.config(['$routeProvider', '$locationProvider', '$httpProvider', 'hljsServiceProvider',
+    function ($routeProvider, $locationProvider, $httpProvider, hljsServiceProvider) {
         var access = routingConfig.accessLevels;
         $locationProvider.html5Mode(true);
 
