@@ -15,6 +15,7 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.managers;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -375,5 +376,17 @@ public class CatalogManager {
 		return orgDao.countOrgCategorySearch;
 	}
 	*/
+	
+	/**
+	 * Retrieve news from database
+	 * @return list of {@link ServiceHistory} instances
+	 */
+	public List<ServiceHistory> getNews(){
+		try{
+			return shDao.getNews();
+		}catch(DataAccessException d){
+			return null; 
+		}
+	}
 
 }

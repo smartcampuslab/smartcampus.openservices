@@ -15,6 +15,7 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.dao;
 
+import java.text.ParseException;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
@@ -74,5 +75,13 @@ public interface ServiceHistoryDao {
 	 * @throws DataAccessException
 	 */
 	public List<ServiceHistory> getServiceHistoryByOrgId(int org_id) throws DataAccessException;
+	
+	/**
+	 * Get news of service within 5 days from current day
+	 * @return
+	 * @throws DataAccessException
+	 * @throws ParseException 
+	 */
+	public List<ServiceHistory> getNews() throws DataAccessException;
 
 }

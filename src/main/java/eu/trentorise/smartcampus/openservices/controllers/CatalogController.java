@@ -412,10 +412,28 @@ public class CatalogController {
 		return responseObject;
 	}
 	
-	@RequestMapping(value="/search", method=RequestMethod.GET)
+	/**
+	 * Retrieve news
+	 * @param response : {@link HttpServletResponse} which is needed for status of response (OK or NOT FOUND)
+	 * @return {@link ResponseObject} with list of service history (news), status (OK or NOT FOUND) and 
+	 * error message (if status is NOT FOUND).
+	 */
+	@RequestMapping(value="/news", method=RequestMethod.GET)
 	@ResponseBody
-	public void catalogSearch(){
-		
+	public ResponseObject catalogNews(HttpServletResponse response){
+		logger.info("-- Category Catalog browse --");
+		List<ServiceHistory> news = catalogManager.getNews();
+		responseObject = new ResponseObject();
+		if(news==null || news.size()==0){
+			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			responseObject.setError("There is no recent news");
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		}
+		else{
+			responseObject.setData(news);
+			responseObject.setStatus(HttpServletResponse.SC_OK);
+		}
+		return responseObject;
 	}
 	
 }

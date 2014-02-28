@@ -15,6 +15,9 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.dao;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -131,10 +134,45 @@ public class ServiceHistoryDaoImpl implements ServiceHistoryDao{
 	@Override
 	public List<ServiceHistory> getServiceHistoryByOrgId(int org_id)
 			throws DataAccessException {
-		getEntityManager().createQuery("FROM ServiceHistory SH WHERE SH.id_service IN (" +
+		Query q = getEntityManager().createQuery("FROM ServiceHistory SH WHERE SH.id_service IN (" +
 				"SELECT S.id FROM Service S WHERE S.organizationId=:organization_id )")
 				.setParameter("organization_id", org_id);
-		return null;
+		return (List<ServiceHistory>)q.getResultList();
+	}
+
+	/**
+	 * Retrieve news on service
+	 * 5 days before today
+	 * @throws ParseException 
+	 */
+	@Transactional
+	@Override
+	public List<ServiceHistory> getNews() throws DataAccessException{
+		Date now = new Date();
+		System.out.println("Now + 1 days: "+now);
+		
+		Date start = now;
+		start.setTime(start.getTime() - (5 * 1000L * 60L * 60L * 24L ));
+		System.out.println("Start - 6 days: "+start);
+		/*
+		Query q = getEntityManager().createQuery("FROM ServiceHistory s WHERE s.date >= NOW() - INTERVAL 5 DAY " +
+				"AND s.id = ( SELECT MAX(s1.id) FROM ServiceHistory s1 WHERE s1.operation=s.operation " +
+				"AND s1.id_service=s.id_service AND s1.id_serviceMethod=s.id_serviceMethod " +
+				"AND s1.date >= NOW() - INTERVAL 5 DAY)");
+		*/
+		
+		Query q = getEntityManager().createQuery("FROM ServiceHistory S WHERE S.date BETWEEN :start AND " +
+				"NOW() " +
+				"AND S.id = ( SELECT MAX(S1.id) FROM ServiceHistory S1 WHERE S1.operation = S.operation " +
+				"AND S1.id_service = S.id_service AND S1.id_serviceMethod = S.id_serviceMethod " +
+				"AND S1.date BETWEEN :start AND " +
+				"NOW() )")
+				.setParameter("start", start)
+				;//.setParameter("end", now);
+		
+		List<ServiceHistory> news = q.getResultList();
+		System.out.println("News size: "+news.size());
+		return news;
 	}
 
 }
