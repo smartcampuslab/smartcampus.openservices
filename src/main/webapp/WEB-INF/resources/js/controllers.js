@@ -40,12 +40,12 @@ app.controller('signinCtrl', ['$scope', '$location', 'Auth', '$rootScope',
     }
 ]);
 
-app.controller('signUpCtrl', ['$scope', '$location', 'User',
-    function ($scope, $location, User) {
+app.controller('signUpCtrl', ['$scope', 'User',
+    function ($scope, User) {
         $scope.user = new User();
         $scope.submit = function () {
             $scope.user.$save($scope.user, function () {
-                $location.path('signin');
+                $scope.success = true;
             }, function (data) {
                 $scope.error = data.data.error;
             });
