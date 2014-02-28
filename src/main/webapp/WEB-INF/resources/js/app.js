@@ -99,7 +99,7 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
             templateUrl: 'partials/profile/services/edit.html',
             access: access.ROLE_NORMAL
         }).
-        when('/profile/services/:id/view', {
+        when('/profile/services/:id', {
             controller: 'viewServiceCtrl',
             templateUrl: 'partials/profile/services/view.html',
             access: access.ROLE_NORMAL
