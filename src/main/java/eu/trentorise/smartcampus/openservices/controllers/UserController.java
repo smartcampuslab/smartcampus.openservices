@@ -130,8 +130,8 @@ public class UserController {
 	 * @param user : {@link User} instance
 	 * @param response : {@link HttpServletResponse} which returns status of response CREATED, FORBIDDEN or 
 	 * SERVICE UNAVAILABLE
-	 * @return {@link ResponseObject} with new user data, status (CREATED, FORBIDDEN or SERVICE UNAVAILABLE) and 
-	 * error message (if status is FORBIDDEN or SERVICE UNAVAILABLE).
+	 * @return {@link ResponseObject} with new user data, status (OK, FORBIDDEN, BAD REQUEST or 
+	 * SERVICE UNAVAILABLE) and error message (if status is FORBIDDEN, BAD REQUEST or SERVICE UNAVAILABLE).
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
@@ -155,19 +155,25 @@ public class UserController {
 			}
 			else{
 				String host = Utils.getAppURL(req);//env.getProperty("host");
-				User newUser = userManager.createUser(user, host, env.getProperty("email.username"),
-						env.getProperty("user.message.object"),env.getProperty("user.message.body"));
-				if(newUser!=null){
-					responseObject.setData(newUser);
-					responseObject.setStatus(HttpServletResponse.SC_CREATED);
-					//verify email
-					//verifyEmail(newUser, req);
-					response.setStatus(HttpServletResponse.SC_CREATED);
-				}
-				else{
-					responseObject.setError("Connection problem with database or duplicate email");
-					responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
-					response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				try {
+					User newUser = userManager.createUser(user, host,
+							env.getProperty("email.username"),
+							env.getProperty("user.message.object"),
+							env.getProperty("user.message.body"));
+					if (newUser != null) {
+						//responseObject.setData(newUser);
+						responseObject.setStatus(HttpServletResponse.SC_OK);
+						// verify email
+						// verifyEmail(newUser, req);
+					} else {
+						responseObject.setError("Connection problem with database or duplicate email");
+						responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+						response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+					}
+				} catch (SecurityException s) {
+					responseObject.setError("Duplicate email");
+					responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				}
 			}
 		}
