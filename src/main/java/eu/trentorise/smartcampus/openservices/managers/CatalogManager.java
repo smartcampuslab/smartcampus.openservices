@@ -21,6 +21,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
@@ -38,6 +40,7 @@ import eu.trentorise.smartcampus.openservices.entities.Organization;
 import eu.trentorise.smartcampus.openservices.entities.Service;
 import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
 import eu.trentorise.smartcampus.openservices.support.CategoryServices;
+import eu.trentorise.smartcampus.openservices.support.TagCounter;
 
 /**
  * Manager that retrieves data about service and organization for 
@@ -387,6 +390,34 @@ public class CatalogManager {
 		}catch(DataAccessException d){
 			return null; 
 		}
+	}
+	
+	/**
+	 * Retrieve counter of tags
+	 * @return a list of {@link TagCounter} instances
+	 */
+	public List<TagCounter> getTagsServicesCounter() {
+		List<TagCounter> list = new ArrayList<TagCounter>();
+		try {
+			Map<String, Integer> tags = serviceDao.findTagServices();
+			if(!tags.isEmpty()){
+				Iterator<Map.Entry<String, Integer>> iter = tags.entrySet().iterator();
+				while (iter.hasNext()) {
+					String key = iter.next().getKey();
+					TagCounter tc = new TagCounter();
+					tc.setTag(key);
+					tc.setCounter(tags.get(key));
+					list.add(tc);
+				}
+			}else{
+				throw new EntityNotFoundException();
+			}
+			
+		} catch (DataAccessException d) {
+			list = null;
+		}
+		return list;
+		
 	}
 
 }
