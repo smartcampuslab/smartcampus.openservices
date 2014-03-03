@@ -205,4 +205,11 @@ public interface ServiceDao{ //extends JpaRepository<Service, Integer>{
 	 */
 	public Long countServiceCategorySearch(int category) throws DataAccessException;
 	
+	/**
+	 * 
+	 * @return Map<String, Integer>: tag name, number of services for each tag;
+	 * @throws DataAccessException
+	 */
+	public Map<String,Integer> findTagServices() throws DataAccessException;
+	
 }

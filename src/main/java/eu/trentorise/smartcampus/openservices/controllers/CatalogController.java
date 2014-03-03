@@ -17,6 +17,7 @@ package eu.trentorise.smartcampus.openservices.controllers;
 
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
@@ -432,6 +433,36 @@ public class CatalogController {
 		else{
 			responseObject.setData(news);
 			responseObject.setStatus(HttpServletResponse.SC_OK);
+		}
+		return responseObject;
+	}
+	
+	/**
+	 * Retrieve tag counter
+	 * @param response : {@link HttpServletResponse} which is needed for status of response (OK, BAD REQUEST 
+	 * or NOT FOUND)
+	 * @return {@link ResponseObject} with list of tag counter, status (OK, BAD REQUEST or NOT FOUND) and 
+	 * error message (if status is NOT FOUND or BAD REQUEST).
+	 */
+	@RequestMapping(value="/tagcloud", method=RequestMethod.GET)
+	@ResponseBody
+	public ResponseObject catalogTag(HttpServletResponse response){
+		logger.info("-- Tag counter --");
+		try{
+			List<TagCounter> tglist = catalogManager.getTagsServicesCounter();
+			responseObject = new ResponseObject();
+			if (tglist == null || tglist.size() == 0) {
+				responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				responseObject.setError("There is a problem in connecting with database");
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			} else {
+				responseObject.setData(tglist);
+				responseObject.setStatus(HttpServletResponse.SC_OK);
+			}
+		}catch(EntityNotFoundException e){
+			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			responseObject.setError("There is no tags");
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
 		return responseObject;
 	}
