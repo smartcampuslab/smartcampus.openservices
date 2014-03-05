@@ -1,18 +1,18 @@
 <div class="row">
   <div class="col-md-8 col-md-offset-2">
-      <div class="col-md-3" ng-repeat="category in categoryData.categories">
-        <div class="thumbnail">
-          <div class="caption">
-            <h4>
-              <a href="categories/{{category.id}}" >{{category.name}}</a>
-            </h4>
-            <p>{{category.description}}</p>
-            <p>
-              <em>{{serviceCount($index)}} services</em>
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="clearfix visible-md"></div>
+    <div ng-repeat="category in categoryData.categories">
+      <h1>
+        <a ng-href="categories/{{category.id}}">
+          {{category.name}}
+        </a>
+
+      </h1>
+      <blockquote>
+        <p>{{category.description}};
+          <em>{{serviceCount($index)}} services</em>
+        </p>
+      </blockquote>
+    </div>
+
   </div>
 </div>
