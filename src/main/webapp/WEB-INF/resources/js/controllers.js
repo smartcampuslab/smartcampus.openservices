@@ -233,6 +233,7 @@ app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Servi
             if ($scope.service.expiration) {
                 $scope.service.expiration = new Date($scope.service.expiration).getTime();
             }
+            $scope.service.tags = $scope.service.tags.split(',');
             Service.update($scope.service, function () {
                 $location.path('profile/services/' + $routeParams.id + '/view');
             });
