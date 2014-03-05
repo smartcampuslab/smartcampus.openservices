@@ -1,18 +1,16 @@
 <div class="row">
   <div class="col-md-8 col-md-offset-2">
-    <section id="grid" class="grid clearfix">
-      <a ng-repeat="org in orgs" ng-href="organizations/{{org.id}}" data-path-hover="m 180,34.57627 -180,0 L 0,0 180,0 z">
-        <figure>
-          <img ng-src="{{org.logo}}" />
-          <svg viewBox="0 0 180 320" preserveAspectRatio="none">
-            <path d="M 180,160 0,218 0,0 180,0 z" />
-          </svg>
-          <figcaption>
-            <h2>{{org.name}}</h2>
-            <p>{{org.description}}</p>
-          </figcaption>
-        </figure>
-      </a>
-    </section>
+    <div ng-repeat="org in orgs">
+      <h1>
+        <a ng-href="organizations/{{org.id}}">
+          {{org.name}}
+        </a>
+
+      </h1>
+      <blockquote>
+        <p>{{org.description}}</p>
+      </blockquote>
+    </div>
+
   </div>
 </div>
