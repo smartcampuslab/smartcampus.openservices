@@ -553,32 +553,10 @@ services.factory('Gravatar', ['$http', '$rootScope',
     }
 ]);
 
-services.service('Page', function () {
-    this.next = function (start, end, sort) {
-        if (end < total) {
-            start += 10;
-            end += 10;
-
-            Catalog.browseServiceOrg({
-                org: $routeParams.id,
-                start: $scope.start,
-                end: $scope.end,
-                sort: 'name'
-            }, function (services) {
-                $scope.total = services.totalNumber;
-                services.data.forEach(function (e) {
-                    if (e.tags) {
-                        e.tags = e.tags.split(',');
-                    } else {
-                        e.tags = [];
-                    }
-                });
-                $scope.services = services.data;
-            });
-        }
-    };
-
-    this.prev = function (start, end, sort) {
-        return "Hello, World!"
-    };
-});
+services.factory('Bread', ['$location',
+    function ($location) {
+        var loc = $location.path().split('/');
+        loc.splice(0, 1);
+        return loc;
+    }
+]);
