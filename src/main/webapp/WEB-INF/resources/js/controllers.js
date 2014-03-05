@@ -1,6 +1,10 @@
 'use strict';
-app.controller('homeCtrl', [
-    function () {}
+app.controller('homeCtrl', ['$http', '$scope',
+    function ($http, $scope) {
+        $http.get('api/catalog/news').success(function (data) {
+            $scope.news = data.data;
+        });
+    }
 ]);
 
 app.controller('navCtrl', ['$scope', 'Auth', '$location', '$rootScope',
