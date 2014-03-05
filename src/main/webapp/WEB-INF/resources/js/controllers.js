@@ -489,13 +489,6 @@ app.controller('categoryCtrl', ['$scope', '$http', '$location', 'Catalog', '$rou
                 sort: 'name'
             }, function (services) {
                 $scope.total = services.totalNumber;
-                services.data.forEach(function (e) {
-                    if (e.tags) {
-                        e.tags = e.tags.split(',');
-                    } else {
-                        e.tags = [];
-                    }
-                });
                 $scope.services = services.data;
             });
         };
@@ -619,13 +612,6 @@ app.controller('organizationServicesCtrl', ['$scope', '$http', '$routeParams', '
                 sort: 'name'
             }, function (services) {
                 $scope.total = services.totalNumber;
-                services.data.forEach(function (e) {
-                    if (e.tags) {
-                        e.tags = e.tags.split(',');
-                    } else {
-                        e.tags = [];
-                    }
-                });
                 $scope.services = services.data;
             });
         };
