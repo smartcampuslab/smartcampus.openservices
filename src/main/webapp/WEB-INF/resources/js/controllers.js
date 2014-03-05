@@ -538,13 +538,6 @@ app.controller('servicesCtrl', ['$scope', '$http', '$routeParams', 'Catalog',
                 sort: 'name'
             }, function (services) {
                 $scope.total = services.totalNumber;
-                services.data.forEach(function (e) {
-                    if (e.tags) {
-                        e.tags = e.tags.split(',');
-                    } else {
-                        e.tags = [];
-                    }
-                });
                 $scope.services = services.data;
             });
         };
