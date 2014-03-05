@@ -20,7 +20,7 @@ directives.directive('gravatar', ['Gravatar', '$compile',
             link: function (scope, element, attrs) {
                 attrs.$observe('gravatar', function (email) {
                     if (email) {
-                        var html = '<img class="media-object dp img-circle" style="width: ' + attrs.size + 'px;height:' + attrs.size + 'px;" src="' + Gravatar.picture(attrs.size, email) + '" />';
+                        var html = '<img class="img-responsive img-circle" style="width: ' + attrs.size + 'px;height:' + attrs.size + 'px;" src="' + Gravatar.picture(attrs.size, email) + '" />';
                         var e = $compile(html)(scope);
                         element.replaceWith(e);
                     }
