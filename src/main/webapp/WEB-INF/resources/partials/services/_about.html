@@ -1,20 +1,22 @@
 <div class="row">
     <div class="col-md-12">
         <br>
-        <h3>
-            <small>Organization:</small>{{org.name}}</h3>
-        <h3>
-            <small>Tags:</small>{{service.tags}}</h3>
-        <h3>
-            <small>Category:</small>{{category.name}}</h3>
-        <h3>
+        <h4>
+            <small>Organization:</small>{{org.name}}</h4>
+        <h4>
+            <small>Tags:</small>
+            <em ng-repeat="tag in service.tags">{{tag}}</em>
+        </h4>
+        <h4>
+            <small>Category:</small>{{category.name}}</h4>
+        <h4>
             <small>Documentation:</small> <a ng-href="{{service.documentation}}">{{service.documentation}}</a>
-        </h3>
-        <h3>
-            <small>License:</small>{{service.license}}</h3>
-        <h3>
-            <small>Version:</small>{{service.version}}</h3>
-        <h3>
-            <small>Expiration:</small>{{service.expiration| date:'yyyy-MM-dd'}}</h3>
+        </h4>
+        <h4>
+            <small>License:</small>{{service.license}}</h4>
+        <h4>
+            <small>Version:</small>{{service.version}}</h4>
+        <h4>
+            <small>Expiration:</small>{{service.expiration| date:'yyyy-MM-dd'}}</h4>
     </div>
 </div>
