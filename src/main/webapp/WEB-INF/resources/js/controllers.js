@@ -199,6 +199,7 @@ app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service', 'Or
 app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Service', 'Org', 'Category',
     function ($scope, $routeParams, $location, Service, Org, Category) {
         $scope.protocols = ['OAuth2', 'OpenID', 'Public'];
+        $scope.formats = ['json', 'xml', 'yaml', 'txt'];
         $scope.accessInformation = {
             authentication: {
                 accessProtocol: null,
@@ -237,9 +238,11 @@ app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Servi
             if ($scope.service.expiration) {
                 $scope.service.expiration = new Date($scope.service.expiration).getTime();
             }
-            $scope.service.tags = $scope.service.tags.split(',');
+            if ($scope.service.tags.length >= 1)
+                $scope.service.tags = $scope.service.tags.split(',');
+
             Service.update($scope.service, function () {
-                $location.path('profile/services/' + $routeParams.id + '/view');
+                $location.path('profile/services/' + $routeParams.id);
             });
         };
     }

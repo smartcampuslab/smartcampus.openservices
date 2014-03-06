@@ -17,7 +17,7 @@
             </div>
             <div class="form-group">
                 <label for="tags">Tags (comma separated)</label>
-                <input type="text" class="form-control" id="tags" placeholder="tag1,tag2" ng-model="service.tags">
+                <input type="text" class="form-control" id="tags" placeholder="tag1,tag2" ng-model="service.tags" required>
             </div>
             <div class="form-group">
                 <label for="category">Category</label>
@@ -63,7 +63,7 @@
                     </div>
                     <div class="form-group">
                         <label for="formats">Formats</label>
-                        <input type="text" class="form-control" id="formats" placeholder="json, xml" ng-model="service.accessInformation.formats">
+                        <select ng-options="format for format in formats" id="formats" class="form-control" ng-model="service.accessInformation.formats" />
                     </div>
                     <div class="form-group">
                         <label for="protocols">Protocols</label>
@@ -120,7 +120,7 @@
                         </div>
                         <div class="form-group">
                             <label for="clientid">Client Secret</label>
-                            <input type="text" class="form-control" id="clientid" placeholder="fcb1cb23-12a3-1234-1f23-12a3f45e6789" ng-model="accessInformation.authentication.accessAttributes.client_secret">
+                            <input ng-disabled="accessInformation.authentication.accessAttributes.grant_type !== 'implicit'" type="text" class="form-control" id="clientid" placeholder="fcb1cb23-12a3-1234-1f23-12a3f45e6789" ng-model="accessInformation.authentication.accessAttributes.client_secret">
                         </div>
                         <div class="form-group">
                             <label for="scope">Scope (comma separated)</label>
