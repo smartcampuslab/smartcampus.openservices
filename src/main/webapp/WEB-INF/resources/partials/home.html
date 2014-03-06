@@ -13,7 +13,7 @@
   <div class="col-md-12">
     <br>
     <ul class="timeline">
-      <li ng-repeat="entry in news" ng-class="{'timeline-inverted': $index % 2 !== 0}">
+      <li ng-repeat="entry in news|limitTo:3" ng-class="{'timeline-inverted': $index % 2 !== 0}">
         <div class="timeline-badge primary">
         </div>
         <div class="timeline-panel">
