@@ -38,15 +38,15 @@
 
       <div ng-controller="navCtrl" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-		  <li ng-class="{active: loc[1] === 'whishlist'}"><a href="#">Whishlist</a>
+		  <li ng-class="{active: loc[0] === 'whishlist'}"><a href="#">Whishlist</a>
           </li>
-          <li ng-class="{active: loc[1] === 'apps'}"><a href="#">Apps</a>
+          <li ng-class="{active: loc[0] === 'apps'}"><a href="#">Apps</a>
           </li>
-          <li ng-class="{active: loc[1] === 'services'}"><a href="services">Services</a>
+          <li ng-class="{active: loc[0] === 'services'}"><a href="services">Services</a>
           </li>
-          <li ng-class="{active: loc[1] === 'categories'}"><a href="categories">Categories</a>
+          <li ng-class="{active: loc[0] === 'categories'}"><a href="categories">Categories</a>
           </li>
-          <li ng-class="{active: loc[1] === 'organizations'}"><a href="organizations">Organizations</a>
+          <li ng-class="{active: loc[0] === 'organizations'}"><a href="organizations">Organizations</a>
           </li>
         </ul>
         <ul ng-include="navtemplate" class="nav navbar-nav navbar-right">
@@ -77,7 +77,6 @@
   <script src="js/vendor/underscore.min.js"></script>
   <script src="js/vendor/jquery-2.1.0.min.js"></script>
   <script src="js/vendor/bootstrap.min.js"></script>
-  <script src="js/vendor/holder.js"></script>
   <script src="js/vendor/datepicker.js"></script>
   <script src="js/vendor/highlight.pack.js"></script>
   
