@@ -22,7 +22,7 @@
         	<url>http://repo.springsource.org/libs-milestone</url>
     	</repository>
 	</repositories>
-	<!-- Spring data Solr profile 
+	<!-- Spring data Solr profile -->
 	<profiles>
 		<profile>
 			<id>dev</id>
@@ -36,7 +36,7 @@
 				<build.profile.id>prod</build.profile.id>
 			</properties>
 		</profile>
-	</profiles> -->
+	</profiles> 
 	
 	<dependencies>
 		<!-- Spring -->

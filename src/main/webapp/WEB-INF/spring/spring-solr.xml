@@ -9,7 +9,7 @@
     <context:property-placeholder location="classpath:openservice.properties"/>
 
     <!-- Enable Solr repositories and configure repository base package -->
-    <solr:repositories base-package="eu.trentorise.smartcampus.openservices.spring.datasolr.todo.repository.solr"/>
+    <solr:repositories base-package="eu.trentorise.smartcampus.openservices.solr"/>
 
     <!-- Bean definitions for the dev profile -->
     <beans profile="dev">

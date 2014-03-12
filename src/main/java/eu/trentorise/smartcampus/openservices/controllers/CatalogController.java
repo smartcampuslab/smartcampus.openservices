@@ -43,7 +43,7 @@ import eu.trentorise.smartcampus.openservices.support.*;
 @RequestMapping(value="/api/catalog")
 public class CatalogController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(ServiceController.class);
+	private static final Logger logger = LoggerFactory.getLogger(CatalogController.class);
 	/**
 	 * {@link ResponseObject} Response object contains requested data, 
 	 * status of response and if necessary a custom error message.
