@@ -15,7 +15,6 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.managers;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -26,7 +25,6 @@ import javax.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import eu.trentorise.smartcampus.openservices.Constants.SERVICE_STATE;
 import eu.trentorise.smartcampus.openservices.dao.MethodDao;
@@ -76,7 +74,7 @@ public class CatalogManager {
 	 */
 	@Autowired
 	private CategoryManager categoryManager;
-	
+
 	/**
 	 * Get list of published and deprecated services
 	 * @return all {@link Service} instances
