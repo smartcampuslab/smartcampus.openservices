@@ -16,6 +16,7 @@
 package eu.trentorise.smartcampus.openservices.controllers;
 
 import java.io.IOException;
+import java.net.ConnectException;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -216,27 +217,6 @@ public class HomeController {
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login(HttpServletRequest request, HttpServletResponse response){
 		logger.info("-- Perform Login --");
-		/*String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		User user = userManager.getUserByUsername(username);
-		if(user!=null){
-			user.setPassword(null);
-			Cookie[] cookies = request.getCookies();
-			String name;
-			if(cookies!=null){
-				for (int i = 0; i < cookies.length; i++) {
-					name = cookies[i].getName();
-					if(name.equalsIgnoreCase("value")){
-					cookies[i].setValue("true");
-					}
-					response.addCookie(cookies[i]);
-				}
-			}
-			return user;
-		}
-		else{
-			//response.sendError(401);
-			return null;
-		}*/
 		return "index";
 	}
 	
@@ -291,5 +271,15 @@ public class HomeController {
 		}
 		return "index";
 	}
-	
+	/*
+	@ExceptionHandler(ConnectException.class)
+	@ResponseBody
+	public ResponseObject catchException(HttpServletResponse response){
+		responseObjetc = new ResponseObject();
+		responseObjetc.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+		responseObjetc.setError("We are sorry but now server is down.");
+		response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+		return responseObjetc;
+	}
+	*/
 }
