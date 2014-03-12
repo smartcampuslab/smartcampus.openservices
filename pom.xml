@@ -13,6 +13,31 @@
 		<org.aspectj-version>1.6.10</org.aspectj-version>
 		<org.slf4j-version>1.6.6</org.slf4j-version>
 	</properties>
+	
+	<!-- Spring data solr repository -->
+	<repositories>
+    	<repository>
+       		<id>spring-milestone</id>
+        	<name>Spring Milestone Maven Repository</name>
+        	<url>http://repo.springsource.org/libs-milestone</url>
+    	</repository>
+	</repositories>
+	<!-- Spring data Solr profile 
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<properties>
+				<build.profile.id>dev</build.profile.id>
+			</properties>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<properties>
+				<build.profile.id>prod</build.profile.id>
+			</properties>
+		</profile>
+	</profiles> -->
+	
 	<dependencies>
 		<!-- Spring -->
 		<dependency>
@@ -108,15 +133,6 @@
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
-		
-
-		<!-- Test -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.7</version>
-			<scope>test</scope>
-		</dependency>
 
 		<!-- Spring Security -->
 		<dependency>
@@ -193,17 +209,6 @@
 	    	<artifactId>mail</artifactId>
 	    	<version>1.4.7</version>
     	</dependency>
-    	<!-- Thymeleaf for .html static page -->
-    	<dependency>
-    		<groupId>org.thymeleaf</groupId>
-    		<artifactId>thymeleaf</artifactId>
-    		<version>2.1.1.RELEASE</version>
-    	</dependency>
-    	<dependency>
-    		<groupId>org.thymeleaf</groupId>
-    		<artifactId>thymeleaf-spring3</artifactId>
-    		<version>2.1.1.RELEASE</version>
-    	</dependency>
     	
    		 <dependency>
 			<groupId>com.mchange</groupId>
@@ -245,6 +250,12 @@
 		</dependency>
 		
 		<!-- For test JUnit -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.7</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.hamcrest</groupId>
 			<artifactId>hamcrest-all</artifactId>
@@ -298,9 +309,30 @@
 			<scope>test</scope>
 		</dependency>
 		
+		<!-- Spring data solr -->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-solr</artifactId>
+			<version>1.1.0.RELEASE</version>
+		</dependency>
+		<!-- Spring data solr for embedded solr server -->
+		<dependency>
+			<groupId>org.apache.solr</groupId>
+			<artifactId>solr-core</artifactId>
+			<version>4.2.0</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-jdk14</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
 	</dependencies>
 	<build>
+		
 		<plugins>
+		
 			<plugin>
 				<artifactId>maven-eclipse-plugin</artifactId>
 				<version>2.9</version>
@@ -336,13 +368,26 @@
 				</configuration>
 			</plugin>
 			<plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.6</version>
-        <configuration>
-          <skipTests>true</skipTests>
-        </configuration>
-      </plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-surefire-plugin</artifactId>
+       			<version>2.6</version>
+       			<configuration>
+          			<skipTests>true</skipTests>
+        		</configuration>
+      		</plugin>
+      		
+      		<!-- Spring data solr -->
+      		<plugin>
+     			<groupId>org.apache.tomcat.maven</groupId>
+     			<artifactId>tomcat7-maven-plugin</artifactId>
+     			<version>2.2</version>
+    			<configuration>
+        			<stopKey>todostop</stopKey>
+         			<stopPort>9999</stopPort>
+         			<systemPropertiesFile>${project.basedir}/profiles/${build.profile.id}/system.properties</systemPropertiesFile>
+     			</configuration>
+ 			</plugin> 
+      
 		</plugins>
 		<finalName>openservice</finalName>
 	</build>
