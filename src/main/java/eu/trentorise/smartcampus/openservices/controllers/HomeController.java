@@ -208,21 +208,42 @@ public class HomeController {
 	}
 	
 	/**
-	 * Login view which is in this case home jsp.
-	 * @param request : {@link HttpServletRequest} DO NOTHING NOW
-	 * @param response : {@link HttpServletResponse} DO NOTHING NOW
-	 * @return index jsp
-	 * @throws IOException
+	 * Login rest, checking if cookie already exists and change their value.
+	 * @param request : {@link HttpServletRequest}
+	 * @param response : {@link HttpServletResponse} 
+	 * @return a {@link ResponseObject} with status (UNAUTHORIZED) and error (You have to sign in)
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseObject login(HttpServletRequest request, HttpServletResponse response){
 		logger.info("-- Perform Login --");
+		
+		//Check if cookies exist and change it
+		Cookie cookie = new Cookie("value", "false");
+		cookie.setPath("/openservice/");
+		
+		Cookie[] cookies = request.getCookies();
+		String name;
+		if(cookies!=null){
+			for (int i = 0; i < cookies.length; i++) {
+				name = cookies[i].getName();
+				System.out.println("Found cookies: "+i+", name: "+name);
+				if(name.equalsIgnoreCase("value")){
+					cookies[i].setValue("false");
+					cookies[i].setPath("/openservice/");
+					response.addCookie(cookies[i]);
+				}
+				if(name.equalsIgnoreCase("user")){
+					cookies[i].setValue(null);
+					response.addCookie(cookies[i]);
+				}
+			}
+		}
+		
 		responseObjetc = new ResponseObject();
-		responseObjetc.setError("You have to sign up");
+		responseObjetc.setError("You have to sign in");
 		responseObjetc.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-		//return "index";
 		return responseObjetc;
 	}
 	
