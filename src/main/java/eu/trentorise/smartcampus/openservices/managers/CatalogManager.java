@@ -16,6 +16,7 @@
 package eu.trentorise.smartcampus.openservices.managers;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -233,7 +234,7 @@ public class CatalogManager {
 	 * @param tags : String tags for searching in service tags
 	 * @return all {@link Service} instances
 	 */
-	public HashSet<Service> catalogServiceBrowseByTags(String tags, int firstResult, int maxResult, String param_order) {
+	public Collection<Service> catalogServiceBrowseByTags(String tags, int firstResult, int maxResult, String param_order) {
 		System.out.println("Tag manager");
 		String[] listTags = tags.split(",");
 		System.out.println("List "+listTags[0]);

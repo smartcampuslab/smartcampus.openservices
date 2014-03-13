@@ -33,10 +33,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import eu.trentorise.smartcampus.openservices.Constants.SERVICE_STATE;
 import eu.trentorise.smartcampus.openservices.entities.Method;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
-import eu.trentorise.smartcampus.openservices.entities.Service;
 import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
 import eu.trentorise.smartcampus.openservices.entities.TestInfo;
 import eu.trentorise.smartcampus.openservices.managers.ServiceManager;
+import eu.trentorise.smartcampus.openservices.model.Service;
 
 /**
  * Controller that retrieves service data and adds, modifies and delets them for 
@@ -80,7 +80,7 @@ public class ServiceController {
 		logger.info("-- User: Access my data service --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		//ListService lserv = new ListService();
-		List<Service> services = serviceManager.getUserServices(username);
+		List<Service> services = Service.fromServiceEntities(serviceManager.getUserServices(username));
 		//lserv.setServices(services);
 		responseObject = new ResponseObject();
 		if(services==null || services.size()==0){
@@ -107,7 +107,7 @@ public class ServiceController {
 	@ResponseBody
 	public ResponseObject viewServices(HttpServletResponse response){
 		logger.info("-- View Services --");
-		List<Service> services = serviceManager.getServices();
+		List<Service> services = Service.fromServiceEntities(serviceManager.getServices());
 		responseObject = new ResponseObject();
 		if(services==null || services.size()==0){
 			responseObject.setError("There is no available service");
@@ -134,7 +134,7 @@ public class ServiceController {
 	@ResponseBody
 	public ResponseObject viewServiceDescription(@PathVariable int service_id, HttpServletResponse response){
 		logger.info("-- View service description --");
-		Service service = serviceManager.getServiceById(service_id);
+		Service service = Service.fromServiceEntity(serviceManager.getServiceById(service_id));
 		responseObject = new ResponseObject();
 		if(service==null){
 			responseObject.setError("There is no service with this id");
@@ -223,7 +223,7 @@ public class ServiceController {
 				&& service.getOrganizationId() != 0) {
 			try {
 				boolean result = serviceManager
-						.createService(username, service);
+						.createService(username, service.toServiceEntity());
 				if (result) {
 					responseObject.setStatus(HttpServletResponse.SC_CREATED);
 					response.setStatus(HttpServletResponse.SC_CREATED);
@@ -265,7 +265,7 @@ public class ServiceController {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		responseObject = new ResponseObject();
 		try {
-			boolean result = serviceManager.updateService(username, service);
+			boolean result = serviceManager.updateService(username, service.toServiceEntity());
 			if (result) {
 				responseObject.setStatus(HttpServletResponse.SC_OK);
 				response.setStatus(HttpServletResponse.SC_OK);

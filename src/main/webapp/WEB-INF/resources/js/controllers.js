@@ -189,6 +189,11 @@ app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service', 'Or
         $scope.submit = function () {
             if ($scope.service.expiration) {
                 $scope.service.expiration = new Date($scope.service.expiration).getTime();
+            } else {
+            	$scope.service.expiration = null;
+            }
+            if ($scope.service.tags) {
+            	$scope.service.tags = $scope.service.tags.split(','); 
             }
             Service.create($scope.service, function () {
                 $location.path('profile');

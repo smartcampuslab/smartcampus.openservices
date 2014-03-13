@@ -32,8 +32,6 @@ public class Tag {
 	@Id
 	@GeneratedValue
 	private int id;
-	@Column(name="id_service", nullable=false)
-	private int id_service;
 	@Column(name="name", nullable=false)
 	private String name;
 
@@ -51,22 +49,6 @@ public class Tag {
 	 */
 	public void setId(int id) {
 		this.id = id;
-	}
-	
-	/**
-	 * 
-	 * @return service id : int
-	 */
-	public int getId_service() {
-		return id_service;
-	}
-	
-	/**
-	 * 
-	 * @param id_service : int
-	 */
-	public void setId_service(int id_service) {
-		this.id_service = id_service;
 	}
 	
 	/**

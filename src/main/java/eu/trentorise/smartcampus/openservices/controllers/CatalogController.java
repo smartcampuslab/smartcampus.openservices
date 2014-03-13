@@ -16,7 +16,6 @@
 package eu.trentorise.smartcampus.openservices.controllers;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
@@ -26,11 +25,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import eu.trentorise.smartcampus.openservices.entities.*;
+import eu.trentorise.smartcampus.openservices.entities.Method;
+import eu.trentorise.smartcampus.openservices.entities.Organization;
+import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
+import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
 import eu.trentorise.smartcampus.openservices.managers.CatalogManager;
-import eu.trentorise.smartcampus.openservices.support.*;
+import eu.trentorise.smartcampus.openservices.model.Service;
+import eu.trentorise.smartcampus.openservices.support.CategoryServices;
+import eu.trentorise.smartcampus.openservices.support.TagCounter;
 
 /**
  * Catalog, a restful web services that retrieves data about Organization or Services 
@@ -72,7 +80,7 @@ public class CatalogController {
 		List<Service> services = new ArrayList<Service>();
 		if (token == null && tags == null) {
 			logger.info("-- List of service --");
-			services = catalogManager.catalogServices(firstResult, maxResult,param_order);
+			services = Service.fromServiceEntities(catalogManager.catalogServices(firstResult, maxResult,param_order));
 			if (services == null || services.size() == 0) {
 				responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 				responseObject.setError("No service available");
@@ -85,8 +93,8 @@ public class CatalogController {
 
 		} else if (token != null && tags == null) {
 			logger.info("-- Simple Search --");
-			services = catalogManager.catalogServiceSimpleSearch(token,
-					firstResult, maxResult, param_order);
+			services = Service.fromServiceEntities(catalogManager.catalogServiceSimpleSearch(token,
+					firstResult, maxResult, param_order));
 			if (services == null || services.size() == 0) {
 				responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 				responseObject.setError("No published service for this search by name");
@@ -100,7 +108,7 @@ public class CatalogController {
 
 		else if (token == null && tags != null) {//TODO pagination on tags
 			logger.info("-- Simple Search by tags: {} --", tags);
-			HashSet<Service> s = catalogManager.catalogServiceBrowseByTags(tags,firstResult, maxResult, param_order);
+			List<Service> s = Service.fromServiceEntities(catalogManager.catalogServiceBrowseByTags(tags,firstResult, maxResult, param_order));
 			if (s == null || s.size() == 0) {
 				responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 				responseObject.setError("No service for this search by tags");
@@ -126,7 +134,7 @@ public class CatalogController {
 	@ResponseBody
 	public ResponseObject cataogServiceById(@PathVariable int serviceId, HttpServletResponse response){
 		logger.info("-- Service Catalog Service By Id--");
-		Service service = catalogManager.catalogServiceById(serviceId);
+		Service service = Service.fromServiceEntity(catalogManager.catalogServiceById(serviceId));
 		responseObject=new ResponseObject();
 		if(service==null){
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -208,8 +216,8 @@ public class CatalogController {
 			@RequestParam(value="order", required=false, defaultValue="name") String param_order, 
 			HttpServletResponse response){
 		logger.info("-- Service Catalog browse (category) --");
-		List<Service> services = catalogManager.catalogServiceBrowseByCategory(categoryId, firstResult, 
-				maxResult, param_order);
+		List<Service> services = Service.fromServiceEntities(catalogManager.catalogServiceBrowseByCategory(categoryId, firstResult, 
+				maxResult, param_order));
 		responseObject=new ResponseObject();
 		if(services==null || services.size()==0){
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -240,7 +248,7 @@ public class CatalogController {
 			@RequestParam(value="order", required=false, defaultValue="name") String param_order, 
 			HttpServletResponse response){
 		logger.info("-- Service Catalog browse (org) --");
-		List<Service> services = catalogManager.catalogServiceBrowseByOrg(org, firstResult, maxResult, param_order);
+		List<Service> services = Service.fromServiceEntities(catalogManager.catalogServiceBrowseByOrg(org, firstResult, maxResult, param_order));
 		responseObject=new ResponseObject();
 		if(services==null || services.size()==0){
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
