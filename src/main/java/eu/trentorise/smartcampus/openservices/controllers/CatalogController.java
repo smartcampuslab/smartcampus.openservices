@@ -358,7 +358,7 @@ public class CatalogController {
 	 * @return {@link ResponseObject} with list of service and category data, status (OK or NOT FOUND) and 
 	 * error message (if status is NOT FOUND).
 	 */
-	@RequestMapping(value = "/service/browse/category", method = RequestMethod.GET, produces="application/json") 
+	@RequestMapping(value = "/category/services", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
 	public ResponseObject catalogCategoryServices(HttpServletResponse response) {
 		logger.info("-- Category Catalog browse --");

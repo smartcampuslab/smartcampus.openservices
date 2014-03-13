@@ -1,8 +1,12 @@
 'use strict';
 app.controller('homeCtrl', ['$http', '$scope',
     function ($http, $scope) {
-        $http.get('api/catalog/news').success(function (data) {
+        $http.get('api/catalog/news')
+        .success(function (data) {
             $scope.news = data.data;
+        })
+        .error(function (data) {
+        	$scope.news = [];
         });
     }
 ]);
@@ -492,9 +496,9 @@ app.controller('categoryCtrl', ['$scope', '$http', '$location', 'Catalog', '$rou
         $scope.update = function () {
             Catalog.browseServiceCat({
                 category: $routeParams.category,
-                start: $scope.start,
-                end: $scope.end,
-                sort: 'name'
+                first: $scope.start,
+                last: $scope.end,
+                order: 'name'
             }, function (services) {
                 $scope.total = services.totalNumber;
                 $scope.services = services.data;
@@ -534,9 +538,9 @@ app.controller('servicesCtrl', ['$scope', '$http', '$routeParams', 'Catalog',
         }
         $scope.update = function () {
             Catalog.listServices({
-                start: $scope.start,
-                end: $scope.end,
-                sort: 'name'
+                first: $scope.start,
+                last: $scope.end,
+                order: 'name'
             }, function (services) {
                 $scope.total = services.totalNumber;
                 $scope.services = services.data;
@@ -582,9 +586,9 @@ app.controller('servicesCtrl', ['$scope', '$http', '$routeParams', 'Catalog',
 app.controller('organizationsCtrl', ['$scope', '$http', '$routeParams', 'Catalog',
     function ($scope, $http, $routeParams, Catalog) {
         Catalog.listOrgs({
-            start: 0,
-            end: 20,
-            sort: 'name'
+            first: 0,
+            last: 20,
+            order: 'name'
         }, function (data) {
             $scope.orgs = data.data;
         });

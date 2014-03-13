@@ -44,7 +44,7 @@ import static junit.framework.Assert.*;
 @TransactionConfiguration(transactionManager="transactionManager", defaultRollback=false)
 public class CatalogControllerTest {
 	
-	private static final String BASE_URL = "http://localhost:8080/openservice/api/catalog";
+	private static final String BASE_URL = "http://localhost:8080/smartcampus.openservices/api/catalog";
 	private RestTemplate restTemplate;
 	//Log
 	private Logger log = LoggerFactory.getLogger(CatalogControllerTest.class);
@@ -61,7 +61,7 @@ public class CatalogControllerTest {
 	public void testServicesPublishDepracate() throws Exception{
 		log.info("* Test Catalog REST: /service - STARTING");
 		//ListService searchService 
-		ResponseObject searchService= restTemplate.getForObject(BASE_URL+"/service?first=0&max=2&" +
+		ResponseObject searchService= restTemplate.getForObject(BASE_URL+"/service?first=0&last=2&" +
 				"order=id", 
 				ResponseObject.class, new Object[]{});
 		System.out.println("RESPONSEOBJECT: "+searchService.getData()+", "+searchService.getStatus()+", "
@@ -129,10 +129,10 @@ public class CatalogControllerTest {
 	
 	@Test
 	public void testServiceSimpleSearch() throws Exception{
-		log.info("* Test Catalog REST: /service/search/{token} - STARTING");
-		String token = "b"; 
+		log.info("* Test Catalog REST: /service- STARTING");
+		String token = "s"; 
 		ResponseObject searchService = restTemplate.getForObject(BASE_URL+"/service?q="+token+
-				"&first=0&max=5&order=id", ResponseObject.class, new Object[]{});
+				"&first=0&last=5&order=id", ResponseObject.class, new Object[]{});
 		assertNotNull("No service for this simple search", searchService.getData());
 	}
 	
@@ -145,7 +145,7 @@ public class CatalogControllerTest {
 			List<Category> category = categories.getCategories();
 		
 			ResponseObject searchService = restTemplate.getForObject(BASE_URL+"/service/category/"+
-					category.get(0).getId()+"?first=0&max=5&order=id", 
+					category.get(0).getId()+"?first=0&last=5&order=id", 
 					ResponseObject.class, new Object[]{});
 			assertNotNull("No service for this search by category", searchService.getData());
 		}
