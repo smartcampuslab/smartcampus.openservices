@@ -218,10 +218,7 @@ public class HomeController {
 	public ResponseObject login(HttpServletRequest request, HttpServletResponse response){
 		logger.info("-- Perform Login --");
 		
-		//Check if cookies exist and change it
-		Cookie cookie = new Cookie("value", "false");
-		cookie.setPath("/openservice/");
-		
+		//Check if cookies exist and change them
 		Cookie[] cookies = request.getCookies();
 		String name;
 		if(cookies!=null){
