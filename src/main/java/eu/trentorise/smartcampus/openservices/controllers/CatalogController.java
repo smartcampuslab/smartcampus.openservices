@@ -107,7 +107,7 @@ public class CatalogController {
 			} else {
 				responseObject.setData(services);
 				responseObject.setStatus(HttpServletResponse.SC_OK);
-				responseObject.setTotalNumber(catalogManager.countServiceByTagsSearch(tags));
+				responseObject.setTotalNumber((long) services.size());//catalogManager.countServiceByTagsSearch(tags)
 			}
 		}
 		return responseObject;

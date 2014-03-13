@@ -15,6 +15,7 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.dao;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -150,7 +151,19 @@ public interface ServiceDao{ //extends JpaRepository<Service, Integer>{
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
-	public List<Service> browseService(Integer category, String tags, int firstResult, int maxResult, String param_order) 
+	public List<Service> browseService(Integer category, int firstResult, int maxResult, String param_order) 
+			throws DataAccessException;
+	
+	/**
+	 * Retrieve service searching by tag
+	 * @param tag
+	 * @param firstResult
+	 * @param maxResult
+	 * @param param_order
+	 * @return list of {@link Service} instances
+	 * @throws DataAccessException
+	 */
+	public HashSet<Integer> getServiceByTag(String tag) 
 			throws DataAccessException;
 
 	/**

@@ -15,7 +15,9 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.dao;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +25,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.hibernate.mapping.Array;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
@@ -30,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import eu.trentorise.smartcampus.openservices.entities.Organization;
 import eu.trentorise.smartcampus.openservices.entities.Service;
+import eu.trentorise.smartcampus.openservices.entities.Tag;
 import eu.trentorise.smartcampus.openservices.entities.User;
 import eu.trentorise.smartcampus.openservices.managers.CatalogManager;
 
@@ -273,27 +277,27 @@ public class ServiceDaoImpl implements ServiceDao{
 	 */
 	@Transactional
 	@Override
-	public List<Service> browseService(Integer category, String tags, int firstResult, int maxResult, String param_order)
+	public List<Service> browseService(Integer category, int firstResult, int maxResult, String param_order)
 			throws DataAccessException {
-		Query q = null;
-		if(category!=null && tags!=null){
-			q = getEntityManager().createQuery("FROM Service S WHERE S.category=:category AND " +
-				"S.tags LIKE :tags AND S.state!='UNPUBLISH' ORDER BY S."+param_order)
-				.setParameter("category", category)
-				.setParameter("tags", "%"+tags+"%");
-		}
-		else if(category==null && tags!=null){
-			q = getEntityManager().createQuery("FROM Service S WHERE S.tags LIKE :tags AND S.state!='UNPUBLISH' " +
-					"ORDER BY S."+param_order)
-					.setParameter("tags", "%"+tags+"%");
-		}
-		else if(category!=null && tags==null){
-			q = getEntityManager().createQuery("FROM Service S WHERE S.category=:category AND S.state!='UNPUBLISH' " +
-					"ORDER BY S."+param_order)
-					.setParameter("category", category);
-		}
+		Query q =  getEntityManager().createQuery("FROM Service S WHERE S.category=:category AND " +
+				"S.state!='UNPUBLISH' ORDER BY S."+param_order)
+				.setParameter("category", category);
 		List<Service> s = q.setFirstResult(firstResult).setMaxResults(maxResult).getResultList();
 		return s;
+	}
+	
+	@Transactional
+	@Override
+	public HashSet<Integer> getServiceByTag(String tags){
+		System.out.println(tags);
+		Query q =  getEntityManager().createQuery("SELECT id_service FROM Tag WHERE name LIKE :tag ORDER BY id_service")
+				.setParameter("tag", "%"+tags+"%");
+		List<Integer> serviceId = q.getResultList();
+		HashSet<Integer> list = new HashSet<Integer>();
+		for(int i=0;i<serviceId.size();i++){
+			list.add(serviceId.get(i));
+		}
+		return list;
 	}
 
 	/**
@@ -365,9 +369,9 @@ public class ServiceDaoImpl implements ServiceDao{
 	
 	@Transactional
 	@Override
-	public Long countServiceTagsSearch(String tags) throws DataAccessException {
-		return (Long) getEntityManager().createQuery("SELECT COUNT(s) FROM Service S WHERE S.tags LIKE :tags AND S.state!='UNPUBLISH' ")
-				.setParameter("tags", "%"+tags+"%").getSingleResult();
+	public Long countServiceTagsSearch(String tag) throws DataAccessException {
+		return (Long) getEntityManager().createQuery("SELECT COUNT(t) FROM Tag t, Tag t2 WHERE t.name LIKE :tag ")
+				.setParameter("tag", "%"+tag+"%").getSingleResult();
 	}
 
 	/**
