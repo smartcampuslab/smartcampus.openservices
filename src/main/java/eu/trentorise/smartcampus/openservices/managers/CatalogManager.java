@@ -16,6 +16,7 @@
 package eu.trentorise.smartcampus.openservices.managers;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -198,7 +199,7 @@ public class CatalogManager {
 	 */
 	public List<Service> catalogServiceBrowseByCategory(int category, int firstResult, int maxResult, String param_order){
 		try{
-			return serviceDao.browseService(category, null, firstResult, maxResult, param_order);
+			return serviceDao.browseService(category, firstResult, maxResult, param_order);
 		}catch(DataAccessException d){
 			return null;
 		}
@@ -232,9 +233,20 @@ public class CatalogManager {
 	 * @param tags : String tags for searching in service tags
 	 * @return all {@link Service} instances
 	 */
-	public List<Service> catalogServiceBrowseByTags(String tags, int firstResult, int maxResult, String param_order) {
+	public HashSet<Service> catalogServiceBrowseByTags(String tags, int firstResult, int maxResult, String param_order) {
+		System.out.println("Tag manager");
+		String[] listTags = tags.split(",");
+		System.out.println("List "+listTags[0]);
+		HashSet<Service> allS = new HashSet<Service>();
 		try{
-			return serviceDao.browseService(null, tags, firstResult, maxResult, param_order);
+			System.out.println("1");
+			for(String t:listTags){
+				System.out.println("2");
+				List<Service> s = serviceDao.getServiceByTag(t, firstResult, maxResult, param_order);
+				System.out.println("List get service by tag: "+s.size());
+				allS.addAll(s);
+			}
+			return allS;
 		}catch(DataAccessException d){
 			return null;
 		}
@@ -349,7 +361,12 @@ public class CatalogManager {
 	 * @return number of services retrieved by tags search
 	 */
 	public Long countServiceByTagsSearch(String tags){
-		return serviceDao.countServiceTagsSearch(tags);
+		String[] tag = tags.split(",");
+		Long count = serviceDao.countServiceTagsSearch(tag[0]);
+		for(int i=1; i<tag.length;i++){
+			count = count + serviceDao.countServiceTagsSearch(tag[i]);
+		}
+		return count; 
 	}
 	
 	/**

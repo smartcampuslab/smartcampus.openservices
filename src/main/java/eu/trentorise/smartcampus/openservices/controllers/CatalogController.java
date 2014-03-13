@@ -16,6 +16,7 @@
 package eu.trentorise.smartcampus.openservices.controllers;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
@@ -97,17 +98,17 @@ public class CatalogController {
 			}
 		}
 
-		else if (token == null && tags != null) {
+		else if (token == null && tags != null) {//TODO pagination on tags
 			logger.info("-- Simple Search by tags: {} --", tags);
-			services = catalogManager.catalogServiceBrowseByTags(tags,firstResult, maxResult, param_order);
-			if (services == null || services.size() == 0) {
+			HashSet<Service> s = catalogManager.catalogServiceBrowseByTags(tags,firstResult, maxResult, param_order);
+			if (s == null || s.size() == 0) {
 				responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 				responseObject.setError("No service for this search by tags");
 				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			} else {
-				responseObject.setData(services);
+				responseObject.setData(s);
 				responseObject.setStatus(HttpServletResponse.SC_OK);
-				responseObject.setTotalNumber((long) services.size());//catalogManager.countServiceByTagsSearch(tags)
+				responseObject.setTotalNumber(catalogManager.countServiceByTagsSearch(tags));
 			}
 		}
 		return responseObject;

@@ -288,15 +288,11 @@ public class ServiceDaoImpl implements ServiceDao{
 	
 	@Transactional
 	@Override
-	public HashSet<Integer> getServiceByTag(String tags){
-		System.out.println(tags);
-		Query q =  getEntityManager().createQuery("SELECT id_service FROM Tag WHERE name LIKE :tag ORDER BY id_service")
+	public List<Service> getServiceByTag(String tags, int firstResult, int maxResult, String param_order){
+		Query q =  getEntityManager().createQuery("FROM Service S WHERE S.id IN (SELECT DISTINCT id_service " +
+				"FROM Tag WHERE name LIKE :tag ORDER BY id_service)")
 				.setParameter("tag", "%"+tags+"%");
-		List<Integer> serviceId = q.getResultList();
-		HashSet<Integer> list = new HashSet<Integer>();
-		for(int i=0;i<serviceId.size();i++){
-			list.add(serviceId.get(i));
-		}
+		List<Service> list = q.setFirstResult(firstResult).setMaxResults(maxResult).getResultList();
 		return list;
 	}
 
@@ -370,7 +366,8 @@ public class ServiceDaoImpl implements ServiceDao{
 	@Transactional
 	@Override
 	public Long countServiceTagsSearch(String tag) throws DataAccessException {
-		return (Long) getEntityManager().createQuery("SELECT COUNT(t) FROM Tag t, Tag t2 WHERE t.name LIKE :tag ")
+		return (Long) getEntityManager().createQuery("SELECT COUNT(S) FROM Service S WHERE S.id IN " +
+				"(SELECT DISTINCT id_service FROM Tag WHERE name LIKE :tag ORDER BY id_service)")
 				.setParameter("tag", "%"+tag+"%").getSingleResult();
 	}
 
