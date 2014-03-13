@@ -215,9 +215,15 @@ public class HomeController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login(HttpServletRequest request, HttpServletResponse response){
+	@ResponseBody
+	public ResponseObject login(HttpServletRequest request, HttpServletResponse response){
 		logger.info("-- Perform Login --");
-		return "index";
+		responseObjetc = new ResponseObject();
+		responseObjetc.setError("You have to sign up");
+		responseObjetc.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		//return "index";
+		return responseObjetc;
 	}
 	
 	/**
