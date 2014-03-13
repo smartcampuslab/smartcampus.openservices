@@ -15,6 +15,7 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
@@ -56,13 +57,153 @@ public class CatalogController {
 	private CatalogManager catalogManager;
 	
 	
+	@RequestMapping(value="/service", method = RequestMethod.GET, produces="application/json")
+	@ResponseBody
+	public ResponseObject catalogServicesRest(
+			@RequestParam(required=false) Integer firstResult, @RequestParam(required=false) Integer maxResult, 
+				@RequestParam(required=false) String param_order, 
+			@RequestParam(required=false) Integer service_id, 
+				@RequestParam(required=false) String requestService /*data,method,history */,
+			@RequestParam(required=false) String token, @RequestParam(required=false) Integer category_id, 
+				@RequestParam(required=false) Integer org_id, @RequestParam(required=false) String tags,
+			HttpServletResponse response){
+		logger.info("-- Service Catalog --");
+		responseObject = new ResponseObject();
+		if(service_id==null && firstResult!=null && maxResult!=null && param_order!=null){
+			logger.info("-- List of service or Search --");
+			List<Service> services = new ArrayList<Service>();
+			if(token==null && category_id==null && org_id==null && tags==null){
+				logger.info("-- List of service --");
+				services = catalogManager.catalogServices(firstResult, maxResult, param_order);
+				if (services == null || services.size() == 0) {
+					responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+					responseObject.setError("No service available");
+					response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				} else {
+					responseObject.setData(services);
+					responseObject.setStatus(HttpServletResponse.SC_OK);
+					responseObject.setTotalNumber(catalogManager.countService());
+				}
+			
+			}
+			else if(token!=null && category_id==null && org_id==null && tags==null){
+				logger.info("-- Simple Search --");
+				services = catalogManager.catalogServiceSimpleSearch(token, firstResult, maxResult, param_order);
+				if(services==null || services.size()==0){
+					responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+					responseObject.setError("No published service for this search by name");
+					response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				}
+				else{
+					responseObject.setData(services);
+					responseObject.setStatus(HttpServletResponse.SC_OK);
+					responseObject.setTotalNumber(catalogManager.countServiceSimpleSearch(token));
+				}
+			}
+			else if(token==null && category_id!=null && org_id==null && tags==null){
+				logger.info("-- Simple Search by category id: {} --", category_id);
+				services = catalogManager.catalogServiceBrowseByCategory(category_id, firstResult,
+						maxResult, param_order);
+				if(services==null || services.size()==0){
+					responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+					responseObject.setError("No published service for this category");
+					response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				}
+				else{
+					responseObject.setData(services);
+					responseObject.setStatus(HttpServletResponse.SC_OK);
+					responseObject.setTotalNumber(catalogManager.countServiceByCategorySearch(category_id));
+				}
+			}
+			else if(token==null && category_id==null && org_id!=null && tags==null){
+				logger.info("-- Simple Search by organization id: {} --", org_id);
+				services = catalogManager.catalogServiceBrowseByOrg(org_id, firstResult, maxResult, param_order);
+				if(services==null || services.size()==0){
+					responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+					responseObject.setError("No service for this organization");
+					response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				}
+				else{
+					responseObject.setData(services);
+					responseObject.setStatus(HttpServletResponse.SC_OK);
+					responseObject.setTotalNumber(catalogManager.countServiceByOrgSearch(org_id));
+				}
+			}
+			else if(token==null && category_id==null && org_id==null && tags!=null){
+				logger.info("-- Simple Search by tags: {} --", tags);
+				services = catalogManager.catalogServiceBrowseByTags(tags, firstResult, maxResult, param_order);
+				if(services==null || services.size()==0){
+					responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+					responseObject.setError("No service for this search by tags");
+					response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				}
+				else{
+					responseObject.setData(services);
+					responseObject.setStatus(HttpServletResponse.SC_OK);
+					responseObject.setTotalNumber(catalogManager.countServiceByTagsSearch(tags));
+				}
+			}
+			else{
+				responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				responseObject.setError("The requested operation is not implemented");
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			}
+		}
+		else{
+			logger.info("-- Service Catalog Service By Id: {} --",service_id);
+			if(requestService.equalsIgnoreCase("data")){
+				Service service = catalogManager.catalogServiceById(service_id);
+				if (service == null) {
+					responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+					responseObject
+							.setError("No published service with this id");
+					response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				} else {
+					responseObject.setData(service);
+					responseObject.setStatus(HttpServletResponse.SC_OK);
+				}
+			}
+			else if(requestService.equalsIgnoreCase("method")){
+				List<Method> methods = catalogManager.catalogServiceMethods(service_id);
+				if(methods==null || methods.size()==0){
+					responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+					responseObject.setError("No methods for this published service");
+					response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				}
+				else{
+					responseObject.setData(methods);
+					responseObject.setStatus(HttpServletResponse.SC_OK);
+				}
+			}
+			else if(requestService.equalsIgnoreCase("history")){
+				List<ServiceHistory> history = catalogManager.catalogServiceHistory(service_id);
+				if(history==null || history.size()==0){
+					responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+					responseObject.setError("No service history for this published service");
+					response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				}
+				else{
+					responseObject.setData(history);
+					responseObject.setStatus(HttpServletResponse.SC_OK);
+				}
+			}
+			else{
+				responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				responseObject.setError("The value of request service parameter are: " +
+						"data, method or history.");
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			}
+		}
+		return responseObject;
+	}
+	
 	/**
 	 * Show all services in catalog which are published or deprecated.
 	 * @param response : {@link HttpServletResponse} which returns status of response OK or NOT FOUND
 	 * @return {@link ResponseObject} with list of published and deprecated services data, status (OK or NOT FOUND) and 
 	 * error message (if status is NOT FOUND).
 	 */
-	@RequestMapping(value="/service/{firstResult}/{maxResult}/{param_order}", method = RequestMethod.GET, produces="application/json")
+	/*@RequestMapping(value="/service/{firstResult}/{maxResult}/{param_order}", method = RequestMethod.GET, produces="application/json")
 	@ResponseBody
 	public ResponseObject catalogServices(@PathVariable int firstResult, @PathVariable int maxResult, 
 			@PathVariable String param_order, HttpServletResponse response){
@@ -81,7 +222,7 @@ public class CatalogController {
 			responseObject.setTotalNumber(catalogManager.countService());
 		}
 		return responseObject;
-	}
+	}*/
 	
 	/**
 	 * Retrieve data of a specific service, which must be published or deprecated.
@@ -91,7 +232,7 @@ public class CatalogController {
 	 * @return {@link ResponseObject} with services data, status (OK or NOT FOUND) and 
 	 * error message (if status is NOT FOUND).
 	 */
-	@RequestMapping(value="/service/{service_id}", method = RequestMethod.GET, produces="application/json")
+	/*@RequestMapping(value="/service/{service_id}", method = RequestMethod.GET, produces="application/json")
 	@ResponseBody
 	public ResponseObject cataogServiceById(@PathVariable int service_id, HttpServletResponse response){
 		logger.info("-- Service Catalog Service By Id--");
@@ -107,7 +248,7 @@ public class CatalogController {
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 		}
 		return responseObject;
-	}
+	}*/
 	
 	/**
 	 * Retrieve methods data of a specific published or deprecated service.
@@ -117,7 +258,7 @@ public class CatalogController {
 	 * @return {@link ResponseObject} with services method data, status (OK or NOT FOUND) and 
 	 * error message (if status is NOT FOUND).
 	 */
-	@RequestMapping(value="/service/methods/{service_id}", method = RequestMethod.GET, produces="application/json")
+	/*@RequestMapping(value="/service/methods/{service_id}", method = RequestMethod.GET, produces="application/json")
 	@ResponseBody
 	public ResponseObject cataogServiceMethods(@PathVariable int service_id, HttpServletResponse response){
 		logger.info("-- Service Catalog Show Methods --");
@@ -133,7 +274,7 @@ public class CatalogController {
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 		}
 		return responseObject;
-	}
+	}*/
 	
 	/**
 	 * Retrieve data history of a specific service.
@@ -143,7 +284,7 @@ public class CatalogController {
 	 * @return {@link ResponseObject} with services history data, status (OK or NOT FOUND) and 
 	 * error message (if status is NOT FOUND).
 	 */
-	@RequestMapping(value="/service/history/{service_id}", method = RequestMethod.GET, produces="application/json")
+	/*@RequestMapping(value="/service/history/{service_id}", method = RequestMethod.GET, produces="application/json")
 	@ResponseBody
 	public ResponseObject cataogServiceHistory(@PathVariable int service_id, HttpServletResponse response){
 		logger.info("-- Service Catalog Show Methods --");
@@ -159,7 +300,7 @@ public class CatalogController {
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 		}
 		return responseObject;
-	}
+	}*/
 	
 	/**
 	 * Simple search in service catalog.
@@ -169,7 +310,7 @@ public class CatalogController {
 	 * @return {@link ResponseObject} with list of service data, status (OK or NOT FOUND) and 
 	 * error message (if status is NOT FOUND).
 	 */
-	@RequestMapping(value = "/service/search/{token}/{firstResult}/{maxResult}/{param_order}", method = RequestMethod.GET, produces="application/json") 
+	/*@RequestMapping(value = "/service/search/{token}/{firstResult}/{maxResult}/{param_order}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
 	public ResponseObject catalogServiceSimpleSearch(@PathVariable String token, @PathVariable int firstResult,
 			@PathVariable int maxResult, @PathVariable String param_order, HttpServletResponse response){
@@ -187,7 +328,7 @@ public class CatalogController {
 			responseObject.setTotalNumber(catalogManager.countServiceSimpleSearch(token));
 		}
 		return responseObject;
-	}
+	}*/
 	
 	/**
 	 * Browse service in catalog by category.
@@ -197,7 +338,7 @@ public class CatalogController {
 	 * @return {@link ResponseObject} with list of service data, status (OK or NOT FOUND) and 
 	 * error message (if status is NOT FOUND).
 	 */
-	@RequestMapping(value = "/service/browse/category/{category}/{firstResult}/{maxResult}/{param_order}", method = RequestMethod.GET, produces="application/json") 
+	/*@RequestMapping(value = "/service/browse/category/{category}/{firstResult}/{maxResult}/{param_order}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
 	public ResponseObject catalogServiceBrowseByCategory(@PathVariable int category, @PathVariable int firstResult,
 			@PathVariable int maxResult, @PathVariable String param_order, HttpServletResponse response){
@@ -215,7 +356,7 @@ public class CatalogController {
 			responseObject.setTotalNumber(catalogManager.countServiceByCategorySearch(category));
 		}
 		return responseObject;
-	}
+	}*/
 
 	/**
 	 * Browse service in catalog by organization.
@@ -225,7 +366,7 @@ public class CatalogController {
 	 * @return {@link ResponseObject} with list of service data, status (OK or NOT FOUND) and 
 	 * error message (if status is NOT FOUND).
 	 */
-	@RequestMapping(value = "/service/browse/org/{org}/{firstResult}/{maxResult}/{param_order}", method = RequestMethod.GET, produces="application/json") 
+	/*@RequestMapping(value = "/service/browse/org/{org}/{firstResult}/{maxResult}/{param_order}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
 	public ResponseObject catalogServiceBrowseByOrg(@PathVariable int org, @PathVariable int firstResult,
 			@PathVariable int maxResult, @PathVariable String param_order, HttpServletResponse response){
@@ -243,7 +384,7 @@ public class CatalogController {
 			responseObject.setTotalNumber(catalogManager.countServiceByOrgSearch(org));
 		}
 		return responseObject;
-	}
+	}*/
 
 	/**
 	 * Browse service in catalog by tags.
@@ -252,7 +393,7 @@ public class CatalogController {
 	 * @return {@link ResponseObject} with list of service data, status (OK or NOT FOUND) and 
 	 * error message (if status is NOT FOUND).
 	 */
-	@RequestMapping(value = "/service/browse/tags/{tags}/{firstResult}/{maxResult}/{param_order}", method = RequestMethod.GET, produces = "application/json")
+	/*@RequestMapping(value = "/service/browse/tags/{tags}/{firstResult}/{maxResult}/{param_order}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public ResponseObject catalogServiceBrowseByTags(@PathVariable String tags, @PathVariable int firstResult,
 			@PathVariable int maxResult, @PathVariable String param_order, HttpServletResponse response) {
@@ -270,6 +411,81 @@ public class CatalogController {
 			responseObject.setTotalNumber(catalogManager.countServiceByTagsSearch(tags));
 		}
 		return responseObject;
+	}*/
+	
+	@RequestMapping(value="/org", method = RequestMethod.GET, produces="application/json")
+	@ResponseBody
+	public ResponseObject catalogOrgRest(@RequestParam(required=false) Integer firstResult, 
+			@RequestParam(required=false) Integer maxResult, @RequestParam(required=false) String param_order, 
+			@RequestParam(required=false) Integer org_id,
+			@RequestParam(required=false) String token, @RequestParam(required=false) Integer category_id,
+			HttpServletResponse response){
+		logger.info("-- Organization Catalog --");
+		responseObject = new ResponseObject();
+		if(org_id==null && firstResult!=null && maxResult!=null && param_order!=null){
+			logger.info("-- List of Organization --");
+			List<Organization> orgs = new ArrayList<Organization>();
+			if(token==null && category_id==null){
+				logger.info("-- All organization --");
+				orgs = catalogManager.catalogOrg(firstResult, maxResult, param_order);
+				if (orgs == null || orgs.size() == 0) {
+					responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+					responseObject.setError("No organization available");
+					response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				} else {
+					responseObject.setData(orgs);
+					responseObject.setStatus(HttpServletResponse.SC_OK);
+					responseObject.setTotalNumber(catalogManager.countOrg());
+				}
+			}
+			else if(token!=null && category_id==null){
+				logger.info("-- Simple Organization Search: {} --", token);
+				orgs = catalogManager.catalogOrgSimpleSearch(token, firstResult, maxResult, param_order);
+				responseObject = new ResponseObject();
+				if(orgs==null || orgs.size()==0){
+					responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+					responseObject.setError("No organization for this search by name");
+					response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				}
+				else{
+					responseObject.setData(orgs);
+					responseObject.setStatus(HttpServletResponse.SC_OK);
+					responseObject.setTotalNumber(catalogManager.countOrg());
+				}
+			}
+			else if(token==null && category_id!=null){
+				logger.info("-- Simple Search by category id: {} --", category_id);
+				orgs = catalogManager.catalogOrgBrowse(category_id, firstResult, maxResult, param_order);
+				responseObject = new ResponseObject();
+				if (orgs == null || orgs.size() == 0) {
+					responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+					responseObject.setError("No organization for this search by category");
+					response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				} else {
+					responseObject.setData(orgs);
+					responseObject.setStatus(HttpServletResponse.SC_OK);
+					responseObject.setTotalNumber(catalogManager.countOrg());
+				}
+			}
+			else{
+				responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				responseObject.setError("Wrong input data missing value: pagination, token or category id.");
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			}
+		}
+		else{
+			Organization org = catalogManager.catalogOrgById(org_id);
+			if(org==null){
+				responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				responseObject.setError("No organization with this id");
+				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			}
+			else{
+				responseObject.setData(org);
+				responseObject.setStatus(HttpServletResponse.SC_OK);
+			}
+		}
+		return responseObject;
 	}
 	
 	/**
@@ -278,7 +494,7 @@ public class CatalogController {
 	 * @return {@link ResponseObject} with list of organization data, status (OK or NOT FOUND) and 
 	 * error message (if status is NOT FOUND).
 	 */
-	@RequestMapping(value="/org/{firstResult}/{maxResult}/{param_order}", method = RequestMethod.GET, produces="application/json")
+	/*@RequestMapping(value="/org/{firstResult}/{maxResult}/{param_order}", method = RequestMethod.GET, produces="application/json")
 	@ResponseBody
 	public ResponseObject catalogOrg(@PathVariable int firstResult, @PathVariable int maxResult, 
 			@PathVariable String param_order, HttpServletResponse response){
@@ -297,7 +513,7 @@ public class CatalogController {
 		}
 		return responseObject;
 	}
-	
+	*/
 	/**
 	 * Retrieve data of a specific organization.
 	 * Search by its id.
@@ -306,7 +522,7 @@ public class CatalogController {
 	 * @return {@link ResponseObject} with organization data, status (OK or NOT FOUND) and 
 	 * error message (if status is NOT FOUND).
 	 */
-	@RequestMapping(value="/org/{id}", method = RequestMethod.GET, produces="application/json")
+	/*@RequestMapping(value="/org/{id}", method = RequestMethod.GET, produces="application/json")
 	@ResponseBody
 	public ResponseObject catalogOrg(@PathVariable int id, HttpServletResponse response){
 		logger.info("-- Organization Catalog data --");
@@ -323,7 +539,7 @@ public class CatalogController {
 		}
 		return responseObject;
 	}
-	
+	*/
 	
 	/**
 	 * Simple search in organization catalog.
@@ -333,7 +549,7 @@ public class CatalogController {
 	 * @return {@link ResponseObject} with list of organization data, status (OK or NOT FOUND) and 
 	 * error message (if status is NOT FOUND).
 	 */
-	@RequestMapping(value = "/org/search/{token}/{firstResult}/{maxResult}/{param_order}", method = RequestMethod.GET, produces="application/json") 
+	/*@RequestMapping(value = "/org/search/{token}/{firstResult}/{maxResult}/{param_order}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
 	public ResponseObject catalogOrgSimpleSearch(@PathVariable String token, @PathVariable int firstResult, 
 			@PathVariable int maxResult, @PathVariable String param_order, HttpServletResponse response){
@@ -351,7 +567,7 @@ public class CatalogController {
 			responseObject.setTotalNumber(catalogManager.countOrg());
 		}
 		return responseObject;
-	}
+	}*/
 	
 	/**
 	 * Browse organization by category.
@@ -361,7 +577,7 @@ public class CatalogController {
 	 * @return {@link ResponseObject} with list of organization data, status (OK or NOT FOUND) and 
 	 * error message (if status is NOT FOUND).
 	 */
-	@RequestMapping(value = "/org/browse/category/{category}/{firstResult}/{maxResult}/{param_order}", method = RequestMethod.GET, produces="application/json") 
+	/*@RequestMapping(value = "/org/browse/category/{category}/{firstResult}/{maxResult}/{param_order}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
 	public ResponseObject catalogOrgBrowse(@PathVariable int category, @PathVariable int firstResult, 
 			@PathVariable int maxResult, @PathVariable String param_order, HttpServletResponse response){
@@ -379,7 +595,7 @@ public class CatalogController {
 			responseObject.setTotalNumber(catalogManager.countOrg());
 		}
 		return responseObject;
-	}
+	}*/
 	//browse catalog using filters (by geography) - when add address of organization - TODO
 	
 	/**
