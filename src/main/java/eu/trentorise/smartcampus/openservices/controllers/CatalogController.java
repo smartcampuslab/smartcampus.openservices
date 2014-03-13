@@ -271,13 +271,6 @@ public class CatalogController {
 		}
 		return responseObject;
 	}
-	//browse catalog using filter (by protocols) - TO DEFINE - TODO
-
-	//view most used - depends on App - TODO
-	public ListService catalogServiceMostUsed(){
-		logger.info("-- Service Catalog most used --");
-		return null;
-	}
 	
 	/**
 	 * Retrieve all organization data for users.
