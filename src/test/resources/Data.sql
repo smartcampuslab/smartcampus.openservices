@@ -21,13 +21,13 @@ INSERT INTO Category VALUES (4,'@Test',NULL);
 -- Dumping data for table `Service`
 --
 
-INSERT INTO Service VALUES (1,'service',NULL,'a,b',3,NULL,'1',NULL,NULL,0,'PUBLISH',1,NULL,2);
-INSERT INTO Service VALUES (2,'amazon service','Amazone Service','a',2,'license','1',NULL,NULL,0,'publish',2,NULL,2);
-INSERT INTO Service VALUES (3,'prova','Service di prova','c,d',3,'license','1',NULL,NULL,0,'deprecate',3,NULL,1);
-INSERT INTO Service VALUES (4,'mouse','mouse','d',3,'license','1',NULL,NULL,0,'unpublish',1,NULL,2);
-INSERT INTO Service VALUES (5,'service prova','my service for sara organization from web','c,d',3,'qwertyui','0.1',NULL,NULL,0,'UNPUBLISH',1,NULL,2);
-INSERT INTO Service VALUES (6,'book seller','Selling book','d',1,'license','1',NULL,NULL,0,'publish',1,NULL,2);
-INSERT INTO Service VALUES (7,'myServiceWithoutCategory',NULL,'e',0,'','1',NULL,NULL,0,'PUBLISH',3,NULL,2);
+INSERT INTO Service VALUES (1,'service',NULL,3,NULL,'1',NULL,NULL,0,'PUBLISH',1,NULL,2);
+INSERT INTO Service VALUES (2,'amazon service','Amazone Service',2,'license','1',NULL,NULL,0,'publish',2,NULL,2);
+INSERT INTO Service VALUES (3,'prova','Service di prova',3,'license','1',NULL,NULL,0,'deprecate',3,NULL,1);
+INSERT INTO Service VALUES (4,'mouse','mouse',3,'license','1',NULL,NULL,0,'unpublish',1,NULL,2);
+INSERT INTO Service VALUES (5,'service prova','my service for sara organization from web',3,'qwertyui','0.1',NULL,NULL,0,'UNPUBLISH',1,NULL,2);
+INSERT INTO Service VALUES (6,'book seller','Selling book',1,'license','1',NULL,NULL,0,'publish',1,NULL,2);
+INSERT INTO Service VALUES (7,'myServiceWithoutCategory',NULL,0,'','1',NULL,NULL,0,'PUBLISH',3,NULL,2);
 
 --
 -- Dumping data for table `Tag`

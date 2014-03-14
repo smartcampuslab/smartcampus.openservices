@@ -44,7 +44,7 @@ import static junit.framework.Assert.*;
 @TransactionConfiguration(transactionManager="transactionManager", defaultRollback=false)
 public class CatalogControllerTest {
 	
-	private static final String BASE_URL = "http://localhost:8080/smartcampus.openservices/api/catalog";
+	private static final String BASE_URL = "http://localhost:8080/openservice/api/catalog";
 	private RestTemplate restTemplate;
 	//Log
 	private Logger log = LoggerFactory.getLogger(CatalogControllerTest.class);
