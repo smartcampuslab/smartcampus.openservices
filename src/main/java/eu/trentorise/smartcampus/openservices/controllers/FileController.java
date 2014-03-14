@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright 2012-2013 Trento RISE
+ * 
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ * 
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.controllers;
 
 import java.io.File;
@@ -23,6 +38,13 @@ import org.springframework.web.multipart.MultipartFile;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.managers.OrganizationManager;
 
+/**
+ * Retrieve a Multipart file from a form and then save it
+ * in an organization
+ * 
+ * @author Giulia Canobbio
+ *
+ */
 @Controller
 @RequestMapping(value="/api/file/")
 @PropertySource("classpath:openservice.properties")
@@ -50,6 +72,16 @@ public class FileController {
 		return "file";
 	}
 	
+	/**
+	 * Retrieve an image and save it.
+	 * 
+	 * @param organizationId : int
+	 * @param file : {@MultipartFile}
+	 * @param request : HttpServletRequest
+	 * @param response : HttpServletResponse
+	 * @return {@link ResponseObject} with filename, status (OK, NOT ACCEPTABLE, BAD REQUEST or NOT FOUND) and 
+	 * error message (if status is NOT ACCEPTABLE, BAD REQUEST or NOT FOUND).
+	 */
 	@RequestMapping(value = "upload/{organizationId}", method = RequestMethod.POST)
 	public @ResponseBody ResponseObject uploadFile(@PathVariable int organizationId, 
 			@RequestParam("file") MultipartFile file, HttpServletRequest request,
@@ -64,24 +96,7 @@ public class FileController {
 		String realPath = request.getSession().getServletContext().getRealPath("/images");
 		logger.info("Request Real Path: "+realPath);
 		if(!file.isEmpty() && file!=null){
-			//logger.info("File "+file);
 			try {
-				/*
-				//check directory if exists
-				File dir = new File(dirFile+organizationId);
-				if(dir.exists()){
-					//check if there is a file
-					logger.info(".. Directory already exists..");
-					if(dir.listFiles()[0].exists()){
-						//delete file
-						if(dir.listFiles()[0].delete()){
-							logger.info(".. Deleting file ..");
-						}
-						else{
-							logger.info(".. Error in deleting ..");
-						}
-					}
-				}*/
 				File f = new File(dirFile+"/" +organizationId+"/" + file.getOriginalFilename());
 				logger.info("Absolute path: "+f.getAbsolutePath());
 				//check if this exists
@@ -95,16 +110,6 @@ public class FileController {
 				responseObject.setData(file.getOriginalFilename());
 				responseObject.setStatus(HttpServletResponse.SC_OK);
 				logger.info("-- File uploaded correctly --");
-				
-				//Save new logo relative path in organization
-				// /images/org_id/file.getOriginalFilename()
-				/*boolean result = orgManager.updateLogo("sara", organizationId, "/images/"+organizationId+
-						"/"+file.getOriginalFilename());
-				if(result){
-					logger.info(".. Organization logo update ");
-				}else{
-					logger.info(".. Failed to save logo in db... ");
-				}*/
 				
 				String format = new MimetypesFileTypeMap().getContentType(f);
 				logger.info(".. Checking image format... "+format);
@@ -132,50 +137,5 @@ public class FileController {
 		}
 		return responseObject;
 	}
-	/*
-	@RequestMapping(value = "download/{organizationId}", method = RequestMethod.GET)
-	public @ResponseBody ResponseObject downloadFile(@PathVariable int organizationId, HttpServletResponse response) {
-		logger.info("-- FILE -- Download file ...");
-		responseObject = new ResponseObject();
-		logger.info("Org id: "+organizationId);//+", filename: "+filename+", extension: "+extension);
-		
-		String dirFile = env.getProperty("filedir");
-		
-		try{
-			File f = new File(dirFile+organizationId);//+"/"+filename+"."+extension);
-			if(!f.exists()){
-				logger.info("File does not exist");
-				responseObject.setError("File does not exist");
-				responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			}
-			else{
-				logger.info("File exists");
-				
-				File image = new File(dirFile+organizationId+"/"+f.listFiles()[0].getName());
-				logger.info("File name: "+image.getName());
-				BufferedImage img = ImageIO.read(image);
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				String format = new MimetypesFileTypeMap().getContentType(image);
-
-				logger.info("Format image: "+format+" and split: "+format.split("/")[1]);
-				ImageIO.write(img,format.split("/")[1], baos);
-				baos.flush();
-				byte[] imageInByte = baos.toByteArray();
-				
-				baos.close();
-				
-				responseObject.setData(format+";base64,"+new String(Base64.encodeBase64(imageInByte,false)));
-				responseObject.setStatus(HttpServletResponse.SC_OK);
-				logger.info("Download successfully");
-			}
-		} catch (Throwable e) {
-			logger.info("Download error");
-			responseObject.setError("File not found");
-			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			e.printStackTrace();
-		}
-		
-		return responseObject;
-	}*/
 
 }
