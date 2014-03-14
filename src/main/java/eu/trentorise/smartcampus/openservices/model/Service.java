@@ -68,7 +68,7 @@ public class Service {
 				getTags().add(t.getName());
 			}
 		}
-		setVersion(version);
+		setVersion(s.getVersion());
 	} 
 	
 	
