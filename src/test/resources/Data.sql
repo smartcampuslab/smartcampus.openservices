@@ -30,6 +30,21 @@ INSERT INTO Service VALUES (6,'book seller','Selling book','d',1,'license','1',N
 INSERT INTO Service VALUES (7,'myServiceWithoutCategory',NULL,'e',0,'','1',NULL,NULL,0,'PUBLISH',3,NULL,2);
 
 --
+-- Dumping data for table `Tag`
+--
+
+INSERT INTO Tag VALUES (1,1,'a');
+INSERT INTO Tag VALUES (2,1,'b');
+INSERT INTO Tag VALUES (3,2,'a');
+INSERT INTO Tag VALUES (4,3,'c');
+INSERT INTO Tag VALUES (5,3,'d');
+INSERT INTO Tag VALUES (6,4,'d');
+INSERT INTO Tag VALUES (7,5,'c');
+INSERT INTO Tag VALUES (8,5,'d');
+INSERT INTO Tag VALUES (9,6,'d');
+INSERT INTO Tag VALUES (10,7,'e');
+
+--
 -- Dumping data for table `ServiceHistory`
 --
 

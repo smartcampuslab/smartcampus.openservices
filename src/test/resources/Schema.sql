@@ -34,7 +34,6 @@ CREATE TABLE Service (
   id integer identity primary key,
   name varchar(45) NOT NULL,
   description varchar(45) DEFAULT NULL,
-  tags varchar(45) DEFAULT NULL,
   category integer DEFAULT NULL,
   license varchar(150),
   version varchar(45) NOT NULL,
@@ -45,6 +44,16 @@ CREATE TABLE Service (
   creator_id integer NOT NULL,
   implementation varchar(500),
   organization_id integer NOT NULL
+);
+
+--
+-- Table structure for table `Tag`
+--
+
+CREATE TABLE Tag(
+	id integer identity primary key,
+	id_service integer NOT NULL FOREIGN KEY REFERENCES Service(id),
+	name varchar(45) NOT NULL
 );
 
 --
