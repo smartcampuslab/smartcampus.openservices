@@ -87,7 +87,6 @@ public class UserController {
 		User user = userManager.getUserById(id);
 		responseObject = new ResponseObject();
 		if(user == null){
-			//response.getWriter().println("User does not exist");
 			responseObject.setError("User does not exist");
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -154,17 +153,14 @@ public class UserController {
 				response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 			}
 			else{
-				String host = Utils.getAppURL(req);//env.getProperty("host");
+				String host = Utils.getAppURL(req);
 				try {
 					User newUser = userManager.createUser(user, host,
 							env.getProperty("email.username"),
 							env.getProperty("user.message.object"),
 							env.getProperty("user.message.body"));
 					if (newUser != null) {
-						//responseObject.setData(newUser);
 						responseObject.setStatus(HttpServletResponse.SC_OK);
-						// verify email
-						// verifyEmail(newUser, req);
 					} else {
 						responseObject.setError("Connection problem with database or duplicate email");
 						responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
@@ -196,8 +192,8 @@ public class UserController {
 			String s = userManager.addKeyVerifyEmail(user.getUsername());
 			if(s!=null){
 			// return link
-			String host = Utils.getAppURL(req);//env.getProperty("host");
-			String link = host+"enable/"/*+user.getUsername()+"/"*/+ s;//api/user/add/enable/
+			String host = Utils.getAppURL(req);
+			String link = host+"enable/"+ s;
 			// send it via email to user
 			mailer.sendMail(env.getProperty("email.username"),
 					user.getEmail(),
@@ -228,12 +224,12 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/add/enable/{key}", method = RequestMethod.GET) 
 	@ResponseBody
-	public ResponseObject enableUser(/*@PathVariable String username,*/ @PathVariable String key, 
+	public ResponseObject enableUser(@PathVariable String key, 
 			HttpServletResponse response){
 		logger.info("-- User enable --");
 		responseObject = new ResponseObject();
 		try{
-			User enabledUser = userManager.enableUserAfterVerification(/*username,*/ key);
+			User enabledUser = userManager.enableUserAfterVerification(key);
 			if(enabledUser!=null){
 				enabledUser.setPassword(null);
 				responseObject.setData(enabledUser);
