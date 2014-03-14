@@ -138,7 +138,7 @@ public class CatalogControllerTest {
 	
 	@Test
 	public void testServiceSearchByCategory() throws Exception{
-		log.info("** Test Catalog REST: /service/browse/category/{category} - STARTING ...");
+		log.info("** Test Catalog REST: /service/category/{category_id} - STARTING ...");
 		//get categories data
 		CategoryServices categories = catalog.getCategoryServices();
 		if(categories!=null && categories.getCategories().size()>0){
@@ -153,11 +153,11 @@ public class CatalogControllerTest {
 	
 	@Test
 	public void testServiceSearchByTags() throws Exception{
-		log.info("** Test Catalog REST: /service/browse/tags/{tags} - STARTING ...");
+		log.info("** Test Catalog REST: /service/tag - STARTING ...");
 		String token = "b"; 
 		try{
 			ResponseObject searchService = restTemplate.getForObject(BASE_URL+"/service?first=0&max=5&" +
-				"order=id&tags="+token, ResponseObject.class, new Object[]{});
+				"order=id&tag="+token, ResponseObject.class, new Object[]{});
 			assertNotNull("No service for this search by tags", searchService.getData());
 			assertTrue("List is empty", searchService.getData()!=null);
 		}catch(HttpClientErrorException e){
