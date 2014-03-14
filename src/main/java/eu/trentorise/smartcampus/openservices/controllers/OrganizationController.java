@@ -140,7 +140,7 @@ public class OrganizationController {
 	 * @return {@link ResponseObject} with list of organization data, status (OK or NOT FOUND) and 
 	 * error message (if status is NOT FOUND).
 	 */
-	@RequestMapping(value = "/list", method = RequestMethod.GET, produces="application/json") 
+	/*@RequestMapping(value = "/list", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
 	public ResponseObject getOrganizations(HttpServletResponse response){
 		logger.info("-- View organization list --");
@@ -156,7 +156,7 @@ public class OrganizationController {
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 		}
 		return responseObject;
-	}
+	}*/
 	
 	//Organization - View organization activity history
 	/**

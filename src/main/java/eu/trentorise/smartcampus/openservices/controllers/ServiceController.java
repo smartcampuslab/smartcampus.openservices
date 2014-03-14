@@ -79,12 +79,9 @@ public class ServiceController {
 	public ResponseObject myServices(HttpServletResponse response){
 		logger.info("-- User: Access my data service --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		//ListService lserv = new ListService();
 		List<Service> services = Service.fromServiceEntities(serviceManager.getUserServices(username));
-		//lserv.setServices(services);
 		responseObject = new ResponseObject();
 		if(services==null || services.size()==0){
-			//response.getWriter().println("No service for this user");
 			responseObject.setError("You have zero service");
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -103,7 +100,7 @@ public class ServiceController {
 	 * @return {@link ResponseObject} with list of service data, status (OK or NOT FOUND) and 
 	 * error message (if status is NOT FOUND).
 	 */
-	@RequestMapping(value = "/view", method = RequestMethod.GET, produces="application/json") 
+	/*@RequestMapping(value = "/view", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
 	public ResponseObject viewServices(HttpServletResponse response){
 		logger.info("-- View Services --");
@@ -119,7 +116,7 @@ public class ServiceController {
 			response.setStatus(HttpServletResponse.SC_OK);
 		}
 		return responseObject;
-	}
+	}*/
 	
 	//Service - View Service - view service description
 	/**
@@ -184,7 +181,7 @@ public class ServiceController {
 	 * @return {@link ResponseObject} with list of service history data, status (OK or NOT FOUND) and 
 	 * error message (if status is NOT FOUND).
 	 */
-	@RequestMapping(value = "/view/history/{service_id}", method = RequestMethod.GET, produces="application/json") 
+	/*@RequestMapping(value = "/view/history/{service_id}", method = RequestMethod.GET, produces="application/json") 
 	@ResponseBody
 	public ResponseObject viewServiceHistory(@PathVariable int service_id, HttpServletResponse response){
 		logger.info("-- View service history --");
@@ -200,7 +197,7 @@ public class ServiceController {
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 		}
 		return responseObject;
-	}
+	}*/
 	
 	//Service - Manage Service - create Service
 	/**
