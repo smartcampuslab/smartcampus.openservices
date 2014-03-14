@@ -285,15 +285,32 @@ public class ServiceDaoImpl implements ServiceDao{
 		List<Service> s = q.setFirstResult(firstResult).setMaxResults(maxResult).getResultList();
 		return s;
 	}
-	
+	/**
+	 * Retrieve Services searching by tag
+	 */
 	@Transactional
 	@Override
-	public List<Service> getServiceByTag(String tags, int firstResult, int maxResult, String param_order){
-		Query q =  getEntityManager().createQuery("FROM Service S WHERE S.id IN (SELECT DISTINCT id_service " +
-				"FROM Tag WHERE name LIKE :tag ORDER BY id_service)")
-				.setParameter("tag", "%"+tags+"%");
+	public List<Service> getServiceByTag(String tag, int firstResult, int maxResult, String param_order){
+		//TODO
+		/*Query q =  getEntityManager().createQuery("FROM Service S WHERE S.id IN (SELECT DISTINCT T.id_service " +
+				"FROM Tag T WHERE T.name LIKE :tag) ORDER BY S."+param_order)
+				.setParameter("tag", "%"+tag+"%");
+		*/
+		/*Query q =  getEntityManager().createQuery("FROM Service S WHERE :tag IN (SELECT S1.tags FROM Service S1) " +
+				"ORDER BY S."+param_order)
+				.setParameter("tag", tag);
 		List<Service> list = q.setFirstResult(firstResult).setMaxResults(maxResult).getResultList();
-		return list;
+		return list;*/
+		List<Service> list = showPublishedService(firstResult, maxResult, param_order);
+		List<Service> result = new ArrayList<Service>();
+		for(int i=0;i<list.size();i++){
+			for(int j=0;j<list.get(i).getTags().size();j++){
+				if(list.get(i).getTags().get(j).getName().equalsIgnoreCase(tag)){
+					result.add(list.get(i));
+				}
+			}
+		}
+		return result;
 	}
 
 	/**
@@ -345,29 +362,33 @@ public class ServiceDaoImpl implements ServiceDao{
 	@Transactional
 	@Override
 	public Long countServiceSimpleSearch(String token) throws DataAccessException {
-		return (Long) getEntityManager().createQuery("SELECT COUNT(s) FROM Service s WHERE s.name LIKE :token AND s.state!='UNPUBLISH'")
+		return (Long) getEntityManager().createQuery("SELECT COUNT(s) FROM Service s WHERE s.name LIKE :token " +
+				"AND s.state!='UNPUBLISH'")
 				.setParameter("token", "%"+token+"%").getSingleResult();
 	}
 
 	@Transactional
 	@Override
 	public Long countServiceByOrgSearch(int id_org) throws DataAccessException {
-		return (Long) getEntityManager().createQuery("SELECT COUNT(s) FROM Service S WHERE S.organizationId=:id_org AND s.state!='UNPUBLISH'")
+		return (Long) getEntityManager().createQuery("SELECT COUNT(s) FROM Service S WHERE S.organizationId=:id_org " +
+				"AND s.state!='UNPUBLISH'")
 				.setParameter("id_org", id_org).getSingleResult();
 	}
 
 	@Transactional
 	@Override
 	public Long countServiceCategorySearch(int category) throws DataAccessException {
-		return (Long) getEntityManager().createQuery("SELECT COUNT(s) FROM Service S WHERE S.category=:category AND S.state!='UNPUBLISH' ")
+		return (Long) getEntityManager().createQuery("SELECT COUNT(s) FROM Service S WHERE S.category=:category " +
+				"AND S.state!='UNPUBLISH' ")
 				.setParameter("category", category).getSingleResult();
 	}
 	
 	@Transactional
 	@Override
 	public Long countServiceTagsSearch(String tag) throws DataAccessException {
-		return (Long) getEntityManager().createQuery("SELECT COUNT(S) FROM Service S WHERE S.id IN " +
-				"(SELECT DISTINCT id_service FROM Tag WHERE name LIKE :tag ORDER BY id_service)")
+		//TODO
+		return (Long) getEntityManager().createQuery("SELECT COUNT(T.name) FROM Tag T " +
+				"WHERE T.name LIKE :tag")
 				.setParameter("tag", "%"+tag+"%").getSingleResult();
 	}
 

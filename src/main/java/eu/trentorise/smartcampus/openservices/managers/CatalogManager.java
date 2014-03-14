@@ -234,20 +234,11 @@ public class CatalogManager {
 	 * @param tags : String tags for searching in service tags
 	 * @return all {@link Service} instances
 	 */
-	public Collection<Service> catalogServiceBrowseByTags(String tags, int firstResult, int maxResult, String param_order) {
-		System.out.println("Tag manager");
-		String[] listTags = tags.split(",");
-		System.out.println("List "+listTags[0]);
-		HashSet<Service> allS = new HashSet<Service>();
+	public List<Service> catalogServiceBrowseByTags(String tag, int firstResult, int maxResult, String param_order) {
 		try{
-			System.out.println("1");
-			for(String t:listTags){
-				System.out.println("2");
-				List<Service> s = serviceDao.getServiceByTag(t, firstResult, maxResult, param_order);
-				System.out.println("List get service by tag: "+s.size());
-				allS.addAll(s);
-			}
-			return allS;
+			List<Service> s = serviceDao.getServiceByTag(tag, firstResult, maxResult, param_order);
+			System.out.println("List get service by tag: "+s.size());
+			return s;
 		}catch(DataAccessException d){
 			return null;
 		}
@@ -358,16 +349,11 @@ public class CatalogManager {
 	
 	/**
 	 * 
-	 * @param tags : String ex. tag1,tag2
+	 * @param tag : String
 	 * @return number of services retrieved by tags search
 	 */
-	public Long countServiceByTagsSearch(String tags){
-		String[] tag = tags.split(",");
-		Long count = serviceDao.countServiceTagsSearch(tag[0]);
-		for(int i=1; i<tag.length;i++){
-			count = count + serviceDao.countServiceTagsSearch(tag[i]);
-		}
-		return count; 
+	public Long countServiceByTagsSearch(String tag){
+		return serviceDao.countServiceTagsSearch(tag); 
 	}
 	
 	/**

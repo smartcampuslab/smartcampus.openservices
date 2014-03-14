@@ -73,12 +73,12 @@ public class CatalogController {
 			@RequestParam(value="first",required=false, defaultValue="0") Integer firstResult, 
 			@RequestParam(value="last",required=false, defaultValue="0") Integer maxResult, 
 			@RequestParam(value="order",required=false, defaultValue="name") String param_order, 
-			@RequestParam(required=false) String tags,
+			@RequestParam(required=false) String tag,
 			HttpServletResponse response){
 		logger.info("-- Service Catalog --");
 		responseObject = new ResponseObject();
 		List<Service> services = new ArrayList<Service>();
-		if (token == null && tags == null) {
+		if (token == null && tag == null) {
 			logger.info("-- List of service --");
 			services = Service.fromServiceEntities(catalogManager.catalogServices(firstResult, maxResult,param_order));
 			if (services == null || services.size() == 0) {
@@ -91,7 +91,7 @@ public class CatalogController {
 				responseObject.setTotalNumber(catalogManager.countService());
 			}
 
-		} else if (token != null && tags == null) {
+		} else if (token != null && tag == null) {
 			logger.info("-- Simple Search --");
 			services = Service.fromServiceEntities(catalogManager.catalogServiceSimpleSearch(token,
 					firstResult, maxResult, param_order));
@@ -106,9 +106,9 @@ public class CatalogController {
 			}
 		}
 
-		else if (token == null && tags != null) {//TODO pagination on tags
-			logger.info("-- Simple Search by tags: {} --", tags);
-			List<Service> s = Service.fromServiceEntities(catalogManager.catalogServiceBrowseByTags(tags,firstResult, maxResult, param_order));
+		else if (token == null && tag != null) {//TODO pagination on tags
+			logger.info("-- Simple Search by tags: {} --", tag);
+			List<Service> s = Service.fromServiceEntities(catalogManager.catalogServiceBrowseByTags(tag,firstResult, maxResult, param_order));
 			if (s == null || s.size() == 0) {
 				responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 				responseObject.setError("No service for this search by tags");
@@ -116,7 +116,7 @@ public class CatalogController {
 			} else {
 				responseObject.setData(s);
 				responseObject.setStatus(HttpServletResponse.SC_OK);
-				responseObject.setTotalNumber(catalogManager.countServiceByTagsSearch(tags));
+				responseObject.setTotalNumber(catalogManager.countServiceByTagsSearch(tag));
 			}
 		}
 		return responseObject;
