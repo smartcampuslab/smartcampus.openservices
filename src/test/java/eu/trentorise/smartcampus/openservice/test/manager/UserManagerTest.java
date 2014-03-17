@@ -35,7 +35,7 @@ import eu.trentorise.smartcampus.openservices.managers.UserManager;
 @ContextConfiguration(value= {"file:src/main/webapp/WEB-INF/spring/root-context.xml",
 		"file:src/main/webapp/WEB-INF/spring/spring-security.xml",
 		"file:src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml",
-		"file:src/test/java/spring-embedded-db.xml"})
+		"file:src/test/resources/spring-embedded-db.xml"})
 @TransactionConfiguration(transactionManager="transactionManager", defaultRollback=false)
 public class UserManagerTest {
 	// Log
@@ -111,14 +111,7 @@ public class UserManagerTest {
 		log.info("User "+user.getUsername()+" and email "+user.getEmail());
 		String s = userManager.addKeyVerifyEmail(user.getUsername());
 		
-		/*String link = "http://localhost:8080/api/user/add/enable/"+user.getUsername()+","+ s;
-		//ApplicationMailer mailer = new ApplicationMailer();
-		mailer.sendMail2("g.canobbio@gmail.com","g.canobbio@gmail.com",
-				"[OpenService] Welcome "+ user.getUsername(), 
-				"Welcome "+user.getUsername()+"! For activating your account goes to following link: "+link);
-		*/
 		//enable user after verification
-		
 		log.info("Key "+s);
 		assertTrue("No key", s!=null);
 		

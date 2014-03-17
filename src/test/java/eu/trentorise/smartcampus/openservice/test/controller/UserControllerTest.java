@@ -44,11 +44,9 @@ import eu.trentorise.smartcampus.openservices.entities.User;
 @ContextConfiguration(value= {"file:src/main/webapp/WEB-INF/spring/root-context.xml",
 		"file:src/main/webapp/WEB-INF/spring/spring-security.xml",
 		"file:src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml",
-		"file:src/test/java/spring-embedded-db.xml"})
+		"file:src/test/resources/spring-embedded-db.xml"})
 @TransactionConfiguration(transactionManager="transactionManager", defaultRollback=false)
 public class UserControllerTest {
-	
-	//@Inject private CustomUserDetailsService customUserDetails;
 	
 	private static final String BASE_URL = "http://localhost:8080/openservice/api/user";
 	private RestTemplate restTemplate;
@@ -57,21 +55,7 @@ public class UserControllerTest {
 	
 	@Before
 	public void setUp(){
-		
-		//customUserDetails = new CustomUserDetailsService();
-		
 		restTemplate = new RestTemplate();
-		
-		//set up my Authentication object
-		/*Object principal = "sara";
-		Object credentials = "sara";
-		Authentication auth = new TestingAuthenticationToken(principal, credentials);
-		SecurityContextHolder.getContext().setAuthentication(auth);
-		*/
-		/* version 2 - does not work because I have a CustomUserDetailsService
-		Authentication authentication = new UsernamePasswordAuthenticationToken("sara","sara");
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		*/
 	}
 	
 	@Test
