@@ -66,7 +66,8 @@ public class OrganizationDaoImpl implements OrganizationDao{
 	@Override
 	public List<Organization> showOrganizations(int firstResult, int maxResult,  String param_order) 
 			throws DataAccessException {
-		Query q = getEntityManager().createQuery("FROM Organization Org ORDER BY Org."+param_order);
+		Query q = getEntityManager().createQuery("FROM Organization Org ORDER BY :order")
+				.setParameter("order", param_order);
 		List<Organization> os = q.setFirstResult(firstResult).setMaxResults(maxResult).getResultList();
 		return os;
 	}
@@ -168,8 +169,9 @@ public class OrganizationDaoImpl implements OrganizationDao{
 			throws DataAccessException {
 		Query q = getEntityManager().createQuery("FROM Organization Org WHERE Org.id IN " +
 				"( SELECT Ur.id_org FROM UserRole Ur " +
-				"WHERE Ur.id_user=:id_user AND Ur.role='"+ROLES.ROLE_ORGOWNER+"')")
-				.setParameter("id_user", owner_id);
+				"WHERE Ur.id_user=:id_user AND Ur.role=':role')")
+				.setParameter("id_user", owner_id)
+				.setParameter("role", ROLES.ROLE_ORGOWNER);
 		List<Organization> orgs = q.getResultList();
 		return orgs;
 	}
@@ -186,8 +188,9 @@ public class OrganizationDaoImpl implements OrganizationDao{
 	public List<Organization> searchOrganization(String token, int firstResult, int maxResult, String param_order)
 			throws DataAccessException {
 		Query q = getEntityManager().createQuery("FROM Organization Org WHERE Org.name LIKE :token " +
-				"ORDER BY Org."+param_order)
-				.setParameter("token", "%"+token+"%");
+				"ORDER BY :order")
+				.setParameter("token", "%"+token+"%")
+				.setParameter("order", param_order);
 		List<Organization> orgs = q.setFirstResult(firstResult).setMaxResults(maxResult).getResultList();
 		return orgs;
 	}
@@ -207,16 +210,18 @@ public class OrganizationDaoImpl implements OrganizationDao{
 		Query q = null;
 		if(category!=null && geography==null){
 			q = getEntityManager().createQuery("FROM Organization Org WHERE Org.category=:category " +
-					"ORDER BY Org."+param_order)
-					.setParameter("category", category);
+					"ORDER BY :order")
+					.setParameter("category", category)
+					.setParameter("order", param_order);
 		}
 		else if(category==null && geography!=null){
 			
 		}
 		else if(category!=null && geography!=null){
 			q = getEntityManager().createQuery("FROM Organization Org WHERE Org.category=:category "+
-					"ORDER BY Org."+param_order)
-					.setParameter("category", category);
+					"ORDER BY :order")
+					.setParameter("category", category)
+					.setParameter("order", param_order);
 		}
 		List<Organization> orgs = q.setFirstResult(firstResult).setMaxResults(maxResult).getResultList();
 		return orgs;
