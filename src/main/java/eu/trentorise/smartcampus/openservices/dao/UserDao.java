@@ -90,7 +90,7 @@ public interface UserDao {
 	public boolean isEmailAlreadyUse(String email) throws DataAccessException;
 	
 	/**
-	 * Retrieve user by username
+	 * Retrieve user by email
 	 * @param username
 	 * @return an instance of {@link User}
 	 * @throws DataAccessException

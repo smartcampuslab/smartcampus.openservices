@@ -258,4 +258,20 @@ public class UserManager {
 			return false;
 		}
 	}
+	
+	/**
+	 * Reset user password, and change it with a random string
+	 * @param email : String
+	 * @return temporary password : String
+	 */
+	public String resetPassword(String email){
+		try{
+			User user = userDao.getUserByEmail(email);
+			String tPassw = UUID.randomUUID().toString();
+			userDao.modifyPassword(user.getUsername(), tPassw);
+			return tPassw;
+		}catch(DataAccessException d){
+			return null;
+		}
+	}
 }
