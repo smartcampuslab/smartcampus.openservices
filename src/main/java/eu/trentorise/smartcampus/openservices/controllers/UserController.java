@@ -303,4 +303,54 @@ public class UserController {
 		return responseObject;
 	}
 	
+	@RequestMapping(value = "/passw/modify", method = RequestMethod.POST, produces="application/json")
+	@ResponseBody
+	public ResponseObject modifyUserPassword(@RequestBody String oldP, @RequestBody String newP, 
+			HttpServletResponse response){
+		logger.info("-- Modify User password --");
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		responseObject = new ResponseObject();
+		try{
+			boolean result = userManager.modifyUserPassword(username, oldP,
+					newP);
+			if (result) {
+				responseObject.setStatus(HttpServletResponse.SC_OK);
+			} else {
+				responseObject.setError("Connection problem with database");
+				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+			}
+		}catch(SecurityException s){
+			responseObject.setError("Your old password is not correct");
+			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		}
+		return responseObject;
+	}
+	
+	@RequestMapping(value = "/passw/reset", method = RequestMethod.POST, produces="application/json")
+	@ResponseBody
+	public ResponseObject resetUserPassword(@RequestBody String email, 
+			HttpServletResponse response){
+		logger.info("-- Reset User password --");
+		//TODO
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		responseObject = new ResponseObject();
+		try{
+			boolean result = true;//userManager.modifyUserPassword(username, oldP,newP);
+			if (result) {
+				responseObject.setStatus(HttpServletResponse.SC_OK);
+			} else {
+				responseObject.setError("Connection problem with database");
+				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+			}
+		}catch(SecurityException s){
+			responseObject.setError("Your old password is not correct");
+			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		}
+		return responseObject;
+	}
+	
 }

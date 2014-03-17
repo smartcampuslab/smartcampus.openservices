@@ -21,6 +21,7 @@ import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -223,6 +224,38 @@ public class UserManager {
 		}
 		}catch(DataAccessException d){
 			return null;
+		}
+	}
+	
+	/**
+	 * Modify user password.
+	 * This function retrieves user data and check if password is the same.
+	 * If it is correct then user password is modify with new one, otherwise an exception is thrown.
+	 * @param username : String
+	 * @param oldPassw : String
+ 	 * @param newPassw : String
+	 * @return a boolean value: true if there is no error, false otherwise. Throw a SecurityException if 
+	 * user's old password is wrong
+	 */
+	public boolean modifyUserPassword(String username, String oldPassw, String newPassw){
+		try{
+			// get user data
+			User user = userDao.getUserByUsername(username);
+			// check if email are equals
+			// bcrypt old passw
+			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+			String encodedOldPassword = ((BCryptPasswordEncoder) passwordEncoder)
+					.encode(oldPassw);
+			if (encodedOldPassword.equalsIgnoreCase(user.getPassword())) {
+				// commit
+				userDao.modifyPassword(username, newPassw);
+				return true;
+			} else {
+				throw new SecurityException();
+			}
+		}
+		catch(DataAccessException d){
+			return false;
 		}
 	}
 }

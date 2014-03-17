@@ -96,5 +96,15 @@ public interface UserDao {
 	 * @throws DataAccessException
 	 */
 	public User getUserByEmail(String email) throws DataAccessException;
+	
+	/**
+	 * Modify user password
+	 * @param username
+	 * @param oldPassw
+	 * @param newPassw
+	 * @return
+	 * @throws DataAccessException
+	 */
+	public boolean modifyPassword(String username, String newPassw) throws DataAccessException;
 
 }

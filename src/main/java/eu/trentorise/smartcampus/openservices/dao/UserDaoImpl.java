@@ -117,14 +117,6 @@ public class UserDaoImpl implements UserDao{
 	@Override
 	public void modifyUser(int user_id, User user) throws DataAccessException{
 		User oldUser = getUserById(user_id);
-		//new password
-		if(user.getPassword()!=null && !user.getPassword().equalsIgnoreCase("") 
-				&& !oldUser.getPassword().equalsIgnoreCase(user.getPassword())){
-			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-			String encodedPassword = ((BCryptPasswordEncoder) passwordEncoder)
-					.encode(user.getPassword());
-			user.setPassword(encodedPassword);
-		}
 		oldUser.setProfile(user.getProfile());
 		oldUser.setEmail(user.getEmail());
 		getEntityManager().merge(oldUser);
@@ -192,6 +184,22 @@ public class UserDaoImpl implements UserDao{
 			return null;
 		}
 		else return users.get(0);
+	}
+
+	@Transactional
+	@Override
+	public boolean modifyPassword(String username, String newPassw) throws DataAccessException {
+		User user = getUserByUsername(username);
+		//new password
+		if(newPassw!=null && !newPassw.equalsIgnoreCase("")){
+			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+			String encodedPassword = ((BCryptPasswordEncoder) passwordEncoder)
+							.encode(newPassw);
+			user.setPassword(encodedPassword);
+			getEntityManager().merge(user);
+			return true;
+		}
+		return false;
 	}
 
 }
