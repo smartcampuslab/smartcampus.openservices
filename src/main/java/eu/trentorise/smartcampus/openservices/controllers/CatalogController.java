@@ -106,7 +106,7 @@ public class CatalogController {
 			}
 		}
 
-		else if (token == null && tag != null) {//TODO pagination on tags
+		else if (token == null && tag != null) {
 			logger.info("-- Simple Search by tags: {} --", tag);
 			List<Service> s = Service.fromServiceEntities(catalogManager.catalogServiceBrowseByTags(tag,firstResult, maxResult, param_order));
 			if (s == null || s.size() == 0) {
