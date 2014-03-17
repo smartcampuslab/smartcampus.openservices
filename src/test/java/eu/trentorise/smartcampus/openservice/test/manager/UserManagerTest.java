@@ -35,7 +35,7 @@ import eu.trentorise.smartcampus.openservices.managers.UserManager;
 @ContextConfiguration(value= {"file:src/main/webapp/WEB-INF/spring/root-context.xml",
 		"file:src/main/webapp/WEB-INF/spring/spring-security.xml",
 		"file:src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml",
-		"file:src/main/webapp/WEB-INF/spring/spring-embedded-db.xml"})
+		"file:src/test/java/spring-embedded-db.xml"})
 @TransactionConfiguration(transactionManager="transactionManager", defaultRollback=false)
 public class UserManagerTest {
 	// Log
