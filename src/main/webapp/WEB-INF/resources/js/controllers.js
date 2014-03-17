@@ -481,8 +481,9 @@ app.controller('editOrgMembersCtrl', ['$scope', '$http', '$location', 'Org',
     }
 ]);
 
-app.controller('categoriesCtrl', ['$scope', '$http', '$location', 'Catalog',
-    function ($scope, $http, $location, Catalog) {
+app.controller('categoriesCtrl', ['$scope','$rootScope', '$http', '$location', 'Catalog',
+    function ($scope,$rootScope, $http, $location, Catalog) {
+		$rootScope.locTitles = ['categories'];
 
         Catalog.browseAllServiceCat({}, function (data) {
             $scope.categoryData = data.data;
@@ -494,8 +495,8 @@ app.controller('categoriesCtrl', ['$scope', '$http', '$location', 'Catalog',
     }
 ]);
 
-app.controller('categoryCtrl', ['$scope', '$http', '$location', 'Catalog', '$routeParams',
-    function ($scope, $http, $location, Catalog, $routeParams) {
+app.controller('categoryCtrl', ['$scope','$rootScope', '$http', '$location', 'Catalog', 'Category', '$routeParams',
+    function ($scope, $rootScope, $http, $location, Catalog, Category, $routeParams) {
         $scope.start = 0;
         $scope.end = 9;
         $scope.update = function () {
@@ -511,6 +512,11 @@ app.controller('categoryCtrl', ['$scope', '$http', '$location', 'Catalog', '$rou
         };
         $scope.update();
 
+        Category.getById({id:$routeParams.category}, function(data) {
+        	$scope.category = data.data;
+    		$rootScope.locTitles = ['categories',$scope.category.name];
+        });
+        
         $scope.next = function () {
             if ($scope.end < $scope.total) {
                 $scope.start += 10;
@@ -533,10 +539,11 @@ app.controller('categoryCtrl', ['$scope', '$http', '$location', 'Catalog', '$rou
     }
 ]);
 
-app.controller('servicesCtrl', ['$scope', '$http', '$routeParams', 'Catalog',
-    function ($scope, $http, $routeParams, Catalog) {
+app.controller('servicesCtrl', ['$scope','$rootScope', '$http', '$routeParams', 'Catalog',
+    function ($scope, $rootScope, $http, $routeParams, Catalog) {
         $scope.start = 0;
         $scope.end = 9;
+        $rootScope.locTitles = ['services'];
 
         if ( !! $scope.categoryActive) {
             $scope.categoryActive = undefined;
@@ -588,8 +595,9 @@ app.controller('servicesCtrl', ['$scope', '$http', '$routeParams', 'Catalog',
     }
 ]);
 
-app.controller('organizationsCtrl', ['$scope', '$http', '$routeParams', 'Catalog',
-    function ($scope, $http, $routeParams, Catalog) {
+app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routeParams', 'Catalog',
+    function ($scope, $rootScope, $http, $routeParams, Catalog) {
+		$rootScope.locTitles = ['organizations'];
         Catalog.listOrgs({
             first: 0,
             last: 20,
@@ -599,12 +607,13 @@ app.controller('organizationsCtrl', ['$scope', '$http', '$routeParams', 'Catalog
         });
     }
 ]);
-app.controller('organizationCtrl', ['$scope', '$http', '$routeParams', 'Catalog', 'Category',
-    function ($scope, $http, $routeParams, Catalog, Category) {
+app.controller('organizationCtrl', ['$scope', '$rootScope', '$http', '$routeParams', 'Catalog', 'Category',
+    function ($scope, $rootScope, $http, $routeParams, Catalog, Category) {
         Catalog.getOrgById({
             id: $routeParams.id
         }, function (data) {
             $scope.org = data.data;
+    		$rootScope.locTitles = ['organizations',$scope.org.name];
             if ($scope.org.category) {
                 Category.getById({
                     id: $scope.org.category
@@ -653,8 +662,8 @@ app.controller('organizationServicesCtrl', ['$scope', '$http', '$routeParams', '
     }
 ]);
 
-app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', '$http', '$location', 'RemoteApi',
-    function ($scope, $routeParams, Catalog, Category, $http, $location, RemoteApi) {
+app.controller('serviceCtrl', ['$scope', '$rootScope', '$routeParams', 'Catalog', 'Category', '$http', '$location', 'RemoteApi',
+    function ($scope, $rootScope, $routeParams, Catalog, Category, $http, $location, RemoteApi) {
         $scope.remoteapi;
         $scope.template = 'partials/services/_about.html';
         $scope.request = {};
@@ -662,6 +671,7 @@ app.controller('serviceCtrl', ['$scope', '$routeParams', 'Catalog', 'Category', 
             id: $routeParams.id
         }, function (data) {
             $scope.service = data.data;
+            $rootScope.locTitles = ['services',$scope.service.name];
 
             Catalog.getOrgById({
                 id: $scope.service.organizationId
