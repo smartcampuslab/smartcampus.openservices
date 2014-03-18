@@ -303,6 +303,15 @@ public class UserController {
 		return responseObject;
 	}
 	
+	/**
+	 * Modify a user's password
+	 * @param oldP : String old password saved in db
+	 * @param newP : Strign new password
+	 * @param response : {@link HttpServletResponse} which returns status of response OK, SERVICE UNAVAILABLE 
+	 * or NOT FOUND
+	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE or NOT FOUND) and 
+	 * error message (if status is SERVICE UNAVAILABLE or NOT FOUND).
+	 */
 	@RequestMapping(value = "/passw/modify", method = RequestMethod.POST, produces="application/json")
 	@ResponseBody
 	public ResponseObject modifyUserPassword(@RequestBody String oldP, @RequestBody String newP, 
@@ -328,6 +337,15 @@ public class UserController {
 		return responseObject;
 	}
 	
+	/**
+	 * Reset a user's password when password is forgotten.
+	 * This function reset password in db with a new random value and send it via email to user.
+	 * @param email : String user's email
+	 * @param response : a {@link HttpServletResponse} which returns status of response OK, FORBIDDEN, 
+	 * SERVICE UNAVAILABLE or NOT FOUND
+	 * @return {@link ResponseObject} with status (OK, FORBIDDEN, SERVICE UNAVAILABLE or NOT FOUND) and 
+	 * error message (if status is FORBIDDEN, SERVICE UNAVAILABLE or NOT FOUND).
+	 */
 	@RequestMapping(value = "/passw/reset", method = RequestMethod.POST, produces="application/json")
 	@ResponseBody
 	public ResponseObject resetUserPassword(@RequestBody String email, HttpServletResponse response){
