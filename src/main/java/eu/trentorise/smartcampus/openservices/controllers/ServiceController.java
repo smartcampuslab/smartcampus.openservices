@@ -39,7 +39,7 @@ import eu.trentorise.smartcampus.openservices.managers.ServiceManager;
 import eu.trentorise.smartcampus.openservices.model.Service;
 
 /**
- * Controller that retrieves service data and adds, modifies and delets them for 
+ * Controller that retrieves service data and adds, modifies and deletes them for 
  * authenticated users.
  * 
  * @author Giulia Canobbio
