@@ -65,7 +65,18 @@ public class CatalogController {
 	@Autowired
 	private CatalogManager catalogManager;
 	
-	
+	/**
+	 * Retrieve list of all services or a partial one searching by name or tag.
+	 * @param token :String
+	 * @param firstResult : Integer
+	 * @param maxResult : Integer
+	 * @param param_order : String
+	 * @param tag : String
+	 * @param response : {@link HttpServletResponse} which is needed for status of response (OK, BAD REQUEST 
+	 * or NOT FOUND)
+	 * @return {@link ResponseObject} with services data, status (OK, BAD REQUEST or NOT FOUND) and 
+	 * error message (if status is BAD REQUEST or NOT FOUND).
+	 */
 	@RequestMapping(value="/service", method = RequestMethod.GET, produces="application/json")
 	@ResponseBody
 	public ResponseObject catalogServices(
@@ -278,6 +289,17 @@ public class CatalogController {
 		return responseObject;
 	}
 
+	/**
+	 * Retrieve list of all organizations or a partial one search by name
+	 * @param token : String
+	 * @param firstResult : Integer
+	 * @param maxResult : Integer
+	 * @param param_order : String 
+	 * @param response : {@link HttpServletResponse} which is needed for status of response (OK, BAD REQUEST
+	 *  or NOT FOUND)
+	 * @return {@link ResponseObject} with organizations data, status (OK, BAD REQUEST or NOT FOUND) and 
+	 * error message (if status is BAD REQUEST or NOT FOUND).
+	 */
 	@RequestMapping(value="/org", method = RequestMethod.GET, produces="application/json")
 	@ResponseBody
 	public ResponseObject catalogOrgs(
