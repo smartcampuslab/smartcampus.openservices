@@ -78,46 +78,54 @@ public class CatalogController {
 		logger.info("-- Service Catalog --");
 		responseObject = new ResponseObject();
 		List<Service> services = new ArrayList<Service>();
-		if (token == null && tag == null) {
-			logger.info("-- List of service --");
-			services = Service.fromServiceEntities(catalogManager.catalogServices(firstResult, maxResult,param_order));
-			if (services == null || services.size() == 0) {
-				responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-				responseObject.setError("No service available");
-				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			} else {
-				responseObject.setData(services);
-				responseObject.setStatus(HttpServletResponse.SC_OK);
-				responseObject.setTotalNumber(catalogManager.countService());
+		try{
+			if (token == null && tag == null) {
+				logger.info("-- List of service --");
+				services = Service.fromServiceEntities(catalogManager.catalogServices(firstResult, maxResult, 
+							param_order));
+				if (services == null || services.size() == 0) {
+					responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+					responseObject.setError("No service available");
+					response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				} else {
+					responseObject.setData(services);
+					responseObject.setStatus(HttpServletResponse.SC_OK);
+					responseObject.setTotalNumber(catalogManager.countService());
+				}
+
+			} else if (token != null && tag == null) {
+				logger.info("-- Simple Search --");
+				services = Service.fromServiceEntities(catalogManager
+						.catalogServiceSimpleSearch(token, firstResult,maxResult, param_order));
+				if (services == null || services.size() == 0) {
+					responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+					responseObject.setError("No published service for this search by name");
+					response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				} else {
+					responseObject.setData(services);
+					responseObject.setStatus(HttpServletResponse.SC_OK);
+					responseObject.setTotalNumber(catalogManager.countServiceSimpleSearch(token));
+				}
 			}
 
-		} else if (token != null && tag == null) {
-			logger.info("-- Simple Search --");
-			services = Service.fromServiceEntities(catalogManager.catalogServiceSimpleSearch(token,
-					firstResult, maxResult, param_order));
-			if (services == null || services.size() == 0) {
-				responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-				responseObject.setError("No published service for this search by name");
-				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			} else {
-				responseObject.setData(services);
-				responseObject.setStatus(HttpServletResponse.SC_OK);
-				responseObject.setTotalNumber(catalogManager.countServiceSimpleSearch(token));
+			else if (token == null && tag != null) {
+				logger.info("-- Simple Search by tags: {} --", tag);
+				List<Service> s = Service.fromServiceEntities(catalogManager
+						.catalogServiceBrowseByTags(tag, firstResult,maxResult, param_order));
+				if (s == null || s.size() == 0) {
+					responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+					responseObject.setError("No service for this search by tags");
+					response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				} else {
+					responseObject.setData(s);
+					responseObject.setStatus(HttpServletResponse.SC_OK);
+					responseObject.setTotalNumber(catalogManager.countServiceByTagsSearch(tag));
+				}
 			}
-		}
-
-		else if (token == null && tag != null) {
-			logger.info("-- Simple Search by tags: {} --", tag);
-			List<Service> s = Service.fromServiceEntities(catalogManager.catalogServiceBrowseByTags(tag,firstResult, maxResult, param_order));
-			if (s == null || s.size() == 0) {
-				responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-				responseObject.setError("No service for this search by tags");
-				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			} else {
-				responseObject.setData(s);
-				responseObject.setStatus(HttpServletResponse.SC_OK);
-				responseObject.setTotalNumber(catalogManager.countServiceByTagsSearch(tag));
-			}
+		}catch(SecurityException s){
+			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			responseObject.setError("Order value is wrong. It can be only id or name");
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return responseObject;
 	}
@@ -248,17 +256,24 @@ public class CatalogController {
 			@RequestParam(value="order", required=false, defaultValue="name") String param_order, 
 			HttpServletResponse response){
 		logger.info("-- Service Catalog browse (org) --");
-		List<Service> services = Service.fromServiceEntities(catalogManager.catalogServiceBrowseByOrg(org, firstResult, maxResult, param_order));
-		responseObject=new ResponseObject();
-		if(services==null || services.size()==0){
-			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			responseObject.setError("No service for this organization");
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-		}
-		else{
-			responseObject.setData(services);
-			responseObject.setStatus(HttpServletResponse.SC_OK);
-			responseObject.setTotalNumber(catalogManager.countServiceByOrgSearch(org));
+		try{
+			List<Service> services = Service.fromServiceEntities(catalogManager.catalogServiceBrowseByOrg(org, 
+					firstResult, maxResult, param_order));
+			responseObject=new ResponseObject();
+			if(services==null || services.size()==0){
+				responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				responseObject.setError("No service for this organization");
+				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			}
+			else{
+				responseObject.setData(services);
+				responseObject.setStatus(HttpServletResponse.SC_OK);
+				responseObject.setTotalNumber(catalogManager.countServiceByOrgSearch(org));
+			}
+		}catch(SecurityException s){
+			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			responseObject.setError("Order value is wrong. It can be only id or name");
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return responseObject;
 	}
@@ -274,31 +289,39 @@ public class CatalogController {
 		logger.info("-- Organization Catalog --");
 		responseObject = new ResponseObject();
 		List<Organization> orgs = new ArrayList<Organization>();
-		if (token == null) {
-			logger.info("-- All organization --");
-			orgs = catalogManager.catalogOrg(firstResult, maxResult,param_order);
-			if (orgs == null || orgs.size() == 0) {
-				responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-				responseObject.setError("No organization available");
-				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			} else {
-				responseObject.setData(orgs);
-				responseObject.setStatus(HttpServletResponse.SC_OK);
-				responseObject.setTotalNumber(catalogManager.countOrg());
+		try{
+			if (token == null) {
+				logger.info("-- All organization --");
+				orgs = catalogManager.catalogOrg(firstResult, maxResult,
+						param_order);
+				if (orgs == null || orgs.size() == 0) {
+					responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+					responseObject.setError("No organization available");
+					response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				} else {
+					responseObject.setData(orgs);
+					responseObject.setStatus(HttpServletResponse.SC_OK);
+					responseObject.setTotalNumber(catalogManager.countOrg());
+				}
+			} else if (token != null) {
+				logger.info("-- Simple Organization Search: {} --", token);
+				orgs = catalogManager.catalogOrgSimpleSearch(token,
+						firstResult, maxResult, param_order);
+				responseObject = new ResponseObject();
+				if (orgs == null || orgs.size() == 0) {
+					responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+					responseObject.setError("No organization for this search by name");
+					response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				} else {
+					responseObject.setData(orgs);
+					responseObject.setStatus(HttpServletResponse.SC_OK);
+					responseObject.setTotalNumber(catalogManager.countOrg());
+				}
 			}
-		} else if (token != null) {
-			logger.info("-- Simple Organization Search: {} --", token);
-			orgs = catalogManager.catalogOrgSimpleSearch(token, firstResult,maxResult, param_order);
-			responseObject = new ResponseObject();
-			if (orgs == null || orgs.size() == 0) {
-				responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-				responseObject.setError("No organization for this search by name");
-				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			} else {
-				responseObject.setData(orgs);
-				responseObject.setStatus(HttpServletResponse.SC_OK);
-				responseObject.setTotalNumber(catalogManager.countOrg());
-			}
+		}catch(SecurityException s){
+			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			responseObject.setError("Order value is wrong. It can be only id or name");
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return responseObject;
 	}
@@ -345,17 +368,23 @@ public class CatalogController {
 			@RequestParam(value="order", required=false, defaultValue="name") String param_order,  
 			HttpServletResponse response){
 		logger.info("-- Organization Catalog browse --");
-		List<Organization> orgs = catalogManager.catalogOrgBrowse(categoryId, firstResult, maxResult, param_order);
-		responseObject = new ResponseObject();
-		if(orgs==null || orgs.size()==0){
-			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			responseObject.setError("No organization for this search by category");
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-		}
-		else{
-			responseObject.setData(orgs);
-			responseObject.setStatus(HttpServletResponse.SC_OK);
-			responseObject.setTotalNumber(catalogManager.countOrg());
+		try{
+			List<Organization> orgs = catalogManager.catalogOrgBrowse(categoryId, firstResult, maxResult, param_order);
+			responseObject = new ResponseObject();
+			if(orgs==null || orgs.size()==0){
+				responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				responseObject.setError("No organization for this search by category");
+				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			}
+			else{
+				responseObject.setData(orgs);
+				responseObject.setStatus(HttpServletResponse.SC_OK);
+				responseObject.setTotalNumber(catalogManager.countOrg());
+			}
+		}catch(SecurityException s){
+			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			responseObject.setError("Order value is wrong. It can be only id or name");
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return responseObject;
 	}

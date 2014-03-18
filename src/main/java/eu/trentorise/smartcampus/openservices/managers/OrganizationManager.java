@@ -33,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mchange.rmi.NotAuthorizedException;
 
+import eu.trentorise.smartcampus.openservices.Constants.ORDER;
 import eu.trentorise.smartcampus.openservices.Constants.ROLES;
 import eu.trentorise.smartcampus.openservices.dao.OrganizationDao;
 import eu.trentorise.smartcampus.openservices.dao.ServiceDao;
@@ -274,7 +275,12 @@ public class OrganizationManager {
 	 */
 	public List<Organization> getOrganizations(int firstResult, int maxResult, String param_order) {
 		try{
-			return orgDao.showOrganizations(firstResult, maxResult, param_order);
+			if(param_order.equalsIgnoreCase(ORDER.id.toString())){
+				return orgDao.showOrganizations(firstResult, maxResult, ORDER.id.toString());
+			}else if(param_order.equalsIgnoreCase(ORDER.name.toString())){
+				return orgDao.showOrganizations(firstResult, maxResult, ORDER.name.toString());
+			}
+			throw new SecurityException();
 		}catch(DataAccessException d){
 			return null;
 		}

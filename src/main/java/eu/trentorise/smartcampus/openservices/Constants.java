@@ -36,4 +36,8 @@ public class Constants {
 	 * Roles enum
 	 */
 	public enum ROLES {ROLE_ORGOWNER, ROLE_NORMAL, ROLE_SERVICEOWNER};
+	/**
+	 * Possible values for ORDER BY in hsql query
+	 */
+	public enum ORDER {id, name};
 }

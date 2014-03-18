@@ -15,12 +15,7 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.managers;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -28,7 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 
-import eu.trentorise.smartcampus.openservices.Constants.SERVICE_STATE;
+import eu.trentorise.smartcampus.openservices.Constants.*;
 import eu.trentorise.smartcampus.openservices.dao.MethodDao;
 import eu.trentorise.smartcampus.openservices.dao.OrganizationDao;
 import eu.trentorise.smartcampus.openservices.dao.ServiceDao;
@@ -83,11 +78,12 @@ public class CatalogManager {
 	 */
 	public List<Service> catalogServices(int firstResult, int maxResult, String param_order){
 		try{
-			return cleanAuthenticationData(serviceDao.showPublishedService(firstResult,maxResult, param_order));
-			/*PageRequest pageReq = new PageRequest(page, size, Direction.ASC, "name");
-			Page<Service> s =  serviceDao.findAll(pageReq);
-			return s.getContent();
-			*/		
+			if(param_order.equalsIgnoreCase(ORDER.id.toString())){
+				return cleanAuthenticationData(serviceDao.showPublishedService(firstResult,maxResult, ORDER.id.toString()));
+			}else if(param_order.equalsIgnoreCase(ORDER.name.toString())){
+				return cleanAuthenticationData(serviceDao.showPublishedService(firstResult,maxResult, ORDER.name.toString()));
+			}
+			throw new SecurityException();
 		}catch(DataAccessException d){
 			return null;
 		}
@@ -187,7 +183,12 @@ public class CatalogManager {
 	 */
 	public List<Service> catalogServiceSimpleSearch(String token, int firstResult, int maxResult, String param_order){
 		try{
-			return serviceDao.searchService(token, firstResult, maxResult, param_order);
+			if(param_order.equalsIgnoreCase(ORDER.id.toString())){
+				return serviceDao.searchService(token, firstResult, maxResult, ORDER.id.toString());
+			}else if(param_order.equalsIgnoreCase(ORDER.name.toString())){
+				return serviceDao.searchService(token, firstResult, maxResult, ORDER.name.toString());
+			}
+			throw new SecurityException();
 		}catch(DataAccessException d){
 			return null;
 		}
@@ -214,7 +215,12 @@ public class CatalogManager {
 	public List<Service> catalogServiceBrowseByOrg(int org, int firstResult, int maxResult,String param_order) {
 		List<Service> s = new ArrayList<Service>();
 		try {
-			s = serviceDao.getServiceByIdOrg(org,firstResult, maxResult, param_order);
+			if(param_order.equalsIgnoreCase(ORDER.id.toString())){
+				s = serviceDao.getServiceByIdOrg(org,firstResult, maxResult, ORDER.id.toString());
+			}else if(param_order.equalsIgnoreCase(ORDER.name.toString())){
+				s = serviceDao.getServiceByIdOrg(org,firstResult, maxResult, ORDER.name.toString());
+			}
+			else throw new SecurityException();
 			if (s != null) {
 				for (Iterator<Service> iterator = s.iterator(); iterator.hasNext();) {
 					Service service = iterator.next();
@@ -236,9 +242,12 @@ public class CatalogManager {
 	 */
 	public List<Service> catalogServiceBrowseByTags(String tag, int firstResult, int maxResult, String param_order) {
 		try{
-			List<Service> s = serviceDao.getServiceByTag(tag, firstResult, maxResult, param_order);
-			System.out.println("List get service by tag: "+s.size());
-			return s;
+			if(param_order.equalsIgnoreCase(ORDER.id.toString())){
+				return serviceDao.getServiceByTag(tag, firstResult, maxResult, ORDER.id.toString());
+			}else if(param_order.equalsIgnoreCase(ORDER.name.toString())){
+				return serviceDao.getServiceByTag(tag, firstResult, maxResult, ORDER.name.toString());
+			}
+			throw new SecurityException();
 		}catch(DataAccessException d){
 			return null;
 		}
@@ -250,7 +259,12 @@ public class CatalogManager {
 	 */
 	public List<Organization> catalogOrg( int firstResult, int maxResult,  String param_order){
 		try{
-			return orgDao.showOrganizations(firstResult, maxResult, param_order);
+			if(param_order.equalsIgnoreCase(ORDER.id.toString())){
+				return orgDao.showOrganizations(firstResult, maxResult, ORDER.id.toString());
+			}else if(param_order.equalsIgnoreCase(ORDER.name.toString())){
+				return orgDao.showOrganizations(firstResult, maxResult, ORDER.name.toString());
+			}
+			throw new SecurityException();
 		}catch(DataAccessException d){
 			return null;
 		}
@@ -264,7 +278,12 @@ public class CatalogManager {
 	 */
 	public List<Organization> catalogOrgSimpleSearch(String token, int firstResult, int maxResult,  String param_order){
 		try{
-			return orgDao.searchOrganization(token, firstResult, maxResult, param_order);
+			if(param_order.equalsIgnoreCase(ORDER.id.toString())){
+				return orgDao.searchOrganization(token, firstResult, maxResult, ORDER.id.toString());
+			}else if(param_order.equalsIgnoreCase(ORDER.name.toString())){
+				return orgDao.searchOrganization(token, firstResult, maxResult, ORDER.name.toString());
+			}
+			throw new SecurityException();
 		}catch(DataAccessException d){
 			return null;
 		}
@@ -277,7 +296,12 @@ public class CatalogManager {
 	 */
 	public List<Organization> catalogOrgBrowse(int category, int firstResult, int maxResult,  String param_order){
 		try{
-			return orgDao.browseOrganization(category,null, firstResult, maxResult, param_order);
+			if(param_order.equalsIgnoreCase(ORDER.id.toString())){
+				return orgDao.browseOrganization(category,null, firstResult, maxResult, ORDER.id.toString());
+			}else if(param_order.equalsIgnoreCase(ORDER.name.toString())){
+				return orgDao.browseOrganization(category,null, firstResult, maxResult, ORDER.name.toString());
+			}
+			throw new SecurityException();
 		}catch(DataAccessException d){
 			return null;
 		}

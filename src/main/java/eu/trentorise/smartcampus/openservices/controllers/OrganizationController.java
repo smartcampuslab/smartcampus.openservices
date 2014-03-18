@@ -144,16 +144,22 @@ public class OrganizationController {
 	@ResponseBody
 	public ResponseObject getOrganizations(HttpServletResponse response){
 		logger.info("-- View organization list --");
-		List<Organization> orgs = organizationManager.getOrganizations(0, 100000000, "name");
-		responseObject = new ResponseObject();
-		if(orgs==null || orgs.size()==0){
-			responseObject.setError("There is no organization");
-			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-		}
-		else{
-			responseObject.setData(orgs);
-			responseObject.setStatus(HttpServletResponse.SC_OK);
+		try{
+			List<Organization> orgs = organizationManager.getOrganizations(0, 100000000, "name");
+			responseObject = new ResponseObject();
+			if(orgs==null || orgs.size()==0){
+				responseObject.setError("There is no organization");
+				responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			}
+			else{
+				responseObject.setData(orgs);
+				responseObject.setStatus(HttpServletResponse.SC_OK);
+			}
+		}catch(SecurityException s){
+			responseObject.setError("Order is wrong. It can be name or id.");
+				responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return responseObject;
 	}*/
