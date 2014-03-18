@@ -110,8 +110,8 @@ public class ServiceDaoImpl implements ServiceDao{
 	@Override
 	public List<Service> showPublishedService(int firstResult, int maxResult, String param_order) 
 			throws DataAccessException {
-		Query q = getEntityManager().createQuery("FROM Service S WHERE S.state!='UNPUBLISH' ORDER BY :order")
-				.setParameter("order", param_order);
+		Query q = getEntityManager().createQuery("FROM Service S WHERE S.state!='UNPUBLISH' ORDER BY S."+param_order)
+				/*.setParameter("porder", param_order)*/;
 		List<Service> s = q.setFirstResult(firstResult).setMaxResults(maxResult).getResultList();
 		return s;
 	}
@@ -251,9 +251,9 @@ public class ServiceDaoImpl implements ServiceDao{
 	@Override
 	public List<Service> getServiceByIdOrg(int id_org, int firstResult,int maxResult, String param_order) 
 			throws DataAccessException{
-		Query q = getEntityManager().createQuery("FROM Service S WHERE S.organizationId=:id_org ORDER BY :order")
-				.setParameter("id_org", id_org)
-				.setParameter("order", param_order);
+		Query q = getEntityManager().createQuery("FROM Service WHERE organizationId=:idOrg ORDER BY "+param_order)
+				.setParameter("idOrg", id_org)
+				/*.setParameter("order", param_order)*/;
 		List<Service> s = q.setFirstResult(firstResult).setMaxResults(maxResult).getResultList();
 		return s;
 	}

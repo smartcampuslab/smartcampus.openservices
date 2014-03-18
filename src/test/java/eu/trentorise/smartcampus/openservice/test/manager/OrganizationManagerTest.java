@@ -67,7 +67,7 @@ public class OrganizationManagerTest {
 		public void testCreateOrg(){
 			log.info("TEST - Create organization: "+org.getName()+", by user "+username);
 			boolean result = orgManager.createOrganization(username,org);
-			log.info("Result of creation: "+result);
+			log.info("Result of creation: {}",result);
 			assertTrue("Creation not available", result==true);
 		}
 		
@@ -79,7 +79,7 @@ public class OrganizationManagerTest {
 			org.setId(newOrg.getId());// db assigned it
 			org.setDescription("Update description");
 			boolean result = orgManager.updateOrganization(username, org);
-			log.info("Result of updating: "+result);
+			log.info("Result of updating: {} ",result);
 			assertTrue("Update not available", result==true);
 		}
 		
@@ -114,6 +114,7 @@ public class OrganizationManagerTest {
 		
 		@Test
 		public void testGetOrgById(){
+			log.info("TEST - Find organization by id");
 			//get org id
 			Organization newOrg = orgDao.getOrganizationByName(org.getName());
 			org.setId(newOrg.getId());// db assigned it
@@ -122,23 +123,22 @@ public class OrganizationManagerTest {
 		}
 		
 		@Test
-		public void testGetOrgList(){
-			List<Organization> orgs = orgManager.getOrganizations(0,3,"name");
-			assertNotNull("No organization", orgs);
-			assertTrue("Organization list is empty", orgs.size()>0);
-		}
-		
-		@Test
 		public void testGetHistoryOrg(){
+			log.info("TEST - Find organization history");
 			//get org id
 			Organization newOrg = orgDao.getOrganizationByName(org.getName());
 			org.setId(newOrg.getId());// db assigned it
 			List<ServiceHistory> history = orgManager.getHistory(org.getId());
-			assertNull("You find something: history", history);
+			if(history==null){
+				assertNull("You find something: history", history);
+			}else{
+				assertNotNull("There is no history", history);
+			}
 		}
 		
 		@Test
 		public void testDeleteOrgUser(){
+			log.info("TEST - Delete organization member");
 			//get org id
 			Organization newOrg = orgDao.getOrganizationByName(org.getName());
 			org.setId(newOrg.getId());// db assigned it
@@ -153,10 +153,13 @@ public class OrganizationManagerTest {
 		
 		@Test
 		public void testDeleteOrg(){
+			log.info("TEST - Delete organization");
 			//get org id
 			Organization newOrg = orgDao.getOrganizationByName(org.getName());
 			org.setId(newOrg.getId());// db assigned it
+			log.info("Organization id: {} ",newOrg.getId());
 			boolean result = orgManager.deleteOrganization(username, org.getId());
+			log.info("Result of deleting: {}",result);
 			assertTrue("Delete organization not available", result==true);
 		}
 		
