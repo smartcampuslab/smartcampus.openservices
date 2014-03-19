@@ -17,6 +17,7 @@ package eu.trentorise.smartcampus.openservices.controllers;
 
 import java.util.List;
 
+import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
@@ -427,8 +428,8 @@ public class ServiceController {
 	 * @param method : {@link Method} instance
 	 * @param response : {@link HttpServletResponse} which returns status of response CREATED, SERVICE UNAVAILABLE or 
 	 * UNAUTHORIZED
-	 * @return {@link ResponseObject} with status (CREATED, SERVICE UNAVAILABLE or UNAUTHORIZED) and 
-	 * error message (if status is SERVICE UNAVAILABLE or UNAUTHORIZED).
+	 * @return {@link ResponseObject} with status (CREATED, SERVICE UNAVAILABLE, BAD REQUEST or UNAUTHORIZED) and 
+	 * error message (if status is SERVICE UNAVAILABLE, BAD REQUEST or UNAUTHORIZED).
 	 */
 	@RequestMapping(value = "/method/add", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
@@ -450,6 +451,10 @@ public class ServiceController {
 			responseObject.setError("User must be part of this organization before adding a method to this service");
 			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		} catch(EntityExistsException e){
+			responseObject.setError("Method with specified name already exists. Please change it.");
+			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return responseObject;
 	}

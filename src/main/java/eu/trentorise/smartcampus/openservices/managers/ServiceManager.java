@@ -18,6 +18,8 @@ package eu.trentorise.smartcampus.openservices.managers;
 
 import java.util.*;
 
+import javax.persistence.EntityExistsException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
@@ -306,6 +308,12 @@ public class ServiceManager {
 	@Transactional
 	public boolean addMethod(String username, Method method) {
 		try {
+			//check method name
+			Method m = methodDao.getMethodByName(method.getName());
+			if(m!=null){
+				throw new EntityExistsException();
+			}
+			//save
 			User user = userDao.getUserByUsername(username);
 			Service s = getServiceById(method.getServiceId());
 			UserRole ur = urDao.getRoleOfUser(user.getId(),
