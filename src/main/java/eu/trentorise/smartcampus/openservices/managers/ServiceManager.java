@@ -352,6 +352,13 @@ public class ServiceManager {
 				throw new SecurityException();
 
 			Method m = methodDao.getMethodById(method.getId());
+			
+			//check method name
+			Method checkM = methodDao.getMethodByName(method.getName());
+			if(checkM!=null && checkM.getId()!=m.getId()){
+				throw new EntityExistsException();
+			}
+			//modify
 			m.setName(method.getName());
 			m.setSynopsis(method.getSynopsis());
 			m.setDocumentation(method.getDocumentation());

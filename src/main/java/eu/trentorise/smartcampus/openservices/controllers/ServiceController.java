@@ -490,6 +490,10 @@ public class ServiceController {
 			responseObject.setError("User must be part of this organization before modifying a method to this service");
 			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		} catch(EntityExistsException e){
+			responseObject.setError("Another method with specified name already exists. Please change it.");
+			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return responseObject;
 	}
