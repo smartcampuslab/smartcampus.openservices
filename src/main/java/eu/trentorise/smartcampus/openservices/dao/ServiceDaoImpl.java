@@ -269,7 +269,8 @@ public class ServiceDaoImpl implements ServiceDao{
 	@Override
 	public List<Service> searchService(String token, int firstResult, int maxResult, String param_order) 
 			throws DataAccessException{
-		Query q = getEntityManager().createQuery("FROM Service S WHERE S.name LIKE :token AND S.state!='UNPUBLISH' " +
+		Query q = getEntityManager().createQuery("FROM Service S WHERE (S.name LIKE :token " +
+				"OR S.description LIKE :token) AND S.state!='UNPUBLISH' " +
 				"ORDER BY :order")
 				.setParameter("token", "%"+token+"%")
 				.setParameter("order", param_order);
