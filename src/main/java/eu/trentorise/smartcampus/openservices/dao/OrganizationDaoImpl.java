@@ -66,8 +66,8 @@ public class OrganizationDaoImpl implements OrganizationDao{
 	@Override
 	public List<Organization> showOrganizations(int firstResult, int maxResult,  String param_order) 
 			throws DataAccessException {
-		Query q = getEntityManager().createQuery("FROM Organization Org ORDER BY :order")
-				.setParameter("order", param_order);
+		Query q = getEntityManager().createQuery("FROM Organization Org ORDER BY "+param_order)
+				/*.setParameter("order", param_order)*/;
 		List<Organization> os = q.setFirstResult(firstResult).setMaxResults(maxResult).getResultList();
 		return os;
 	}
@@ -188,9 +188,9 @@ public class OrganizationDaoImpl implements OrganizationDao{
 	public List<Organization> searchOrganization(String token, int firstResult, int maxResult, String param_order)
 			throws DataAccessException {
 		Query q = getEntityManager().createQuery("FROM Organization Org WHERE Org.name LIKE :token " +
-				"ORDER BY :order")
+				"ORDER BY "+param_order)
 				.setParameter("token", "%"+token+"%")
-				.setParameter("order", param_order);
+				/*.setParameter("order", param_order)*/;
 		List<Organization> orgs = q.setFirstResult(firstResult).setMaxResults(maxResult).getResultList();
 		return orgs;
 	}
@@ -210,9 +210,9 @@ public class OrganizationDaoImpl implements OrganizationDao{
 		Query q = null;
 		if(category!=null && geography==null){
 			q = getEntityManager().createQuery("FROM Organization Org WHERE Org.category=:category " +
-					"ORDER BY :order")
+					"ORDER BY "+param_order)
 					.setParameter("category", category)
-					.setParameter("order", param_order);
+					/*.setParameter("order", param_order)*/;
 		}
 		else if(category==null && geography!=null){
 			
