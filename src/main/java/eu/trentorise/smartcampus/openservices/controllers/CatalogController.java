@@ -67,7 +67,8 @@ public class CatalogController {
 	private CatalogManager catalogManager;
 	
 	/**
-	 * Retrieve list of all services or a partial one searching by name or tag.
+	 * Retrieve list of all services or a partial one searching by free text in name and description,
+	 * or searching by tag.
 	 * @param token :String
 	 * @param firstResult : Integer
 	 * @param maxResult : Integer
@@ -291,7 +292,7 @@ public class CatalogController {
 	}
 
 	/**
-	 * Retrieve list of all organizations or a partial one search by name
+	 * Retrieve list of all organizations or a partial one search by free text in name and description
 	 * @param token : String
 	 * @param firstResult : Integer
 	 * @param maxResult : Integer

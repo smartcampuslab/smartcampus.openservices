@@ -188,7 +188,7 @@ public class OrganizationDaoImpl implements OrganizationDao{
 	public List<Organization> searchOrganization(String token, int firstResult, int maxResult, String param_order)
 			throws DataAccessException {
 		Query q = getEntityManager().createQuery("FROM Organization Org WHERE Org.name LIKE :token " +
-				"ORDER BY "+param_order)
+				"OR Org.description LIKE :token ORDER BY "+param_order)
 				.setParameter("token", "%"+token+"%")
 				/*.setParameter("order", param_order)*/;
 		List<Organization> orgs = q.setFirstResult(firstResult).setMaxResults(maxResult).getResultList();
