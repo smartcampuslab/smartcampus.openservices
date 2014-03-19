@@ -1,13 +1,18 @@
 'use strict';
-app.controller('homeCtrl', ['$http', '$scope',
-    function ($http, $scope) {
-        $http.get('api/catalog/news')
+app.controller('homeCtrl', ['$http', '$scope', '$rootScope', '$location', 'Catalog',
+    function ($http, $scope, $rootScope, $location, Catalog) {
+        $http.get('api/catalog/news?n=5')
         .success(function (data) {
             $scope.news = data.data;
         })
         .error(function (data) {
         	$scope.news = [];
         });
+
+        $scope.search = function(q) {
+        	$rootScope.searchQuery = q;
+        	$location.path('/search');
+        }
     }
 ]);
 
@@ -103,7 +108,7 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
         $scope.template = 'partials/profile/_details.html';
 
         $scope.deleteOrg = function (i) {
-            Org.delete({
+            Org.remove({
                 id: $scope.orgs[i].id
             }, function () {
                 $scope.orgs.splice(i, 1);
@@ -136,7 +141,7 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
             });
         };
         $scope.deleteService = function (i) {
-            Service.delete({
+            Service.remove({
                 id: $scope.services[i].id
             }, function () {
                 $scope.services.splice(i, 1);
@@ -539,20 +544,22 @@ app.controller('categoryCtrl', ['$scope','$rootScope', '$http', '$location', 'Ca
     }
 ]);
 
-app.controller('servicesCtrl', ['$scope','$rootScope', '$http', '$routeParams', 'Catalog',
-    function ($scope, $rootScope, $http, $routeParams, Catalog) {
+app.controller('servicesCtrl', ['$scope','$rootScope', '$http', 'Catalog',
+    function ($scope, $rootScope, $http, Catalog) {
         $scope.start = 0;
         $scope.end = 9;
-        $rootScope.locTitles = ['services'];
+        $rootScope.locTitles = $rootScope.searchQuery ?['search'] : ['services'];
 
         if ( !! $scope.categoryActive) {
             $scope.categoryActive = undefined;
         }
+        
         $scope.update = function () {
             Catalog.listServices({
                 first: $scope.start,
                 last: $scope.end,
-                order: 'name'
+                order: 'name',
+                q: $rootScope.searchQuery
             }, function (services) {
                 $scope.total = services.totalNumber;
                 $scope.services = services.data;
