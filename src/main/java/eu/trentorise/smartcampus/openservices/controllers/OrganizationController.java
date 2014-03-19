@@ -18,6 +18,7 @@ package eu.trentorise.smartcampus.openservices.controllers;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -222,7 +223,7 @@ public class OrganizationController {
 	//Organization - Manage Organization data: delete organization (if services are published then it delete them)
 	/**
 	 * User can delete an organization from database, only if he/she has role 'organization owner' 
-	 * for this organization.
+	 * for this organization and if there is no published service.
 	 * Delete operation causes delete of all services, methods and service histories which belogns 
 	 * to this organization.
 	 * @param id : int organization id
@@ -249,6 +250,10 @@ public class OrganizationController {
 			}
 		} catch (SecurityException s) {
 			responseObject.setError("You cannot delete this organization");
+			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		} catch(EntityExistsException e){
+			responseObject.setError("You cannot delete this organization, published services exist");
 			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		}

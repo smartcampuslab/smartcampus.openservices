@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.naming.OperationNotSupportedException;
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.NotSupportedException;
 
@@ -92,7 +93,7 @@ public class OrganizationManager {
 
 
 	/**
-	 * Delete an existing organization from database
+	 * Delete an existing organization from database if published services do not exist.
 	 * @param username : String username of logged in user
 	 * @param orgId : int organizatin id
 	 * @return boolean: true if it is ok, else false
@@ -105,15 +106,24 @@ public class OrganizationManager {
 			// check user role
 			UserRole ur = urDao.getRoleOfUser(user.getId(), orgId);
 			if (ur != null && ur.getRole().equalsIgnoreCase(ROLES.ROLE_ORGOWNER.toString())) {
+				//check that published services do not exist
+				List<Service> slist = serviceDao.getServiceByIdOrg(orgId, 0, 0, "id");
+				if(slist!=null){
+					for (Service s : slist) {
+						if(s.getState().equalsIgnoreCase("PUBLISH")){
+							throw new EntityExistsException();
+						}
+					}
+				}
 				// delete user roles
 				List<UserRole> list = urDao.getUserRoleByIdOrg(orgId);
 				for (UserRole urElem : list) {
 					urDao.deleteUserRole(urElem);
 				}
 				// delete services
-				List<Service> serviceList = serviceDao.getServiceByIdOrg(orgId,0,0,"name");
-				if(serviceList!=null){
-					for (Service s : serviceList) {
+				//List<Service> serviceList = serviceDao.getServiceByIdOrg(orgId,0,0,"name");
+				if(slist!=null){
+					for (Service s : slist) {
 						serviceDao.deleteService(s);
 					}
 				}
