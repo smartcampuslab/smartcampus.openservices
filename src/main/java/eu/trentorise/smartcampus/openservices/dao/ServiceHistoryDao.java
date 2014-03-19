@@ -77,11 +77,11 @@ public interface ServiceHistoryDao {
 	public List<ServiceHistory> getServiceHistoryByOrgId(int org_id) throws DataAccessException;
 	
 	/**
-	 * Get news of service within 5 days from current day
-	 * @return
+	 * Retrieve a list of n news, where n is the number of news.
+	 * @param n : int
+	 * @return list of {@link ServiceHistory} instances
 	 * @throws DataAccessException
-	 * @throws ParseException 
 	 */
-	public List<ServiceHistory> getNews() throws DataAccessException;
+	public List<ServiceHistory> getNews(int n) throws DataAccessException;
 
 }

@@ -411,9 +411,9 @@ public class CatalogManager {
 	 * Retrieve news from database
 	 * @return list of {@link ServiceHistory} instances
 	 */
-	public List</*News*/ServiceHistory> getNews(){
+	public List</*News*/ServiceHistory> getNews(int n){
 		try{
-			return shDao.getNews();
+			return shDao.getNews(n);
 			/*List<News> news = new ArrayList<News>();
 			String method = null,service=null;
 			List<ServiceHistory> shlist = shDao.getNews();

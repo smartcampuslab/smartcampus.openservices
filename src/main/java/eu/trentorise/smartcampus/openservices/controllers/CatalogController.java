@@ -444,9 +444,9 @@ public class CatalogController {
 	 */
 	@RequestMapping(value="/news", method=RequestMethod.GET)
 	@ResponseBody
-	public ResponseObject catalogNews(HttpServletResponse response){
+	public ResponseObject catalogNews(@RequestParam int n,HttpServletResponse response){
 		logger.info("-- Category Catalog browse --");
-		List<ServiceHistory> news = catalogManager.getNews();
+		List<ServiceHistory> news = catalogManager.getNews(n);
 		responseObject = new ResponseObject();
 		if(news==null || news.size()==0){
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);

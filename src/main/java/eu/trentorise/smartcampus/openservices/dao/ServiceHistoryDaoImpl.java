@@ -141,26 +141,19 @@ public class ServiceHistoryDaoImpl implements ServiceHistoryDao{
 	}
 
 	/**
-	 * Retrieve news on service
-	 * 5 days before today
-	 * @throws ParseException 
+	 * Retrieve n news on service
 	 */
 	@Transactional
 	@Override
-	public List<ServiceHistory> getNews() throws DataAccessException{
-		Date now = new Date();
+	public List<ServiceHistory> getNews(int n) throws DataAccessException{
+		/*Date now = new Date();
 		System.out.println("Now + 1 days: "+now);
 		
 		Date start = now;
 		start.setTime(start.getTime() - (5 * 1000L * 60L * 60L * 24L ));
 		System.out.println("Start - 6 days: "+start);
-		/*
-		Query q = getEntityManager().createQuery("FROM ServiceHistory s WHERE s.date >= NOW() - INTERVAL 5 DAY " +
-				"AND s.id = ( SELECT MAX(s1.id) FROM ServiceHistory s1 WHERE s1.operation=s.operation " +
-				"AND s1.id_service=s.id_service AND s1.id_serviceMethod=s.id_serviceMethod " +
-				"AND s1.date >= NOW() - INTERVAL 5 DAY)");
-		*/
-		
+				
+		//query select news with interval of 5 days
 		Query q = getEntityManager().createQuery("FROM ServiceHistory S WHERE S.date BETWEEN :start AND " +
 				"NOW() " +
 				"AND S.id = ( SELECT MAX(S1.id) FROM ServiceHistory S1 WHERE S1.operation = S.operation " +
@@ -169,8 +162,9 @@ public class ServiceHistoryDaoImpl implements ServiceHistoryDao{
 				"NOW() )")
 				.setParameter("start", start)
 				;//.setParameter("end", now);
-		
-		List<ServiceHistory> news = q.getResultList();
+		*/
+		Query q = getEntityManager().createQuery("FROM ServiceHistory S ORDER BY S.id DESC");
+		List<ServiceHistory> news = q.setMaxResults(n).getResultList();
 		System.out.println("News size: "+news.size());
 		return news;
 	}
