@@ -23,6 +23,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import eu.trentorise.smartcampus.openservices.Constants.ROLES;
 import eu.trentorise.smartcampus.openservices.Constants.SERVICE_STATE;
 import eu.trentorise.smartcampus.openservices.dao.*;
 import eu.trentorise.smartcampus.openservices.entities.*;
@@ -234,7 +235,21 @@ public class ServiceManager {
 	@Transactional
 	public List<Service> getUserServices(String username) {
 		try{
-			return serviceDao.showMyService(username);
+			//services of organization in which I am a member
+			List<Service> result = new ArrayList<Service>();
+			User u = userDao.getUserByUsername(username);
+			List<UserRole> roles = urDao.getUserRoleByIdRole(u.getId(), ROLES.ROLE_ORGOWNER.toString());
+			System.out.println("Roles: "+roles.size());
+			for(UserRole r:roles){
+				System.out.println("Loop -");
+				List<Service> sl = serviceDao.getServiceByIdOrg(r.getId_org(), 0, 0, "id");
+				System.out.println("Services: "+sl.size());
+				result.addAll(sl);
+			}
+			//my service
+			result.addAll(serviceDao.showMyService(username));
+			
+			return result;
 		}catch(DataAccessException d){
 			return null;
 		}

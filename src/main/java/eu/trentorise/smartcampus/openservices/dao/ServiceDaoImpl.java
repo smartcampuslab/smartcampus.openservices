@@ -37,6 +37,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import eu.trentorise.smartcampus.openservices.Constants;
+import eu.trentorise.smartcampus.openservices.Constants.ROLES;
 import eu.trentorise.smartcampus.openservices.entities.Organization;
 import eu.trentorise.smartcampus.openservices.entities.Service;
 import eu.trentorise.smartcampus.openservices.entities.Tag;
@@ -131,6 +133,14 @@ public class ServiceDaoImpl implements ServiceDao{
 				"SELECT U.id FROM User U WHERE U.username=:username " +
 				")")
 				.setParameter("username",username);
+		
+		/*Query q = getEntityManager().createQuery("SELECT S FROM Service S " +
+				"WHERE S.organization_id IN " +
+				"(SELECT Ur.id_org FROM UserRole UR WHERE UR.role=:role AND UR.id_user = " +
+					"(SELECT U.id FROM User U WHERE U.username=:username ) " +
+				")")
+				.setParameter("username",username)
+				.setParameter("role", ROLES.ROLE_ORGOWNER.toString());*/
 		List<Service> s = q.getResultList();
 		return s;
 	}

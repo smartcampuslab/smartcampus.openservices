@@ -169,7 +169,7 @@ public class UserRoleDaoImpl implements UserRoleDao{
 	@Override
 	public List<UserRole> getUserRoleByIdRole(int user_id, String role)
 			throws DataAccessException {
-		Query q = getEntityManager().createQuery("UserRole UR WHERE UR.id_user=:id_user AND UR.role=:role")
+		Query q = getEntityManager().createQuery("FROM UserRole UR WHERE UR.id_user=:id_user AND UR.role=:role")
 				.setParameter("id_user", user_id).setParameter("role", role);
 		List<UserRole> ur = q.getResultList();
 		return ur;
