@@ -1,11 +1,13 @@
 <div class="row" id="search">
   <div class="col-md-12">
-    <div class="input-group">
-      <input type="text" class="form-control" ng-model="query">
-      <span class="input-group-btn">
-        <button class="btn btn-default" type="button" ng-click="search(query)">Search</button>
-      </span>
-    </div>
+    <form role="form">
+      <div class="input-group">
+				<input type="text" class="form-control" ng-model="query">
+				<span class="input-group-btn">
+					<button class="btn btn-default" type="submit" ng-click="search(query)">Search</button>
+				</span>
+		  </div>
+    </form>
   </div>
 </div>
 

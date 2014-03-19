@@ -566,6 +566,7 @@ app.controller('servicesCtrl', ['$scope','$rootScope', '$http', 'Catalog',
             });
         };
         $scope.update();
+        $rootScope.searchQuery = null;
 
         $scope.servicesActive = [];
 
