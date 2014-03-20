@@ -100,6 +100,7 @@ public class ServiceManager {
 			sh.setOperation("Unpublish Service Added");
 			sh.setId_service(service.getId());
 			sh.setDate(new Date());
+			sh.setServiceName(service.getName());
 			shDao.addServiceHistory(sh);
 			// check if service is created
 			if (serviceDao.useService(service.getName()) != null) {
@@ -154,6 +155,7 @@ public class ServiceManager {
 			sh.setOperation("Modify Service");
 			sh.setId_service(s.getId());
 			sh.setDate(new Date());
+			sh.setServiceName(service.getName());
 			shDao.addServiceHistory(sh);
 			return true;
 		} catch (DataAccessException d) {
@@ -192,6 +194,7 @@ public class ServiceManager {
 			sh.setOperation(state + " service");
 			sh.setId_service(service.getId());
 			sh.setDate(new Date());
+			sh.setServiceName(service.getName());
 			shDao.addServiceHistory(sh);
 			
 			return true;
@@ -221,6 +224,7 @@ public class ServiceManager {
 			sh.setOperation("Delete Service");
 			sh.setId_service(service.getId());
 			sh.setDate(new Date());
+			sh.setServiceName(service.getName());
 			shDao.addServiceHistory(sh);
 			return true;
 		} catch (DataAccessException d) {
@@ -325,6 +329,7 @@ public class ServiceManager {
 	 */
 	@Transactional
 	public boolean addMethod(String username, Method method) {
+		boolean result = false;
 		try {
 			//check method name
 			Method m = methodDao.getMethodByName(method.getName(),method.getServiceId());
@@ -339,13 +344,21 @@ public class ServiceManager {
 			if (ur == null)
 				throw new SecurityException();
 			methodDao.addMethod(method);
+			//check if method is add
+			Method addedM = methodDao.getMethodByName(method.getName(), method.getServiceId());
+			if(addedM!=null){
+				result = true;
+			}
 			//Add history
 			ServiceHistory sh = new ServiceHistory();
 			sh.setOperation("Add new service method");
 			sh.setId_service(method.getServiceId());
+			sh.setId_serviceMethod(addedM.getId());
 			sh.setDate(new Date());
+			sh.setServiceName(s.getName());
+			sh.setMethodName(method.getName());
 			shDao.addServiceHistory(sh);
-			return true;
+			return result;
 		} catch (DataAccessException d) {
 			return false;
 		}
@@ -387,6 +400,8 @@ public class ServiceManager {
 			sh.setOperation("Modify service method");
 			sh.setId_service(method.getServiceId());
 			sh.setDate(new Date());
+			sh.setServiceName(s.getName());
+			sh.setMethodName(m.getName());
 			shDao.addServiceHistory(sh);
 			return true;
 		} catch (DataAccessException d) {
@@ -417,7 +432,10 @@ public class ServiceManager {
 			ServiceHistory sh = new ServiceHistory();
 			sh.setOperation("Delete service method");
 			sh.setId_service(m.getServiceId());
+			sh.setId_serviceMethod(m.getId());
 			sh.setDate(new Date());
+			sh.setServiceName(s.getName());
+			sh.setMethodName(m.getName());
 			shDao.addServiceHistory(sh);
 			return true;
 		} catch (DataAccessException d) {

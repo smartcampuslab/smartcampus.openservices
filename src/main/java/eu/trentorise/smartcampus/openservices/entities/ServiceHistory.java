@@ -49,6 +49,10 @@ public class ServiceHistory {
 	private int id_serviceMethod;
 	@Column(name="\"date\"")
 	private Date date;
+	@Column(name="serviceName")
+	private String serviceName;
+	@Column(name="methodName")
+	private String methodName;
 	
 	/**
 	 * New {@link ServiceHistory} instance
@@ -136,5 +140,39 @@ public class ServiceHistory {
 	public void setDate(Date date) {
 		this.date = date;
 	}
+
+	/**
+	 * 
+	 * @return service name : String
+	 */
+	public String getServiceName() {
+		return serviceName;
+	}
+
+	/**
+	 * 
+	 * @param serviceName : String
+	 */
+	public void setServiceName(String serviceName) {
+		this.serviceName = serviceName;
+	}
+
+	/**
+	 * 
+	 * @return method name : String
+	 */
+	public String getMethodName() {
+		return methodName;
+	}
+
+	/**
+	 * 
+	 * @param methodName : String
+	 */
+	public void setMethodName(String methodName) {
+		this.methodName = methodName;
+	}
+	
+	
 
 }
