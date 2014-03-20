@@ -29,8 +29,9 @@ import org.springframework.web.bind.annotation.*;
 
 import eu.trentorise.smartcampus.openservices.Utils;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
-import eu.trentorise.smartcampus.openservices.entities.User;
+import eu.trentorise.smartcampus.openservices.model.User;
 import eu.trentorise.smartcampus.openservices.managers.UserManager;
+import eu.trentorise.smartcampus.openservices.model.Service;
 import eu.trentorise.smartcampus.openservices.support.ApplicationMailer;
 import eu.trentorise.smartcampus.openservices.support.EmailValidator;
 
@@ -84,7 +85,7 @@ public class UserController {
 	@ResponseBody
 	public ResponseObject getUserById(@PathVariable int id, HttpServletResponse response){
 		logger.info("-- User Data by Id --");
-		User user = userManager.getUserById(id);
+		User user = User.fromUserEntity(userManager.getUserById(id));
 		responseObject = new ResponseObject();
 		if(user == null){
 			responseObject.setError("User does not exist");
@@ -109,7 +110,7 @@ public class UserController {
 	public ResponseObject getUserByUsername(HttpServletResponse response){
 		logger.info("-- My User Data--");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		User user = userManager.getUserByUsername(username);
+		User user = User.fromUserEntity(userManager.getUserByUsername(username));
 		responseObject = new ResponseObject();
 		if(user == null){
 			responseObject.setError("Connection Problem with database");
@@ -134,11 +135,12 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
-	public ResponseObject createUser(@RequestBody User user, HttpServletRequest req,
-			HttpServletResponse response){
+	public ResponseObject createUser(@RequestBody eu.trentorise.smartcampus.openservices.entities.User user, 
+			HttpServletRequest req, HttpServletResponse response){
 		logger.info("-- Add user data --");
 		//Check username
-		User userDB = userManager.getUserByUsername(user.getUsername());
+		eu.trentorise.smartcampus.openservices.entities.User userDB = 
+				userManager.getUserByUsername(user.getUsername());
 		responseObject = new ResponseObject();
 		if(userDB != null){
 			responseObject.setError("Username already use");
@@ -155,7 +157,7 @@ public class UserController {
 			else{
 				String host = Utils.getAppURL(req);
 				try {
-					User newUser = userManager.createUser(user, host,
+					eu.trentorise.smartcampus.openservices.entities.User newUser = userManager.createUser(user, host,
 							env.getProperty("email.username"),
 							env.getProperty("user.message.object"),
 							env.getProperty("user.message.body"));
@@ -229,9 +231,9 @@ public class UserController {
 		logger.info("-- User enable --");
 		responseObject = new ResponseObject();
 		try{
-			User enabledUser = userManager.enableUserAfterVerification(key);
+			User enabledUser = User.fromUserEntity(userManager.enableUserAfterVerification(key));
 			if(enabledUser!=null){
-				enabledUser.setPassword(null);
+				//enabledUser.setPassword(null);
 				responseObject.setData(enabledUser);
 				responseObject.setStatus(HttpServletResponse.SC_OK);
 			}else{
@@ -258,10 +260,11 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/modify", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
-	public ResponseObject modifyUserData(@RequestBody User user, HttpServletResponse response){
+	public ResponseObject modifyUserData(@RequestBody eu.trentorise.smartcampus.openservices.entities.User user, 
+			HttpServletResponse response){
 		logger.info("-- User modify --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		User modifiedUser = userManager.modifyUserData(username, user);
+		User modifiedUser = User.fromUserEntity(userManager.modifyUserData(username, user));
 		responseObject = new ResponseObject();
 		if (modifiedUser != null) {
 			responseObject.setData(modifiedUser);
@@ -290,7 +293,7 @@ public class UserController {
 	@ResponseBody
 	public ResponseObject disabledUser(@PathVariable String username, HttpServletResponse response){
 		logger.info("-- User disable --");
-		User user =  userManager.disabledUser(username);
+		User user =  User.fromUserEntity(userManager.disabledUser(username));
 		responseObject = new ResponseObject();
 		if (user != null) {
 			responseObject.setData(user);
