@@ -115,7 +115,7 @@ services.factory('Category', ['$resource',
                 method: 'PUT',
                 url: 'api/category/modify',
             },
-            delete: {
+            remove: {
                 method: 'DELETE',
                 url: 'api/category/delete/:id',
             }
@@ -219,7 +219,7 @@ services.factory('Service', ['$resource',
                 method: 'PUT',
                 url: 'api/service/deprecate/:id',
             },
-            delete: {
+            remove: {
                 method: 'DELETE',
                 url: 'api/service/delete/:id',
             },
@@ -277,7 +277,7 @@ services.factory('Org', ['$resource',
                 method: 'POST',
                 url: 'api/org/add'
             },
-            delete: {
+            remove: {
                 method: 'DELETE',
                 url: 'api/org/delete/:id'
             },

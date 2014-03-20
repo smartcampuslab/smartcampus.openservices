@@ -15,7 +15,10 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.managers;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -23,7 +26,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 
-import eu.trentorise.smartcampus.openservices.Constants.*;
+import eu.trentorise.smartcampus.openservices.Constants.ORDER;
+import eu.trentorise.smartcampus.openservices.Constants.SERVICE_STATE;
 import eu.trentorise.smartcampus.openservices.dao.MethodDao;
 import eu.trentorise.smartcampus.openservices.dao.OrganizationDao;
 import eu.trentorise.smartcampus.openservices.dao.ServiceDao;
@@ -34,7 +38,6 @@ import eu.trentorise.smartcampus.openservices.entities.Method;
 import eu.trentorise.smartcampus.openservices.entities.Organization;
 import eu.trentorise.smartcampus.openservices.entities.Service;
 import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
-import eu.trentorise.smartcampus.openservices.model.News;
 import eu.trentorise.smartcampus.openservices.support.CategoryServices;
 import eu.trentorise.smartcampus.openservices.support.TagCounter;
 
