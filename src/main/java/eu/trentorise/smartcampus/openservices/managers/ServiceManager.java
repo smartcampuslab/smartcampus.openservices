@@ -97,7 +97,7 @@ public class ServiceManager {
 			serviceDao.createService(service);
 			// create history
 			ServiceHistory sh = new ServiceHistory();
-			sh.setOperation("Unpublish Service Added");
+			sh.setOperation("Add");
 			sh.setId_service(service.getId());
 			sh.setDate(new Date());
 			sh.setServiceName(service.getName());
@@ -152,7 +152,7 @@ public class ServiceManager {
 
 			// Add a new ServiceHistory
 			ServiceHistory sh = new ServiceHistory();
-			sh.setOperation("Modify Service");
+			sh.setOperation("Modify");
 			sh.setId_service(s.getId());
 			sh.setDate(new Date());
 			sh.setServiceName(service.getName());
@@ -191,7 +191,7 @@ public class ServiceManager {
 			serviceDao.modifyService(service);
 			// add service history
 			ServiceHistory sh = new ServiceHistory();
-			sh.setOperation(state + " service");
+			sh.setOperation(state);
 			sh.setId_service(service.getId());
 			sh.setDate(new Date());
 			sh.setServiceName(service.getName());
@@ -221,7 +221,7 @@ public class ServiceManager {
 			serviceDao.deleteService(service);
 			// add service history
 			ServiceHistory sh = new ServiceHistory();
-			sh.setOperation("Delete Service");
+			sh.setOperation("Delete");
 			sh.setId_service(service.getId());
 			sh.setDate(new Date());
 			sh.setServiceName(service.getName());
@@ -351,7 +351,7 @@ public class ServiceManager {
 			}
 			//Add history
 			ServiceHistory sh = new ServiceHistory();
-			sh.setOperation("Add new service method");
+			sh.setOperation("Add");
 			sh.setId_service(method.getServiceId());
 			sh.setId_serviceMethod(addedM.getId());
 			sh.setDate(new Date());
@@ -397,7 +397,7 @@ public class ServiceManager {
 			methodDao.modifyMethod(m);
 			//Add history
 			ServiceHistory sh = new ServiceHistory();
-			sh.setOperation("Modify service method");
+			sh.setOperation("Modify");
 			sh.setId_service(method.getServiceId());
 			sh.setDate(new Date());
 			sh.setServiceName(s.getName());
@@ -430,7 +430,7 @@ public class ServiceManager {
 			methodDao.deleteMethod(m);
 			//Add history
 			ServiceHistory sh = new ServiceHistory();
-			sh.setOperation("Delete service method");
+			sh.setOperation("Delete");
 			sh.setId_service(m.getServiceId());
 			sh.setId_serviceMethod(m.getId());
 			sh.setDate(new Date());

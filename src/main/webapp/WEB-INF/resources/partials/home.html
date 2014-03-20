@@ -20,13 +20,32 @@
         </div>
         <div class="timeline-panel">
           <div class="timeline-heading">
-            <h4 class="timeline-title">{{entry.operation}}</h4>
+            <h4 class="timeline-title">{{entry.service}}</h4>
             <p>
               <small class="text-muted"><i class="glyphicon glyphicon-time"></i> {{entry.date| date:'yyyy-MM-dd'}}</small>
             </p>
           </div>
           <div class="timeline-body">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            
+            <div ng-switch on=entry.state>
+            	<span ng-switch-when="Add"> 
+            		<span ng-hide="entry.method">A new service <b>{{entry.service}}</b> is added.</span>
+            		<span ng-show="entry.method">A new method <b>{{entry.method}}</b> is added to this service.</span>
+            	</span>
+            	<span ng-switch-when="Modify">
+            	<span ng-hide="entry.method">Service <b>{{entry.service}}</b> is modified.</span>
+            		<span ng-show="entry.method">Method <b>{{entry.method}}</b> is modified.</span>
+            	</span>
+            	<span ng-switch-when="Delete">
+            		<span ng-hide="entry.method">Service <b>{{entry.service}}</b> is deleted.</span>
+            		<span ng-show="entry.method">Method <b>{{entry.method}}</b> is deleted from this service.</span>
+            	</span>
+            	<span ng-switch-when="PUBLISH">Service <b>{{entry.service}}</b> is published</span>
+            	<span ng-switch-when="UNPUBLISH">Service <b>{{entry.service}}</b> is unpublished</span>
+            	<span ng-switch-when="DEPRECATE">Service <b>{{entry.service}}</b> is deprecated</span>
+            </div>
+            
+            
           </div>
         </div>
       </li>
