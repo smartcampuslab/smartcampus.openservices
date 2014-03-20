@@ -188,7 +188,7 @@ public class ServiceManagerTest {
 	public void testDeleteMethod(){
 		log.info("TEST Add new service method");
 		//get method id
-		Method newMethod = methodDao.getMethodByName(method.getName());
+		Method newMethod = methodDao.getMethodByName(method.getName(),method.getServiceId());
 		boolean result = serviceManager.deleteMethod(username, newMethod.getId());
 		assertTrue("No service method added",result==true);
 	}

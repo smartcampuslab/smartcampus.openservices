@@ -76,9 +76,10 @@ public class MethodDaoImpl implements MethodDao{
 	 */
 	@Transactional
 	@Override
-	public Method getMethodByName(String name) throws DataAccessException {
-		Query q = getEntityManager().createQuery("FROM Method M WHERE M.name=:name")
-				.setParameter("name", name);
+	public Method getMethodByName(String name, int service_id) throws DataAccessException {
+		Query q = getEntityManager().createQuery("FROM Method M WHERE M.name=:name AND service_id=:id")
+				.setParameter("name", name)
+				.setParameter("id", service_id);
 		List<Method> ms = q.getResultList();
 		if(ms.size()==0){
 			return null;

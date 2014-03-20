@@ -327,8 +327,8 @@ public class ServiceManager {
 	public boolean addMethod(String username, Method method) {
 		try {
 			//check method name
-			Method m = methodDao.getMethodByName(method.getName());
-			if(m!=null){
+			Method m = methodDao.getMethodByName(method.getName(),method.getServiceId());
+			if(m!=null && m.getServiceId()==method.getServiceId()){
 				throw new EntityExistsException();
 			}
 			//save
@@ -372,8 +372,8 @@ public class ServiceManager {
 			Method m = methodDao.getMethodById(method.getId());
 			
 			//check method name
-			Method checkM = methodDao.getMethodByName(method.getName());
-			if(checkM!=null && checkM.getId()!=m.getId()){
+			Method checkM = methodDao.getMethodByName(method.getName(),method.getServiceId());
+			if(checkM!=null && checkM.getId()!=m.getId() && checkM.getServiceId()==m.getServiceId()){
 				throw new EntityExistsException();
 			}
 			//modify

@@ -45,7 +45,7 @@ public interface MethodDao {
 	 * @return a {@link Method} instance
 	 * @throws DataAccessException
 	 */
-	public Method getMethodByName(String name) throws DataAccessException;
+	public Method getMethodByName(String name, int service_id) throws DataAccessException;
 	
 	/**
 	 * Get a list of method for a given service
