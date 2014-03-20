@@ -606,10 +606,10 @@ public class ServiceController {
 	 * @param testinfo : {@link TestInfo} instance
 	 * @param id : int method id
 	 * @param pos : int index of test that user wants to update
-	 * @param response : {@link HttpServletResponse} which returns status of response OK, SERVICE UNAVAILABLE or 
-	 * UNAUTHORIZED
-	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE or UNAUTHORIZED) and 
-	 * error message (if status is SERVICE UNAVAILABLE or UNAUTHORIZED).
+	 * @param response : {@link HttpServletResponse} which returns status of response OK, SERVICE UNAVAILABLE, 
+	 * BAD REQUEST or UNAUTHORIZED
+	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE, BAD REQUEST or UNAUTHORIZED) and 
+	 * error message (if status is SERVICE UNAVAILABLE, BAD REQUEST or UNAUTHORIZED).
 	 */
 	@RequestMapping(value = "/method/{id}/test/{pos}", method = RequestMethod.PUT, consumes="application/json") 
 	@ResponseBody
@@ -632,6 +632,10 @@ public class ServiceController {
 			responseObject.setError("User must be part of this organization before modifying test for this method service");
 			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		}catch (EntityExistsException e) {
+			responseObject.setError("Test with this name already exists. Change it.");
+			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return responseObject;
 	}

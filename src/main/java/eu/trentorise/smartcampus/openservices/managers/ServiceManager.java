@@ -519,6 +519,12 @@ public class ServiceManager {
 				throw new SecurityException();
 			TestBoxProperties props = m.getTestboxProperties();
 			List<TestInfo> tests = props.getTests();
+			//check name of test
+			for(int i=0;i<tests.size();i++){
+				if(i!=pos && tests.get(i).getName().equalsIgnoreCase(testinfo.getName())){
+					throw new EntityExistsException();
+				}
+			}
 			tests.set(pos, testinfo);
 			methodDao.modifyMethod(m);
 			return true;
