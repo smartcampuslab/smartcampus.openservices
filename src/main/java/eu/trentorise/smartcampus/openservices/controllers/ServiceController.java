@@ -235,6 +235,10 @@ public class ServiceController {
 				responseObject.setError("You are not allowed to create a new service for this organization");
 				responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			}catch(EntityExistsException e){
+				responseObject.setError("Another service with specified name already exists. Please change it.");
+				responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			}
 		}
 		else{

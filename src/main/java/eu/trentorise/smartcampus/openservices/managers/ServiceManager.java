@@ -82,11 +82,16 @@ public class ServiceManager {
 	 */
 	@Transactional
 	public boolean createService(String username, Service service) {
-		//TODO
 		try {
+			//check service name
+			Service sCheck = serviceDao.useService(service.getName());
+			if(sCheck!=null){
+				throw new EntityExistsException();
+			}
+			
 			User user = userDao.getUserByUsername(username);
 			UserRole ur = urDao.getRoleOfUser(user.getId(), service.getOrganizationId());
-			if (ur == null) throw new SecurityException();//TODO
+			if (ur == null) throw new SecurityException();
 			service.setCreatorId(user.getId());
 			service.setState(SERVICE_STATE.UNPUBLISH.toString());
 			serviceDao.createService(service);
