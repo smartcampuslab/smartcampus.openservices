@@ -50,7 +50,7 @@ directives.directive('showValidation', [
 	            }
 	
 	            function showValidation(formGroupEl, msg) {
-	                var input = formGroupEl.find('input[ng-model],textarea[ng-model]');
+	                var input = formGroupEl.find('input[ng-model],textarea[ng-model],select[ng-model]');
 	                if (input.length > 0) {
 	                    scope.$watch(function() {
 	                        return input.hasClass('ng-invalid');// && input.hasClass('ng-dirty');
