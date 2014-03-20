@@ -1,4 +1,5 @@
 <div class="row animated fadeIn">
+    <div ng-hide="!errorMsg" class="alert alert-danger">{{errorMsg}}</div>
     <div class="col-md-6 col-md-offset-3">
         <h2>{{title}} Service</h2>
         <form name="main" novalidate role="form" ng-submit="submit()">

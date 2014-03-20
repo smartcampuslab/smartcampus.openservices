@@ -150,9 +150,13 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
         };
 
         $scope.submit = function () {
-            User.update($scope.user, function () {
-                $location.path('profile');
-            });
+            User.update($scope.user, 
+            	function () {
+                	$location.path('profile');
+            	},
+            	function(res) {
+            		$scope.errorMsg = res.data.error;
+            	});
         };
 
         User.getInfo({}, function (data) {
@@ -197,12 +201,16 @@ app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service', 'Or
             } else {
             	$scope.service.expiration = null;
             }
-            if ($scope.service.tags) {
+            if (typeof $scope.service.tags == 'string') {
             	$scope.service.tags = $scope.service.tags.split(','); 
             }
-            Service.create($scope.service, function () {
-                $location.path('profile');
-            });
+            Service.create($scope.service, 
+            		function () {
+            			$location.path('profile');
+            		},
+            		function (res) {
+            			$scope.errorMsg = res.data.error;
+            		});
         };
         $scope.keep = function () {
             $scope.service.accessInformation = $scope.accessInformation;
@@ -257,7 +265,10 @@ app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Servi
 
             Service.update($scope.service, function () {
                 $location.path('profile/services/' + $routeParams.id);
-            });
+            },
+        	function(res) {
+        		$scope.errorMsg = res.data.error;
+        	});
         };
     }
 ]);
@@ -317,7 +328,10 @@ app.controller('newMethodCtrl', ['$scope', '$http', '$location', '$routeParams',
         $scope.submit = function () {
             Service.createMethod($scope.method, function () {
                 $location.path('profile/services/' + $scope.method.serviceId + '/view');
-            });
+            },
+        	function(res) {
+        		$scope.errorMsg = res.data.error;
+        	});
         };
     }
 ]);
@@ -354,7 +368,10 @@ app.controller('editMethodCtrl', ['$scope', '$http', '$location', '$routeParams'
         $scope.submit = function () {
             Service.updateMethod($scope.method, function () {
                 $location.path('profile/services/' + $scope.method.serviceId + '/view');
-            });
+            },
+        	function(res) {
+        		$scope.errorMsg = res.data.error;
+        	});
         };
 
     }
@@ -379,7 +396,10 @@ app.controller('newTestCtrl', ['$scope', '$http', '$location', '$routeParams', '
                 id: $scope.method.id
             }, $scope.test, function () {
                 $location.path('profile/services/' + $scope.method.serviceId + '/methods/' + $scope.method.id + '/view');
-            });
+            },
+        	function(res) {
+        		$scope.errorMsg = res.data.error;
+        	});
         };
     }
 ]);
@@ -410,7 +430,10 @@ app.controller('editTestCtrl', ['$scope', '$http', '$location', '$routeParams', 
                 pos: $routeParams.pos
             }, $scope.test, function () {
                 $location.path('profile/services/' + $scope.method.serviceId + '/methods/' + $scope.method.id + '/view');
-            });
+            },
+        	function(res) {
+        		$scope.errorMsg = res.data.error;
+        	});
         };
     }
 ]);
@@ -426,7 +449,10 @@ app.controller('newOrgCtrl', ['$scope', '$http', '$location', 'Org', 'Category',
         $scope.submit = function () {
             Org.create($scope.org, function () {
                 $location.path('profile');
-            });
+            },
+        	function(res) {
+        		$scope.errorMsg = res.data.error;
+        	});
         };
 
     }
@@ -465,12 +491,17 @@ app.controller('editOrgCtrl', ['$scope', '$http', '$location', '$routeParams', '
                         $location.path('profile');
                     });
 
-                });
+                }).error(function(res) {
+            		$scope.errorMsg = res.data.error;
+            	});
 
             } else {
                 Org.update($scope.org, function () {
                     $location.path('profile');
-                });
+                },
+            	function(res) {
+            		$scope.errorMsg = res.data.error;
+            	});
             }
 
         };
