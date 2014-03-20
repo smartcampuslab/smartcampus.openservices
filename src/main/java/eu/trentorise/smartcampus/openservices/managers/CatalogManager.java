@@ -38,6 +38,7 @@ import eu.trentorise.smartcampus.openservices.entities.Method;
 import eu.trentorise.smartcampus.openservices.entities.Organization;
 import eu.trentorise.smartcampus.openservices.entities.Service;
 import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
+import eu.trentorise.smartcampus.openservices.model.News;
 import eu.trentorise.smartcampus.openservices.support.CategoryServices;
 import eu.trentorise.smartcampus.openservices.support.TagCounter;
 
@@ -414,21 +415,16 @@ public class CatalogManager {
 	 * Retrieve news from database
 	 * @return list of {@link ServiceHistory} instances
 	 */
-	public List</*News*/ServiceHistory> getNews(int n){
+	public List<News /*ServiceHistory*/> getNews(int n){
 		try{
-			return shDao.getNews(n);
-			/*List<News> news = new ArrayList<News>();
-			String method = null,service=null;
-			List<ServiceHistory> shlist = shDao.getNews();
+			//return shDao.getNews(n);
+			List<News> news = new ArrayList<News>();
+			List<ServiceHistory> shlist = shDao.getNews(n);
 			for(ServiceHistory sh:shlist){
-				service = serviceDao.getServiceById(sh.getId_service()).getName();
-				if(sh.getId_serviceMethod()!=0){
-					method= methodDao.getMethodById(sh.getId_serviceMethod()).getName();
-				}
-				News n = new News(service, method, sh.getOperation(), sh.getDate());
-				news.add(n);
+				News s = new News(sh.getServiceName(),sh.getMethodName(),sh.getOperation(),sh.getDate());
+				news.add(s);
 			}
-			return news;*/
+			return news;
 		}catch(DataAccessException d){
 			return null; 
 		}

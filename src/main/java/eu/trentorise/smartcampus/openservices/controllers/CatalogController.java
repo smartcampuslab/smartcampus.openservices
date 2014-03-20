@@ -36,6 +36,7 @@ import eu.trentorise.smartcampus.openservices.entities.Organization;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
 import eu.trentorise.smartcampus.openservices.managers.CatalogManager;
+import eu.trentorise.smartcampus.openservices.model.News;
 import eu.trentorise.smartcampus.openservices.model.Service;
 import eu.trentorise.smartcampus.openservices.support.CategoryServices;
 import eu.trentorise.smartcampus.openservices.support.TagCounter;
@@ -446,7 +447,7 @@ public class CatalogController {
 	@ResponseBody
 	public ResponseObject catalogNews(@RequestParam int n,HttpServletResponse response){
 		logger.info("-- Category Catalog browse --");
-		List<ServiceHistory> news = catalogManager.getNews(n);
+		List<News> news = catalogManager.getNews(n);
 		responseObject = new ResponseObject();
 		if(news==null || news.size()==0){
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
