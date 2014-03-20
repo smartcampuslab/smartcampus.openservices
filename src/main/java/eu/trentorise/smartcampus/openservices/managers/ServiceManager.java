@@ -485,6 +485,12 @@ public class ServiceManager {
 				tests = new ArrayList<TestInfo>();
 				props.setTests(tests);
 			}
+			//check name
+			for(TestInfo t:tests){
+				if(t.getName().equalsIgnoreCase(testinfo.getName())){
+					throw new EntityExistsException();
+				}
+			}
 			tests.add(testinfo);
 			methodDao.modifyMethod(m);
 			return true;

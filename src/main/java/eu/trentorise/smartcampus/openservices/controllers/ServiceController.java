@@ -567,10 +567,10 @@ public class ServiceController {
 	 * User must have role 'organization owner' for organization service.
 	 * @param testinfo : {@link TestInfo} instance
 	 * @param id : int method id
-	 * @param response : {@link HttpServletResponse} which returns status of response OK, SERVICE UNAVAILABLE or 
-	 * UNAUTHORIZED
-	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE or UNAUTHORIZED) and 
-	 * error message (if status is SERVICE UNAVAILABLE or UNAUTHORIZED).
+	 * @param response : {@link HttpServletResponse} which returns status of response OK, SERVICE UNAVAILABLE, 
+	 * BAD REQUEST or UNAUTHORIZED
+	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE, BAD REQUEST or UNAUTHORIZED) and 
+	 * error message (if status is SERVICE UNAVAILABLE, BAD REQUEST or UNAUTHORIZED).
 	 */
 	@RequestMapping(value = "/method/{id}/test/add", method = RequestMethod.POST, consumes="application/json") 
 	@ResponseBody
@@ -592,6 +592,10 @@ public class ServiceController {
 			responseObject.setError("User must be part of this organization before adding a test for this service method");
 			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		} catch (EntityExistsException e) {
+			responseObject.setError("Test with this name already exists. Change it.");
+			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return responseObject;
 	}
