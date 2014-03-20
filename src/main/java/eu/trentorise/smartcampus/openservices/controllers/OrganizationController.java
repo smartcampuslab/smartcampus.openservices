@@ -266,7 +266,7 @@ public class OrganizationController {
 	 * He/she can modify only the following field: description, category and contacts.
 	 * @param org : {@link Organization} organization object
 	 * @param response : {@link HttpServletResponse} which returns status of response OK, BAD REQUEST or UNAUTHORIZED
-	 * @return {@link ResponseObject} with status (OK or UNAUTHORIZED) and 
+	 * @return {@link ResponseObject} with status (OK, BAD REQUEST or UNAUTHORIZED) and 
 	 * error message (if status is BAD REQUEST or UNAUTHORIZED).
 	 */
 	@RequestMapping(value = "/modify", method = RequestMethod.PUT, consumes="application/json") 
@@ -291,6 +291,10 @@ public class OrganizationController {
 			responseObject.setError("You cannot modify this organization");
 			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		}catch(EntityExistsException e){
+			responseObject.setError("Organization with this name already exists. Change it.");
+			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return responseObject;
 	}

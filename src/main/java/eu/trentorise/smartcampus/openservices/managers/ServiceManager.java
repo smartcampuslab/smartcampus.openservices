@@ -125,7 +125,14 @@ public class ServiceManager {
 				throw new SecurityException();
 
 			Service s = serviceDao.getServiceById(service.getId());
-			// cannot change name
+			
+			//check service name
+			Service sCheck = serviceDao.useService(service.getName());
+			if(sCheck!=null && sCheck.getId()!=s.getId()){
+				throw new EntityExistsException();
+			}
+			
+			s.setName(service.getName());
 			s.setDescription(service.getDescription());
 			s.setTags(service.getTags());
 			s.setCategory(service.getCategory());

@@ -253,8 +253,8 @@ public class ServiceController {
 	 * @param service : {@link Service} object
 	 * @param response : {@link HttpServletResponse} which returns status of response OK, SERVICE UNAVAILABLE or 
 	 * UNAUTHORIZED
-	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE or UNAUTHORIZED) and 
-	 * error message (if status is SERVICE UNAVAILABLE or UNAUTHORIZED).
+	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE, BAD REQUEST or UNAUTHORIZED) and 
+	 * error message (if status is SERVICE UNAVAILABLE, BAD REQUEST or UNAUTHORIZED).
 	 */
 	@RequestMapping(value = "/modify", method = RequestMethod.PUT, consumes="application/json") 
 	@ResponseBody
@@ -277,6 +277,10 @@ public class ServiceController {
 			responseObject.setError("User must be a member of this organizaiton");
 			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		}catch(EntityExistsException e){
+			responseObject.setError("Service with this name already exists. Change it.");
+			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return responseObject;
 	}

@@ -42,6 +42,7 @@ import eu.trentorise.smartcampus.openservices.dao.ServiceHistoryDao;
 import eu.trentorise.smartcampus.openservices.dao.TemporaryLinkDao;
 import eu.trentorise.smartcampus.openservices.dao.UserDao;
 import eu.trentorise.smartcampus.openservices.dao.UserRoleDao;
+import eu.trentorise.smartcampus.openservices.entities.Method;
 import eu.trentorise.smartcampus.openservices.entities.Organization;
 import eu.trentorise.smartcampus.openservices.entities.Service;
 import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
@@ -192,6 +193,11 @@ public class OrganizationManager {
 		try {
 			User user = userDao.getUserByUsername(username);
 			Organization o = orgDao.getOrganizationById(org.getId());
+			//check organization name
+			Organization orgCheck = orgDao.getOrganizationByName(org.getName());
+			if(orgCheck!=null && orgCheck.getId()!=o.getId()){
+				throw new EntityExistsException();
+			}
 			// check user role
 			UserRole ur = urDao.getRoleOfUser(user.getId(), org.getId());
 			if (ur != null && ur.getRole().equalsIgnoreCase(ROLES.ROLE_ORGOWNER.toString())) {
