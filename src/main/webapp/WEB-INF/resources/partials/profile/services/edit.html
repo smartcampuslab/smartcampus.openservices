@@ -2,20 +2,20 @@
     <div class="col-md-6 col-md-offset-3">
         <h2>{{title}} Service</h2>
         <form name="main" novalidate role="form" ng-submit="submit()">
-            <div class="form-group">
+            <div class="form-group" show-validation>
                 <label for="servicename">Service Name</label>
                 <input ng-disabled="service.id != null" type="text" class="form-control" id="servicename" placeholder="Service Name" ng-model="service.name" required>
             </div>
-            <div class="form-group">
+            <div class="form-group" show-validation>
                 <label for="authority">Organization</label>
                 <select ng-disabled="service.id != null" ng-options="org.id as org.name for org in orgs" id="org" class="form-control" ng-model="service.organizationId" required>
                 </select>
             </div>
-            <div class="form-group">
+            <div class="form-group" show-validation>
                 <label for="orgdesc">Description</label>
-                <input type="text" class="form-control" id="orgdesc" placeholder="Description" ng-model="service.description">
+                <input type="text" class="form-control" id="orgdesc" placeholder="Description" ng-model="service.description" required>
             </div>
-            <div class="form-group">
+            <div class="form-group" show-validation>
                 <label for="tags">Tags (comma separated)</label>
                 <input type="text" class="form-control" id="tags" placeholder="tag1,tag2" ng-model="service.tags" required>
             </div>
@@ -28,7 +28,7 @@
                 <label for="license">License</label>
                 <input type="text" class="form-control" id="license" ng-model="service.license">
             </div>
-            <div class="form-group">
+            <div class="form-group" show-validation>
                 <label for="license">Version</label>
                 <input type="text" class="form-control" id="version" ng-model="service.version" required>
             </div>
@@ -114,7 +114,7 @@
                 </div>
                 <div ng-show="accessInformation.authentication.accessProtocol === 'OAuth2'">
                     <form name="form" class="css-form" novalidate>
-                        <div class="form-group">
+                        <div class="form-group" show-validation>
                             <label for="clientid">Client ID</label>
                             <input type="text" class="form-control" id="clientid" placeholder="fcb1cb23-12a3-1234-1f23-12a3f45e6789" ng-model="accessInformation.authentication.accessAttributes.client_id" required>
                         </div>
@@ -126,15 +126,15 @@
                             <label for="scope">Scope (comma separated)</label>
                             <input type="text" class="form-control" id="scope" placeholder="profile.email, profile.photo" ng-model="accessInformation.authentication.accessAttributes.scope">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" show-validation>
                             <label for="responsetype">Response Type</label>
                             <select ng-options="response_type for response_type in ['token','code']" id="responsetype" class="form-control" ng-model="accessInformation.authentication.accessAttributes.response_type" required/>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" show-validation>
                             <label for="authurl">Authorization URL</label>
-                            <input type="text" class="form-control" id="authurl" placeholder="https://vas-dev.smartcampuslab.it/aac/eauth/authorize" ng-model="accessInformation.authentication.accessAttributes.authorizationUrl">
+                            <input type="text" class="form-control" id="authurl" placeholder="https://vas-dev.smartcampuslab.it/aac/eauth/authorize" ng-model="accessInformation.authentication.accessAttributes.authorizationUrl" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" show-validation>
                             <label for="granttype">Grant Type</label>
                             <select ng-options="grant_type for grant_type in ['implicit','authorization_code','client_credentials']" id="responsetype" class="form-control" ng-model="accessInformation.authentication.accessAttributes.grant_type" required/>
                         </div>
@@ -144,7 +144,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" ng-click="cancel()" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" ng-click="keep()" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+                <button type="button" ng-click="keep()" ng-disabled="form.$invalid" class="btn btn-primary" data-dismiss="modal">Save changes</button>
             </div>
         </div>
         <!-- /.modal-content -->

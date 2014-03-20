@@ -34,3 +34,46 @@ directives.directive('fileselect', ['$parse',
         };
     }
 ]);
+
+directives.directive('showValidation', [
+    function() {
+	    return {
+	        restrict: "A",
+	        link: function(scope, element, attrs, ctrl) {
+	
+	            if (element.get(0).nodeName.toLowerCase() === 'form') {
+	                element.find('.form-group').each(function(i, formGroup) {
+	                    showValidation(angular.element(formGroup), attrs.showValidation);
+	                });
+	            } else {
+	                showValidation(element, attrs.showValidation);
+	            }
+	
+	            function showValidation(formGroupEl, msg) {
+	                var input = formGroupEl.find('input[ng-model],textarea[ng-model]');
+	                if (input.length > 0) {
+	                    scope.$watch(function() {
+	                        return input.hasClass('ng-invalid');// && input.hasClass('ng-dirty');
+	                    }, function(isInvalid) {
+	                        formGroupEl.toggleClass('has-error', isInvalid);
+	                        var errmsg = formGroupEl.find('#err');
+	                        errmsg.remove();
+	                        if (isInvalid) {
+		                    	var label = formGroupEl.find('label');
+	                        	msg = label.text();
+	                        	if (msg) {
+	                        		formGroupEl.append('<span id="err" class="control-label">'+constructMsg(msg, input)+'</span>');
+	                        	}
+	                        }
+	                    });
+	                }
+	            }
+	            function constructMsg(fieldLabel, input) {
+	            	if (input.hasClass('ng-invalid-required')) return fieldLabel + ' is required';
+	            	return null;
+	            }
+	            
+	        }
+	    };
+    }
+]);    

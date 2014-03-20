@@ -97,9 +97,6 @@ body > .container {
         line-height: 1.4;
     }
 }
-input.ng-invalid.ng-dirty {
-    border-color: #FA787E;
-}
 a {
     cursor: pointer;
 }
