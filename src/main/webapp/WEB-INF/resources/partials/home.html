@@ -28,15 +28,15 @@
           <div class="timeline-body">
             
             <div ng-switch on=entry.state>
-            	<span ng-switch-when="Add"> 
+            	<span ng-switch-when="ADD"> 
             		<span ng-hide="entry.method">A new service <b>{{entry.service}}</b> is added.</span>
             		<span ng-show="entry.method">A new method <b>{{entry.method}}</b> is added to this service.</span>
             	</span>
-            	<span ng-switch-when="Modify">
+            	<span ng-switch-when="MODIFY">
             	<span ng-hide="entry.method">Service <b>{{entry.service}}</b> is modified.</span>
             		<span ng-show="entry.method">Method <b>{{entry.method}}</b> is modified.</span>
             	</span>
-            	<span ng-switch-when="Delete">
+            	<span ng-switch-when="DELETE">
             		<span ng-hide="entry.method">Service <b>{{entry.service}}</b> is deleted.</span>
             		<span ng-show="entry.method">Method <b>{{entry.method}}</b> is deleted from this service.</span>
             	</span>

@@ -25,6 +25,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import eu.trentorise.smartcampus.openservices.Constants.OPERATION;
 import eu.trentorise.smartcampus.openservices.Constants.ORDER;
 import eu.trentorise.smartcampus.openservices.Constants.ROLES;
 import eu.trentorise.smartcampus.openservices.Constants.SERVICE_STATE;
@@ -97,7 +98,7 @@ public class ServiceManager {
 			serviceDao.createService(service);
 			// create history
 			ServiceHistory sh = new ServiceHistory();
-			sh.setOperation("Add");
+			sh.setOperation(OPERATION.ADD.toString());
 			sh.setId_service(service.getId());
 			sh.setDate(new Date());
 			sh.setServiceName(service.getName());
@@ -152,7 +153,7 @@ public class ServiceManager {
 
 			// Add a new ServiceHistory
 			ServiceHistory sh = new ServiceHistory();
-			sh.setOperation("Modify");
+			sh.setOperation(OPERATION.MODIFY.toString());
 			sh.setId_service(s.getId());
 			sh.setDate(new Date());
 			sh.setServiceName(service.getName());
@@ -221,7 +222,7 @@ public class ServiceManager {
 			serviceDao.deleteService(service);
 			// add service history
 			ServiceHistory sh = new ServiceHistory();
-			sh.setOperation("Delete");
+			sh.setOperation(OPERATION.DELETE.toString());
 			sh.setId_service(service.getId());
 			sh.setDate(new Date());
 			sh.setServiceName(service.getName());
@@ -351,7 +352,7 @@ public class ServiceManager {
 			}
 			//Add history
 			ServiceHistory sh = new ServiceHistory();
-			sh.setOperation("Add");
+			sh.setOperation(OPERATION.ADD.toString());
 			sh.setId_service(method.getServiceId());
 			sh.setId_serviceMethod(addedM.getId());
 			sh.setDate(new Date());
@@ -397,7 +398,7 @@ public class ServiceManager {
 			methodDao.modifyMethod(m);
 			//Add history
 			ServiceHistory sh = new ServiceHistory();
-			sh.setOperation("Modify");
+			sh.setOperation(OPERATION.MODIFY.toString());
 			sh.setId_service(method.getServiceId());
 			sh.setDate(new Date());
 			sh.setServiceName(s.getName());
