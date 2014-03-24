@@ -421,7 +421,8 @@ public class CatalogManager {
 			List<News> news = new ArrayList<News>();
 			List<ServiceHistory> shlist = shDao.getNews(n);
 			for(ServiceHistory sh:shlist){
-				News s = new News(sh.getServiceName(),sh.getMethodName(),sh.getOperation(),sh.getDate());
+				News s = new News(sh.getServiceName(),sh.getMethodName(),sh.getOperation(),sh.getDate(),
+						sh.getId_service(),sh.getId_serviceMethod());
 				news.add(s);
 			}
 			return news;

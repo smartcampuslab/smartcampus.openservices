@@ -29,18 +29,25 @@ public class News {
 	private String state;
 	private Date date;
 	
+	private int serviceId;
+	private int methodId;
+	
 	/**
 	 * New instance of {@link News}
 	 * @param service : String
 	 * @param method : String
 	 * @param state : String
 	 * @param date : Date
+	 * @param serviceId : int
+	 * @param methodId : int
 	 */
-	public News(String service, String method, String state, Date date) {
+	public News(String service, String method, String state, Date date, int serviceId, int methodId) {
 		this.service=service;
 		this.method=method;
 		this.state=state;
 		this.date=date;
+		this.serviceId=serviceId;
+		this.methodId=methodId;
 	}
 	/**
 	 * 
@@ -97,6 +104,34 @@ public class News {
 	 */
 	public void setDate(Date date) {
 		this.date = date;
+	}
+	/**
+	 * 
+	 * @return service id : int
+	 */
+	public int getServiceId() {
+		return serviceId;
+	}
+	/**
+	 * 
+	 * @param serviceId : int
+	 */
+	public void setServiceId(int serviceId) {
+		this.serviceId = serviceId;
+	}
+	/**
+	 * 
+	 * @return method id : int
+	 */
+	public int getMethodId() {
+		return methodId;
+	}
+	/**
+	 * 
+	 * @param methodId : ints
+	 */
+	public void setMethodId(int methodId) {
+		this.methodId = methodId;
 	}
 
 }
