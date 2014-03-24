@@ -254,8 +254,8 @@ public class OrganizationController {
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		} catch(EntityExistsException e){
 			responseObject.setError("You cannot delete this organization, published services exist");
-			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return responseObject;
 	}
