@@ -29,20 +29,35 @@
             
             <div ng-switch on=entry.state>
             	<span ng-switch-when="ADD"> 
-            		<span ng-hide="entry.method">A new service <b>{{entry.service}}</b> is added.</span>
-            		<span ng-show="entry.method">A new method <b>{{entry.method}}</b> is added to this service.</span>
+            		<span ng-hide="entry.method">A new service 
+            			<b>{{entry.service}}</b> is added.
+            		</span>
+            		<span ng-show="entry.method">A new method 
+            			<b><a href="services/{{entry.serviceId}}">{{entry.method}}</a></b> is added to this service.
+            		</span>
             	</span>
             	<span ng-switch-when="MODIFY">
-            	<span ng-hide="entry.method">Service <b>{{entry.service}}</b> is modified.</span>
-            		<span ng-show="entry.method">Method <b>{{entry.method}}</b> is modified.</span>
+            		<span ng-hide="entry.method">Service 
+            			<b><a ng-href="services/{{entry.serviceId}}">{{entry.service}}</a></b> is modified.
+            		</span>
+            		<span ng-show="entry.method">Method 
+            			<b><a href="services/{{entry.serviceId}}">{{entry.method}}</a></b> is modified.
+            		</span>
             	</span>
             	<span ng-switch-when="DELETE">
-            		<span ng-hide="entry.method">Service <b>{{entry.service}}</b> is deleted.</span>
+            		<span ng-hide="entry.method">Service <b>{{entry.service}}</b> is deleted.
+            		</span>
             		<span ng-show="entry.method">Method <b>{{entry.method}}</b> is deleted from this service.</span>
             	</span>
-            	<span ng-switch-when="PUBLISH">Service <b>{{entry.service}}</b> is published</span>
-            	<span ng-switch-when="UNPUBLISH">Service <b>{{entry.service}}</b> is unpublished</span>
-            	<span ng-switch-when="DEPRECATE">Service <b>{{entry.service}}</b> is deprecated</span>
+            	<span ng-switch-when="PUBLISH">Service 
+					<b><a ng-href="services/{{entry.serviceId}}">{{entry.service}}</a></b> is published
+				</span>
+            	<span ng-switch-when="UNPUBLISH">Service 
+            		<b>{{entry.service}}</b> is unpublished
+            	</span>
+            	<span ng-switch-when="DEPRECATE">Service 
+            		<b><a ng-href="services/{{entry.serviceId}}">{{entry.service}}</a></b> is deprecated
+            	</span>
             </div>
             
             
