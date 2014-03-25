@@ -113,7 +113,9 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
             }, function () {
                 $scope.orgs.splice(i, 1);
                 $location.path('profile');
-            });
+            }, function(res) {
+        		$scope.errorMsg = res.data.error;
+        	});
         };
 
         $scope.deprecateService = function (i) {
