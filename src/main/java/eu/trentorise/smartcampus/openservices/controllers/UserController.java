@@ -34,6 +34,7 @@ import eu.trentorise.smartcampus.openservices.managers.UserManager;
 import eu.trentorise.smartcampus.openservices.model.Service;
 import eu.trentorise.smartcampus.openservices.support.ApplicationMailer;
 import eu.trentorise.smartcampus.openservices.support.EmailValidator;
+import eu.trentorise.smartcampus.openservices.support.Password;
 
 /**
  * Controller that retrieves and modify user data for logged user and
@@ -317,14 +318,14 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/passw/modify", method = RequestMethod.POST, produces="application/json")
 	@ResponseBody
-	public ResponseObject modifyUserPassword(@RequestBody String oldP, @RequestBody String newP, 
+	public ResponseObject modifyUserPassword(@RequestBody Password passw,//String oldP, @RequestBody String newP, 
 			HttpServletResponse response){
 		logger.info("-- Modify User password --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		responseObject = new ResponseObject();
 		try{
-			boolean result = userManager.modifyUserPassword(username, oldP,
-					newP);
+			boolean result = userManager.modifyUserPassword(username, passw.getOldP(),
+					passw.getNewP());
 			if (result) {
 				responseObject.setStatus(HttpServletResponse.SC_OK);
 			} else {

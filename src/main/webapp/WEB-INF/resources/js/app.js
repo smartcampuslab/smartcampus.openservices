@@ -79,6 +79,11 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', 'hljsService
             templateUrl: 'partials/reset.html',
             access: access.public
         }).
+        when('/profile/change',{
+        	controller: 'passwCtrl',
+        	templateUrl: 'partials/profile/change.html',
+        	access: access.ROLE_NORMAL
+        }).
         when('/enable/:key', {
             controller: 'enableCtrl',
             templateUrl: 'partials/enable.html',

@@ -91,6 +91,10 @@ services.factory('User', ['$resource',
             save: {
                 method: 'POST',
                 url: 'api/user/add'
+            },//update password - giulia
+            updatePassw:{
+            	method: 'POST',
+            	url: 'api/user/passw/modify'
             }
         });
     }

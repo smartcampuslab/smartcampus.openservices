@@ -74,6 +74,24 @@ app.controller('resetCtrl', ['$scope', '$location', 'User',
         };
     }
 ]);
+//ToDo - passwCtrl (Giulia)
+app.controller('passwCtrl', ['$scope', '$location', 'User',
+    function ($scope, $location, User, $timeout){
+		//$scope.user = new User();
+		$scope.submit = function() {
+			User.updatePassw($scope.password, 
+        	function () {
+				$scope.success = $timeout(function(){
+					return true;
+				},3000);
+            	$location.path('profile');
+          	},
+          	function(res) {
+          		$scope.errorMsg = res.data.error;
+          	});
+		};
+	}
+]);
 
 app.controller('enableCtrl', ['$scope', '$routeParams', 'User',
     function ($scope, $routeParams, User) {

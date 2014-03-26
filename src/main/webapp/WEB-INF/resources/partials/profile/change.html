@@ -1,0 +1,33 @@
+<div class="row animated fadeIn">
+    <div ng-hide="!errorMsg" class="alert alert-danger">{{errorMsg}}</div>
+    <div class="col-md-6 col-md-offset-3">
+        <h2>Change Password</h2>
+        <form novalidate role="form" ng-submit="submit()" name="passwordform">
+            <div class="form-group">
+                <label for="oldPassword">Old password</label>
+                <input type="password" class="form-control" id="oldP" ng-model="password.oldP" required>
+            </div>
+            <div class="form-group">
+                <label for="newPassword">New Password</label>
+                <input type="password" class="form-control" id="newP" ng-model="password.newP" required>
+            </div>
+            <div class="form-group">
+                <label for="rNewPassword">Repeat New Password</label>
+                <input type="password" class="form-control" id="rNewP" ng-model="rNewP" required>
+            </div>
+            
+            <div ng-show="!rNewP.required && password.newP!==rNewP" class="alert alert-danger">
+            	New password is not repeated correctly.
+            </div>
+            
+            <button type="submit" class="btn btn-info" ng-disabled="passwordform.$invalid || 
+            password.newP!==rNewP">Save</button>
+            <button ng-click="back()" class="pull-right btn btn-default">Go back</button>
+        </form>
+    </div>
+    
+    <div ng-hide="!success" class="col-md-6 col-md-offset-3 animated fadeIn">
+    <h2 class="text-center">Success! Your new password is saved!</h2>
+  </div>
+    
+</div>
