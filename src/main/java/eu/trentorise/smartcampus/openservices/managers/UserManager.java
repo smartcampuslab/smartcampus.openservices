@@ -244,9 +244,8 @@ public class UserManager {
 			// check if email are equals
 			// bcrypt old passw
 			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-			String encodedOldPassword = ((BCryptPasswordEncoder) passwordEncoder)
-					.encode(oldPassw);
-			if (encodedOldPassword.equalsIgnoreCase(user.getPassword())) {
+			if (passwordEncoder.matches(oldPassw, user.getPassword())) {
+				System.out.println("Matches");
 				// commit
 				userDao.modifyPassword(username, newPassw);
 				return true;
