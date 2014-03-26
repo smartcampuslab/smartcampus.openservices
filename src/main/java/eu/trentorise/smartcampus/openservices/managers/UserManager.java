@@ -245,7 +245,6 @@ public class UserManager {
 			// bcrypt old passw
 			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 			if (passwordEncoder.matches(oldPassw, user.getPassword())) {
-				System.out.println("Matches");
 				// commit
 				userDao.modifyPassword(username, newPassw);
 				return true;
