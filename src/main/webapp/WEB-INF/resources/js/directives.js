@@ -132,13 +132,13 @@ directives.directive('checkStrength', [
 						elem.css({"display": "none"});
 					}else{
 						var c = strength.getColor(strength.measureStrength(scope.newP));
-						elem.css({"dispaly": "inline"});
+						elem.css({"display": "inline"});
 						elem.children('li')
 							.css({"background": "#DDD"})
 							.slice(0,c.idx)
 							.css({"background": c.col});
 					}
 				});
-			}, template: ''
+			}, template: '<li class="point"></li><li class="point"></li><li class="point"></li><li class="point"></li><li class="point"></li>'
 		};	
 }]);

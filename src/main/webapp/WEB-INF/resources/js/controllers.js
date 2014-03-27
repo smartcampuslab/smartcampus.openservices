@@ -77,7 +77,6 @@ app.controller('resetCtrl', ['$scope', '$location', 'User',
 //ToDo - passwCtrl (Giulia)
 app.controller('passwCtrl', ['$scope', '$location', 'User',
     function ($scope, $location, User){
-		//$scope.user = new User();
 		$scope.submit = function() {
 			User.updatePassw($scope.password, 
         	function () {
