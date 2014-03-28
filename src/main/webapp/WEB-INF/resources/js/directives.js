@@ -128,7 +128,7 @@ directives.directive('checkStrength', [
 	            };
 			
 				scope.$watch(attrs.checkStrength, function(){
-					if(scope.newP ==='' && (scope.newP===null || angular.isUndefined(scope.newP))){
+					if(scope.newP ==='' || !scope.newP){
 						elem.css({"display": "none"});
 					}else{
 						var c = strength.getColor(strength.measureStrength(scope.newP));
