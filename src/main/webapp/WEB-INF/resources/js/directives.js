@@ -128,7 +128,7 @@ directives.directive('checkStrength', [
 	            };
 			
 				scope.$watch(attrs.checkStrength, function(){
-					if(scope.newP ===''){
+					if(scope.newP ==='' && (scope.newP===null || angular.isUndefined(scope.newP))){
 						elem.css({"display": "none"});
 					}else{
 						var c = strength.getColor(strength.measureStrength(scope.newP));
@@ -139,6 +139,6 @@ directives.directive('checkStrength', [
 							.css({"background": c.col});
 					}
 				});
-			}, template: '<li class="point"></li><li class="point"></li><li class="point"></li><li class="point"></li><li class="point"></li>'
+			}, template: '<div></div>'
 		};	
 }]);
