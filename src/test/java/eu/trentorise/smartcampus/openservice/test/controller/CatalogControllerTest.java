@@ -168,7 +168,6 @@ public class CatalogControllerTest {
 	@Test
 	public void testOrg() throws Exception{
 		log.info("** Test Catalog REST: /org - STARTING ...");
-		String token = "a"; 
 		ResponseObject searchOrg = restTemplate.getForObject(BASE_URL+"/org?first=0&max=5&order=name", 
 				ResponseObject.class, new Object[]{});
 		assertNotNull("No organization for this simple search", searchOrg.getData());

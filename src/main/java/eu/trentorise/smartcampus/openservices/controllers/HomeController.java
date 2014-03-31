@@ -16,7 +16,6 @@
 package eu.trentorise.smartcampus.openservices.controllers;
 
 import java.io.IOException;
-import java.net.ConnectException;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

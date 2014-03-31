@@ -112,8 +112,6 @@ public class CustomUserDetailsService implements UserDetailsService{
 			 */
 			@Override
 			public Collection<? extends GrantedAuthority> getAuthorities() {
-				//Get user id from Users
-				int userid = domainUser.getId();
 				List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
 				
 				//roles: ADMIN or NORMAL user

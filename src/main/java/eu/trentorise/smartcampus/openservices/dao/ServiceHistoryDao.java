@@ -15,7 +15,6 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.dao;
 
-import java.text.ParseException;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;

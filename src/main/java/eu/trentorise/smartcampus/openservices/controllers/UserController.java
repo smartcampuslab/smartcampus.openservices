@@ -31,7 +31,6 @@ import eu.trentorise.smartcampus.openservices.Utils;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.model.User;
 import eu.trentorise.smartcampus.openservices.managers.UserManager;
-import eu.trentorise.smartcampus.openservices.model.Service;
 import eu.trentorise.smartcampus.openservices.support.ApplicationMailer;
 import eu.trentorise.smartcampus.openservices.support.EmailValidator;
 import eu.trentorise.smartcampus.openservices.support.Password;

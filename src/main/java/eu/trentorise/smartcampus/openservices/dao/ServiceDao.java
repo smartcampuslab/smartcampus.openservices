@@ -15,12 +15,10 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.dao;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import eu.trentorise.smartcampus.openservices.entities.*;
 

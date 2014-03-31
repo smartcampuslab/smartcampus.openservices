@@ -18,8 +18,6 @@ package eu.trentorise.smartcampus.openservices.dao;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
-
-import eu.trentorise.smartcampus.openservices.entities.Category;
 import eu.trentorise.smartcampus.openservices.entities.Method;
 
 /**

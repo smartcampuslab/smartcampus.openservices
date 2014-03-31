@@ -25,7 +25,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import eu.trentorise.smartcampus.openservices.Utils;
 import eu.trentorise.smartcampus.openservices.Constants.ROLES;
 import eu.trentorise.smartcampus.openservices.dao.TemporaryLinkDao;
 import eu.trentorise.smartcampus.openservices.dao.UserDao;
@@ -244,7 +243,7 @@ public class UserManager {
 			// check if email are equals
 			// bcrypt old passw
 			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-			if (passwordEncoder.matches(oldPassw, user.getPassword())) {
+			if (oldPassw!=null && passwordEncoder.matches(oldPassw, user.getPassword())) {
 				// commit
 				userDao.modifyPassword(username, newPassw);
 				return true;

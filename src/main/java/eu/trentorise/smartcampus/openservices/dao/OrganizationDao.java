@@ -19,7 +19,6 @@ import java.util.List;
 
 import org.springframework.dao.DataAccessException;
 
-import eu.trentorise.smartcampus.openservices.entities.Method;
 import eu.trentorise.smartcampus.openservices.entities.Organization;
 
 /**
