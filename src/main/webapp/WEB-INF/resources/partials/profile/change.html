@@ -5,24 +5,24 @@
         <form novalidate role="form" ng-submit="submit()" name="passwordform">
             <div class="form-group">
                 <label for="oldPassword">Old password</label>
-                <input type="password" class="form-control" id="oldP" ng-model="password.oldP" required>
+                <input type="password" class="form-control" id="oldP" ng-model="oldP" required>
             </div>
             <div class="form-group">
                 <label for="newPassword">New Password</label>
-                <input type="password" class="form-control" id="newP" ng-model="password.newP" required>
-                <ul id="strenght" check-strength="password.newP"></ul>
+                <input type="password" class="form-control" id="newP" name="newP" ng-model="newP" ng-minlength="6" required>
+                <ul id="strenght" check-strength="newP"></ul>
             </div>
             <div class="form-group">
                 <label for="rNewPassword">Repeat New Password</label>
-                <input type="password" class="form-control" id="rNewP" ng-model="rNewP" required>
+                <input type="password" class="form-control" id="rNewP" ng-model="rNewP" ng-minlength="6" required>
             </div>
             
-            <div ng-show="!rNewP.required && password.newP!==rNewP" class="alert alert-danger">
+            <div ng-show="!rNewP.required && newP!==rNewP" class="alert alert-danger">
             	New password is not repeated correctly.
             </div>
             
             <button type="submit" class="btn btn-info" ng-disabled="passwordform.$invalid || 
-            password.newP!==rNewP">Save</button>
+            newP!==rNewP">Save</button>
             <button ng-click="back()" class="pull-right btn btn-default">Go back</button>
         </form>
     </div>
