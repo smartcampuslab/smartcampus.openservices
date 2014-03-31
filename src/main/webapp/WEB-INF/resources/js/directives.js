@@ -139,6 +139,6 @@ directives.directive('checkStrength', [
 							.css({"background": c.col});
 					}
 				});
-			}, template: '<div></div>'
+			}, template: '<li class="point"></li><li class="point"></li><li class="point"></li><li class="point"></li><li class="point"></li>'
 		};	
 }]);

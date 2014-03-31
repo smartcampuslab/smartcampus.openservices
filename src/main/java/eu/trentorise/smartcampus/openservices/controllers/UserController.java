@@ -321,6 +321,8 @@ public class UserController {
 	public ResponseObject modifyUserPassword(@RequestBody Password passw,//String oldP, @RequestBody String newP, 
 			HttpServletResponse response){
 		logger.info("-- Modify User password --");
+		logger.info("-- OldP-- "+passw.getOldP());
+		logger.info("-- NewP-- "+passw.getNewP());
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		responseObject = new ResponseObject();
 		try{

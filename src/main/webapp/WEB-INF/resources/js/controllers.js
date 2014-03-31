@@ -78,7 +78,8 @@ app.controller('resetCtrl', ['$scope', '$location', 'User',
 app.controller('passwCtrl', ['$scope', '$location', 'User',
     function ($scope, $location, User){
 		$scope.submit = function() {
-			User.updatePassw($scope.password, 
+			var password= {newP:$scope.newP, oldP:$scope.oldP};
+			User.updatePassw(password, 
         	function () {
 				/*$timeout(function(){
 					$scope.success = true;

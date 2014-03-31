@@ -21,6 +21,7 @@
   <link rel="stylesheet" href="css/animate.min.css" />
   <link rel="stylesheet" href="css/datepicker3.css" />  
   <link rel="stylesheet" href="css/railscasts.css">
+   <link rel="stylesheet" href="css/strength.css">
 </head>
 
 <body>
