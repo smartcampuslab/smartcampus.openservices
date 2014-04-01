@@ -15,6 +15,7 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.controllers;
 
+import java.net.ConnectException;
 import java.util.List;
 
 import javax.persistence.EntityExistsException;
@@ -344,6 +345,10 @@ public class OrganizationController {
 					responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 					responseObject.setError("User cannot invite other users to an organization");
 					response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				}catch(org.springframework.mail.MailSendException m){
+					responseObject.setError("User invitation is not allowed. Try again later.");
+					responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				}
 			} else {
 				// wrong email address - not valid

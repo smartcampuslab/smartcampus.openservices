@@ -15,6 +15,8 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.controllers;
 
+import java.net.ConnectException;
+
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -172,6 +174,14 @@ public class UserController {
 					responseObject.setError("Duplicate email");
 					responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				}catch(ConnectException c){
+					responseObject.setError("Registration is not allowed. Try again later.");
+					responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				}catch(org.springframework.mail.MailSendException m){
+					responseObject.setError("Registration is not allowed. Try again later.");
+					responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				}
 			}
 		}
@@ -212,6 +222,10 @@ public class UserController {
 			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			responseObject.setError("Your account is already enabled.");
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		}catch(org.springframework.mail.MailSendException m){
+			responseObject.setError("Email verification is not allowed. Try again later.");
+			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 		responseObject.setStatus(HttpServletResponse.SC_OK);
 		return responseObject;

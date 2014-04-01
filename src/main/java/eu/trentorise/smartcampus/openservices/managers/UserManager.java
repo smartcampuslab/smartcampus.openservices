@@ -15,6 +15,7 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.managers;
 
+import java.net.ConnectException;
 import java.util.UUID;
 
 import javax.persistence.EntityNotFoundException;
@@ -91,7 +92,7 @@ public class UserManager {
 	 * @return a {@link User} instance
 	 */
 	public User createUser(User user, String host, String from, String object,
-			String message){
+			String message) throws ConnectException{
 		if(!userDao.isEmailAlreadyUse(user.getEmail())){
 			user.setEnabled(0);
 			user.setRole(ROLES.ROLE_NORMAL.toString());
@@ -102,9 +103,8 @@ public class UserManager {
 				if(s!=null){
 					// return link
 					String link = host+"enable/"+ s;
-					// send it via email to user
 					mailer.sendMail(from,user.getEmail(),object+""+user.getUsername(),
-							message+" "+link);
+						message+" "+link);
 				}
 				return userDao.getUserByUsername(user.getUsername());
 			}catch(DataAccessException d){

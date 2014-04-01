@@ -17,6 +17,8 @@ package eu.trentorise.smartcampus.openservice.test.manager;
 
 import static org.junit.Assert.*;
 
+import java.net.ConnectException;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -69,9 +71,15 @@ public class UserManagerTest {
 		User checkUser = userManager.getUserByUsername(user.getUsername());
 		if(checkUser==null){
 			// create User
-			User newUser = userManager.createUser(user,"http://localhost:8080/openservice/",
-					env.getProperty("email.username"),
-					env.getProperty("user.message.object"),env.getProperty("user.message.body"));
+			User newUser = null;
+			try {
+				newUser = userManager.createUser(user,"http://localhost:8080/openservice/",
+						env.getProperty("email.username"),
+						env.getProperty("user.message.object"),env.getProperty("user.message.body"));
+			} catch (ConnectException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			assertNotNull("No user created", newUser);
 			user.setId(newUser.getId());// get user id from database
 			log.info("New user " + newUser.getUsername() + ", with id "
