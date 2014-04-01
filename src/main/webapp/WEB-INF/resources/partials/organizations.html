@@ -11,6 +11,17 @@
         <p>{{org.description}}</p>
       </blockquote>
     </div>
+    
+    <ul class="pager">
+    	<li ng-class="{disabled: start <= 0}"><a ng-click="prev()" href="">Previous</a></li>
+    	<li ng-class="{disabled: end >= total}"><a ng-click="next()" href="">Next</a></li>
+    </ul>
 
   </div>
+  
+  <div class="col-md-12" ng-if="!orgs || orgs.length == 0">
+  	<h4>No results.</h4>
+  </div>
+  
 </div>
+

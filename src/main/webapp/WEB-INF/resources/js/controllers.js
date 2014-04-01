@@ -658,14 +658,37 @@ app.controller('servicesCtrl', ['$scope','$rootScope', '$http', 'Catalog',
 
 app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routeParams', 'Catalog',
     function ($scope, $rootScope, $http, $routeParams, Catalog) {
+		$scope.start = 0;
+		$scope.end = 9;
 		$rootScope.locTitles = ['organizations'];
-        Catalog.listOrgs({
-            first: 0,
-            last: 20,
-            order: 'name'
-        }, function (data) {
-            $scope.orgs = data.data;
-        });
+        
+		$scope.update = function () {
+			Catalog.listOrgs({
+				first: $scope.start,
+				last: $scope.end,
+				order: 'name'
+			}, function (data) {
+				$scope.total = data.totalNumber;
+				$scope.orgs = data.data;
+			});
+		};
+		$scope.update();
+		
+		 $scope.next = function () {
+	            if ($scope.end < $scope.total) {
+	                $scope.start += 10;
+	                $scope.end += 10;
+	                $scope.update();
+	            }
+	        };
+
+	        $scope.prev = function () {
+	            if ($scope.start > 0) {
+	                $scope.start -= 10;
+	                $scope.end -= 10;
+	                $scope.update();
+	            }
+	        };
     }
 ]);
 app.controller('organizationCtrl', ['$scope', '$rootScope', '$http', '$routeParams', 'Catalog', 'Category',
