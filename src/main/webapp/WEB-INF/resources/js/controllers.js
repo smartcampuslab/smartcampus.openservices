@@ -660,6 +660,7 @@ app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routePar
     function ($scope, $rootScope, $http, $routeParams, $location, Catalog) {
 		$scope.start = 0;
 		$scope.end = 9;
+		$rootScope.searchQuery = null;
 		$rootScope.locTitles = ['organizations'];
         
 		$scope.update = function () {
