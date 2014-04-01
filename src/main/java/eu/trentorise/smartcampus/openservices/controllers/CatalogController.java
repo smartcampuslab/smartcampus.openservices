@@ -427,7 +427,7 @@ public class CatalogController {
 		responseObject = new ResponseObject();
 		if(cat==null){
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			responseObject.setError("No services and categories");
+			responseObject.setError("There is no category.");
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
 		else{
