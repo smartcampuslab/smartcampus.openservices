@@ -656,8 +656,8 @@ app.controller('servicesCtrl', ['$scope','$rootScope', '$http', 'Catalog',
     }
 ]);
 
-app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routeParams', 'Catalog',
-    function ($scope, $rootScope, $http, $routeParams, Catalog) {
+app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routeParams', '$location','Catalog',
+    function ($scope, $rootScope, $http, $routeParams, $location, Catalog) {
 		$scope.start = 0;
 		$scope.end = 9;
 		$rootScope.locTitles = ['organizations'];
@@ -666,11 +666,14 @@ app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routePar
 			Catalog.listOrgs({
 				first: $scope.start,
 				last: $scope.end,
-				order: 'name'
+				order: 'name',
+				q: $rootScope.searchQuery
 			}, function (data) {
 				$scope.total = data.totalNumber;
 				$scope.orgs = data.data;
-			});
+			}, function(res) {
+				$scope.orgs = null;
+        	});
 		};
 		$scope.update();
 		
@@ -688,6 +691,12 @@ app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routePar
 	                $scope.end -= 10;
 	                $scope.update();
 	            }
+	        };
+	        
+	        $scope.search = function(q) {
+	        	$rootScope.searchQuery = q;
+	        	$location.path('/organizations');
+	        	$scope.update();
 	        };
     }
 ]);
