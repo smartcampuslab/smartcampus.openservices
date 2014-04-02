@@ -612,14 +612,18 @@ app.controller('servicesCtrl', ['$scope','$rootScope', '$http', 'Catalog',
                 first: $scope.start,
                 last: $scope.end,
                 order: 'name',
-                q: $rootScope.searchQuery
+                q: $rootScope.searchQuery,
+                tag: $scope.query
             }, function (services) {
                 $scope.total = services.totalNumber;
                 $scope.services = services.data;
-            });
+            },function(res) {
+        		$scope.services = null;
+        	});
         };
         $scope.update();
         $rootScope.searchQuery = null;
+        $scope.query=null;
 
         $scope.servicesActive = [];
 

@@ -298,7 +298,7 @@ public class ServiceDaoImpl implements ServiceDao{
 	@Override
 	public List<Service> getServiceByTag(String tag, int firstResult, int maxResult, String param_order){
 		Query q =  getEntityManager().createQuery("SELECT S FROM Service S JOIN S.tags T WHERE T.name=:tag " +
-				"ORDER BY :order")
+				"AND S.state!='UNPUBLISH' ORDER BY :order")
 				.setParameter("tag", tag)
 				.setParameter("order", param_order);
 		List<Service> list = q.setFirstResult(firstResult).setMaxResults(maxResult).getResultList();
@@ -379,7 +379,8 @@ public class ServiceDaoImpl implements ServiceDao{
 	@Transactional
 	@Override
 	public Long countServiceTagsSearch(String tag) throws DataAccessException {
-		return (Long) getEntityManager().createQuery("SELECT COUNT(S) FROM Service S JOIN S.tags T WHERE T.name=:tag")
+		return (Long) getEntityManager().createQuery("SELECT COUNT(S) FROM Service S JOIN S.tags T WHERE " +
+				"T.name=:tag AND S.state!='UNPUBLISH'")
 				.setParameter("tag", tag).getSingleResult();
 	}
 
