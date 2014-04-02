@@ -793,6 +793,11 @@ app.controller('serviceCtrl', ['$scope', '$rootScope', '$routeParams', 'Catalog'
                     }
                 }
             });
+            Catalog.getListServiceHistory({
+            	id: $routeParams.id	
+            }, function(data){
+            	$scope.histories = data.data;
+            });
 
         });
 

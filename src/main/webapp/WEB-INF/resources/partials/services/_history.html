@@ -1,0 +1,40 @@
+<div class="row">
+    <div class="col-md-12">
+        <br>
+         <div ng-repeat="history in histories" class="col-md-12">
+        <h4>
+            <h3>{{history.date| date:'yyyy-MM-dd'}}</h3>
+            <div ng-switch on=history.operation>
+            	<span ng-switch-when="ADD"> 
+            		<span ng-hide="history.methodName">This service, 
+            			<b>{{history.serviceName}}</b>, is added.
+            		</span>
+            		<span ng-show="history.methodName">A new method 
+            			<b>{{history.methodName}}</b> is added to this service.
+            		</span>
+            	</span>
+            	<span ng-switch-when="MODIFY">
+            		<span ng-hide="history.methodName">This service, 
+            			<b>{{history.serviceName}}</b>, is modified.
+            		</span>
+            		<span ng-show="history.methodName">Method 
+            			<b>{{history.methodName}}</b> is modified.
+            		</span>
+            	</span>
+            	<span ng-switch-when="DELETE">
+            		<!-- <span ng-hide="history.methodName">Service <b>{{history.serviceName}}</b> is deleted.
+            		</span>  -->
+            		<span ng-show="history.methodName">Method <b>{{history.methodName}}</b> 
+            			is deleted from this service.</span>
+            	</span>
+            	<span ng-switch-when="PUBLISH">This service, <b>{{history.serviceName}}</b>, is published
+				</span>
+            	<span ng-switch-when="UNPUBLISH">This service, <b>{{history.serviceName}}</b>, is unpublished
+            	</span>
+            	<span ng-switch-when="DEPRECATE">This service, <b>{{history.serviceName}}</b>, is deprecated
+            	</span>
+            </div>
+            <hr>
+        </div>
+    </div>
+</div>
