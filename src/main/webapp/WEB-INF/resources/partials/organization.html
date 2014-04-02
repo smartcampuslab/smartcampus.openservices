@@ -22,10 +22,51 @@
             </ul>
         </div>
     </div>
-    <div class="row">
+	
+	<div class="row">
       <div class="col-md-8 col-md-offset-2">
       <hr/>
         <a href="organizations/{{org.id}}/services">Services</a>
       </div>
+      <hr>
     </div>
+    <hr>
+
+
+	<div class="row">
+		<div class="col-md-4 col-md-offset-2">
+			<h3>History</h3>
+			<div ng-repeat="history in histories">
+				{{history.date| date:'yyyy-MM-dd'}}
+				<div ng-switch on=history.operation>
+					<span ng-switch-when="ADD"> <span
+						ng-hide="history.methodName">Service, <b>{{history.serviceName}}</b>,
+							is added.
+					</span> <span ng-show="history.methodName">A new method <b>{{history.methodName}}</b>
+							is added to this service.
+					</span>
+					</span> <span ng-switch-when="MODIFY"> <span
+						ng-hide="history.methodName">Service, <b>{{history.serviceName}}</b>,
+							is modified.
+					</span> <span ng-show="history.methodName">Method <b>{{history.methodName}}</b>
+							is modified.
+					</span>
+					</span> <span ng-switch-when="DELETE">
+						<span ng-hide="history.methodName">Service <b>{{history.serviceName}}</b> is deleted.
+            			</span>
+            			<span ng-show="history.methodName">Method
+							<b>{{history.methodName}}</b> is deleted from this service.
+					</span>
+					</span> <span ng-switch-when="PUBLISH">Service, <b>{{history.serviceName}}</b>,
+						is published
+					</span> <span ng-switch-when="UNPUBLISH">Service, <b>{{history.serviceName}}</b>,
+						is unpublished
+					</span> <span ng-switch-when="DEPRECATE">Service, <b>{{history.serviceName}}</b>,
+						is deprecated
+					</span>
+				</div>
+				<hr>
+			</div>
+		</div>
+	</div>
 </div>

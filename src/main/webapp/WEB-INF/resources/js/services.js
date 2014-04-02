@@ -274,8 +274,7 @@ services.factory('Org', ['$resource',
             },
             getOrgHistory: {
                 method: 'GET',
-                url: 'api/org/activity/history/:id',
-                isArray: true
+                url: 'api/org/activity/history/:id'
             },
             create: {
                 method: 'POST',

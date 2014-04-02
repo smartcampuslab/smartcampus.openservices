@@ -705,8 +705,8 @@ app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routePar
 	        };
     }
 ]);
-app.controller('organizationCtrl', ['$scope', '$rootScope', '$http', '$routeParams', 'Catalog', 'Category',
-    function ($scope, $rootScope, $http, $routeParams, Catalog, Category) {
+app.controller('organizationCtrl', ['$scope', '$rootScope', '$http', '$routeParams', 'Catalog', 'Category', 'Org',
+    function ($scope, $rootScope, $http, $routeParams, Catalog, Category, Org) {
         Catalog.getOrgById({
             id: $routeParams.id
         }, function (data) {
@@ -720,6 +720,11 @@ app.controller('organizationCtrl', ['$scope', '$rootScope', '$http', '$routePara
                 });
             }
 
+        });
+        Org.getOrgHistory({
+        	id: $routeParams.id
+        }, function(data){
+        	$scope.histories = data.data;
         });
     }
 ]);
