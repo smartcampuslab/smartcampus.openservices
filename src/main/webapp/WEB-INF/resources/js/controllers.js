@@ -725,6 +725,8 @@ app.controller('organizationCtrl', ['$scope', '$rootScope', '$http', '$routePara
         	id: $routeParams.id
         }, function(data){
         	$scope.histories = data.data;
+        }, function(res){
+        	$scope.histories = null;
         });
     }
 ]);
