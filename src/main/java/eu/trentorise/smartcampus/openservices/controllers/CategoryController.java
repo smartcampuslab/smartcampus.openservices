@@ -18,6 +18,7 @@ package eu.trentorise.smartcampus.openservices.controllers;
 
 import java.util.List;
 
+import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
@@ -113,14 +114,20 @@ public class CategoryController {
 	public @ResponseBody ResponseObject createCategory(@RequestBody Category category, HttpServletResponse response) {
 		logger.info("-- New Cateogry --");
 		responseObject = new ResponseObject();
-		Category cat = categoryManager.addCategory(category);
-		if(cat!=null){
-			responseObject.setData(cat);
-			responseObject.setStatus(HttpServletResponse.SC_OK);
-		}else{
-			responseObject.setError("Problem in adding a new category.");
-			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		try{
+			Category cat = categoryManager.addCategory(category);
+			if(cat!=null){
+				responseObject.setData(cat);
+				responseObject.setStatus(HttpServletResponse.SC_OK);
+			}else{
+				responseObject.setError("Problem in adding a new category.");
+				responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			}
+		}catch(EntityExistsException e){
+			responseObject.setError("Category name already exists. Change it.");
+			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return responseObject;
 	}
@@ -136,14 +143,20 @@ public class CategoryController {
 	public @ResponseBody ResponseObject modifyCategory(@RequestBody Category category, HttpServletResponse response) {
 		logger.info("-- Modify Category --");
 		responseObject = new ResponseObject();
-		Category cat = categoryManager.modifyCategory(category);
-		if(cat!=null){
-			responseObject.setData(cat);
-			responseObject.setStatus(HttpServletResponse.SC_OK);
-		}else{
-			responseObject.setError("The category was not modified.");
-			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		try{
+			Category cat = categoryManager.modifyCategory(category);
+			if(cat!=null){
+				responseObject.setData(cat);
+				responseObject.setStatus(HttpServletResponse.SC_OK);
+			}else{
+				responseObject.setError("The category was not modified.");
+				responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			}
+		}catch(EntityExistsException e){
+			responseObject.setError("Category name already exists. Change it.");
+			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return responseObject;
 	}
@@ -159,14 +172,20 @@ public class CategoryController {
 	public ResponseObject deleteCategory(@PathVariable int category, HttpServletResponse response) {
 		logger.info("-- Delete Cateogry by id --");
 		responseObject = new ResponseObject();
-		boolean cat = categoryManager.deleteCategory(category);
-		if(cat){
-			responseObject.setData(cat);
-			responseObject.setStatus(HttpServletResponse.SC_OK);
-		}else{
-			responseObject.setError("Category was not deleted.");
-			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		try{
+			boolean cat = categoryManager.deleteCategory(category);
+			if(cat){
+				responseObject.setData(cat);
+				responseObject.setStatus(HttpServletResponse.SC_OK);
+			}else{
+				responseObject.setError("Category was not deleted.");
+				responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			}
+		}catch(EntityExistsException e){
+			responseObject.setError("You cannot delete a category used in service and/or organization");
+			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return responseObject;
 	}

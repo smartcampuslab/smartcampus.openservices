@@ -49,6 +49,7 @@ public class User {
 		setProfile(u.getProfile());
 		setRole(u.getRole());
 	}
+	
 	/**
 	 * 
 	 * @return username : String
