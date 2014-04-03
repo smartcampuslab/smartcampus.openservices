@@ -159,6 +159,16 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', 'hljsService
             templateUrl: 'partials/profile/organizations/members/show.html',
             access: access.ROLE_NORMAL
         }).
+        when('/profile/category/:id',{
+        	controller: 'editCategoryCtrl',
+        	templateUrl: 'partials/profile/admin/categories/edit.html',
+        	access: access.ROLE_ADMIN
+        }).
+        when('/profile/categories/new',{
+        	controller: 'newCategoryCtrl',
+        	templateUrl: 'partials/profile/admin/categories/edit.html',
+        	access: access.ROLE_ADMIN
+        }).
         otherwise({
             redirectTo: '/'
         });

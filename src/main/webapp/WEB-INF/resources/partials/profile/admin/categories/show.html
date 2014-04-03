@@ -1,0 +1,26 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <br>
+        <div class="col-md-12">
+            <div ng-repeat="category in categories" class="panel panel-default">
+                <div class="panel-body">
+                    <strong>{{category.name}}</strong>
+                    <em>{{category.description}}</em>
+                    <button type="button" data-toggle="tooltip" title="Delete category" class="pull-right btn btn-default btn-sm orgbtn" ng-click="deleteCategory($index)"><i class="fa fa-trash-o"></i>
+                    </button>
+                    <a href="profile/category/{{category.id}}" data-toggle="tooltip" title="Edit category" class="pull-right btn btn-default btn-sm orgbtn"><i class="fa fa-edit"></i></a>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <div class="row">
+        <div class="col-md-2 col-md-offset-10">
+            <a href="profile/categories/new" class="btn btn-info btn-block">Add</a>
+        </div>
+    </div>
+    <br>
+ 
+</div>
+

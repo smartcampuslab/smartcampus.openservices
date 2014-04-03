@@ -123,8 +123,8 @@ app.controller('enableOrgCtrl', ['$scope', '$routeParams', 'Org', '$location',
     }
 ]);
 
-app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service', 'Org',
-    function ($scope, $http, $location, User, Service, Org) {
+app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service', 'Org', 'Category',
+    function ($scope, $http, $location, User, Service, Org, Category) {
         $scope.template = 'partials/profile/_details.html';
 
         $scope.deleteOrg = function (i) {
@@ -191,7 +191,19 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
         Service.get({}, function (data) {
             $scope.services = data.data;
         });
-
+        
+        //Categories
+        $scope.deleteCategory = function(i){
+        	 Category.remove({
+                 id: $scope.categories[i].id
+             }, function () {
+                 $scope.categories.splice(i, 1);
+                 $location.path('profile');
+             });
+        };
+        Category.list({}, function (data){
+        	$scope.categories = data.data;
+        });
     }
 ]);
 
@@ -895,4 +907,36 @@ app.controller('showOrgMembersCtrl', ['$scope', 'Org', '$routeParams',
             });
         };
     }
+]);
+
+app.controller('editCategoryCtrl', [ '$scope', '$routeParams', '$location', 'Category',
+		function($scope, $routeParams, $location, Category) {
+
+			Category.getById({
+				id : $routeParams.id
+			}, function(data) {
+				$scope.category = data.data;
+			});
+
+			$scope.submit = function() {
+
+				Category.update($scope.category, function() {
+					$location.path('profile');
+				}, function(res) {
+					$scope.errorMsg = res.data.error;
+				});
+			};
+	} 
+]);
+
+app.controller('newCategoryCtrl', [ '$scope', '$location', 'Category',
+    function($scope, $location, Category) {
+		$scope.submit = function() {
+			Category.create($scope.category, function() {
+				$location.path('profile');
+				}, function(res) {
+					$scope.errorMsg = res.data.error;
+					});
+			};
+		} 
 ]);
