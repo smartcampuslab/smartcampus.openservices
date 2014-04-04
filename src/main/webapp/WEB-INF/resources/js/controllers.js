@@ -8,11 +8,19 @@ app.controller('homeCtrl', ['$http', '$scope', '$rootScope', '$location', 'Catal
         .error(function (data) {
         	$scope.news = [];
         });
+        
+        $http.get('api/catalog/tagcloud')
+        .success(function (data) {
+            $scope.taglist = data.data;
+        })
+        .error(function (data) {
+        	$scope.taglist = [];
+        });
 
         $scope.search = function(q) {
         	$rootScope.searchQuery = q;
         	$location.path('/search');
-        }
+        };
     }
 ]);
 

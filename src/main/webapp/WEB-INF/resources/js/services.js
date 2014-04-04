@@ -173,7 +173,7 @@ services.factory('Catalog', ['$resource',
             },
             browseOrgCat: {
                 method: 'GET',
-                url: 'api/catalog/org/category/:category',
+                url: 'api/catalog/org/category/:category'
             }
         });
     }
