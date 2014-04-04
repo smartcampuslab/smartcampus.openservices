@@ -294,7 +294,7 @@ app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Servi
             if ($scope.service.expiration) {
                 $scope.service.expiration = new Date($scope.service.expiration).getTime();
             }
-            if ($scope.service.tags.length >= 1)
+            if (typeof $scope.service.tags == 'string' && $scope.service.tags.length >= 1)
                 $scope.service.tags = $scope.service.tags.split(',');
 
             Service.update($scope.service, function () {
