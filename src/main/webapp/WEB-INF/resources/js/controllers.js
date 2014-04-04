@@ -125,6 +125,7 @@ app.controller('enableOrgCtrl', ['$scope', '$routeParams', 'Org', '$location',
 
 app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service', 'Org', 'Category',
     function ($scope, $http, $location, User, Service, Org, Category) {
+		$scope.errorMsg = null;
         $scope.template = 'partials/profile/_details.html';
 
         $scope.deleteOrg = function (i) {
@@ -199,7 +200,9 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
              }, function () {
                  $scope.categories.splice(i, 1);
                  $location.path('profile');
-             });
+             }, function(res) {
+         		$scope.errorMsg = res.data.error;
+         	});
         };
         Category.list({}, function (data){
         	$scope.categories = data.data;

@@ -169,11 +169,11 @@ public class CategoryController {
 	 * error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value="/delete/{id}", method=RequestMethod.DELETE)
-	public ResponseObject deleteCategory(@PathVariable int category, HttpServletResponse response) {
+	public @ResponseBody ResponseObject deleteCategory(@PathVariable int id, HttpServletResponse response) {
 		logger.info("-- Delete Cateogry by id --");
 		responseObject = new ResponseObject();
 		try{
-			boolean cat = categoryManager.deleteCategory(category);
+			boolean cat = categoryManager.deleteCategory(id);
 			if(cat){
 				responseObject.setData(cat);
 				responseObject.setStatus(HttpServletResponse.SC_OK);
