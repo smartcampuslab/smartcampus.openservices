@@ -15,9 +15,11 @@
   <div class="col-md-16">
     <div class="col-md-16 col-md-offset-1">
     	<div class="pull-right">
-    	 <h3><b>Tag Cloud</b></h3>
+    	 <h2><b>Tag Cloud</b></h2>
     	<div ng-repeat="t in taglist">
-          	<h4>{{t.tag}} </h4>
+          	<span ng-if="$index===max"><h3>{{t.tag}}</h3></span>
+          	<span ng-if="$index===min"><h5>{{t.tag}}</h5></span>
+          	<span ng-if="$index!==min && $index!==max"><h4>{{t.tag}}</h4></span>
     	</div>
     	</div>
     </div>

@@ -1,6 +1,10 @@
 'use strict';
 app.controller('homeCtrl', ['$http', '$scope', '$rootScope', '$location', 'Catalog',
     function ($http, $scope, $rootScope, $location, Catalog) {
+	
+		$scope.max = 0;
+		$scope.min = 0;
+	
         $http.get('api/catalog/news?n=5')
         .success(function (data) {
             $scope.news = data.data;
@@ -12,6 +16,19 @@ app.controller('homeCtrl', ['$http', '$scope', '$rootScope', '$location', 'Catal
         $http.get('api/catalog/tagcloud')
         .success(function (data) {
             $scope.taglist = data.data;
+            
+            for(var i=0; i<$scope.taglist.length;i++){
+            	//max
+            	if($scope.taglist[i].counter > $scope.taglist[$scope.max].counter){
+            		$scope.max = i;
+            	}
+            	//min
+            	if($scope.taglist[i].counter < $scope.taglist[$scope.min].counter){
+            		$scope.min = i;
+            	}
+            }
+            
+            
         })
         .error(function (data) {
         	$scope.taglist = [];
