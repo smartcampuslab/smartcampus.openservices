@@ -3,7 +3,7 @@ app.controller('homeCtrl', ['$http', '$scope', '$rootScope', '$location', 'Catal
     function ($http, $scope, $rootScope, $location, Catalog) {
 	
 		$scope.max = 0;
-		$scope.min = 0;
+		$scope.min = 100;
 	
         $http.get('api/catalog/news?n=5')
         .success(function (data) {
@@ -19,12 +19,12 @@ app.controller('homeCtrl', ['$http', '$scope', '$rootScope', '$location', 'Catal
             
             for(var i=0; i<$scope.taglist.length;i++){
             	//max
-            	if($scope.taglist[i].counter > $scope.taglist[$scope.max].counter){
-            		$scope.max = i;
+            	if($scope.taglist[i].counter > $scope.max){
+            		$scope.max = $scope.taglist[i].counter;
             	}
             	//min
-            	if($scope.taglist[i].counter < $scope.taglist[$scope.min].counter){
-            		$scope.min = i;
+            	if($scope.taglist[i].counter < $scope.min){
+            		$scope.min = $scope.taglist[i].counter;
             	}
             }
             

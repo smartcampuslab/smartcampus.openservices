@@ -17,9 +17,9 @@
     	<div class="pull-right">
     	 <h2><b>Tag Cloud</b></h2>
     	<div ng-repeat="t in taglist">
-          	<span ng-if="$index===max"><h3><a href="search/{{t.tag}}">{{t.tag}}</a></h3></span>
-          	<span ng-if="$index===min"><h5><a href="search/{{t.tag}}">{{t.tag}}</a></h5></span>
-          	<span ng-if="$index!==min && $index!==max"><h4><a href="search/{{t.tag}}">{{t.tag}}</a></h4></span>
+          	<span ng-if="t.counter===max"><h3><a href="search/{{t.tag}}">{{t.tag}}</a></h3></span>
+          	<span ng-if="t.counter===min"><h5><a href="search/{{t.tag}}">{{t.tag}}</a></h5></span>
+          	<span ng-if="t.counter!==min && t.counter!==max"><h4><a href="search/{{t.tag}}">{{t.tag}}</a></h4></span>
     	</div>
     	</div>
     </div>
