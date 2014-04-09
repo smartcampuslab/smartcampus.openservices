@@ -392,8 +392,10 @@ public class ServiceDaoImpl implements ServiceDao{
 	public Map<String, Integer> findTagServices() throws DataAccessException {
 		Map<String,Integer> res = new HashMap<String, Integer>();
 		List<Object[]> results = entityManager
-		        .createQuery("SELECT tag.name AS tag, COUNT(tag.name) AS total FROM Tag AS tag GROUP BY tag.name")
+		        .createQuery("SELECT T.name AS tag, COUNT(T.name) FROM Service S JOIN S.tags T" +
+		        		" WHERE S.state!='UNPUBLISH' GROUP BY T.name")
 		        .getResultList();
+				
 		for (Object[] result : results) {
 		    String tag = ((String) result[0]).toString();
 		    int count = ((Number) result[1]).intValue();
