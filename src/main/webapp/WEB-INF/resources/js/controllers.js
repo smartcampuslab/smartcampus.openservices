@@ -637,11 +637,17 @@ app.controller('categoryCtrl', ['$scope','$rootScope', '$http', '$location', 'Ca
     }
 ]);
 
-app.controller('servicesCtrl', ['$scope','$rootScope', '$http', 'Catalog',
-    function ($scope, $rootScope, $http, Catalog) {
+app.controller('servicesCtrl', ['$scope','$rootScope', '$http', '$routeParams', 'Catalog',
+    function ($scope, $rootScope, $http, $routeParams, Catalog) {
         $scope.start = 0;
         $scope.end = 9;
         $rootScope.locTitles = $rootScope.searchQuery ?['search'] : ['services'];
+        
+        if(!!$routeParams.tag){
+        	$scope.query = $routeParams.tag;
+        	//$scope.tag = true;
+        }
+       
 
         if ( !! $scope.categoryActive) {
             $scope.categoryActive = undefined;

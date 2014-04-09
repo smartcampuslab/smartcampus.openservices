@@ -29,6 +29,11 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', 'hljsService
             templateUrl: 'partials/services/list.html',
             access: access.public
         }).
+        when('/search/:tag', {
+            controller: 'servicesCtrl',
+            templateUrl: 'partials/services/list.html',
+            access: access.public
+        }).
         when('/services', {
             controller: 'servicesCtrl',
             templateUrl: 'partials/services/list.html',
