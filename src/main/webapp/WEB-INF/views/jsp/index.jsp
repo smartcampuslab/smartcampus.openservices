@@ -16,12 +16,12 @@
   <link rel="stylesheet" href="resources/css/prism.css" /> 
    -->
   <link rel="stylesheet" href="css/bootstrap.min.css" />
-  <link rel="stylesheet" href="css/openservices.css" />
   <link rel="stylesheet" href="css/font-awesome.min.css" />
   <link rel="stylesheet" href="css/animate.min.css" />
   <link rel="stylesheet" href="css/datepicker3.css" />  
   <link rel="stylesheet" href="css/railscasts.css">
-   <link rel="stylesheet" href="css/strength.css">
+  <link rel="stylesheet" href="css/strength.css">
+  <link rel="stylesheet" href="css/openservices.css" />
 </head>
 
 <body>
@@ -57,8 +57,10 @@
     </div>
     <!-- /.navbar-collapse -->
   </nav>
-  <div ng-hide="loc[0] === ''" class="container-fluid" id="bread">
-    <ol ng-controller="breadCtrl" ng-hide="location === '/'" class="breadcrumb">
+  <!-- ng-hide="loc[0] === ''" -->
+  <div class="container-fluid" id="bread">
+  <!-- ng-hide="location === '/'" -->
+    <ol ng-controller="breadCtrl" ng-hide="loc[0] === ''" class="breadcrumb">
       <li ng-repeat="location in loc">
         <a ng-href="{{loc.slice(0,$index+1).join('/')}}">{{locTitles[$index] ? locTitles[$index] : location}}</a>
       </li>

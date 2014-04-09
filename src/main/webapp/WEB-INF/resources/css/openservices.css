@@ -17,10 +17,10 @@ body {
 .container .credit {
     margin: 20px 0;
 }
-body > .container {
+/*body > .container {
     padding: 60px 15px 0;
-}
-#footer > .container {
+}*/
+ #footer > .container {
     padding-left: 15px;
     padding-right: 15px;
 }
@@ -102,13 +102,14 @@ a {
 }
 #bread {
     margin-top: 50px;
+    min-height: 56px;
     padding-left: 0px;
     padding-right: 0px;
 }
-#search {
+/*#search {
     margin-top: 60px;
-}
-#members {
+}*/
+ #members {
     margin-top: 4%;
 }
 pre {
@@ -268,4 +269,17 @@ pre {
         left: -14px;
         right: auto;
     }
+}
+.service-row {
+    padding: 15px;
+    background-color: #EEEEEE;
+}
+.service-row h3 {
+    margin: 0;
+}
+.service-row .tags span {
+    vertical-align: middle;
+}
+.service-row .tags span:not(:first-child) {
+    margin-left: 4px;
 }
