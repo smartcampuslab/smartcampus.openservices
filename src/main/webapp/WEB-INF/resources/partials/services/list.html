@@ -20,21 +20,22 @@
         <div class="col-md-3">
             <h4>Categories</h4>
             <div class="form-group">
-                <div class="checkbox">
+                <div ng-repeat="cat in categories" class="checkbox">
                     <label>
-                        <input type="checkbox" value="">One
+                        <input type="checkbox" value="{{cat.name}}" onclick=""
+                        	ng-model="category">{{cat.name}}
                     </label>
                 </div>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" value="">Two
-                    </label>
-                </div>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" value="">Three
-                    </label>
-                </div>
+<!--                 <div class="checkbox"> -->
+<!--                     <label> -->
+<!--                         <input type="checkbox" value="">Two -->
+<!--                     </label> -->
+<!--                 </div> -->
+<!--                 <div class="checkbox"> -->
+<!--                     <label> -->
+<!--                         <input type="checkbox" value="">Three -->
+<!--                     </label> -->
+<!--                 </div> -->
             </div>
         </div>
         <div class="col-md-9">

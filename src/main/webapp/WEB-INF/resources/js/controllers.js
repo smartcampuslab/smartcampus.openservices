@@ -637,11 +637,31 @@ app.controller('categoryCtrl', ['$scope','$rootScope', '$http', '$location', 'Ca
     }
 ]);
 
-app.controller('servicesCtrl', ['$scope','$rootScope', '$http', '$routeParams', 'Catalog',
-    function ($scope, $rootScope, $http, $routeParams, Catalog) {
+app.controller('servicesCtrl', ['$scope','$rootScope', '$http', '$routeParams', 'Catalog', 'Category',
+    function ($scope, $rootScope, $http, $routeParams, Catalog, Category) {
         $scope.start = 0;
         $scope.end = 9;
         $rootScope.locTitles = $rootScope.searchQuery ?['search'] : ['services'];
+        
+        Category.list({}, function (data){
+        	$scope.categories = data.data;
+        });
+        
+        /*$scope.search = function(cat){
+        	console.log("Search");
+        	console.log("Search category with value: "+cat.id);
+        	Catalog.browseServiceCat({
+        		category: $scope.category.id,
+        		first: $scope.start,
+                last: $scope.end,
+                order: 'name'
+        	}, function(services){
+        		$scope.total = services.totalNumber;
+                $scope.services = services.data;
+        	},function(res){
+        		$scope.services = null;
+        	});
+        };*/
         
         if(!!$routeParams.tag){
         	$scope.query = $routeParams.tag;
