@@ -16,16 +16,21 @@
 package eu.trentorise.smartcampus.openservices.managers;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.codehaus.jackson.map.util.Comparators;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 
+import eu.trentorise.smartcampus.openservices.Constants;
 import eu.trentorise.smartcampus.openservices.Constants.ORDER;
 import eu.trentorise.smartcampus.openservices.Constants.SERVICE_STATE;
 import eu.trentorise.smartcampus.openservices.dao.MethodDao;
@@ -456,6 +461,44 @@ public class CatalogManager {
 			
 		} catch (DataAccessException d) {
 			list = null;
+		}
+		
+		if(group.equalsIgnoreCase(Constants.ORDER.tag.toString()) && 
+				order.equalsIgnoreCase(Constants.ASCDESC.DESC.toString())){
+			Collections.sort(list, Collections.reverseOrder(new Comparator<TagCounter>() {
+				@Override
+				public int compare(TagCounter o1, TagCounter o2) {
+					return o1.getTag().compareToIgnoreCase(o2.getTag());
+				}
+			}));
+		}else if(group.equalsIgnoreCase(Constants.ORDER.counter.toString())){
+			if(order.equalsIgnoreCase(Constants.ASCDESC.ASC.toString())){
+			Collections.sort(list, new Comparator<TagCounter>() {
+				@Override
+				public int compare(TagCounter o1, TagCounter o2) {
+					if(o1.getCounter()==o2.getCounter()){
+						return 0;
+					}
+					else if(o1.getCounter() > o2.getCounter()){
+						return 1;
+					}
+					else return -1;
+				}
+			});
+			} else{
+				Collections.sort(list, Collections.reverseOrder(new Comparator<TagCounter>() {
+					@Override
+					public int compare(TagCounter o1, TagCounter o2) {
+						if(o1.getCounter()==o2.getCounter()){
+							return 0;
+						}
+						else if(o1.getCounter() > o2.getCounter()){
+							return 1;
+						}
+						else return -1;
+					}
+				}));
+			}
 		}
 		return list;
 		
