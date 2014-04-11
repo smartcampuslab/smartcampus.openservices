@@ -26,6 +26,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import eu.trentorise.smartcampus.openservices.Constants;
 import eu.trentorise.smartcampus.openservices.entities.Organization;
 import eu.trentorise.smartcampus.openservices.entities.Service;
 import eu.trentorise.smartcampus.openservices.entities.User;
@@ -389,13 +390,22 @@ public class ServiceDaoImpl implements ServiceDao{
 	 */
 	@Transactional
 	@Override
-	public Map<String, Integer> findTagServices() throws DataAccessException {
+	public Map<String, Integer> findTagServices(String group, String order) throws DataAccessException {
 		Map<String,Integer> res = new HashMap<String, Integer>();
-		List<Object[]> results = entityManager
+		List<Object[]> results;
+		if(group.equalsIgnoreCase(Constants.ORDER.tag.toString())){
+			results= entityManager
 		        .createQuery("SELECT T.name AS tag, COUNT(T.name) FROM Service S JOIN S.tags T" +
-		        		" WHERE S.state!='UNPUBLISH' GROUP BY T.name")
+		        		" WHERE S.state!='UNPUBLISH' GROUP BY T.name ORDER BY T.name "+order)
 		        .getResultList();
-				
+		}
+		else{
+			results = entityManager
+		        .createQuery("SELECT T.name AS tag, COUNT(T.name) FROM Service S JOIN S.tags T" +
+		        		" WHERE S.state!='UNPUBLISH' GROUP BY T.name ORDER BY COUNT(T.name) "+order)
+		        .getResultList();
+		}
+		
 		for (Object[] result : results) {
 		    String tag = ((String) result[0]).toString();
 		    int count = ((Number) result[1]).intValue();

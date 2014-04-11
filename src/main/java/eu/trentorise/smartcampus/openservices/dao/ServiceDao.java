@@ -218,9 +218,11 @@ public interface ServiceDao{ //extends JpaRepository<Service, Integer>{
 	
 	/**
 	 * 
+	 * @param order 
+	 * @param group 
 	 * @return Map<String, Integer>: tag name, number of services for each tag;
 	 * @throws DataAccessException
 	 */
-	public Map<String,Integer> findTagServices() throws DataAccessException;
+	public Map<String,Integer> findTagServices(String group, String order) throws DataAccessException;
 	
 }

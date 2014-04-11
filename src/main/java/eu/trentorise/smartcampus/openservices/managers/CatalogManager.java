@@ -433,12 +433,14 @@ public class CatalogManager {
 	
 	/**
 	 * Retrieve counter of tags
+	 * @param order : value tag or counter
+	 * @param group : value ASC or DESC
 	 * @return a list of {@link TagCounter} instances
 	 */
-	public List<TagCounter> getTagsServicesCounter() {
+	public List<TagCounter> getTagsServicesCounter(String group, String order) {
 		List<TagCounter> list = new ArrayList<TagCounter>();
 		try {
-			Map<String, Integer> tags = serviceDao.findTagServices();
+			Map<String, Integer> tags = serviceDao.findTagServices(group, order);
 			if(!tags.isEmpty()){
 				Iterator<Map.Entry<String, Integer>> iter = tags.entrySet().iterator();
 				while (iter.hasNext()) {

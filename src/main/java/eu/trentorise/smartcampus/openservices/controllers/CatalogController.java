@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import eu.trentorise.smartcampus.openservices.Constants;
 import eu.trentorise.smartcampus.openservices.entities.Method;
 import eu.trentorise.smartcampus.openservices.entities.Organization;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
@@ -471,23 +472,40 @@ public class CatalogController {
 	 */
 	@RequestMapping(value="/tagcloud", method=RequestMethod.GET)
 	@ResponseBody
-	public ResponseObject catalogTag(HttpServletResponse response){
-		logger.info("-- Tag counter --");
-		try{
-			List<TagCounter> tglist = catalogManager.getTagsServicesCounter();
-			responseObject = new ResponseObject();
-			if (tglist == null || tglist.size() == 0) {
-				responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-				responseObject.setError("There is a problem in connecting with database");
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			} else {
-				responseObject.setData(tglist);
-				responseObject.setStatus(HttpServletResponse.SC_OK);
+	public ResponseObject catalogTag(
+			@RequestParam(value="group", required=false, defaultValue="tag") String group, 
+			@RequestParam(value="order", required=false, defaultValue="ASC") String order,
+			HttpServletResponse response){
+		logger.info("-- Tag counter -- Param group: {} -- Param order: {}",group,order);
+		responseObject = new ResponseObject();
+		if((group.equalsIgnoreCase(Constants.ORDER.tag.toString()) || 
+				group.equalsIgnoreCase(Constants.ORDER.counter.toString()) )
+			&&
+		(order.equalsIgnoreCase(Constants.ASCDESC.ASC.toString()) || 
+				order.equalsIgnoreCase(Constants.ASCDESC.DESC.toString())) ){
+			try {
+				List<TagCounter> tglist = catalogManager
+						.getTagsServicesCounter(group, order);
+				if (tglist == null || tglist.size() == 0) {
+					responseObject
+							.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					responseObject
+							.setError("There is a problem in connecting with database");
+					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				} else {
+					responseObject.setData(tglist);
+					responseObject.setStatus(HttpServletResponse.SC_OK);
+				}
+			} catch (EntityNotFoundException e) {
+				responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				responseObject.setError("There is no tags");
+				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			}
-		}catch(EntityNotFoundException e){
-			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			responseObject.setError("There is no tags");
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		}else{
+		responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+		responseObject.setError("Wrong input parameters: group value can be tag or counter;" +
+				" order value can be ASC or DESC.");
+		response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return responseObject;
 	}
