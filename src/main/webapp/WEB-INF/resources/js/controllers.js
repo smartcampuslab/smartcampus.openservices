@@ -647,22 +647,6 @@ app.controller('servicesCtrl', ['$scope','$rootScope', '$http', '$routeParams', 
         	$scope.categories = data.data;
         });
         
-        /*$scope.search = function(cat){
-        	console.log("Search");
-        	console.log("Search category with value: "+cat.id);
-        	Catalog.browseServiceCat({
-        		category: $scope.category.id,
-        		first: $scope.start,
-                last: $scope.end,
-                order: 'name'
-        	}, function(services){
-        		$scope.total = services.totalNumber;
-                $scope.services = services.data;
-        	},function(res){
-        		$scope.services = null;
-        	});
-        };*/
-        
         if(!!$routeParams.tag){
         	$scope.query = $routeParams.tag;
         	//$scope.tag = true;
@@ -672,6 +656,22 @@ app.controller('servicesCtrl', ['$scope','$rootScope', '$http', '$routeParams', 
         if ( !! $scope.categoryActive) {
             $scope.categoryActive = undefined;
         }
+        
+        $scope.serviceCategory = function(id){
+        	console.log("Search");
+        	console.log("Search category with value: "+id);
+        	Catalog.browseServiceCat({
+        		category: id,
+        		first: $scope.start,
+                last: $scope.end,
+                order: 'name'
+        	}, function(services){
+        		$scope.total = services.totalNumber;
+                $scope.services = services.data;
+        	},function(res){
+        		$scope.services = null;
+        	});
+        };
         
         $scope.update = function () {
             Catalog.listServices({
