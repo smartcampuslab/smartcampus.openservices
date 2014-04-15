@@ -1,5 +1,12 @@
 'use strict';
 var app = angular.module('openservices', ['ngRoute', 'ngCookies', 'openservices.directives', 'openservices.services', 'hljs']);
+
+app.filter('fromNow', function () {
+    return function (dateString) {
+        return moment(dateString).fromNow()
+    };
+});
+
 app.config(['$routeProvider', '$locationProvider', '$httpProvider', 'hljsServiceProvider',
     function ($routeProvider, $locationProvider, $httpProvider, hljsServiceProvider) {
         var access = routingConfig.accessLevels;
@@ -84,10 +91,10 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', 'hljsService
             templateUrl: 'partials/reset.html',
             access: access.public
         }).
-        when('/profile/change',{
-        	controller: 'passwCtrl',
-        	templateUrl: 'partials/profile/change.html',
-        	access: access.ROLE_NORMAL
+        when('/profile/change', {
+            controller: 'passwCtrl',
+            templateUrl: 'partials/profile/change.html',
+            access: access.ROLE_NORMAL
         }).
         when('/enable/:key', {
             controller: 'enableCtrl',
@@ -164,15 +171,15 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', 'hljsService
             templateUrl: 'partials/profile/organizations/members/show.html',
             access: access.ROLE_NORMAL
         }).
-        when('/profile/category/:id',{
-        	controller: 'editCategoryCtrl',
-        	templateUrl: 'partials/profile/admin/categories/edit.html',
-        	access: access.ROLE_ADMIN
+        when('/profile/category/:id', {
+            controller: 'editCategoryCtrl',
+            templateUrl: 'partials/profile/admin/categories/edit.html',
+            access: access.ROLE_ADMIN
         }).
-        when('/profile/categories/new',{
-        	controller: 'newCategoryCtrl',
-        	templateUrl: 'partials/profile/admin/categories/edit.html',
-        	access: access.ROLE_ADMIN
+        when('/profile/categories/new', {
+            controller: 'newCategoryCtrl',
+            templateUrl: 'partials/profile/admin/categories/edit.html',
+            access: access.ROLE_ADMIN
         }).
         otherwise({
             redirectTo: '/'

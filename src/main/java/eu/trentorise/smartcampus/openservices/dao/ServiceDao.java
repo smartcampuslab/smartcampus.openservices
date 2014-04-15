@@ -20,106 +20,119 @@ import java.util.Map;
 
 import org.springframework.dao.DataAccessException;
 
-import eu.trentorise.smartcampus.openservices.entities.*;
+import eu.trentorise.smartcampus.openservices.entities.Organization;
+import eu.trentorise.smartcampus.openservices.entities.Service;
+import eu.trentorise.smartcampus.openservices.entities.User;
 
 /**
  * Service Dao Interface
  * 
  * @author Giulia Canobbio
- *
+ * 
  */
-public interface ServiceDao{ //extends JpaRepository<Service, Integer>{
+public interface ServiceDao { // extends JpaRepository<Service, Integer>{
 
-	
-	
 	/**
 	 * Show all service.
+	 * 
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
 	public List<Service> showService() throws DataAccessException;
-	
+
 	/**
 	 * Show only published services.
+	 * 
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
-	public List<Service> showPublishedService(int firstResult, int maxResult, String param_order) 
-			throws DataAccessException;
-	
+	public List<Service> showPublishedService(int firstResult, int maxResult, String param_order) throws DataAccessException;
+
 	/**
 	 * Show all service of a given user.
+	 * 
 	 * @param username
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
 	public List<Service> showMyService(String username) throws DataAccessException;
-	
+
 	/**
 	 * User can interact and use a chosen service.
+	 * 
 	 * @param service_name
 	 * @return a {@link Service} instance
 	 * @throws DataAccessException
 	 */
 	public Service useService(String service_name) throws DataAccessException;
-	
+
 	/**
-	 * Create a service to an organization.
-	 * Set user as owner.
-	 * @param service : a {@link Service} instance
+	 * Create a service to an organization. Set user as owner.
+	 * 
+	 * @param service
+	 *            : a {@link Service} instance
 	 * @throws DataAccessException
 	 */
 	public void createService(Service service) throws DataAccessException;
-	
+
 	/**
 	 * 
 	 * Modify a service.
-	 * @param service : a {@link Service} instance
+	 * 
+	 * @param service
+	 *            : a {@link Service} instance
 	 * @throws DataAccessException
 	 */
 	public void modifyService(Service service) throws DataAccessException;
-	
+
 	/**
 	 * Delete a service.
-	 * @param service : a {@link Service} instance
+	 * 
+	 * @param service
+	 *            : a {@link Service} instance
 	 * @throws DataAccessException
 	 */
 	public void deleteService(Service service) throws DataAccessException;
-	
+
 	/**
 	 * Get organization of service.
+	 * 
 	 * @param service_id
 	 * @return a {@link Organization} instance
 	 * @throws DataAccessException
 	 */
 	public Organization getOrganizationofService(int service_id) throws DataAccessException;
-	
+
 	/**
 	 * Get owner of service.
+	 * 
 	 * @param service_id
 	 * @return a {@link User} instance
 	 * @throws DataAccessException
 	 */
 	public User getOwnerOfService(int service_id) throws DataAccessException;
-	
+
 	/**
 	 * Get service by id.
+	 * 
 	 * @param service_id
 	 * @return a {@link Service} instance
 	 * @throws DataAccessException
 	 */
 	public Service getServiceById(int service_id) throws DataAccessException;
-	
+
 	/**
 	 * Get service by owner id.
+	 * 
 	 * @param id_owner
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
 	public List<Service> getServiceByIdOwner(int id_owner) throws DataAccessException;
-	
+
 	/**
 	 * Get service by organization id.
+	 * 
 	 * @param id_org
 	 * @param firstResult
 	 * @param maxResult
@@ -127,11 +140,12 @@ public interface ServiceDao{ //extends JpaRepository<Service, Integer>{
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
-	public List<Service> getServiceByIdOrg(int id_org, int firstResult, int maxResult, String param_order) 
+	public List<Service> getServiceByIdOrg(int id_org, int firstResult, int maxResult, String param_order)
 			throws DataAccessException;
-	
+
 	/**
 	 * Find services having in name the token in input
+	 * 
 	 * @param token
 	 * @param firstResult
 	 * @param maxResult
@@ -139,21 +153,23 @@ public interface ServiceDao{ //extends JpaRepository<Service, Integer>{
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
-	public List<Service> searchService(String token, int firstResult, int maxResult, String param_order) 
+	public List<Service> searchService(String token, int firstResult, int maxResult, String param_order)
 			throws DataAccessException;
-	
+
 	/**
 	 * Browse services having input category and tags
+	 * 
 	 * @param category
 	 * @param tags
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
-	public List<Service> browseService(Integer category, int firstResult, int maxResult, String param_order) 
+	public List<Service> browseService(Integer category, int firstResult, int maxResult, String param_order)
 			throws DataAccessException;
-	
+
 	/**
 	 * Retrieve service searching by tag
+	 * 
 	 * @param tag
 	 * @param firstResult
 	 * @param maxResult
@@ -161,7 +177,7 @@ public interface ServiceDao{ //extends JpaRepository<Service, Integer>{
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
-	public List<Service> getServiceByTag(String tag,int firstResult, int maxResult, String param_order) 
+	public List<Service> getServiceByTag(String tag, int firstResult, int maxResult, String param_order)
 			throws DataAccessException;
 
 	/**
@@ -171,13 +187,13 @@ public interface ServiceDao{ //extends JpaRepository<Service, Integer>{
 	 */
 	public List<Service> findByCategory(int id);
 
-	
 	/**
-	 * @return Map<Integer, Integer>: category, number of services for each category;
+	 * @return Map<Integer, Integer>: category, number of services for each
+	 *         category;
 	 * @throws DataAccessException
 	 */
-	public Map<Integer,Integer> findCategoryServices() throws DataAccessException;
-	
+	public Map<Integer, Integer> findCategoryServices() throws DataAccessException;
+
 	/**
 	 * 
 	 * @return number of saved services in db
@@ -187,7 +203,8 @@ public interface ServiceDao{ //extends JpaRepository<Service, Integer>{
 
 	/**
 	 * 
-	 * @param token : String
+	 * @param token
+	 *            String
 	 * @return number of services retrieved by simple search
 	 * @throws DataAccessException
 	 */
@@ -215,14 +232,14 @@ public interface ServiceDao{ //extends JpaRepository<Service, Integer>{
 	 * @throws DataAccessException
 	 */
 	public Long countServiceCategorySearch(int category) throws DataAccessException;
-	
+
 	/**
 	 * 
-	 * @param order 
-	 * @param group 
+	 * @param order
+	 * @param group
 	 * @return Map<String, Integer>: tag name, number of services for each tag;
 	 * @throws DataAccessException
 	 */
-	public Map<String,Integer> findTagServices(String group, String order) throws DataAccessException;
-	
+	public Map<String, Integer> findTagServices(String group, String order) throws DataAccessException;
+
 }

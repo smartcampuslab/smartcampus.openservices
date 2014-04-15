@@ -92,12 +92,12 @@ services.factory('User', ['$resource',
                 method: 'POST',
                 url: 'api/user/add'
             },
-            updatePassw:{
-            	method: 'POST',
-            	url: 'api/user/passw/modify'
+            updatePassw: {
+                method: 'POST',
+                url: 'api/user/passw/modify'
             },
-            userData:{
-            	method: 'GET',
+            userData: {
+                method: 'GET',
                 url: 'api/user/:id'
             }
         });
@@ -135,6 +135,10 @@ services.factory('Category', ['$resource',
 services.factory('Catalog', ['$resource',
     function ($resource) {
         return $resource('/api/catalog', {}, {
+            countServices: {
+                method: 'GET',
+                url: 'api/catalog/servicecount',
+            },
             listServices: {
                 method: 'GET',
                 url: 'api/catalog/service',

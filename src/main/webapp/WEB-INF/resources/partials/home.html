@@ -1,144 +1,80 @@
-<div class="row" id="search">
-  <div class="col-md-12">
-    <form role="form">
-      <div class="input-group">
-				<input type="text" class="form-control" ng-model="query">
-				<span class="input-group-btn">
-					<button class="btn btn-default" type="submit" ng-click="search(query)">Search</button>
-				</span>
-		  </div>
-    </form>
-  </div>
-</div>
-
 <div class="row">
-  <div class="col-md-16">
-    <div class="col-md-16 col-md-offset-1">
-    	<div class="pull-right">
-    	 <h2><b>Tag Cloud</b></h2>
-    	<div ng-repeat="t in taglist">
-          	<span ng-if="t.counter===max"><h3><a href="search/{{t.tag}}">{{t.tag}}</a></h3></span>
-          	<span ng-if="t.counter===min"><h5><a href="search/{{t.tag}}">{{t.tag}}</a></h5></span>
-          	<span ng-if="t.counter!==min && t.counter!==max"><h4><a href="search/{{t.tag}}">{{t.tag}}</a></h4></span>
-    	</div>
-    	</div>
+  <div class="col-md-8 col-md-offset-2">
+    <div class="row" id="search">
+      <form role="form">
+        <div class="input-group">
+          <input type="text" class="form-control" ng-model="query">
+          <span class="input-group-btn">
+            <button class="btn btn-primary" type="submit" ng-click="search(query)">
+              &nbsp;
+              <div class="glyphicon glyphicon-search"></div>
+              &nbsp;
+            </button>
+          </span>
+        </div>
+      </form>
     </div>
-    
-    <div class="col-md-8">
-    <br>
-    <ul class="timeline">
-      <li ng-repeat="entry in news|limitTo:3" ng-class="{'timeline-inverted': $index % 2 !== 0}">
-        <div class="timeline-badge primary">
-        </div>
-        <div class="timeline-panel">
-          <div class="timeline-heading">
-            <h4 class="timeline-title">{{entry.service}}</h4>
-            <p>
-              <small class="text-muted"><i class="glyphicon glyphicon-time"></i> {{entry.date| date:'yyyy-MM-dd'}}</small>
-            </p>
-          </div>
-          <div class="timeline-body">
-            
-            <div ng-switch on=entry.state>
-            	<span ng-switch-when="ADD"> 
-            		<span ng-hide="entry.method">A new service 
-            			<b>{{entry.service}}</b> is added.
-            		</span>
-            		<span ng-show="entry.method">A new method 
-            			<b><a href="services/{{entry.serviceId}}">{{entry.method}}</a></b> is added to this service.
-            		</span>
-            	</span>
-            	<span ng-switch-when="MODIFY">
-            		<span ng-hide="entry.method">Service 
-            			<b><a ng-href="services/{{entry.serviceId}}">{{entry.service}}</a></b> is modified.
-            		</span>
-            		<span ng-show="entry.method">Method 
-            			<b><a href="services/{{entry.serviceId}}">{{entry.method}}</a></b> is modified.
-            		</span>
-            	</span>
-            	<span ng-switch-when="DELETE">
-            		<span ng-hide="entry.method">Service <b>{{entry.service}}</b> is deleted.
-            		</span>
-            		<span ng-show="entry.method">Method <b>{{entry.method}}</b> is deleted from this service.</span>
-            	</span>
-            	<span ng-switch-when="PUBLISH">Service 
-					<b><a ng-href="services/{{entry.serviceId}}">{{entry.service}}</a></b> is published
-				</span>
-            	<span ng-switch-when="UNPUBLISH">Service 
-            		<b>{{entry.service}}</b> is unpublished
-            	</span>
-            	<span ng-switch-when="DEPRECATE">Service 
-            		<b><a ng-href="services/{{entry.serviceId}}">{{entry.service}}</a></b> is deprecated
-            	</span>
-            </div>
-            
-            
-          </div>
-        </div>
-      </li>
-    </ul>
-  </div>
-  
-    
   </div>
 </div>
 
-
-<!-- 
 <div class="row">
-  <div class="col-md-12">
-    <br>
-    <ul class="timeline">
-      <li ng-repeat="entry in news|limitTo:3" ng-class="{'timeline-inverted': $index % 2 !== 0}">
-        <div class="timeline-badge primary">
+  <div class="col-md-3 col-md-offset-2">
+    <div class="row">
+      <div class="panel panel-default panel-updates">
+        <!-- <div class="panel-heading">Updates</div> -->
+        <div class="panel-body">
+          <h5>Updates</h5>
+          <ul class="list-unstyled">
+            <li ng-repeat="entry in news | limitTo:5">
+              <!-- {{entry.date | date:'yyyy-MM-dd'}} -->
+              <span class="glyphicon glyphicon-time"></span>&nbsp;{{entry.date | fromNow}}
+              <p ng-switch on=entry.state>
+                <span ng-switch-when="ADD">
+                  <span ng-hide="entry.method">A new service {{entry.service}} is added.
+                  </span>
+                  <span ng-show="entry.method">A new method
+                    <a href="services/{{entry.serviceId}}">{{entry.method}}</a> is added to <a ng-href="services/{{entry.serviceId}}">{{entry.service}}</a> service.
+                  </span>
+                </span>
+                <span ng-switch-when="MODIFY">
+                  <span ng-hide="entry.method">Service
+                    <a ng-href="services/{{entry.serviceId}}">{{entry.service}}</a> is modified.
+                  </span>
+                  <span ng-show="entry.method">Method
+                    <a href="services/{{entry.serviceId}}">{{entry.method}}</a> of service <a ng-href="services/{{entry.serviceId}}">{{entry.service}}</a> is modified.
+                  </span>
+                </span>
+                <span ng-switch-when="DELETE">
+                  <span ng-hide="entry.method">Service {{entry.service}} is deleted.
+                  </span>
+                  <span ng-show="entry.method">Method {{entry.method}} is deleted from service <a ng-href="services/{{entry.serviceId}}">{{entry.service}}</a>.</span>
+                </span>
+                <span ng-switch-when="PUBLISH">Service
+                  <a ng-href="services/{{entry.serviceId}}">{{entry.service}}</a> is published
+                </span>
+                <span ng-switch-when="UNPUBLISH">Service {{entry.service}} is unpublished.
+                </span>
+                <span ng-switch-when="DEPRECATE">Service
+                  <a ng-href="services/{{entry.serviceId}}">{{entry.service}}</a> is deprecated.
+                </span>
+              </p>
+            </li>
+          </ul>
         </div>
-        <div class="timeline-panel">
-          <div class="timeline-heading">
-            <h4 class="timeline-title">{{entry.service}}</h4>
-            <p>
-              <small class="text-muted"><i class="glyphicon glyphicon-time"></i> {{entry.date| date:'yyyy-MM-dd'}}</small>
-            </p>
-          </div>
-          <div class="timeline-body">
-            
-            <div ng-switch on=entry.state>
-            	<span ng-switch-when="ADD"> 
-            		<span ng-hide="entry.method">A new service 
-            			<b>{{entry.service}}</b> is added.
-            		</span>
-            		<span ng-show="entry.method">A new method 
-            			<b><a href="services/{{entry.serviceId}}">{{entry.method}}</a></b> is added to this service.
-            		</span>
-            	</span>
-            	<span ng-switch-when="MODIFY">
-            		<span ng-hide="entry.method">Service 
-            			<b><a ng-href="services/{{entry.serviceId}}">{{entry.service}}</a></b> is modified.
-            		</span>
-            		<span ng-show="entry.method">Method 
-            			<b><a href="services/{{entry.serviceId}}">{{entry.method}}</a></b> is modified.
-            		</span>
-            	</span>
-            	<span ng-switch-when="DELETE">
-            		<span ng-hide="entry.method">Service <b>{{entry.service}}</b> is deleted.
-            		</span>
-            		<span ng-show="entry.method">Method <b>{{entry.method}}</b> is deleted from this service.</span>
-            	</span>
-            	<span ng-switch-when="PUBLISH">Service 
-					<b><a ng-href="services/{{entry.serviceId}}">{{entry.service}}</a></b> is published
-				</span>
-            	<span ng-switch-when="UNPUBLISH">Service 
-            		<b>{{entry.service}}</b> is unpublished
-            	</span>
-            	<span ng-switch-when="DEPRECATE">Service 
-            		<b><a ng-href="services/{{entry.serviceId}}">{{entry.service}}</a></b> is deprecated
-            	</span>
-            </div>
-            
-            
-          </div>
-        </div>
-      </li>
-    </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-5">
+    <div class="tagcloud">
+      <h4>{{servicesTotal}} services available</h4>
+      <ul class="list-unstyled">
+        <li ng-repeat="t in taglist">
+          <span class="barcontainer">
+            <span class="bar progress-bar" ng-style="getTagCloudBarWidth(t.counter, tagmax)"></span>
+          </span>
+          <a href="search/{{t.tag}}">{{t.tag}} ({{t.counter}})</a>
+        </li>
+      </ul>
+    </div>
   </div>
 </div>
- -->

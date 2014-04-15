@@ -22,27 +22,26 @@
             <div class="form-group">
                 <div ng-repeat="cat in categories" class="checkbox">
                     <label>
-                        <input type="checkbox" value="{{cat.name}}" ng-click="serviceCategory(cat.id)"
-                        	ng-model="category">{{cat.name}}
+                        <input type="checkbox" value="{{cat.name}}" ng-click="serviceCategory(cat.id)" ng-model="category">{{cat.name}}
                     </label>
                 </div>
-<!--                 <div class="checkbox"> -->
-<!--                     <label> -->
-<!--                         <input type="checkbox" value="">Two -->
-<!--                     </label> -->
-<!--                 </div> -->
-<!--                 <div class="checkbox"> -->
-<!--                     <label> -->
-<!--                         <input type="checkbox" value="">Three -->
-<!--                     </label> -->
-<!--                 </div> -->
+                <!--                 <div class="checkbox"> -->
+                <!--                     <label> -->
+                <!--                         <input type="checkbox" value="">Two -->
+                <!--                     </label> -->
+                <!--                 </div> -->
+                <!--                 <div class="checkbox"> -->
+                <!--                     <label> -->
+                <!--                         <input type="checkbox" value="">Three -->
+                <!--                     </label> -->
+                <!--                 </div> -->
             </div>
         </div>
         <div class="col-md-9">
-            <div class="panel panel-default">
+            <div class="panel panel-default panel-services">
                 <div class="panel-body">
-                    <div ng-if="services.length > 0">
-                        <div ng-repeat="service in services" class="animated fadeIn service-row">
+                    <ul class="list-unstyled" ng-if="services.length > 0">
+                        <li ng-repeat="service in services" class="animated fadeIn service-row">
                             <span class="badge pull-right">Version: {{service.version}}</span>
                             <h3>
                                 <a ng-href="services/{{service.id}}">{{service.name}}</a>
@@ -54,8 +53,8 @@
                                     <span ng-repeat="tag in service.tags" class="label label-success">{{tag}}</span>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
             <!-- <ul class="pager">
