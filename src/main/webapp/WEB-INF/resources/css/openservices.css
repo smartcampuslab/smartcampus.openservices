@@ -317,6 +317,21 @@ pre {
     display: inline-block;
     height: 100%;
 }
+.dropdown-orderby > .btn-group {
+    margin-left: 5px;
+}
+.dropdown-orderby > .btn-group .dropdown-toggle {
+    min-width: 160px;
+}
+.dropdown-orderby > .btn-group .dropdown-toggle .caret {
+    margin-top: -1px;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+}
+.panel-services {
+    margin-top: 15px;
+}
 .panel-services ul {
     margin-bottom: 0;
 }
@@ -333,6 +348,6 @@ pre {
 .panel-services ul .service-row .tags span {
     vertical-align: middle;
 }
-.panel-services ul .service-row .tags span:not(:first-child) {
+.tags span:not(:first-child) {
     margin-left: 4px;
 }

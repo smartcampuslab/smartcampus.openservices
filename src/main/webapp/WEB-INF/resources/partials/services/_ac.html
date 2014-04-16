@@ -1,17 +1,36 @@
-<div class="row">
+<!-- <div class="row">
     <div class="col-md-12">
-        <br>
-        <h4>
-            <small>Access policies:</small>{{service.accessInformation.accessPolicies}}</h4>
-        <h4>
-            <small>Testing endpoint:</small>{{service.accessInformation.testingEndpoint}}</h4>
-        <h4>
-            <small>Production endpoint:</small>{{service.accessInformation.productionEndpoint}}</h4>
-        <h4>
-            <small>Formats:</small>{{service.accessInformation.formats}}</h4>
-        <h4>
-            <small>Protocols:</small>{{service.accessInformation.protocols}}</h4>
-        <h4>
-            <small>Authentication:</small>{{service.accessInformation.authentication.accessProtocol}}</h4>
-    </div>
+        <div class="row"> -->
+<div class="table-responsive">
+    <table class="table table-striped table-condensed">
+        <tbody>
+            <tr>
+                <td>Access policies</td>
+                <td>{{service.accessInformation.accessPolicies}}</td>
+            </tr>
+            <tr>
+                <td>Testing endpoint</td>
+                <td>{{service.accessInformation.testingEndpoint}}</td>
+            </tr>
+            <tr>
+                <td>Production endpoint</td>
+                <td>{{service.accessInformation.productionEndpoint}}</td>
+            </tr>
+            <tr>
+                <td>Formats</td>
+                <td>{{service.accessInformation.formats}}</td>
+            </tr>
+            <tr>
+                <td>Protocols</td>
+                <td>{{service.accessInformation.protocols}}</td>
+            </tr>
+            <tr>
+                <td>Authentication</td>
+                <td>{{service.accessInformation.authentication.accessProtocol}}</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
+<!-- </div>
+    </div>
+</div> -->

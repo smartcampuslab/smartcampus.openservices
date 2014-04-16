@@ -1,12 +1,20 @@
 <div class="row">
     <div class="col-md-12">
-        <br>
-        <h4>
-            <small>Execution Environment:</small>{{service.implementation.executionEnvironment}}</h4>
-        <h4>
-            <small>Hosting:</small>{{service.implementation.hosting}}</h4>
-        <h4>
-            <small>Source:</small> <a ng-href="{{service.implementation.sourceCode}}">{{service.implementation.sourceCode}}</a>
-        </h4>
+        <div class="row">
+            <li>
+                <b>Execution Environment:</b>
+                <span>{{service.implementation.executionEnvironment}}</span>
+            </li>
+            <li>
+                <b>Hosting:</b>
+                <span>{{service.implementation.hosting}}</span>
+            </li>
+            <li>
+                <b>Source:</b>
+                <a ng-href="{{service.implementation.sourceCode}}">
+                    <span>{{service.implementation.sourceCode}}</span>
+                </a>
+            </li>
+        </div>
     </div>
 </div>

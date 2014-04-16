@@ -644,6 +644,13 @@ app.controller('categoryCtrl', ['$scope', '$rootScope', '$http', '$location', 'C
 
 app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams', 'Catalog', 'Category',
     function ($scope, $rootScope, $http, $routeParams, Catalog, Category) {
+        $scope.orderByOptions = ['A - Z', 'Z - A', 'popularity', 'date'];
+        $scope.orderBySelected = 'A - Z';
+
+        $scope.setOrderBy = function (order) {
+            $scope.orderBySelected = order;
+        };
+
         $scope.start = 0;
         $scope.end = 9;
         $rootScope.locTitles = $rootScope.searchQuery ? ['search'] : ['services'];
@@ -840,8 +847,9 @@ app.controller('organizationServicesCtrl', ['$scope', '$http', '$routeParams', '
 app.controller('serviceCtrl', ['$scope', '$rootScope', '$routeParams', 'Catalog', 'Category', '$http', '$location', 'RemoteApi',
     function ($scope, $rootScope, $routeParams, Catalog, Category, $http, $location, RemoteApi) {
         $scope.remoteapi;
-        $scope.template = 'partials/services/_about.html';
+        $scope.template = 'partials/services/_ac.html';
         $scope.request = {};
+
         Catalog.getServiceById({
             id: $routeParams.id
         }, function (data) {

@@ -1,29 +1,52 @@
-<div class="animated fadeIn">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="page-header">
-                <h1>{{service.name}}
-                    <small>{{service.description}}</small>
-                </h1>
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="row">
+            <h1>{{service.name}}</h1>
+            <!-- <p>{{service.description}}</p> -->
+        </div>
+        <div class="row">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <ul class="list-unstyled">
+                        <li>
+                            <b>Organization:</b>
+                            <span>{{org.name}}</span>
+                        </li>
+                        <li>
+                            <b>Category:</b>
+                            <span>{{category.name}}</span>
+                        </li>
+                        <li class="tags">
+                            <b>Tags:</b>
+                            <span ng-repeat="tag in service.tags" class="label label-success">{{tag}}</span>
+                        </li>
+                        <li>
+                            <b>Description:</b>
+                            <span>{{service.description}}</span>
+                        </li>
+                    </ul>
+                    <ul class="nav nav-tabs">
+                        <!-- <li ng-class="{active: template==='partials/services/_about.html'}">
+                            <a href="" ng-click="template = 'partials/services/_about.html'">About</a>
+                        </li> -->
+                        <li ng-class="{active: template==='partials/services/_ac.html'}">
+                            <a href="" ng-click="template = 'partials/services/_ac.html'">Access Info</a>
+                        </li>
+                        <li ng-class="{active: template==='partials/services/_implementation.html'}">
+                            <a href="" ng-click="template = 'partials/services/_implementation.html'">Implementation</a>
+                        </li>
+                        <li ng-class="{active: template==='partials/services/_tests.html'}">
+                            <a href="" ng-click="template = 'partials/services/_tests.html'">Methods</a>
+                        </li>
+                        <!-- <li ng-class="{active: template==='partials/services/_history.html'}">
+                            <a href="" ng-click="template = 'partials/services/_history.html'">History</a>
+                        </li> -->
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" ng-include="template"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <ul class="nav nav-tabs">
-                <li ng-class="{active: template==='partials/services/_about.html'}"><a href="" ng-click="template = 'partials/services/_about.html'">About</a>
-                </li>
-                <li ng-class="{active: template==='partials/services/_ac.html'}"><a href="" ng-click="template = 'partials/services/_ac.html'">Access Info</a>
-                </li>
-                <li ng-class="{active: template==='partials/services/_implementation.html'}"><a href="" ng-click="template = 'partials/services/_implementation.html'">Implementation</a>
-                </li>
-                <li ng-class="{active: template==='partials/services/_tests.html'}"><a href="" ng-click="template = 'partials/services/_tests.html'">Tests</a>
-                </li>
-                <li ng-class="{active: template==='partials/services/_history.html'}"><a href="" ng-click="template = 'partials/services/_history.html'">History</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div ng-include="template"></div>
-
 </div>

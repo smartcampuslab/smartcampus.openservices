@@ -1,8 +1,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="row">
-            <br>
-            <div class="col-lg-6">
+            <div class="col-md-6">
                 <div class="input-group">
                     <span class="input-group-addon">Method</span>
                     <select ng-options="method as method.name for method in methods" ng-model="request.method" class="form-control" />
@@ -10,15 +9,13 @@
                         <a ng-href="{{request.method.documentation}}" ng-disabled="!request.method" type="button" class="btn btn-default">Doc</a>
                     </span>
                 </div>
-                <!-- /input-group -->
                 <div ng-if="request.method != null">
                     <br>
                     <h5>Method name: {{request.method.name}}</h5>
                     <h5>Method description: {{request.method.synopsis}}</h5>
                 </div>
             </div>
-            <!-- /.col-lg-6 -->
-            <div class="col-lg-6">
+            <div class="col-md-6">
                 <div class="input-group">
                     <span class="input-group-addon">Test</span>
                     <select ng-disabled="!request.hasOwnProperty('method')" ng-options="sample as sample.name for sample in request.method.testboxProperties.tests" ng-model="request.sample" class="form-control" />
@@ -44,9 +41,7 @@
                     </div>
                 </div>
             </div>
-            <!-- /.col-lg-6 -->
         </div>
-        <!-- /.row -->
     </div>
 </div>
 
