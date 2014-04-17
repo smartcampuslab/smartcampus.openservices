@@ -1,20 +1,22 @@
-<div class="row">
-    <div class="col-md-12">
-        <div class="row">
-            <li>
-                <b>Execution Environment:</b>
-                <span>{{service.implementation.executionEnvironment}}</span>
-            </li>
-            <li>
-                <b>Hosting:</b>
-                <span>{{service.implementation.hosting}}</span>
-            </li>
-            <li>
-                <b>Source:</b>
-                <a ng-href="{{service.implementation.sourceCode}}">
-                    <span>{{service.implementation.sourceCode}}</span>
-                </a>
-            </li>
-        </div>
-    </div>
+<div class="table-responsive">
+    <table class="table table-striped table-condensed">
+        <tbody>
+            <tr>
+                <td>Execution Environment</td>
+                <td>{{service.implementation.executionEnvironment}}</td>
+            </tr>
+            <tr>
+                <td>Hosting</td>
+                <td>{{service.implementation.hosting}}</td>
+            </tr>
+            <tr>
+                <td>Source</td>
+                <td>
+                    <a ng-href="{{service.implementation.sourceCode}}">
+                        <span>{{service.implementation.sourceCode}}</span>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>

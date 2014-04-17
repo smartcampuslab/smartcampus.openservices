@@ -25,21 +25,17 @@
             <div class="col-md-3">
                 <h4>Categories</h4>
                 <div class="form-group">
-                    <div ng-repeat="cat in categories" class="checkbox">
+                    <div class="checkbox">
                         <label>
-                            <input type="checkbox" value="{{cat.name}}" ng-click="serviceCategory(cat.id)" ng-model="category">{{cat.name}}
+                            <input type="checkbox" ng-click="selectCategory()" ng-checked="categoriesFilter.length == categories.length">All
                         </label>
                     </div>
-                    <!--                 <div class="checkbox"> -->
-                    <!--                     <label> -->
-                    <!--                         <input type="checkbox" value="">Two -->
-                    <!--                     </label> -->
-                    <!--                 </div> -->
-                    <!--                 <div class="checkbox"> -->
-                    <!--                     <label> -->
-                    <!--                         <input type="checkbox" value="">Three -->
-                    <!--                     </label> -->
-                    <!--                 </div> -->
+                    <hr/>
+                    <div ng-repeat="cat in categories" class="checkbox">
+                        <label>
+                            <input type="checkbox" ng-click="selectCategory(cat.id)" ng-checked="categoriesFilter.indexOf(cat.id) !== -1">{{cat.name}}
+                        </label>
+                    </div>
                 </div>
             </div>
             <div class="col-md-9">

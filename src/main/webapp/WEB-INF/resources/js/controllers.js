@@ -1,10 +1,8 @@
 'use strict';
 app.controller('homeCtrl', ['$http', '$scope', '$rootScope', '$location', 'Catalog',
     function ($http, $scope, $rootScope, $location, Catalog) {
-
         $scope.servicesTotal = 0;
         $scope.tagmax = 0;
-        $scope.tagmin = 100;
 
         $http.get('api/catalog/news?n=5')
             .success(function (data) {
@@ -644,8 +642,34 @@ app.controller('categoryCtrl', ['$scope', '$rootScope', '$http', '$location', 'C
 
 app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams', 'Catalog', 'Category',
     function ($scope, $rootScope, $http, $routeParams, Catalog, Category) {
-        $scope.orderByOptions = ['A - Z', 'Z - A', 'popularity', 'date'];
+        $scope.orderByOptions = ['A - Z', 'Z - A', 'date'];
         $scope.orderBySelected = 'A - Z';
+
+        $scope.categoriesFilter = [];
+
+        $scope.selectCategory = function (catId) {
+            if ( !! catId) {
+                // Category checkbox
+                var index = $scope.categoriesFilter.indexOf(catId);
+                if (index !== -1) {
+                    $scope.categoriesFilter.splice(index, 1);
+                } else {
+                    $scope.categoriesFilter.push(catId);
+                }
+            } else {
+                // 'All' checkbox
+                if ($scope.categoriesFilter.length < $scope.categories.length) {
+                    $scope.categoriesFilter = [];
+                    for (var i = 0; i < $scope.categories.length; i++) {
+                        $scope.categoriesFilter.push($scope.categories[i].id);
+                    }
+                } else {
+                    $scope.categoriesFilter = [];
+                }
+            }
+
+            // TODO: another call to refresh the services
+        };
 
         $scope.setOrderBy = function (order) {
             $scope.orderBySelected = order;
@@ -657,6 +681,9 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
 
         Category.list({}, function (data) {
             $scope.categories = data.data;
+            for (var i = 0; i < $scope.categories.length; i++) {
+                $scope.categoriesFilter.push($scope.categories[i].id);
+            }
         });
 
         if ( !! $routeParams.tag) {

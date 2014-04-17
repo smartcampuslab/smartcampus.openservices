@@ -1,45 +1,41 @@
 <div class="row">
-    <div class="col-md-12">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="input-group">
-                    <span class="input-group-addon">Method</span>
-                    <select ng-options="method as method.name for method in methods" ng-model="request.method" class="form-control" />
-                    <span class="input-group-btn">
-                        <a ng-href="{{request.method.documentation}}" ng-disabled="!request.method" type="button" class="btn btn-default">Doc</a>
-                    </span>
-                </div>
-                <div ng-if="request.method != null">
-                    <br>
-                    <h5>Method name: {{request.method.name}}</h5>
-                    <h5>Method description: {{request.method.synopsis}}</h5>
-                </div>
+    <div class="col-md-6">
+        <div class="input-group">
+            <span class="input-group-addon">Method</span>
+            <select ng-options="method as method.name for method in methods" ng-model="request.method" class="form-control" />
+            <span class="input-group-btn">
+                <a ng-href="{{request.method.documentation}}" ng-disabled="!request.method" type="button" class="btn btn-default">Doc</a>
+            </span>
+        </div>
+        <div ng-if="request.method != null">
+            <br>
+            <h5>Method name: {{request.method.name}}</h5>
+            <h5>Method description: {{request.method.synopsis}}</h5>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="input-group">
+            <span class="input-group-addon">Test</span>
+            <select ng-disabled="!request.hasOwnProperty('method')" ng-options="sample as sample.name for sample in request.method.testboxProperties.tests" ng-model="request.sample" class="form-control" />
+            <span class="input-group-btn">
+                <button ng-disabled="!checkBeforeSend()" ng-click="send()" type="button" class="btn btn-success">Send</button>
+            </span>
+        </div>
+        <!-- /input-group -->
+        <div ng-if="request.sample != null">
+            <h5>Test name: {{request.sample.name}}</h5>
+            <h5>Test description: {{request.sample.description}}</h5>
+        </div>
+        <div ng-if="request.sample.requestPathEditable">
+            <div class="form-group">
+                <label for="path">Request path</label>
+                <input type="text" class="form-control" id="path" ng-model="request.sample.requestPath" />
             </div>
-            <div class="col-md-6">
-                <div class="input-group">
-                    <span class="input-group-addon">Test</span>
-                    <select ng-disabled="!request.hasOwnProperty('method')" ng-options="sample as sample.name for sample in request.method.testboxProperties.tests" ng-model="request.sample" class="form-control" />
-                    <span class="input-group-btn">
-                        <button ng-disabled="!checkBeforeSend()" ng-click="send()" type="button" class="btn btn-success">Send</button>
-                    </span>
-                </div>
-                <!-- /input-group -->
-                <div ng-if="request.sample != null">
-                    <h5>Test name: {{request.sample.name}}</h5>
-                    <h5>Test description: {{request.sample.description}}</h5>
-                </div>
-                <div ng-if="request.sample.requestPathEditable">
-                    <div class="form-group">
-                        <label for="path">Request path</label>
-                        <input type="text" class="form-control" id="path" ng-model="request.sample.requestPath" />
-                    </div>
-                </div>
-                <div ng-if="request.sample.requestBodyEditable">
-                    <div class="form-group">
-                        <label for="body">Request body</label>
-                        <textarea class="form-control" id="body" ng-model="request.sample.requestBody" rows="2" />
-                    </div>
-                </div>
+        </div>
+        <div ng-if="request.sample.requestBodyEditable">
+            <div class="form-group">
+                <label for="body">Request body</label>
+                <textarea class="form-control" id="body" ng-model="request.sample.requestBody" rows="2" />
             </div>
         </div>
     </div>
