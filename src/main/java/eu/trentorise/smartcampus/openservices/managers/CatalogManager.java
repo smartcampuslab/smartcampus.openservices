@@ -217,12 +217,27 @@ public class CatalogManager {
 	 * Get list of all services, searching by category.
 	 * 
 	 * @param category
-	 *            : int category id
+	 *            int, category id
 	 * @return all {@link Service} instances
 	 */
 	public List<Service> catalogServiceBrowseByCategory(int category, int firstResult, int maxResult, String param_order) {
 		try {
 			return serviceDao.browseService(category, firstResult, maxResult, param_order);
+		} catch (DataAccessException d) {
+			return null;
+		}
+	}
+	
+	/**
+	 * Get list of all services, searching by categories.
+	 * 
+	 * @param categories
+	 *            int[] categories ids
+	 * @return all {@link Service} instances
+	 */
+	public List<Service> catalogServiceBrowseByCategories(int[] categories, int firstResult, int maxResult, String param_order) {
+		try {
+			return serviceDao.browseService(categories, firstResult, maxResult, param_order);
 		} catch (DataAccessException d) {
 			return null;
 		}

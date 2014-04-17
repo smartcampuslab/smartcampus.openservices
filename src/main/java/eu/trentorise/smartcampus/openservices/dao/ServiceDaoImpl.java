@@ -316,6 +316,36 @@ public class ServiceDaoImpl implements ServiceDao {
 	}
 
 	/**
+	 * Browse all services but unpublished one by categories and tags
+	 * 
+	 * @param categories
+	 *            int[] categories ids
+	 * @param tags
+	 *            String tags
+	 * @return list of {@link Service} instance
+	 * @throws DataAccessException
+	 */
+	@Transactional
+	@Override
+	public List<Service> browseService(int[] categories, int firstResult, int maxResult, String param_order)
+			throws DataAccessException {
+		String categoriesQuery = "(";
+		for (int i = 0; i < categories.length; i++) {
+			if (i > 0) {
+				categoriesQuery += ", ";
+			}
+			categoriesQuery += categories[i];
+		}
+		categoriesQuery += ")";
+		
+		Query q = getEntityManager().createQuery(
+				"FROM Service S WHERE S.category in " + categoriesQuery + " AND S.state!='UNPUBLISH' ORDER BY :order")
+				.setParameter("order", param_order);
+		List<Service> s = q.setFirstResult(firstResult).setMaxResults(maxResult).getResultList();
+		return s;
+	}
+
+	/**
 	 * Retrieve Services searching by tag
 	 */
 	@Transactional

@@ -304,6 +304,53 @@ public class CatalogController {
 	}
 
 	/**
+	 * Browse service in catalog by multiple categories.
+	 * 
+	 * @param response
+	 *            {@link HttpServletResponse} which is needed for status of
+	 *            response (OK or NOT FOUND)
+	 * @return {@link ResponseObject} with list of service data, status (OK or
+	 *         NOT FOUND) and error message (if status is NOT FOUND).
+	 */
+	@RequestMapping(value = "/service/category", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public ResponseObject catalogServiceByCategories(
+			@RequestParam(value = "first", required = false, defaultValue = "0") Integer firstResult,
+			@RequestParam(value = "last", required = false, defaultValue = "0") Integer maxResult,
+			@RequestParam(value = "order", required = false, defaultValue = "name") String param_order,
+			@RequestParam(value = "ids", required = false, defaultValue = "") String ids, HttpServletResponse response) {
+		logger.info("-- Service Catalog browse (categories) --");
+
+		String[] idsStringArray = ids.split(",");
+		int[] idsArray = new int[idsStringArray.length];
+		for (int i = 0; i < idsStringArray.length; i++) {
+			try {
+				idsArray[i] = Integer.parseInt(idsStringArray[i]);
+			} catch (NumberFormatException nfe) {
+				continue;
+			}
+		}
+
+		List<Service> services = Service.fromServiceEntities(catalogManager.catalogServiceBrowseByCategories(idsArray,
+				firstResult, maxResult, param_order));
+		responseObject = new ResponseObject();
+		if (services == null || services.size() == 0) {
+			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			responseObject.setError("No published service for this category");
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		} else {
+			responseObject.setData(services);
+			responseObject.setStatus(HttpServletResponse.SC_OK);
+			Long count = 0L;
+			for (int i = 0; i < idsArray.length; i++) {
+				count += catalogManager.countServiceByCategorySearch(idsArray[i]);
+			}
+			responseObject.setTotalNumber(count);
+		}
+		return responseObject;
+	}
+
+	/**
 	 * Browse service in catalog by organization. Search is done by organization
 	 * id.
 	 * 

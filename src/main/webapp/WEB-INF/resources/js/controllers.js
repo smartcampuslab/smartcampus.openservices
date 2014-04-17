@@ -668,7 +668,13 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
                 }
             }
 
-            // TODO: another call to refresh the services
+            if ($scope.categoriesFilter.length == $scope.categories.length) {
+                $scope.getServicesAll();
+            } else if ($scope.categoriesFilter.length < $scope.categories.length && $scope.categoriesFilter.length > 0) {
+                $scope.getServiceByCategories($scope.categoriesFilter);
+            } else {
+                $scope.services = null;
+            }
         };
 
         $scope.setOrderBy = function (order) {
@@ -695,11 +701,36 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
             $scope.categoryActive = undefined;
         }
 
-        $scope.serviceCategory = function (id) {
+        // $scope.getServicesByCategory = function (id) {
+        //     console.log("Search");
+        //     console.log("Search category with value: " + id);
+        //     Catalog.browseServiceCat({
+        //         category: id,
+        //         first: $scope.start,
+        //         last: $scope.end,
+        //         order: 'name'
+        //     }, function (services) {
+        //         $scope.total = services.totalNumber;
+        //         $scope.services = services.data;
+        //     }, function (res) {
+        //         $scope.services = null;
+        //     });
+        // };
+
+        $scope.getServiceByCategories = function (ids) {
             console.log("Search");
-            console.log("Search category with value: " + id);
-            Catalog.browseServiceCat({
-                category: id,
+            console.log("Search categories with values: " + ids);
+
+            var cats = '';
+            for (var i = 0; i < ids.length; i++) {
+                if (i > 0) {
+                    cats += ','
+                }
+                cats += ids[i];
+            }
+
+            Catalog.browseServiceCats({
+                ids: cats,
                 first: $scope.start,
                 last: $scope.end,
                 order: 'name'
@@ -711,7 +742,7 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
             });
         };
 
-        $scope.update = function () {
+        $scope.getServicesAll = function () {
             Catalog.listServices({
                 first: $scope.start,
                 last: $scope.end,
@@ -725,7 +756,7 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
                 $scope.services = null;
             });
         };
-        $scope.update();
+        $scope.getServicesAll();
         $rootScope.searchQuery = null;
         $scope.query = null;
 

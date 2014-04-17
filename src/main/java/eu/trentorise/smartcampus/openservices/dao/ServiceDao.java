@@ -166,6 +166,17 @@ public interface ServiceDao { // extends JpaRepository<Service, Integer>{
 	 */
 	public List<Service> browseService(Integer category, int firstResult, int maxResult, String param_order)
 			throws DataAccessException;
+	
+	/**
+	 * Browse services having input categories and tags
+	 * 
+	 * @param category
+	 * @param tags
+	 * @return list of {@link Service} instances
+	 * @throws DataAccessException
+	 */
+	public List<Service> browseService(int[] categories, int firstResult, int maxResult, String param_order)
+			throws DataAccessException;
 
 	/**
 	 * Retrieve service searching by tag
