@@ -93,7 +93,7 @@ public class CatalogController {
 				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			} else {
 				responseObject.setStatus(HttpServletResponse.SC_OK);
-				responseObject.setTotalNumber(catalogManager.countService());
+				responseObject.setTotalNumber(count);//catalogManager.countService()
 			}
 		} catch (SecurityException s) {
 			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
