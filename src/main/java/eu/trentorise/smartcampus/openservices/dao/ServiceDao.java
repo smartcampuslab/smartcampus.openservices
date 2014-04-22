@@ -20,6 +20,7 @@ import java.util.Map;
 
 import org.springframework.dao.DataAccessException;
 
+import eu.trentorise.smartcampus.openservices.Constants.ORDER;
 import eu.trentorise.smartcampus.openservices.entities.Organization;
 import eu.trentorise.smartcampus.openservices.entities.Service;
 import eu.trentorise.smartcampus.openservices.entities.User;
@@ -46,7 +47,7 @@ public interface ServiceDao { // extends JpaRepository<Service, Integer>{
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
-	public List<Service> showPublishedService(int firstResult, int maxResult, String param_order) throws DataAccessException;
+	public List<Service> showPublishedService(int firstResult, int maxResult, ORDER param_order) throws DataAccessException;
 
 	/**
 	 * Show all service of a given user.
@@ -153,7 +154,7 @@ public interface ServiceDao { // extends JpaRepository<Service, Integer>{
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
-	public List<Service> searchService(String token, int firstResult, int maxResult, String param_order)
+	public List<Service> searchService(String token, int firstResult, int maxResult, ORDER param_order)
 			throws DataAccessException;
 
 	/**
@@ -164,9 +165,9 @@ public interface ServiceDao { // extends JpaRepository<Service, Integer>{
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
-	public List<Service> browseService(Integer category, int firstResult, int maxResult, String param_order)
+	public List<Service> browseService(Integer category, int firstResult, int maxResult, ORDER param_order)
 			throws DataAccessException;
-	
+
 	/**
 	 * Browse services having input categories and tags
 	 * 
@@ -175,7 +176,7 @@ public interface ServiceDao { // extends JpaRepository<Service, Integer>{
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
-	public List<Service> browseService(int[] categories, int firstResult, int maxResult, String param_order)
+	public List<Service> browseService(int[] categories, int firstResult, int maxResult, ORDER param_order)
 			throws DataAccessException;
 
 	/**

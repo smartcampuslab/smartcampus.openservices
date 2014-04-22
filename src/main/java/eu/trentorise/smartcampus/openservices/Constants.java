@@ -39,7 +39,7 @@ public class Constants {
 	/**
 	 * Possible values for ORDER BY in hsql query
 	 */
-	public enum ORDER {id, name, tag, counter};
+	public enum ORDER {id, name, namedesc, date, tag, counter};
 	/**
 	 * Enum object for news
 	 */

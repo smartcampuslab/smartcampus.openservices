@@ -29,6 +29,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import eu.trentorise.smartcampus.openservices.Constants;
+import eu.trentorise.smartcampus.openservices.Constants.ORDER;
 import eu.trentorise.smartcampus.openservices.entities.Organization;
 import eu.trentorise.smartcampus.openservices.entities.Service;
 import eu.trentorise.smartcampus.openservices.entities.User;
@@ -101,9 +102,16 @@ public class ServiceDaoImpl implements ServiceDao {
 	 */
 	@Transactional
 	@Override
-	public List<Service> showPublishedService(int firstResult, int maxResult, String param_order) throws DataAccessException {
-		Query q = getEntityManager().createQuery("FROM Service S WHERE S.state!='UNPUBLISH' ORDER BY S." + param_order)
-		/* .setParameter("porder", param_order) */;
+	public List<Service> showPublishedService(int firstResult, int maxResult, ORDER param_order) throws DataAccessException {
+		String queryString = "FROM Service S WHERE S.state!='UNPUBLISH' ORDER BY S."
+				+ (ORDER.namedesc.equals(param_order) ? "name DESC" : ORDER.name.toString());
+
+		if (ORDER.date.equals(param_order)) {
+			queryString = "SELECT S FROM Service S, ServiceHistory SH WHERE S.state!='UNPUBLISH'"
+					+ " AND S.id=SH.id_service AND SH.id_serviceMethod=0 AND SH.operation='ADD'" + "ORDER BY SH.date DESC";
+		}
+
+		Query q = getEntityManager().createQuery(queryString);
 		List<Service> s = q.setFirstResult(firstResult).setMaxResults(maxResult).getResultList();
 		return s;
 	}
@@ -112,7 +120,7 @@ public class ServiceDaoImpl implements ServiceDao {
 	 * Retrieve all user's service from database
 	 * 
 	 * @param username
-	 *            : String username
+	 *            String username
 	 * @return List of {@link Service} instance
 	 * @throws DataAccessException
 	 */
@@ -139,7 +147,7 @@ public class ServiceDaoImpl implements ServiceDao {
 	 * Retrieve service data from database Searching by service name
 	 * 
 	 * @param service_name
-	 *            : String service name
+	 *            String service name
 	 * @return {@link Service} instance
 	 * @throws DataAccessException
 	 */
@@ -150,15 +158,16 @@ public class ServiceDaoImpl implements ServiceDao {
 		List<Service> s = q.getResultList();
 		if (s.size() == 0) {
 			return null;
-		} else
+		} else {
 			return s.get(0);
+		}
 	}
 
 	/**
 	 * Add a new service in database
 	 * 
 	 * @param service
-	 *            : {@link Service}
+	 *            {@link Service}
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -171,7 +180,7 @@ public class ServiceDaoImpl implements ServiceDao {
 	 * Modify an existing service from database
 	 * 
 	 * @param service
-	 *            : {@link Service}
+	 *            {@link Service}
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -184,7 +193,7 @@ public class ServiceDaoImpl implements ServiceDao {
 	 * Delete an existing service from database
 	 * 
 	 * @param service
-	 *            : {@link Service}
+	 *            {@link Service}
 	 * @throws DataAccessException
 	 */
 	@Transactional
@@ -197,7 +206,7 @@ public class ServiceDaoImpl implements ServiceDao {
 	 * Retrieve organization data for a particular service Search by service id
 	 * 
 	 * @param service_id
-	 *            : int service id
+	 *            int service id
 	 * @return {@link Organization} instance
 	 * @throws DataAccessException
 	 */
@@ -212,7 +221,7 @@ public class ServiceDaoImpl implements ServiceDao {
 	 * Retrieve user data for a particular service in which user is owner
 	 * 
 	 * @param service_id
-	 *            : int service id
+	 *            int service id
 	 * @return {@link User} instance
 	 * @throws DataAccessException
 	 */
@@ -227,7 +236,7 @@ public class ServiceDaoImpl implements ServiceDao {
 	 * Find service by its id
 	 * 
 	 * @param service_id
-	 *            : int service id
+	 *            int service id
 	 * @return {@link Service} instance
 	 * @throws DataAccessException
 	 */
@@ -241,7 +250,7 @@ public class ServiceDaoImpl implements ServiceDao {
 	 * Find a service by its owner
 	 * 
 	 * @param id_owner
-	 *            : int service owner id
+	 *            int service owner id
 	 * @return {@link Service} instance
 	 * @throws DataAccessException
 	 */
@@ -258,7 +267,7 @@ public class ServiceDaoImpl implements ServiceDao {
 	 * Find a service by its organization id
 	 * 
 	 * @param id_org
-	 *            : int organization id
+	 *            int organization id
 	 * @return {@link Service} instance
 	 * @throws DataAccessException
 	 */
@@ -277,19 +286,26 @@ public class ServiceDaoImpl implements ServiceDao {
 	 * Retrieve all services but unpublished one Search by a token in name
 	 * 
 	 * @param token
-	 *            : String token
+	 *            String token
 	 * @return a list of {@link Service} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
 	@Override
-	public List<Service> searchService(String token, int firstResult, int maxResult, String param_order)
+	public List<Service> searchService(String token, int firstResult, int maxResult, ORDER param_order)
 			throws DataAccessException {
-		Query q = getEntityManager()
-				.createQuery(
-						"FROM Service S WHERE (S.name LIKE :token " + "OR S.description LIKE :token) AND S.state!='UNPUBLISH' "
-								+ "ORDER BY :order").setParameter("token", "%" + token + "%")
-				.setParameter("order", param_order);
+
+		String queryString = "FROM Service S WHERE (S.name LIKE :token OR S.description LIKE :token)"
+				+ " AND S.state!='UNPUBLISH' " + "ORDER BY S."
+				+ (ORDER.namedesc.equals(param_order) ? "name DESC" : ORDER.name.toString());
+
+		if (ORDER.date.equals(param_order)) {
+			queryString = "SELECT S FROM Service S, ServiceHistory SH WHERE (S.name LIKE :token OR S.description LIKE :token)"
+					+ " AND S.id=SH.id_service AND S.state!='UNPUBLISH'" + " AND SH.id_serviceMethod=0 AND SH.operation='ADD'"
+					+ " ORDER BY SH.date DESC";
+		}
+
+		Query q = getEntityManager().createQuery(queryString).setParameter("token", "%" + token + "%");
 		List<Service> s = q.setFirstResult(firstResult).setMaxResults(maxResult).getResultList();
 		return s;
 	}
@@ -298,19 +314,25 @@ public class ServiceDaoImpl implements ServiceDao {
 	 * Browse all services but unpublished one by category and tags
 	 * 
 	 * @param category
-	 *            : int category id
+	 *            int category id
 	 * @param tags
-	 *            : String tags
+	 *            String tags
 	 * @return list of {@link Service} instance
 	 * @throws DataAccessException
 	 */
 	@Transactional
 	@Override
-	public List<Service> browseService(Integer category, int firstResult, int maxResult, String param_order)
+	public List<Service> browseService(Integer category, int firstResult, int maxResult, ORDER param_order)
 			throws DataAccessException {
-		Query q = getEntityManager()
-				.createQuery("FROM Service S WHERE S.category=:category AND " + "S.state!='UNPUBLISH' ORDER BY :order")
-				.setParameter("category", category).setParameter("order", param_order);
+		String queryString = "FROM Service S WHERE S.category=:category AND " + "S.state!='UNPUBLISH' ORDER BY S."
+				+ (ORDER.namedesc.equals(param_order) ? "name DESC" : ORDER.name.toString());
+
+		if (ORDER.date.equals(param_order)) {
+			queryString = "SELECT S FROM Service S, ServiceHistory SH WHERE SH.id_serviceMethod=0 AND SH.operation='ADD' AND S.id=SH.id_service"
+					+ " AND S.state!='UNPUBLISH' AND S.category=:category ORDER BY SH.date DESC";
+		}
+
+		Query q = getEntityManager().createQuery(queryString).setParameter("category", category);
 		List<Service> s = q.setFirstResult(firstResult).setMaxResults(maxResult).getResultList();
 		return s;
 	}
@@ -327,20 +349,23 @@ public class ServiceDaoImpl implements ServiceDao {
 	 */
 	@Transactional
 	@Override
-	public List<Service> browseService(int[] categories, int firstResult, int maxResult, String param_order)
+	public List<Service> browseService(int[] categories, int firstResult, int maxResult, ORDER param_order)
 			throws DataAccessException {
 		String categoriesQuery = "(";
 		for (int i = 0; i < categories.length; i++) {
-			if (i > 0) {
-				categoriesQuery += ", ";
-			}
-			categoriesQuery += categories[i];
+			categoriesQuery += (i > 0 ? ", " : "") + categories[i] + (i + 1 == categories.length ? ")" : "");
 		}
-		categoriesQuery += ")";
-		
-		Query q = getEntityManager().createQuery(
-				"FROM Service S WHERE S.category in " + categoriesQuery + " AND S.state!='UNPUBLISH' ORDER BY :order")
-				.setParameter("order", param_order);
+
+		String queryString = "SELECT S FROM Service S WHERE S.category in " + categoriesQuery
+				+ " AND S.state!='UNPUBLISH' ORDER BY S."
+				+ (ORDER.namedesc.equals(param_order) ? "name DESC" : ORDER.name.toString());
+
+		if (ORDER.date.equals(param_order)) {
+			queryString = "SELECT S FROM Service S, ServiceHistory SH WHERE SH.id_serviceMethod=0 AND SH.operation='ADD' AND S.id=SH.id_service"
+					+ " AND S.state!='UNPUBLISH' AND S.category in " + categoriesQuery + " ORDER BY SH.date DESC";
+		}
+
+		Query q = getEntityManager().createQuery(queryString);
 		List<Service> s = q.setFirstResult(firstResult).setMaxResults(maxResult).getResultList();
 		return s;
 	}
@@ -351,20 +376,18 @@ public class ServiceDaoImpl implements ServiceDao {
 	@Transactional
 	@Override
 	public List<Service> getServiceByTag(String tag, int firstResult, int maxResult, String param_order) {
-		Query q = getEntityManager()
-				.createQuery(
-						"SELECT S FROM Service S JOIN S.tags T WHERE T.name=:tag " + "AND S.state!='UNPUBLISH' ORDER BY :order")
-				.setParameter("tag", tag).setParameter("order", param_order);
+		Query q = getEntityManager().createQuery(
+				"SELECT S FROM Service S JOIN S.tags T WHERE T.name=:tag " + "AND S.state!='UNPUBLISH' ORDER BY S."
+						+ param_order).setParameter("tag", tag);
 		List<Service> list = q.setFirstResult(firstResult).setMaxResults(maxResult).getResultList();
 		return list;
-
 	}
 
 	/**
 	 * Retrieve services by category
 	 * 
 	 * @param id
-	 *            : int category id
+	 *            int category id
 	 * @return list of {@link Service} instance
 	 * @throws DataAccessException
 	 */

@@ -91,9 +91,13 @@ public class CatalogManager {
 	public List<Service> catalogServices(int firstResult, int maxResult, String param_order) {
 		try {
 			if (param_order.equalsIgnoreCase(ORDER.id.toString())) {
-				return cleanAuthenticationData(serviceDao.showPublishedService(firstResult, maxResult, ORDER.id.toString()));
+				return cleanAuthenticationData(serviceDao.showPublishedService(firstResult, maxResult, ORDER.id));
 			} else if (param_order.equalsIgnoreCase(ORDER.name.toString())) {
-				return cleanAuthenticationData(serviceDao.showPublishedService(firstResult, maxResult, ORDER.name.toString()));
+				return cleanAuthenticationData(serviceDao.showPublishedService(firstResult, maxResult, ORDER.name));
+			} else if (param_order.equalsIgnoreCase(ORDER.namedesc.toString())) {
+				return cleanAuthenticationData(serviceDao.showPublishedService(firstResult, maxResult, ORDER.namedesc));
+			} else if (param_order.equalsIgnoreCase(ORDER.date.toString())) {
+				return cleanAuthenticationData(serviceDao.showPublishedService(firstResult, maxResult, ORDER.date));
 			}
 			throw new SecurityException();
 		} catch (DataAccessException d) {
@@ -197,15 +201,19 @@ public class CatalogManager {
 	 * Get list of all services. Their name contains token.
 	 * 
 	 * @param token
-	 *            : String token compared with service name
+	 *            String token compared with service name
 	 * @return all {@link Service} instances
 	 */
 	public List<Service> catalogServiceSimpleSearch(String token, int firstResult, int maxResult, String param_order) {
 		try {
 			if (param_order.equalsIgnoreCase(ORDER.id.toString())) {
-				return serviceDao.searchService(token, firstResult, maxResult, ORDER.id.toString());
+				return serviceDao.searchService(token, firstResult, maxResult, ORDER.id);
 			} else if (param_order.equalsIgnoreCase(ORDER.name.toString())) {
-				return serviceDao.searchService(token, firstResult, maxResult, ORDER.name.toString());
+				return serviceDao.searchService(token, firstResult, maxResult, ORDER.name);
+			} else if (param_order.equalsIgnoreCase(ORDER.namedesc.toString())) {
+				return serviceDao.searchService(token, firstResult, maxResult, ORDER.namedesc);
+			} else if (param_order.equalsIgnoreCase(ORDER.date.toString())) {
+				return serviceDao.searchService(token, firstResult, maxResult, ORDER.date);
 			}
 			throw new SecurityException();
 		} catch (DataAccessException d) {
@@ -222,12 +230,20 @@ public class CatalogManager {
 	 */
 	public List<Service> catalogServiceBrowseByCategory(int category, int firstResult, int maxResult, String param_order) {
 		try {
-			return serviceDao.browseService(category, firstResult, maxResult, param_order);
+			if (param_order.equalsIgnoreCase(ORDER.id.toString())) {
+				return serviceDao.browseService(category, firstResult, maxResult, ORDER.id);
+			} else if (param_order.equalsIgnoreCase(ORDER.namedesc.toString())) {
+				return serviceDao.browseService(category, firstResult, maxResult, ORDER.namedesc);
+			} else if (param_order.equalsIgnoreCase(ORDER.date.toString())) {
+				return serviceDao.browseService(category, firstResult, maxResult, ORDER.date);
+			} else {
+				return serviceDao.browseService(category, firstResult, maxResult, ORDER.name);
+			}
 		} catch (DataAccessException d) {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Get list of all services, searching by categories.
 	 * 
@@ -237,7 +253,15 @@ public class CatalogManager {
 	 */
 	public List<Service> catalogServiceBrowseByCategories(int[] categories, int firstResult, int maxResult, String param_order) {
 		try {
-			return serviceDao.browseService(categories, firstResult, maxResult, param_order);
+			if (param_order.equalsIgnoreCase(ORDER.id.toString())) {
+				return serviceDao.browseService(categories, firstResult, maxResult, ORDER.id);
+			} else if (param_order.equalsIgnoreCase(ORDER.namedesc.toString())) {
+				return serviceDao.browseService(categories, firstResult, maxResult, ORDER.namedesc);
+			} else if (param_order.equalsIgnoreCase(ORDER.date.toString())) {
+				return serviceDao.browseService(categories, firstResult, maxResult, ORDER.date);
+			} else {
+				return serviceDao.browseService(categories, firstResult, maxResult, ORDER.name);
+			}
 		} catch (DataAccessException d) {
 			return null;
 		}

@@ -17,75 +17,75 @@ package eu.trentorise.smartcampus.openservices.entities;
 
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 /**
- * Service Entity for service table
- * primary key, not null, auto increment int(11) id
- * not null, unique index varchar(45) name
- * varchar(45) description
- * varchar(45) tags
- * int(11) category
- * text license
- * not null varchar(45) version
- * mediumblob access information
- * varchar(45) documentation
- * bigint(20) expiration
- * not null varchar(10) state
- * not null int(11) creator id
- * longblob implementation
- * not null int(11) organization id
+ * Service Entity for service table primary key, not null, auto increment
+ * int(11) id not null, unique index varchar(45) name varchar(45) description
+ * varchar(45) tags int(11) category text license not null varchar(45) version
+ * mediumblob access information varchar(45) documentation bigint(20) expiration
+ * not null varchar(10) state not null int(11) creator id longblob
+ * implementation not null int(11) organization id
  * 
  * @author Giulia Canobbio
- *
+ * 
  */
 @Entity
-@Table(name="Service")
+@Table(name = "Service")
 public class Service {
 
 	@Id
 	@GeneratedValue
 	private int id;
-	@Column(name="name", unique=true, nullable=false)
+	@Column(name = "name", unique = true, nullable = false)
 	private String name;
-	@Column(name="creator_id")
+	@Column(name = "creator_id")
 	private int creatorId;
-	@Column(name="organization_id")
+	@Column(name = "organization_id")
 	private int organizationId;
-	@Column(name="description")
+	@Column(name = "description")
 	private String description;
-	/*@Column(name="tags")
-	private String tags;
-	*/
-	@Column(name="category")
+	/*
+	 * @Column(name="tags") private String tags;
+	 */
+	@Column(name = "category")
 	private int category;
-	@Column(name="license")
+	@Column(name = "license")
 	private String license;
-	@Column(name="version")
+	@Column(name = "version")
 	private String version;
-	@Column(name="expiration")
+	@Column(name = "expiration")
 	private long expiration;
-	@Column(name="documentation")
+	@Column(name = "documentation")
 	private String documentation;
-	@Column(name="state")
+	@Column(name = "state")
 	private String state;
-	
-	@Column(name="accessInformation")
+
+	@Column(name = "accessInformation")
 	@Lob
 	private AccessInformation accessInformation;
-	@Column(name="implementation")
+	@Column(name = "implementation")
 	@Lob
 	private ImplementationInfo implementation;
-	
+
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name="id_service")
+	@JoinColumn(name = "id_service")
 	private List<Tag> tags;
-	
+
 	/**
 	 * New {@link Service} instance
 	 */
-	public Service(){
-		
+	public Service() {
+
 	}
 
 	/**
@@ -98,7 +98,8 @@ public class Service {
 
 	/**
 	 * 
-	 * @param id : int
+	 * @param id
+	 *            : int
 	 */
 	public void setId(int id) {
 		this.id = id;
@@ -114,7 +115,8 @@ public class Service {
 
 	/**
 	 * 
-	 * @param name : String
+	 * @param name
+	 *            : String
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -130,7 +132,8 @@ public class Service {
 
 	/**
 	 * 
-	 * @param description : String
+	 * @param description
+	 *            : String
 	 */
 	public void setDescription(String description) {
 		this.description = description;
@@ -140,18 +143,17 @@ public class Service {
 	 * 
 	 * @return String tags
 	 */
-	/*public String getTags() {
-		return tags;
-	}
-	*/
+	/*
+	 * public String getTags() { return tags; }
+	 */
 	/**
 	 * 
-	 * @param tags : String
+	 * @param tags
+	 *            : String
 	 */
-	/*public void setTags(String tags) {
-		this.tags = tags;
-	}
-	*/
+	/*
+	 * public void setTags(String tags) { this.tags = tags; }
+	 */
 	/**
 	 * 
 	 * @return int category
@@ -162,7 +164,8 @@ public class Service {
 
 	/**
 	 * 
-	 * @param category : int
+	 * @param category
+	 *            : int
 	 */
 	public void setCategory(int category) {
 		this.category = category;
@@ -178,7 +181,8 @@ public class Service {
 
 	/**
 	 * 
-	 * @param license : String 
+	 * @param license
+	 *            : String
 	 */
 	public void setLicense(String license) {
 		this.license = license;
@@ -194,7 +198,8 @@ public class Service {
 
 	/**
 	 * 
-	 * @param version : String
+	 * @param version
+	 *            : String
 	 */
 	public void setVersion(String version) {
 		this.version = version;
@@ -210,7 +215,8 @@ public class Service {
 
 	/**
 	 * 
-	 * @param accessInformation : {@link AccessInformation}
+	 * @param accessInformation
+	 *            : {@link AccessInformation}
 	 */
 	public void setAccessInformation(AccessInformation accessInformation) {
 		this.accessInformation = accessInformation;
@@ -226,7 +232,8 @@ public class Service {
 
 	/**
 	 * 
-	 * @param documentation : String
+	 * @param documentation
+	 *            : String
 	 */
 	public void setDocumentation(String documentation) {
 		this.documentation = documentation;
@@ -242,7 +249,8 @@ public class Service {
 
 	/**
 	 * 
-	 * @param expiration : long
+	 * @param expiration
+	 *            : long
 	 */
 	public void setExpiration(long expiration) {
 		this.expiration = expiration;
@@ -258,7 +266,8 @@ public class Service {
 
 	/**
 	 * 
-	 * @param state : String
+	 * @param state
+	 *            : String
 	 */
 	public void setState(String state) {
 		this.state = state;
@@ -274,7 +283,8 @@ public class Service {
 
 	/**
 	 * 
-	 * @param creatorId : int 
+	 * @param creatorId
+	 *            : int
 	 */
 	public void setCreatorId(int creatorId) {
 		this.creatorId = creatorId;
@@ -290,7 +300,8 @@ public class Service {
 
 	/**
 	 * 
-	 * @param organizationId : int
+	 * @param organizationId
+	 *            : int
 	 */
 	public void setOrganizationId(int organizationId) {
 		this.organizationId = organizationId;
@@ -306,12 +317,13 @@ public class Service {
 
 	/**
 	 * 
-	 * @param implementation : {@link ImplementationInfo}
+	 * @param implementation
+	 *            : {@link ImplementationInfo}
 	 */
 	public void setImplementation(ImplementationInfo implementation) {
 		this.implementation = implementation;
 	}
-	
+
 	/**
 	 * 
 	 * @return list of {@link Tag} instances
@@ -322,7 +334,8 @@ public class Service {
 
 	/**
 	 * 
-	 * @param tags : list of {@link Tag} instances
+	 * @param tags
+	 *            : list of {@link Tag} instances
 	 */
 	public void setTags(List<Tag> tags) {
 		this.tags = tags;
