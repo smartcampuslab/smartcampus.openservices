@@ -120,7 +120,7 @@ public class ServiceManagerTest {
 		//unpublish
 		//not found in get services from catalog
 		log.info("TEST Unpublish Service");
-		List<Service> publishService = serviceDao.showPublishedService(0,5,"id");
+		List<Service> publishService = serviceDao.showPublishedService(0,5,Constants.ORDER.id);
 		for(int i=0;i<publishService.size();i++){
 			assertNotSame(service.getId(),publishService.get(i).getId());
 		}
@@ -132,7 +132,7 @@ public class ServiceManagerTest {
 		assertEquals(true, result);
 		//found in get services from catalog
 		publishService.clear();
-		publishService = serviceDao.showPublishedService(0,5,"name");
+		publishService = serviceDao.showPublishedService(0,5,Constants.ORDER.name);
 		for(int i=0;i<publishService.size();i++){
 			if(publishService.get(i).getId()==service.getId()){
 				assertEquals(service.getId(),publishService.get(i).getId());
