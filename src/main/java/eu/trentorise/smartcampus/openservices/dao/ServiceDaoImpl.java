@@ -471,15 +471,18 @@ public class ServiceDaoImpl implements ServiceDao {
 	public Map<String, Integer> findTagServices(String group, String order) throws DataAccessException {
 		Map<String, Integer> res = new HashMap<String, Integer>();
 		List<Object[]> results;
+		
+		String queryString = "SELECT T.name AS tag, COUNT(T.name) FROM Service S JOIN S.tags T"
+				+ " WHERE S.state!='UNPUBLISH' GROUP BY T.name ORDER BY ";
+		
 		if (group.equalsIgnoreCase(Constants.ORDER.tag.toString())) {
-			results = entityManager.createQuery(
-					"SELECT T.name AS tag, COUNT(T.name) FROM Service S JOIN S.tags T"
-							+ " WHERE S.state!='UNPUBLISH' GROUP BY T.name ORDER BY T.name " + order).getResultList();
+			queryString += "T.name";
 		} else {
-			results = entityManager.createQuery(
-					"SELECT T.name AS tag, COUNT(T.name) FROM Service S JOIN S.tags T"
-							+ " WHERE S.state!='UNPUBLISH' GROUP BY T.name ORDER BY COUNT(T.name) " + order).getResultList();
+			queryString += "COUNT(T.name)";
 		}
+		queryString += " " + order;
+		
+		results = entityManager.createQuery(queryString).getResultList();
 
 		for (Object[] result : results) {
 			String tag = ((String) result[0]).toString();

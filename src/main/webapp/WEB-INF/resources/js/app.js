@@ -1,5 +1,5 @@
 'use strict';
-var app = angular.module('openservices', ['ngRoute', 'ngCookies', 'openservices.directives', 'openservices.services', 'hljs']);
+var app = angular.module('openservices', ['ngRoute', 'ngCookies', 'openservices.directives', 'openservices.services', 'hljs', 'ui.bootstrap']);
 
 app.filter('fromNow', function () {
     return function (dateString) {

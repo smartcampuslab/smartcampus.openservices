@@ -642,9 +642,21 @@ app.controller('categoryCtrl', ['$scope', '$rootScope', '$http', '$location', 'C
 
 app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams', 'Catalog', 'Category',
     function ($scope, $rootScope, $http, $routeParams, Catalog, Category) {
-        $scope.orderByOptions = ['A - Z', 'Z - A', 'date'];
-        $scope.orderBySelected = 'A - Z';
+        $scope.orderByOptions = [{
+            key: 'A - Z',
+            value: 'name'
+        }, {
+            key: 'Z - A',
+            value: 'namedesc'
+        }, {
+            key: 'date',
+            value: 'date'
+        }];
 
+        // default: A - Z
+        $scope.orderBySelected = $scope.orderByOptions[0];
+
+        $scope.categories = [];
         $scope.categoriesFilter = [];
 
         $scope.selectCategory = function (catId) {
@@ -668,29 +680,22 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
                 }
             }
 
-            if ($scope.categoriesFilter.length == $scope.categories.length) {
-                $scope.getServicesAll();
-            } else if ($scope.categoriesFilter.length < $scope.categories.length && $scope.categoriesFilter.length > 0) {
-                $scope.getServiceByCategories($scope.categoriesFilter);
-            } else {
-                $scope.services = null;
-            }
+            $scope.update(true);
         };
 
         $scope.setOrderBy = function (order) {
             $scope.orderBySelected = order;
+            $scope.update(true);
         };
 
-        $scope.start = 0;
-        $scope.end = 9;
-        $rootScope.locTitles = $rootScope.searchQuery ? ['search'] : ['services'];
+        $scope.totalServices = 0;
+        $scope.firstOfPage = 0;
+        $scope.resultsPerPage = 10;
+        $scope.pagePerPagination = 5;
+        $scope.currentPage = 1;
+        $scope.lastOfPage = 0;
 
-        Category.list({}, function (data) {
-            $scope.categories = data.data;
-            for (var i = 0; i < $scope.categories.length; i++) {
-                $scope.categoriesFilter.push($scope.categories[i].id);
-            }
-        });
+        $rootScope.locTitles = $rootScope.searchQuery ? ['search'] : ['services'];
 
         if ( !! $routeParams.tag) {
             $scope.query = $routeParams.tag;
@@ -708,9 +713,9 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
         //         category: id,
         //         first: $scope.start,
         //         last: $scope.end,
-        //         order: 'name'
+        //         order: $scope.orderBySelected.value
         //     }, function (services) {
-        //         $scope.total = services.totalNumber;
+        //         $scope.totalServices = services.totalNumber;
         //         $scope.services = services.data;
         //     }, function (res) {
         //         $scope.services = null;
@@ -730,13 +735,13 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
             }
 
             Catalog.browseServiceCats({
-                ids: cats,
-                first: $scope.start,
-                last: $scope.end,
-                order: 'name'
+                categories: cats,
+                first: $scope.firstOfPage,
+                last: $scope.resultsPerPage,
+                order: $scope.orderBySelected.value
             }, function (services) {
-                $scope.total = services.totalNumber;
                 $scope.services = services.data;
+                $scope.updateCounters(services.totalNumber);
             }, function (res) {
                 $scope.services = null;
             });
@@ -744,39 +749,49 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
 
         $scope.getServicesAll = function () {
             Catalog.listServices({
-                first: $scope.start,
-                last: $scope.end,
-                order: 'name',
+                first: $scope.firstOfPage,
+                last: $scope.resultsPerPage,
+                order: $scope.orderBySelected.value,
                 q: $rootScope.searchQuery,
                 tag: $scope.query
             }, function (services) {
-                $scope.total = services.totalNumber;
                 $scope.services = services.data;
+                $scope.updateCounters(services.totalNumber);
             }, function (res) {
                 $scope.services = null;
             });
         };
-        $scope.getServicesAll();
+
+        $scope.update = function (resetPages) {
+            if (resetPages == true) {
+                $scope.firstOfPage = 0;
+                $scope.currentPage = 1;
+            }
+
+            if ($scope.categoriesFilter.length == $scope.categories.length) {
+                $scope.getServicesAll();
+            } else if ($scope.categoriesFilter.length < $scope.categories.length && $scope.categoriesFilter.length > 0) {
+                $scope.getServiceByCategories($scope.categoriesFilter);
+            } else {
+                $scope.services = null;
+            }
+        }
+
+        $scope.goToPage = function (p) {
+            $scope.page = p;
+            $scope.firstOfPage = ($scope.page - 1) * $scope.resultsPerPage;
+            $scope.update();
+        };
+
+        $scope.updateCounters = function (totalServicesCount) {
+            $scope.totalServices = totalServicesCount;
+            var lop = $scope.firstOfPage + $scope.resultsPerPage + 1;
+            $scope.lastOfPage = lop > $scope.totalServices ? $scope.totalServices : lop;
+        }
+
         $rootScope.searchQuery = null;
         $scope.query = null;
-
         $scope.servicesActive = [];
-
-        $scope.next = function () {
-            if ($scope.end < $scope.total) {
-                $scope.start += 10;
-                $scope.end += 10;
-                $scope.update();
-            }
-        };
-
-        $scope.prev = function () {
-            if ($scope.start > 0) {
-                $scope.start -= 10;
-                $scope.end -= 10;
-                $scope.update();
-            }
-        };
 
         $scope.isServiceActive = function (service) {
             return $scope.servicesActive.indexOf(service) > -1;
@@ -792,6 +807,15 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
                 $scope.servicesActive.splice(index, 1);
             }
         };
+
+        // Start!
+        Category.list({}, function (data) {
+            $scope.categories = data.data;
+            for (var i = 0; i < $scope.categories.length; i++) {
+                $scope.categoriesFilter.push($scope.categories[i].id);
+            }
+            $scope.update();
+        });
     }
 ]);
 

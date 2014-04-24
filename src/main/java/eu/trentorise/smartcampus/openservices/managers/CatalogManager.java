@@ -529,40 +529,40 @@ public class CatalogManager {
 			list = null;
 		}
 
-		if (group.equalsIgnoreCase(Constants.ORDER.tag.toString()) && order.equalsIgnoreCase(Constants.ASCDESC.DESC.toString())) {
-			Collections.sort(list, Collections.reverseOrder(new Comparator<TagCounter>() {
-				@Override
-				public int compare(TagCounter o1, TagCounter o2) {
-					return o1.getTag().compareToIgnoreCase(o2.getTag());
-				}
-			}));
-		} else if (group.equalsIgnoreCase(Constants.ORDER.counter.toString())) {
-			if (order.equalsIgnoreCase(Constants.ASCDESC.ASC.toString())) {
-				Collections.sort(list, new Comparator<TagCounter>() {
-					@Override
-					public int compare(TagCounter o1, TagCounter o2) {
-						if (o1.getCounter() == o2.getCounter()) {
-							return 0;
-						} else if (o1.getCounter() > o2.getCounter()) {
-							return 1;
-						} else
-							return -1;
-					}
-				});
-			} else {
-				Collections.sort(list, Collections.reverseOrder(new Comparator<TagCounter>() {
-					@Override
-					public int compare(TagCounter o1, TagCounter o2) {
-						if (o1.getCounter() == o2.getCounter()) {
-							return 0;
-						} else if (o1.getCounter() > o2.getCounter()) {
-							return 1;
-						} else
-							return -1;
-					}
-				}));
-			}
-		}
+//		if (group.equalsIgnoreCase(Constants.ORDER.tag.toString()) && order.equalsIgnoreCase(Constants.ASCDESC.DESC.toString())) {
+//			Collections.sort(list, Collections.reverseOrder(new Comparator<TagCounter>() {
+//				@Override
+//				public int compare(TagCounter o1, TagCounter o2) {
+//					return o1.getTag().compareToIgnoreCase(o2.getTag());
+//				}
+//			}));
+//		} else if (group.equalsIgnoreCase(Constants.ORDER.counter.toString())) {
+//			if (order.equalsIgnoreCase(Constants.ASCDESC.ASC.toString())) {
+//				Collections.sort(list, new Comparator<TagCounter>() {
+//					@Override
+//					public int compare(TagCounter o1, TagCounter o2) {
+//						if (o1.getCounter() == o2.getCounter()) {
+//							return 0;
+//						} else if (o1.getCounter() > o2.getCounter()) {
+//							return 1;
+//						} else
+//							return -1;
+//					}
+//				});
+//			} else {
+//				Collections.sort(list, Collections.reverseOrder(new Comparator<TagCounter>() {
+//					@Override
+//					public int compare(TagCounter o1, TagCounter o2) {
+//						if (o1.getCounter() == o2.getCounter()) {
+//							return 0;
+//						} else if (o1.getCounter() > o2.getCounter()) {
+//							return 1;
+//						} else
+//							return -1;
+//					}
+//				}));
+//			}
+//		}
 		return list;
 
 	}

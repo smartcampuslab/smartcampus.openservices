@@ -345,7 +345,7 @@ pre {
 .panel-services ul .service-row h3 {
     margin: 0;
 }
-.panel-services ul .service-row .tags span {
+.tags span, .tags i {
     vertical-align: middle;
 }
 .tags span:not(:first-child) {
@@ -353,4 +353,8 @@ pre {
 }
 .panel-service .panel-body .tab-content .tab-pane {
     padding-top: 15px;
+}
+.row-pagination h6 {
+    margin: 20px 0;
+    padding: 8px 0;
 }

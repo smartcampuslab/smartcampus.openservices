@@ -314,21 +314,22 @@ public class CatalogController {
 			@RequestParam(value = "first", required = false, defaultValue = "0") Integer firstResult,
 			@RequestParam(value = "last", required = false, defaultValue = "0") Integer maxResult,
 			@RequestParam(value = "order", required = false, defaultValue = "name") String param_order,
-			@RequestParam(value = "ids", required = false, defaultValue = "") String ids, HttpServletResponse response) {
+			@RequestParam(value = "categories", required = false, defaultValue = "") String categoriesIds,
+			HttpServletResponse response) {
 		logger.info("-- Service Catalog browse (categories) --");
 
-		String[] idsStringArray = ids.split(",");
-		int[] idsArray = new int[idsStringArray.length];
-		for (int i = 0; i < idsStringArray.length; i++) {
+		String[] categoriesIdsStringArray = categoriesIds.split(",");
+		int[] categoriesIdsArray = new int[categoriesIdsStringArray.length];
+		for (int i = 0; i < categoriesIdsStringArray.length; i++) {
 			try {
-				idsArray[i] = Integer.parseInt(idsStringArray[i]);
+				categoriesIdsArray[i] = Integer.parseInt(categoriesIdsStringArray[i]);
 			} catch (NumberFormatException nfe) {
 				continue;
 			}
 		}
 
-		List<Service> services = Service.fromServiceEntities(catalogManager.catalogServiceBrowseByCategories(idsArray,
-				firstResult, maxResult, param_order));
+		List<Service> services = Service.fromServiceEntities(catalogManager.catalogServiceBrowseByCategories(
+				categoriesIdsArray, firstResult, maxResult, param_order));
 		ResponseObject responseObject = new ResponseObject();
 		if (services == null || services.size() == 0) {
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -338,8 +339,8 @@ public class CatalogController {
 			responseObject.setData(services);
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 			Long count = 0L;
-			for (int i = 0; i < idsArray.length; i++) {
-				count += catalogManager.countServiceByCategorySearch(idsArray[i]);
+			for (int i = 0; i < categoriesIdsArray.length; i++) {
+				count += catalogManager.countServiceByCategorySearch(categoriesIdsArray[i]);
 			}
 			responseObject.setTotalNumber(count);
 		}
