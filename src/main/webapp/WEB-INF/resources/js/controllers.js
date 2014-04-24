@@ -929,7 +929,6 @@ app.controller('organizationServicesCtrl', ['$scope', '$http', '$routeParams', '
 app.controller('serviceCtrl', ['$scope', '$rootScope', '$routeParams', 'Catalog', 'Category', '$http', '$location', 'RemoteApi',
     function ($scope, $rootScope, $routeParams, Catalog, Category, $http, $location, RemoteApi) {
         $scope.remoteapi;
-        $scope.template = 'partials/services/_ac.html';
         $scope.request = {};
 
         Catalog.getServiceById({

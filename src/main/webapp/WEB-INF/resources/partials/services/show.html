@@ -25,26 +25,17 @@
                             <span>{{service.description}}</span>
                         </li>
                     </ul>
-                    <ul class="nav nav-tabs">
-                        <!-- <li ng-class="{active: template==='partials/services/_about.html'}">
-                            <a href="" ng-click="template = 'partials/services/_about.html'">About</a>
-                        </li> -->
-                        <li ng-class="{active: template==='partials/services/_ac.html'}">
-                            <a href="" ng-click="template = 'partials/services/_ac.html'">Access Info</a>
-                        </li>
-                        <li ng-class="{active: template==='partials/services/_implementation.html'}">
-                            <a href="" ng-click="template = 'partials/services/_implementation.html'">Implementation</a>
-                        </li>
-                        <li ng-class="{active: template==='partials/services/_tests.html'}">
-                            <a href="" ng-click="template = 'partials/services/_tests.html'">Methods</a>
-                        </li>
-                        <!-- <li ng-class="{active: template==='partials/services/_history.html'}">
-                            <a href="" ng-click="template = 'partials/services/_history.html'">History</a>
-                        </li> -->
-                    </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane active" ng-include="template"></div>
-                    </div>
+                    <tabset>
+                        <tab heading="Access Info">
+                            <div ng-include="'partials/services/_ac.html'"></div>
+                        </tab>
+                        <tab heading="Implementation">
+                            <div ng-include="'partials/services/_implementation.html'"></div>
+                        </tab>
+                        <tab heading="Methods">
+                            <div ng-include="'partials/services/_tests.html'"></div>
+                        </tab>
+                    </tabset>
                 </div>
             </div>
         </div>
