@@ -19,7 +19,12 @@ app.controller('homeCtrl', ['$http', '$scope', '$rootScope', '$location', 'Catal
         $http.get('api/catalog/tagcloud?group=counter&order=DESC')
             .success(function (data) {
                 $scope.taglist = data.data;
-                $scope.tagmax = $scope.taglist[0].counter;
+                $scope.tagmax = 0;
+                for (var i = 0; i < $scope.taglist.length; i++) {
+                    if ($scope.taglist[i].counter > $scope.tagmax) {
+                        $scope.tagmax = $scope.taglist[i].counter;
+                    }
+                }
             })
             .error(function (data) {
                 $scope.taglist = [];

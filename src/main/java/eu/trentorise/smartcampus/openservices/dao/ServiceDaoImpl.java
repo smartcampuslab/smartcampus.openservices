@@ -16,6 +16,7 @@
 package eu.trentorise.smartcampus.openservices.dao;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -469,19 +470,19 @@ public class ServiceDaoImpl implements ServiceDao {
 	@Transactional
 	@Override
 	public Map<String, Integer> findTagServices(String group, String order) throws DataAccessException {
-		Map<String, Integer> res = new HashMap<String, Integer>();
+		Map<String, Integer> res = new LinkedHashMap<String, Integer>();
 		List<Object[]> results;
-		
+
 		String queryString = "SELECT T.name AS tag, COUNT(T.name) FROM Service S JOIN S.tags T"
 				+ " WHERE S.state!='UNPUBLISH' GROUP BY T.name ORDER BY ";
-		
+
 		if (group.equalsIgnoreCase(Constants.ORDER.tag.toString())) {
 			queryString += "T.name";
 		} else {
 			queryString += "COUNT(T.name)";
 		}
 		queryString += " " + order;
-		
+
 		results = entityManager.createQuery(queryString).getResultList();
 
 		for (Object[] result : results) {
