@@ -333,7 +333,7 @@ public class CatalogController {
 		ResponseObject responseObject = new ResponseObject();
 		if (services == null || services.size() == 0) {
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			responseObject.setError("No published service for this category");
+			responseObject.setError("No published service for these categories");
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		} else {
 			responseObject.setData(services);
@@ -504,10 +504,63 @@ public class CatalogController {
 
 		ResponseObject responseObject = new ResponseObject();
 		try {
-			List<Organization> orgs = catalogManager.catalogOrgBrowse(categoryId, firstResult, maxResult, param_order);
+			List<Organization> orgs = catalogManager
+					.catalogOrgBrowseByCategory(categoryId, firstResult, maxResult, param_order);
 			if (orgs == null || orgs.size() == 0) {
 				responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 				responseObject.setError("No organization for this search by category");
+				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			} else {
+				responseObject.setData(orgs);
+				responseObject.setStatus(HttpServletResponse.SC_OK);
+				responseObject.setTotalNumber(catalogManager.countOrg());
+			}
+		} catch (SecurityException s) {
+			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			responseObject.setError("Order value is wrong. It can be only id or name");
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+		}
+		return responseObject;
+	}
+
+	/**
+	 * Browse organization by categoris.
+	 * 
+	 * @param categories
+	 *            path variable
+	 * @param response
+	 *            {@link HttpServletResponse} which is needed for status of
+	 *            response (OK or NOT FOUND)
+	 * @return {@link ResponseObject} with list of organization data, status (OK
+	 *         or NOT FOUND) and error message (if status is NOT FOUND).
+	 */
+	@RequestMapping(value = "/org/category", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody
+	public ResponseObject catalogOrgByCategories(
+			@RequestParam(value = "first", required = false, defaultValue = "0") Integer firstResult,
+			@RequestParam(value = "last", required = false, defaultValue = "0") Integer maxResult,
+			@RequestParam(value = "order", required = false, defaultValue = "name") String param_order,
+			@RequestParam(value = "categories", required = false, defaultValue = "") String categoriesIds,
+			HttpServletResponse response) {
+		logger.info("-- Organization Catalog browse --");
+
+		String[] categoriesIdsStringArray = categoriesIds.split(",");
+		int[] categoriesIdsArray = new int[categoriesIdsStringArray.length];
+		for (int i = 0; i < categoriesIdsStringArray.length; i++) {
+			try {
+				categoriesIdsArray[i] = Integer.parseInt(categoriesIdsStringArray[i]);
+			} catch (NumberFormatException nfe) {
+				continue;
+			}
+		}
+
+		ResponseObject responseObject = new ResponseObject();
+		try {
+			List<Organization> orgs = catalogManager.catalogOrgBrowseByCategories(categoriesIdsArray, firstResult, maxResult,
+					param_order);
+			if (orgs == null || orgs.size() == 0) {
+				responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				responseObject.setError("No organization for this search by categories");
 				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			} else {
 				responseObject.setData(orgs);

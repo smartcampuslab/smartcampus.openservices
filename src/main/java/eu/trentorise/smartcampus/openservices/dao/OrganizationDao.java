@@ -19,105 +19,128 @@ import java.util.List;
 
 import org.springframework.dao.DataAccessException;
 
+import eu.trentorise.smartcampus.openservices.Constants.ORDER;
 import eu.trentorise.smartcampus.openservices.entities.Organization;
 
 /**
  * Organization Dao Interface
  * 
  * @author Giulia Canobbio
- *
+ * 
  */
 public interface OrganizationDao {
-	
+
 	/**
 	 * Show all organization in database.
+	 * 
 	 * @return list of {@link Organization} instances
 	 */
-	public List<Organization> showOrganizations(int firstResult, int maxResult,  String param_order) 
-			throws DataAccessException;
-	
+	public List<Organization> showOrganizations(int firstResult, int maxResult, ORDER param_order) throws DataAccessException;
+
 	/**
-	 * Show my organizations.
-	 * Using user id
+	 * Show my organizations. Using user id
+	 * 
 	 * @param id_user
 	 * @return list of {@link Organization} instances
 	 */
 	public List<Organization> showMyOrganizations(int id_user) throws DataAccessException;
-	
+
 	/**
 	 * Get organization by id.
+	 * 
 	 * @param org_id
 	 * @return a {@link Organization} instance
 	 * @throws DataAccessException
 	 */
 	public Organization getOrganizationById(int org_id) throws DataAccessException;
-	
+
 	/**
 	 * Get organization data by name.
+	 * 
 	 * @param org_name
 	 * @return a {@link Organization} instance
 	 * @throws DataAccessException
 	 */
 	public Organization getOrganizationByName(String org_name) throws DataAccessException;
-	
+
 	/**
 	 * Create an organization.
-	 * @param org : a {@link Organization} instance
+	 * 
+	 * @param org
+	 *            : a {@link Organization} instance
 	 */
 	public void createOrganization(Organization org) throws DataAccessException;
-	
+
 	/**
 	 * Modify Organization
-	 * @param org : a {@link Organization} instance
+	 * 
+	 * @param org
+	 *            : a {@link Organization} instance
 	 */
 	public void modifyOrganization(Organization org) throws DataAccessException;
-	
+
 	/**
 	 * Delete an organization.
-	 * @param org : a {@link Organization} instance
+	 * 
+	 * @param org
+	 *            : a {@link Organization} instance
 	 */
 	public void deleteOrganization(int org) throws DataAccessException;
-	
+
 	/**
 	 * Get a list of organizations where user is owner.
+	 * 
 	 * @param owner_id
 	 * @return list of {@link Organization} instances
 	 */
 	public List<Organization> getOrganizationByOwnerId(int owner_id) throws DataAccessException;
-	
+
 	/**
-	 * Search Organization given a token.
-	 * For now I suppose that token is part of organization name (LIKE).
+	 * Search Organization given a token. For now I suppose that token is part
+	 * of organization name (LIKE).
+	 * 
 	 * @param token
 	 * @return list of {@link Organization} instances
 	 * @throws DataAccessException
 	 */
-	public List<Organization> searchOrganization(String token, int firstResult, int maxResult, String param_order) 
+	public List<Organization> searchOrganization(String token, int firstResult, int maxResult, String param_order)
 			throws DataAccessException;
-	
+
 	/**
-	 * Browse Organization using filters:
-	 * category (LIKE),
-	 * geography - for now I suppose that this is a string (LIKE).
+	 * Browse Organization using filters: category (LIKE), geography - for now I
+	 * suppose that this is a string (LIKE).
+	 * 
 	 * @param category
 	 * @param geography
 	 * @return list of {@link Organization} instances
 	 * @throws DataAccessException
 	 */
-	public List<Organization> browseOrganization(Integer category, String geography, int firstResult, int maxResult,  
-			String param_order) throws DataAccessException;
+	public List<Organization> browseOrganization(Integer category, String geography, int firstResult, int maxResult,
+			ORDER param_order) throws DataAccessException;
 
+	/**
+	 * Browse Organization using filters: category (LIKE), geography - for now I
+	 * suppose that this is a string (LIKE).
+	 * 
+	 * @param categories
+	 * @param geography
+	 * @return list of {@link Organization} instances
+	 * @throws DataAccessException
+	 */
+	public List<Organization> browseOrganization(int[] category, String geography, int firstResult, int maxResult,
+			ORDER param_order) throws DataAccessException;
+	
 	/**
 	 * @param id
 	 * @return list of {@link Organization} instances in a specific category.
 	 */
 	public List<Organization> findByCategory(int id) throws DataAccessException;
-	
+
 	/**
 	 * 
 	 * @return number of organization saved in database
 	 * @throws DataAccessException
 	 */
 	public Long countOrganization() throws DataAccessException;
-	
+
 }

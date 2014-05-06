@@ -189,7 +189,7 @@ public interface ServiceDao { // extends JpaRepository<Service, Integer>{
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
-	public List<Service> getServiceByTag(String tag, int firstResult, int maxResult, String param_order)
+	public List<Service> getServiceByTag(String tag, int firstResult, int maxResult, ORDER param_order)
 			throws DataAccessException;
 
 	/**

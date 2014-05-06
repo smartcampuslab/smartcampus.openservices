@@ -303,9 +303,11 @@ public class CatalogManager {
 	public List<Service> catalogServiceBrowseByTags(String tag, int firstResult, int maxResult, String param_order) {
 		try {
 			if (param_order.equalsIgnoreCase(ORDER.id.toString())) {
-				return serviceDao.getServiceByTag(tag, firstResult, maxResult, ORDER.id.toString());
+				return serviceDao.getServiceByTag(tag, firstResult, maxResult, ORDER.id);
 			} else if (param_order.equalsIgnoreCase(ORDER.name.toString())) {
-				return serviceDao.getServiceByTag(tag, firstResult, maxResult, ORDER.name.toString());
+				return serviceDao.getServiceByTag(tag, firstResult, maxResult, ORDER.name);
+			} else if (param_order.equalsIgnoreCase(ORDER.namedesc.toString())) {
+				return serviceDao.getServiceByTag(tag, firstResult, maxResult, ORDER.namedesc);
 			}
 			throw new SecurityException();
 		} catch (DataAccessException d) {
@@ -321,9 +323,11 @@ public class CatalogManager {
 	public List<Organization> catalogOrg(int firstResult, int maxResult, String param_order) {
 		try {
 			if (param_order.equalsIgnoreCase(ORDER.id.toString())) {
-				return orgDao.showOrganizations(firstResult, maxResult, ORDER.id.toString());
+				return orgDao.showOrganizations(firstResult, maxResult, ORDER.id);
+			} else if (param_order.equalsIgnoreCase(ORDER.namedesc.toString())) {
+				return orgDao.showOrganizations(firstResult, maxResult, ORDER.namedesc);
 			} else if (param_order.equalsIgnoreCase(ORDER.name.toString())) {
-				return orgDao.showOrganizations(firstResult, maxResult, ORDER.name.toString());
+				return orgDao.showOrganizations(firstResult, maxResult, ORDER.name);
 			}
 			throw new SecurityException();
 		} catch (DataAccessException d) {
@@ -355,15 +359,39 @@ public class CatalogManager {
 	 * Get list of organization searching by category
 	 * 
 	 * @param category
-	 *            : int category id
+	 *            int category id
 	 * @return all {@link Organization} instances
 	 */
-	public List<Organization> catalogOrgBrowse(int category, int firstResult, int maxResult, String param_order) {
+	public List<Organization> catalogOrgBrowseByCategory(int category, int firstResult, int maxResult, String param_order) {
 		try {
 			if (param_order.equalsIgnoreCase(ORDER.id.toString())) {
-				return orgDao.browseOrganization(category, null, firstResult, maxResult, ORDER.id.toString());
+				return orgDao.browseOrganization(category, null, firstResult, maxResult, ORDER.id);
+			} else if (param_order.equalsIgnoreCase(ORDER.namedesc.toString())) {
+				return orgDao.browseOrganization(category, null, firstResult, maxResult, ORDER.namedesc);
 			} else if (param_order.equalsIgnoreCase(ORDER.name.toString())) {
-				return orgDao.browseOrganization(category, null, firstResult, maxResult, ORDER.name.toString());
+				return orgDao.browseOrganization(category, null, firstResult, maxResult, ORDER.name);
+			}
+			throw new SecurityException();
+		} catch (DataAccessException d) {
+			return null;
+		}
+	}
+
+	/**
+	 * Get list of organization searching by categories
+	 * 
+	 * @param categories
+	 *            int[] categories ids
+	 * @return all {@link Organization} instances
+	 */
+	public List<Organization> catalogOrgBrowseByCategories(int[] categories, int firstResult, int maxResult, String param_order) {
+		try {
+			if (param_order.equalsIgnoreCase(ORDER.id.toString())) {
+				return orgDao.browseOrganization(categories, null, firstResult, maxResult, ORDER.id);
+			} else if (param_order.equalsIgnoreCase(ORDER.namedesc.toString())) {
+				return orgDao.browseOrganization(categories, null, firstResult, maxResult, ORDER.namedesc);
+			} else if (param_order.equalsIgnoreCase(ORDER.name.toString())) {
+				return orgDao.browseOrganization(categories, null, firstResult, maxResult, ORDER.name);
 			}
 			throw new SecurityException();
 		} catch (DataAccessException d) {
@@ -375,7 +403,7 @@ public class CatalogManager {
 	 * Retrieve organization data searching by its id
 	 * 
 	 * @param id
-	 *            : int organization id
+	 *            int organization id
 	 * @return {@link Organization} instance
 	 */
 	public Organization catalogOrgById(int id) {

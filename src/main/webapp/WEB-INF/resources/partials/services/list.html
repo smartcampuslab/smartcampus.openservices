@@ -94,7 +94,7 @@
                 <li ng-class="{disabled: end >= total}"><a ng-click="next()" href="">Next</a>
                 </li>
                 </ul> -->
-                <div ng-if="services.length == 0">
+                <div ng-if="!services || services.length == 0">
                     <h4>No results.</h4>
                 </div>
             </div>

@@ -1,40 +1,98 @@
-<div class="row" id="search">
-  <div class="col-md-12">
-    <form role="form">
-      <div class="input-group">
-				<input type="text" class="form-control" ng-model="query">
-				<span class="input-group-btn">
-					<button class="btn btn-default" type="submit" ng-click="search(query)">Search</button>
-				</span>
-		  </div>
-    </form>
+<div class="row">
+  <div class="col-md-8 col-md-offset-2" id="search">
+    <div class="row" id="search">
+      <form role="form">
+        <div class="input-group">
+          <input type="text" class="form-control" ng-model="query">
+          <!-- <br/>Tag:
+                <input type="checkbox" ng-model="tag" ng-click="update()"> -->
+          <span class="input-group-btn">
+            <button class="btn btn-primary" type="button">
+              &nbsp;
+              <div class="glyphicon glyphicon-search"></div>
+              &nbsp;
+            </button>
+          </span>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
 
 <div class="row">
   <div class="col-md-8 col-md-offset-2">
-    <div ng-repeat="org in orgs">
-      <h1>
-        <a ng-href="organizations/{{org.id}}">
-          {{org.name}}
-        </a>
-
-      </h1>
-      <blockquote>
-        <p>{{org.description}}</p>
-      </blockquote>
+    <div class="row">
+      <div class="col-md-3">
+        <h4>Categories</h4>
+        <div class="form-group">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" ng-click="selectCategory()" ng-checked="categoriesFilter.length == categories.length">All
+            </label>
+          </div>
+          <hr/>
+          <div ng-repeat="cat in categories" class="checkbox">
+            <label>
+              <input type="checkbox" ng-click="selectCategory(cat.id)" ng-checked="categoriesFilter.indexOf(cat.id) !== -1">{{cat.name}}
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-9">
+        <div class="row">
+          <div class="pull-right dropdown-orderby">
+            <span>Order by</span>
+            <span class="btn-group">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                <span class="pull-left">{{orderBySelected.key}}</span>
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu">
+                <li ng-repeat="orderByOpt in orderByOptions">
+                  <a ng-click="setOrderBy(orderByOpt)">{{orderByOpt.key}}</a>
+                </li>
+              </ul>
+            </span>
+          </div>
+        </div>
+        <div class="row" ng-if="!!orgs && orgs.length > 0">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="panel panel-default panel-services">
+                <div class="panel-body">
+                  <ul class="list-unstyled" ng-if="orgs.length > 0">
+                    <li ng-repeat="org in orgs" class="animated fadeIn service-row">
+                      <h3>
+                        <a ng-href="organizations/{{org.id}}">{{org.name}}</a>
+                      </h3>
+                      <p>{{org.description}}</p>
+                      <div ng-show="!! org.categoryName" class="tags">
+                        <span class="label label-default">{{org.categoryName}}</span>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="row row-pagination">
+              <h6 class="pull-left">
+                Showing {{firstOfPage + 1}}-{{lastOfPage}} of {{totalServices}} in {{(!! totalPages) ? totalPages : '1'}} page{{totalPages > 1 ? 's' : ''}}
+              </h6>
+              <pagination ng-if="totalPages > 1" total-items="totalServices" page="currentPage" items-per-page="resultsPerPage" max-size="pagePerPagination" class="pagination-sm pull-right" boundary-links="true" rotate="true" on-select-page="goToPage(page)" num-pages="totalPages" first-text="&laquo;" previous-text="&lsaquo;" next-text="&rsaquo;" last-text="&raquo;">
+              </pagination>
+            </div>
+          </div>
+        </div>
+        <!-- <ul class="pager">
+                <li ng-class="{disabled: start <= 0}"><a ng-click="prev()" href="">Previous</a>
+                </li>
+                <li ng-class="{disabled: end >= total}"><a ng-click="next()" href="">Next</a>
+                </li>
+                </ul> -->
+        <div ng-if="!orgs || orgs.length == 0">
+          <h4>No results.</h4>
+        </div>
+      </div>
     </div>
-    
-    <ul class="pager">
-    	<li ng-class="{disabled: start <= 0}"><a ng-click="prev()" href="">Previous</a></li>
-    	<li ng-class="{disabled: end >= total}"><a ng-click="next()" href="">Next</a></li>
-    </ul>
-
   </div>
-  
-  <div class="col-md-12" ng-if="!orgs || orgs.length == 0">
-  	<h4>No results.</h4>
-  </div>
-  
 </div>
-

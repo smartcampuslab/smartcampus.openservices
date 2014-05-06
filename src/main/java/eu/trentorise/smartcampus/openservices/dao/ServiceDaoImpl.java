@@ -376,10 +376,16 @@ public class ServiceDaoImpl implements ServiceDao {
 	 */
 	@Transactional
 	@Override
-	public List<Service> getServiceByTag(String tag, int firstResult, int maxResult, String param_order) {
+	public List<Service> getServiceByTag(String tag, int firstResult, int maxResult, ORDER param_order) {
+		String order = param_order.toString();
+
+		if (ORDER.namedesc.equals(param_order)) {
+			order = "name DESC";
+		}
+
 		Query q = getEntityManager().createQuery(
-				"SELECT S FROM Service S JOIN S.tags T WHERE T.name=:tag " + "AND S.state!='UNPUBLISH' ORDER BY S."
-						+ param_order).setParameter("tag", tag);
+				"SELECT S FROM Service S JOIN S.tags T WHERE T.name=:tag " + "AND S.state!='UNPUBLISH' ORDER BY S." + order)
+				.setParameter("tag", tag);
 		List<Service> list = q.setFirstResult(firstResult).setMaxResults(maxResult).getResultList();
 		return list;
 	}

@@ -182,6 +182,10 @@ services.factory('Catalog', ['$resource',
             browseOrgCat: {
                 method: 'GET',
                 url: 'api/catalog/org/category/:category'
+            },
+            browseOrgCats: {
+                method: 'GET',
+                url: 'api/catalog/org/category'
             }
         });
     }

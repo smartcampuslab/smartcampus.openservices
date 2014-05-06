@@ -703,7 +703,7 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
         $rootScope.locTitles = $rootScope.searchQuery ? ['search'] : ['services'];
 
         if ( !! $routeParams.tag) {
-            $scope.query = $routeParams.tag;
+            $scope.queryTag = $routeParams.tag;
             //$scope.tag = true;
         }
 
@@ -758,7 +758,7 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
                 last: $scope.resultsPerPage,
                 order: $scope.orderBySelected.value,
                 q: $rootScope.searchQuery,
-                tag: $scope.query
+                tag: $scope.queryTag
             }, function (services) {
                 $scope.services = services.data;
                 $scope.updateCounters(services.totalNumber);
@@ -824,43 +824,182 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
     }
 ]);
 
-app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routeParams', '$location', 'Catalog',
-    function ($scope, $rootScope, $http, $routeParams, $location, Catalog) {
-        $scope.start = 0;
-        $scope.end = 9;
-        $rootScope.searchQuery = null;
-        $rootScope.locTitles = ['organizations'];
+app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routeParams', '$location', 'Catalog', 'Category',
+    function ($scope, $rootScope, $http, $routeParams, $location, Catalog, Category) {
+        $scope.orderByOptions = [{
+            key: 'A - Z',
+            value: 'name'
+        }, {
+            key: 'Z - A',
+            value: 'namedesc'
+        }, {
+            key: 'date',
+            value: 'date'
+        }];
 
-        $scope.update = function () {
-            Catalog.listOrgs({
-                first: $scope.start,
-                last: $scope.end,
-                order: 'name',
+        // default: A - Z
+        $scope.orderBySelected = $scope.orderByOptions[0];
+
+        $scope.categories = [];
+        $scope.categoriesFilter = [];
+
+        $scope.selectCategory = function (catId) {
+            if ( !! catId) {
+                // Category checkbox
+                var index = $scope.categoriesFilter.indexOf(catId);
+                if (index !== -1) {
+                    $scope.categoriesFilter.splice(index, 1);
+                } else {
+                    $scope.categoriesFilter.push(catId);
+                }
+            } else {
+                // 'All' checkbox
+                if ($scope.categoriesFilter.length < $scope.categories.length) {
+                    $scope.categoriesFilter = [];
+                    for (var i = 0; i < $scope.categories.length; i++) {
+                        $scope.categoriesFilter.push($scope.categories[i].id);
+                    }
+                } else {
+                    $scope.categoriesFilter = [];
+                }
+            }
+
+            $scope.update(true);
+        };
+
+        $scope.setOrderBy = function (order) {
+            $scope.orderBySelected = order;
+            $scope.update(true);
+        };
+
+        $scope.totalServices = 0;
+        $scope.firstOfPage = 0;
+        $scope.resultsPerPage = 10;
+        $scope.pagePerPagination = 5;
+        $scope.currentPage = 1;
+        $scope.lastOfPage = 0;
+
+        $rootScope.locTitles = $rootScope.searchQuery ? ['search'] : ['services'];
+
+        if ( !! $routeParams.tag) {
+            $scope.query = $routeParams.tag;
+            //$scope.tag = true;
+        }
+
+        if ( !! $scope.categoryActive) {
+            $scope.categoryActive = undefined;
+        }
+
+        $scope.getOrgsByCategories = function (ids) {
+            var cats = '';
+            for (var i = 0; i < ids.length; i++) {
+                if (i > 0) {
+                    cats += ','
+                }
+                cats += ids[i];
+            }
+
+            Catalog.browseOrgCats({
+                categories: cats,
+                first: $scope.firstOfPage,
+                last: $scope.resultsPerPage,
+                order: $scope.orderBySelected.value,
                 q: $rootScope.searchQuery
             }, function (data) {
-                $scope.total = data.totalNumber;
                 $scope.orgs = data.data;
+                $scope.fillOrgsCategoryName($scope.orgs);
+                $scope.updateCounters(data.totalNumber);
             }, function (res) {
                 $scope.orgs = null;
             });
-        };
-        $scope.update();
+        }
 
-        $scope.next = function () {
-            if ($scope.end < $scope.total) {
-                $scope.start += 10;
-                $scope.end += 10;
-                $scope.update();
+        $scope.getOrgsAll = function () {
+            Catalog.listOrgs({
+                first: $scope.firstOfPage,
+                last: $scope.resultsPerPage,
+                order: $scope.orderBySelected.value,
+                q: $rootScope.searchQuery
+            }, function (data) {
+                $scope.orgs = data.data;
+                $scope.fillOrgsCategoryName($scope.orgs);
+                $scope.updateCounters(data.totalNumber);
+            }, function (res) {
+                $scope.orgs = null;
+            });
+        }
+
+        $scope.update = function (resetPages) {
+            if (resetPages == true) {
+                $scope.firstOfPage = 0;
+                $scope.currentPage = 1;
+            }
+
+            if ($scope.categoriesFilter.length == $scope.categories.length) {
+                $scope.getOrgsAll();
+            } else if ($scope.categoriesFilter.length < $scope.categories.length && $scope.categoriesFilter.length > 0) {
+                $scope.getOrgsByCategories($scope.categoriesFilter);
+            } else {
+                $scope.orgs = null;
+            }
+        }
+
+        $scope.goToPage = function (p) {
+            $scope.page = p;
+            $scope.firstOfPage = ($scope.page - 1) * $scope.resultsPerPage;
+            $scope.update();
+        };
+
+        $scope.updateCounters = function (totalServicesCount) {
+            $scope.totalServices = totalServicesCount;
+            var lop = $scope.firstOfPage + $scope.resultsPerPage + 1;
+            $scope.lastOfPage = lop > $scope.totalServices ? $scope.totalServices : lop;
+        }
+
+        $rootScope.searchQuery = null;
+        $scope.query = null;
+        $scope.servicesActive = [];
+
+        $scope.isServiceActive = function (service) {
+            return $scope.servicesActive.indexOf(service) > -1;
+        };
+
+        $scope.toggleServiceActive = function (service) {
+            var index = $scope.servicesActive.indexOf(service);
+            if (index === -1) {
+                // add to servicesActive
+                $scope.servicesActive.push(service);
+            } else {
+                // remove
+                $scope.servicesActive.splice(index, 1);
             }
         };
 
-        $scope.prev = function () {
-            if ($scope.start > 0) {
-                $scope.start -= 10;
-                $scope.end -= 10;
-                $scope.update();
+        $scope.getCategoryName = function (id) {
+            for (var i = 0; i < $scope.categories.length; i++) {
+                var cat = $scope.categories[i];
+                if (cat.id == id) {
+                    return cat.name;
+                }
+            }
+            return null;
+        };
+
+        $scope.fillOrgsCategoryName = function (orgs) {
+            for (var o = 0; o < orgs.length; o++) {
+                var org = orgs[o];
+                org.categoryName = $scope.getCategoryName(org.category);
             }
         };
+
+        // Start!
+        Category.list({}, function (data) {
+            $scope.categories = data.data;
+            for (var i = 0; i < $scope.categories.length; i++) {
+                $scope.categoriesFilter.push($scope.categories[i].id);
+            }
+            $scope.update();
+        });
 
         $scope.search = function (q) {
             $rootScope.searchQuery = q;
@@ -869,6 +1008,7 @@ app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routePar
         };
     }
 ]);
+
 app.controller('organizationCtrl', ['$scope', '$rootScope', '$http', '$routeParams', 'Catalog', 'Category', 'Org',
     function ($scope, $rootScope, $http, $routeParams, Catalog, Category, Org) {
         Catalog.getOrgById({
