@@ -283,9 +283,9 @@ public class OrganizationManager {
 	public List<Organization> getOrganizations(int firstResult, int maxResult, String param_order) {
 		try{
 			if(param_order.equalsIgnoreCase(ORDER.id.toString())){
-				return orgDao.showOrganizations(firstResult, maxResult, ORDER.id.toString());
+				return orgDao.showOrganizations(firstResult, maxResult, ORDER.id);
 			}else if(param_order.equalsIgnoreCase(ORDER.name.toString())){
-				return orgDao.showOrganizations(firstResult, maxResult, ORDER.name.toString());
+				return orgDao.showOrganizations(firstResult, maxResult, ORDER.name);
 			}
 			throw new SecurityException();
 		}catch(DataAccessException d){
