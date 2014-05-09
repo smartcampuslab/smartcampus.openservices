@@ -20,15 +20,15 @@
 	
 	 	 <intercept-url pattern="/api/catalog/**" access="permitAll" />
      	<intercept-url pattern="/api/testbox/**" access="permitAll" />
-     	<intercept-url pattern="/api/file/**" access="permitAll" /><!-- TO DELETE after test  -->
+     	<intercept-url pattern="/api/file/**" access="isAuthenticated()" />
 	 	 
 		<intercept-url pattern="/api/org/my/**" access="isAuthenticated()"/>
 		<intercept-url pattern="/api/org/manage/**" access="isAuthenticated()"/>
 		<intercept-url pattern="/api/org/activity/history/**" access="permitAll" />
-    	<intercept-url pattern="/api/org/**" access="isAuthenticated()" /> <!-- hasAnyRole('ROLE_ADMIN','ROLE_ORGOWNER') -->
+    	<intercept-url pattern="/api/org/**" access="isAuthenticated()" />
 		
 		<intercept-url pattern="/api/service/my/**" access="isAuthenticated()" />
-		<intercept-url pattern="/api/service/**" access="isAuthenticated()"/> <!-- hasAnyRole('ROLE_ADMIN', 'ROLE_SERVICEOWNER', 'ROLE_ORGOWNER') -->
+		<intercept-url pattern="/api/service/**" access="isAuthenticated()"/>
 		
 		<intercept-url pattern="/login" access="permitAll" />
 		
@@ -48,9 +48,9 @@
 		<form-login login-page="/login"
 			default-target-url="/welcome" 
 			authentication-failure-url="/loginfailed"
-			login-processing-url="/perform_login" always-use-default-target="true"/><!-- j_spring_security_check default value -->
+			login-processing-url="/perform_login" always-use-default-target="true"/>
+		
 		<logout logout-success-url="/logout" invalidate-session="true" delete-cookies="JSESSIONID"/>
-		<!-- <remember-me key="segret" use-secure-cookie="true" user-service-ref="jdbcUserService"/>  -->
 	</http>
 	
 	 <!-- My authentication with custom db (not using ACL) -->

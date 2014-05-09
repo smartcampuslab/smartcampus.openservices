@@ -32,5 +32,10 @@
 	<annotation-driven />
 	 <!-- Use @Transaction annotations for managing transactions -->
   <tx:annotation-driven transaction-manager="transactionManager" />
+  
+  <!-- For social provider - Login is /signin/{provederId} -->
+   <beans:bean class="org.springframework.social.connect.web.ProviderSignInController">
+        <beans:property name="signInUrl" value="/login" />
+    </beans:bean>
 	
 </beans:beans>
