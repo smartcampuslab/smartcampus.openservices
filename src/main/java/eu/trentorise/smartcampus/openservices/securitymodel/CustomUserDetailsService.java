@@ -59,6 +59,7 @@ public class CustomUserDetailsService implements UserDetailsService{
 		
 		final User domainUser = userDao.getUserByUsername(arg0);
 		if (domainUser == null) throw new UsernameNotFoundException(arg0);
+		if(domainUser.getPassword().equalsIgnoreCase("") || domainUser.getPassword()==null) throw new SecurityException();
 		
 		return new UserDetails() {
 			
