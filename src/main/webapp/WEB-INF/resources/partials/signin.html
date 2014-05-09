@@ -2,10 +2,18 @@
   <div class="col-md-6 col-md-offset-3">
     <div class="row">
       <div class="col-md-4">
-        <a ng-click="signin('fb')" href="#" class="btn btn-lg btn-primary btn-block disabled"><i class="fa fa-facebook"></i></a>
+        <form id="fb" ng-submit="signinFb()"> 
+      		<!--<input type="hidden" name="scope" value="email,user_likes,friends_likes,publish_stream" /> -->
+      		<button type="submit" class="btn btn-lg btn-primary btn-block enabled" ><i class="fa fa-facebook"></i></button>
+      	</form>
       </div>
       <div class="col-md-4">
-        <a href="#" class="btn btn-lg btn-danger btn-block disabled"><i class="fa fa-google-plus"></i></a>
+      	<form id="google" ng-click="signinGoogle()"> 
+      		<!-- <input name="openid_identifier" type="hidden" value="https://www.google.com/accounts/o8/id"/>  -->
+   			<div class="btn btn-lg btn-danger btn-block enabled">
+   				<i class="fa fa-google-plus"></i>
+			</div>
+		</form>
       </div>
       <div class="col-md-4">
         <a href="#" class="btn btn-lg btn-info btn-block disabled"><i class="fa fa-twitter"></i></a>

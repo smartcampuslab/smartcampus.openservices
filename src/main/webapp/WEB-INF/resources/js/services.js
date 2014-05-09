@@ -55,6 +55,24 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope',
                     error(data.error);
                 });
             },
+            fbLogin: function (error){
+            	$http.post('signin/facebook', $.param({'scope':'email,user_likes,friends_likes,publish_stream'}), {
+            		headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                }).error(function (data) {
+                    error(data.error);
+                });
+            },
+            googleLogin: function (error){
+            	$http.post('signin/google', $.param({'scope':'email,user_likes,friends_likes,publish_stream'}), {
+            		headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                }).error(function (data) {
+                    error(data.error);
+                });
+            },
             logout: function (success, error) {
                 $http.get('logout').success(function () {
 

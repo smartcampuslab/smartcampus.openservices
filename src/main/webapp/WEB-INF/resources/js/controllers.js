@@ -78,6 +78,24 @@ app.controller('signinCtrl', ['$scope', '$location', 'Auth', '$rootScope',
 
             );
         };
+        
+        $scope.signinFb = function(){
+        	Auth.fbLogin(function(){
+        		$rootScope.navtemplate = 'partials/nav/_menu.html';
+                $location.path('profile');
+        	}, function(error){
+        		$scope.error = error;
+        	});
+        };
+        
+        $scope.signinGoogle = function(){
+        	Auth.googleLogin(function(){
+        		$rootScope.navtemplate = 'partials/nav/_menu.html';
+                $location.path('profile');
+        	}, function(error){
+        		$scope.error = error;
+        	});
+        };
     }
 ]);
 
