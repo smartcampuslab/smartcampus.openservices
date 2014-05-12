@@ -73,6 +73,24 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope',
                     error(data.error);
                 });
             },
+            twitterLogin: function(error){
+            	$http.post('signin/twitter', {
+            		headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                }).error(function (data) {
+                    error(data.error);
+                });
+            },
+            linkedinLogin: function(error){
+            	$http.post('signin/linkedin', {
+            		headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                }).error(function (data) {
+                    error(data.error);
+                });
+            },
             logout: function (success, error) {
                 $http.get('logout').success(function () {
 

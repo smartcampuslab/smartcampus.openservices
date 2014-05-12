@@ -96,6 +96,24 @@ app.controller('signinCtrl', ['$scope', '$location', 'Auth', '$rootScope',
         		$scope.error = error;
         	});
         };
+        
+        $scope.signinTwitter = function(){
+        	Auth.twitterLogin(function(){
+        		$rootScope.navtemplate = 'partials/nav/_menu.html';
+                $location.path('profile');
+        	}, function(error){
+        		$scope.error = error;
+        	});
+        };
+        
+        $scope.signinLinkedin = function(){
+        	Auth.linkedinLogin(function(){
+        		$rootScope.navtemplate = 'partials/nav/_menu.html';
+                $location.path('profile');
+        	}, function(error){
+        		$scope.error = error;
+        	});
+        };
     }
 ]);
 
