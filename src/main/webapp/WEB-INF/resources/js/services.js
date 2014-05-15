@@ -1,8 +1,8 @@
 'use strict';
 var services = angular.module('openservices.services', ['ngResource', 'ngCookies']);
 
-services.factory('Auth', ['$http', '$cookieStore', '$rootScope',
-    function ($http, $cookieStore, $rootScope) {
+services.factory('Auth', ['$http', '$cookieStore', '$rootScope', '$window',
+    function ($http, $cookieStore, $rootScope,$window) {
         var accessLevels = routingConfig.accessLevels,
             userRoles = routingConfig.userRoles;
         $rootScope.currentUser = $cookieStore.get('user') || {
@@ -69,8 +69,14 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope',
             		headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     }
-                }).error(function (data) {
-                    error(data.error);
+                }).success(function(data,status,header,config){
+                	console.log('Google success - then href');
+                	console.log('Header '+header('Location'));
+                	$window.location.href = header('Location');
+                     
+                }).error(function (data,status) {
+                	console.log('Google error, status '+status);
+                    error(status);
                 });
             },
             twitterLogin: function(error){

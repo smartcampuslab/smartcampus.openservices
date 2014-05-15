@@ -65,8 +65,8 @@ app.controller('breadCtrl', [
     function () {}
 ]);
 
-app.controller('signinCtrl', ['$scope', '$location', 'Auth', '$rootScope',
-    function ($scope, $location, Auth, $rootScope) {
+app.controller('signinCtrl', ['$scope', '$location', 'Auth', '$rootScope', '$http','$window',
+    function ($scope, $location, Auth, $rootScope,$http,$window) {
 
         $scope.signin = function () {
             Auth.login($scope.user, function () {
@@ -89,10 +89,31 @@ app.controller('signinCtrl', ['$scope', '$location', 'Auth', '$rootScope',
         };
         
         $scope.signinGoogle = function(){
+        	console.log('Google sign in');
+        	/*$http.post('signin/google', $.param({'scope':'https://www.googleapis.com/auth/plus.me'}), {
+        		headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            }).success(function(data,status,header,config){
+            	console.log('Google success - then href');
+            	console.log('Header '+header('Location'));
+            	$window.location.href = header('Location');
+                 
+            }).error(function (data,status,header) {
+            	console.log('Google error - ');
+            	$scope.error = 'Problem with Google Plus. Retry Later.';
+            	console.log('Error data '+data+', error status '+status);
+            	console.log('Header '+header('Location'));
+            });*/
+        	
+        	
         	Auth.googleLogin(function(){
-        		$rootScope.navtemplate = 'partials/nav/_menu.html';
-                $location.path('profile');
+        		//$rootScope.navtemplate = 'partials/nav/_menu.html';
+                //$location.path('profile');
+        	}, function(data,status,headers,config){
+        		console.log('success google login');
         	}, function(error){
+        		console.log('error google login');
         		$scope.error = error;
         	});
         };
