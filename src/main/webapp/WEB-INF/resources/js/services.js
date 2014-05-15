@@ -65,7 +65,7 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope',
                 });
             },
             googleLogin: function (error){
-            	$http.post('signin/google', $.param({'scope':'email,user_likes,friends_likes,publish_stream'}), {
+            	$http.post('signin/google', $.param({'scope':'https://www.googleapis.com/auth/plus.me'}), {
             		headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     }
@@ -83,7 +83,7 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope',
                 });
             },
             linkedinLogin: function(error){
-            	$http.post('signin/linkedin', {
+            	$http.post('signin/linkedin', $.param({'scope':'r_basicprofile r_emailaddress'}),{
             		headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     }
