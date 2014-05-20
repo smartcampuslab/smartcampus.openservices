@@ -65,18 +65,14 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope', '$window',
                 });
             },
             googleLogin: function (error){
-            	$http.post('signin/google', $.param({'scope':'https://www.googleapis.com/auth/plus.me'}), {
-            		headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    }
-                }).success(function(data,status,header,config){
-                	console.log('Google success - then href');
-                	console.log('Header '+header('Location'));
-                	$window.location.href = header('Location');
+            	$http.get('api/social/google').success(function(data){
+                	console.log('Google success, data '+data.data);
+                	//$window.location.href = data.data;
+                	$window.open(data.data);
                      
-                }).error(function (data,status) {
-                	console.log('Google error, status '+status);
-                    error(status);
+                }).error(function (data) {
+                	console.log('Google error');
+                    error(data.error);
                 });
             },
             twitterLogin: function(error){

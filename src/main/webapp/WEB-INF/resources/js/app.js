@@ -3,7 +3,7 @@ var app = angular.module('openservices', ['ngRoute', 'ngCookies', 'openservices.
 
 app.filter('fromNow', function () {
     return function (dateString) {
-        return moment(dateString).fromNow()
+        return moment(dateString).fromNow();
     };
 });
 
