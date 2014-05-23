@@ -80,10 +80,13 @@ app.controller('signinCtrl', ['$scope', '$location', 'Auth', '$rootScope', '$htt
         };
         
         $scope.signinFb = function(){
-        	Auth.fbLogin(function(){
+        	console.log('Fb sign in');
+        	Auth.fbLogin(function(data){
+        		console.log('success fb login');
         		$rootScope.navtemplate = 'partials/nav/_menu.html';
                 $location.path('profile');
         	}, function(error){
+        		console.log('error fb login');
         		$scope.error = error;
         	});
         };
@@ -103,19 +106,25 @@ app.controller('signinCtrl', ['$scope', '$location', 'Auth', '$rootScope', '$htt
         };
         
         $scope.signinTwitter = function(){
+        	console.log('Twitter sign in');
         	Auth.twitterLogin(function(){
+        		console.log('Twitter success');
         		$rootScope.navtemplate = 'partials/nav/_menu.html';
                 $location.path('profile');
         	}, function(error){
+        		console.log('Twitter error');
         		$scope.error = error;
         	});
         };
         
         $scope.signinLinkedin = function(){
+        	console.log('Linkedin sign in');
         	Auth.linkedinLogin(function(){
+        		console.log('Linkedin success');
         		$rootScope.navtemplate = 'partials/nav/_menu.html';
                 $location.path('profile');
         	}, function(error){
+        		console.log('Linkedin error');
         		$scope.error = error;
         	});
         };

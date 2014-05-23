@@ -56,11 +56,18 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope', '$window',
                 });
             },
             fbLogin: function (error){
-            	$http.post('signin/facebook', $.param({'scope':'email,user_likes,friends_likes,publish_stream'}), {
+            	/*$http.post('signin/facebook', $.param({'scope':'email,user_likes,friends_likes,publish_stream'}), {
             		headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     }
+                })*/
+                $http.get('api/social/fb').success(function(data){
+                	console.log('Fb success, data '+data.data);
+                	//$window.location.href = data.data;
+                	$window.open(data.data);
+                     
                 }).error(function (data) {
+                	console.log('Fb error, '+data.error);
                     error(data.error);
                 });
             },
@@ -76,19 +83,31 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope', '$window',
                 });
             },
             twitterLogin: function(error){
-            	$http.post('signin/twitter', {
+            	/*$http.post('signin/twitter', {
             		headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     }
+                })*/
+                $http.get('api/social/twitter').success(function(data){
+                	console.log('Twitter success, data '+data.data);
+                	//$window.location.href = data.data;
+                	$window.open(data.data);
+                     
                 }).error(function (data) {
                     error(data.error);
                 });
             },
             linkedinLogin: function(error){
-            	$http.post('signin/linkedin', $.param({'scope':'r_basicprofile r_emailaddress'}),{
+            	/*$http.post('signin/linkedin', $.param({'scope':'r_basicprofile r_emailaddress'}),{
             		headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     }
+                }).*/
+                $http.get('api/social/linkedin').success(function(data){
+                	console.log('Linkedin success, data '+data.data);
+                	//$window.location.href = data.data;
+                	$window.open(data.data);
+                     
                 }).error(function (data) {
                     error(data.error);
                 });

@@ -44,8 +44,9 @@ public class SocialController {
 	
 	@RequestMapping(value = "/fb", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public ResponseObject socialFb() {
+	public ResponseObject socialFb(HttpServletResponse response) {
 		ResponseObject responseObject = new ResponseObject();
+		temp = new RestTemplate();
 		
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -61,12 +62,13 @@ public class SocialController {
 		logger.info("## ResponseEntity Body: {} ##",r.getBody());
 		logger.info("## Status code: {} ", r.getStatusCode());
 		
-		if(r.getStatusCode()==HttpStatus.OK){
+		if(r.getHeaders().getLocation()!=null){
 			responseObject.setData(r.getHeaders().getLocation());
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 		}
 		else{
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			responseObject.setError("Facebook unavailable. Retry Later.");
 		}
 		
@@ -75,7 +77,7 @@ public class SocialController {
 	
 	@RequestMapping(value = "/google", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public ResponseObject socialGooglePlus() {
+	public ResponseObject socialGooglePlus(HttpServletResponse response) {
 		ResponseObject responseObject = new ResponseObject();
 		temp = new RestTemplate();
 		
@@ -100,6 +102,7 @@ public class SocialController {
 		}
 		else{
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			responseObject.setError("Problem with Google Plus. Retry Later.");
 		}
 		
@@ -108,8 +111,9 @@ public class SocialController {
 	
 	@RequestMapping(value = "/twitter", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public ResponseObject socialTwitter() {
+	public ResponseObject socialTwitter(HttpServletResponse response) {
 		ResponseObject responseObject = new ResponseObject();
+		temp = new RestTemplate();
 		
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -125,12 +129,13 @@ public class SocialController {
 		logger.info("## ResponseEntity Body: {} ##",r.getBody());
 		logger.info("## Status code: {} ", r.getStatusCode());
 		
-		if(r.getStatusCode()==HttpStatus.OK){
+		if(r.getHeaders().getLocation()!=null){
 			responseObject.setData(r.getHeaders().getLocation());
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 		}
 		else{
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			responseObject.setError("Twitter unavailable. Retry Later.");
 		}
 		
@@ -139,8 +144,9 @@ public class SocialController {
 	
 	@RequestMapping(value = "/linkedin", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public ResponseObject socialLinkedin() {
+	public ResponseObject socialLinkedin(HttpServletResponse response) {
 		ResponseObject responseObject = new ResponseObject();
+		temp = new RestTemplate();
 		
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -156,12 +162,13 @@ public class SocialController {
 		logger.info("## ResponseEntity Body: {} ##",r.getBody());
 		logger.info("## Status code: {} ", r.getStatusCode());
 		
-		if(r.getStatusCode()==HttpStatus.OK){
+		if(r.getHeaders().getLocation()!=null){
 			responseObject.setData(r.getHeaders().getLocation());
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 		}
 		else{
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			responseObject.setError("Linkedin unavailable. Retry Later.");
 		}
 		
