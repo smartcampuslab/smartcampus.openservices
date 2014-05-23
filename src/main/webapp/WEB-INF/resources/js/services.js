@@ -122,7 +122,7 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope', '$window',
                     $cookieStore.remove('user');
                     success();
                 }).error(error);
-            },
+            },//add social logout
             accessLevels: accessLevels,
             userRoles: userRoles,
             user: $rootScope.currentUser

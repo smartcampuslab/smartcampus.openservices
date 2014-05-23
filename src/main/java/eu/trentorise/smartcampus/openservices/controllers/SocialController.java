@@ -119,7 +119,8 @@ public class SocialController {
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 		
 		MultiValueMap<String, String> body = new LinkedMultiValueMap<String, String>();
-		//body.add("scope", "email,user_likes,friends_likes,publish_stream");
+		//body.add("scope", "");
+		//body.add("oauth_token", "");
 		
 		HttpEntity<?> httpEntity = new HttpEntity<Object>(body,headers);
 		
@@ -129,7 +130,7 @@ public class SocialController {
 		logger.info("## ResponseEntity Body: {} ##",r.getBody());
 		logger.info("## Status code: {} ", r.getStatusCode());
 		
-		if(r.getHeaders().getLocation()!=null){
+		if(r.getHeaders().getLocation()!=null && (r.getStatusCode()!=HttpStatus.UNAUTHORIZED || r.getStatusCode()!=HttpStatus.BAD_REQUEST)){
 			responseObject.setData(r.getHeaders().getLocation());
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 		}
