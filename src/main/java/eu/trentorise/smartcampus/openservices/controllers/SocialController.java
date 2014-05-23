@@ -75,6 +75,38 @@ public class SocialController {
 		return responseObject;
 	}
 	
+	@RequestMapping(value = "/fb", method = RequestMethod.DELETE, produces = "application/json")
+	@ResponseBody
+	public ResponseObject socialFbLogout(HttpServletResponse response) {
+		ResponseObject responseObject = new ResponseObject();
+		temp = new RestTemplate();
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+		
+		MultiValueMap<String, String> body = new LinkedMultiValueMap<String, String>();
+		
+		HttpEntity<?> httpEntity = new HttpEntity<Object>(body,headers);
+		
+		ResponseEntity<Object> r =temp.exchange("http://localhost:8080/openservice/signin/facebook", HttpMethod.DELETE, httpEntity, Object.class);
+		
+		logger.info("## ResponseEntity Headers: {}  ##",r.getHeaders().getLocation());
+		logger.info("## ResponseEntity Body: {} ##",r.getBody());
+		logger.info("## Status code: {} ", r.getStatusCode());
+		
+		if(r.getHeaders().getLocation()!=null){
+			responseObject.setData(r.getHeaders().getLocation());
+			responseObject.setStatus(HttpServletResponse.SC_OK);
+		}
+		else{
+			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			responseObject.setError("Failure to logout. Facebook unavailable. Retry Later.");
+		}
+		
+		return responseObject;
+	}
+	
 	@RequestMapping(value = "/google", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public ResponseObject socialGooglePlus(HttpServletResponse response) {
@@ -104,6 +136,40 @@ public class SocialController {
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			responseObject.setError("Problem with Google Plus. Retry Later.");
+		}
+		
+		return responseObject;
+	}
+	
+	@RequestMapping(value = "/google", method = RequestMethod.DELETE, produces = "application/json")
+	@ResponseBody
+	public ResponseObject socialGooglePlusLogout(HttpServletResponse response) {
+		ResponseObject responseObject = new ResponseObject();
+		temp = new RestTemplate();
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+		
+		MultiValueMap<String, String> body = new LinkedMultiValueMap<String, String>();
+		body.add("redirect_uri","http://localhost:8080/openservice/"/*URLEncoder.encode("http://localhost:8080/openservice")*/);
+		body.add("scope", "https://www.googleapis.com/auth/plus.me");
+		
+		HttpEntity<?> httpEntity = new HttpEntity<Object>(body,headers);
+		
+		ResponseEntity<Object> r =temp.exchange("http://localhost:8080/openservice/signin/google", HttpMethod.DELETE, httpEntity, Object.class);
+		
+		logger.info("## ResponseEntity Headers: {}  ##",r.getHeaders().getLocation());
+		logger.info("## ResponseEntity Body: {} ##",r.getBody());
+		logger.info("## Status code: {} ", r.getStatusCode());
+		
+		if(r.getHeaders().getLocation()!=null){
+			responseObject.setData(r.getHeaders().getLocation());
+			responseObject.setStatus(HttpServletResponse.SC_OK);
+		}
+		else{
+			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			responseObject.setError("Failure to logout. Problem with Google Plus. Retry Later.");
 		}
 		
 		return responseObject;
@@ -143,6 +209,40 @@ public class SocialController {
 		return responseObject;
 	}
 	
+	@RequestMapping(value = "/twitter", method = RequestMethod.DELETE, produces = "application/json")
+	@ResponseBody
+	public ResponseObject socialTwitterLogout(HttpServletResponse response) {
+		ResponseObject responseObject = new ResponseObject();
+		temp = new RestTemplate();
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+		
+		MultiValueMap<String, String> body = new LinkedMultiValueMap<String, String>();
+		//body.add("scope", "");
+		//body.add("oauth_token", "");
+		
+		HttpEntity<?> httpEntity = new HttpEntity<Object>(body,headers);
+		
+		ResponseEntity<Object> r =temp.exchange("http://localhost:8080/openservice/signin/twitter", HttpMethod.DELETE, httpEntity, Object.class);
+		
+		logger.info("## ResponseEntity Headers: {}  ##",r.getHeaders().getLocation());
+		logger.info("## ResponseEntity Body: {} ##",r.getBody());
+		logger.info("## Status code: {} ", r.getStatusCode());
+		
+		if(r.getHeaders().getLocation()!=null && (r.getStatusCode()!=HttpStatus.UNAUTHORIZED || r.getStatusCode()!=HttpStatus.BAD_REQUEST)){
+			responseObject.setData(r.getHeaders().getLocation());
+			responseObject.setStatus(HttpServletResponse.SC_OK);
+		}
+		else{
+			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			responseObject.setError("Failure to logout. Twitter unavailable. Retry Later.");
+		}
+		
+		return responseObject;
+	}
+	
 	@RequestMapping(value = "/linkedin", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public ResponseObject socialLinkedin(HttpServletResponse response) {
@@ -171,6 +271,39 @@ public class SocialController {
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			responseObject.setError("Linkedin unavailable. Retry Later.");
+		}
+		
+		return responseObject;
+	}
+	
+	@RequestMapping(value = "/linkedin", method = RequestMethod.DELETE, produces = "application/json")
+	@ResponseBody
+	public ResponseObject socialLinkedinLogout(HttpServletResponse response) {
+		ResponseObject responseObject = new ResponseObject();
+		temp = new RestTemplate();
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+		
+		MultiValueMap<String, String> body = new LinkedMultiValueMap<String, String>();
+		body.add("scope", "r_basicprofile r_emailaddress");
+		
+		HttpEntity<?> httpEntity = new HttpEntity<Object>(body,headers);
+		
+		ResponseEntity<Object> r =temp.exchange("http://localhost:8080/openservice/signin/linkedin", HttpMethod.DELETE, httpEntity, Object.class);
+		
+		logger.info("## ResponseEntity Headers: {}  ##",r.getHeaders().getLocation());
+		logger.info("## ResponseEntity Body: {} ##",r.getBody());
+		logger.info("## Status code: {} ", r.getStatusCode());
+		
+		if(r.getHeaders().getLocation()!=null){
+			responseObject.setData(r.getHeaders().getLocation());
+			responseObject.setStatus(HttpServletResponse.SC_OK);
+		}
+		else{
+			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			responseObject.setError("Failure to logout. Linkedin unavailable. Retry Later.");
 		}
 		
 		return responseObject;
