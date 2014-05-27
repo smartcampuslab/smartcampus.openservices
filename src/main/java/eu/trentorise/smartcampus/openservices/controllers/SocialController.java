@@ -41,7 +41,11 @@ public class SocialController {
 	private static final Logger logger = LoggerFactory.getLogger(SocialController.class);
 	private RestTemplate temp;
 	
-	
+	/**
+	 * Login with facebook
+	 * @param response
+	 * @return {@link ResponseObject} with link to facebook login page, status (OK or NOT FOUND) and error message (if status is NOT FOUND).
+	 */
 	@RequestMapping(value = "/fb", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public ResponseObject socialFb(HttpServletResponse response) {
@@ -75,6 +79,11 @@ public class SocialController {
 		return responseObject;
 	}
 	
+	/**
+	 * Logout with facebook
+	 * @param response
+	 * @return {@link ResponseObject} with facebook logout data, status (OK or NOT FOUND) and error message (if status is NOT FOUND).
+	 */
 	@RequestMapping(value = "/fb", method = RequestMethod.DELETE, produces = "application/json")
 	@ResponseBody
 	public ResponseObject socialFbLogout(HttpServletResponse response) {
@@ -107,6 +116,11 @@ public class SocialController {
 		return responseObject;
 	}
 	
+	/**
+	 * Login with google plus
+	 * @param response
+	 * @return {@link ResponseObject} with link to google login page, status (OK or NOT FOUND) and error message (if status is NOT FOUND).
+	 */
 	@RequestMapping(value = "/google", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public ResponseObject socialGooglePlus(HttpServletResponse response) {
@@ -141,6 +155,11 @@ public class SocialController {
 		return responseObject;
 	}
 	
+	/**
+	 * Logout with google plus
+	 * @param response
+	 * @return {@link ResponseObject} with google plus logout data, status (OK or NOT FOUND) and error message (if status is NOT FOUND).
+	 */
 	@RequestMapping(value = "/google", method = RequestMethod.DELETE, produces = "application/json")
 	@ResponseBody
 	public ResponseObject socialGooglePlusLogout(HttpServletResponse response) {
@@ -175,6 +194,11 @@ public class SocialController {
 		return responseObject;
 	}
 	
+	/**
+	 * Login with twitter
+	 * @param response
+	 * @return {@link ResponseObject} with link to twitter login page, status (OK or NOT FOUND) and error message (if status is NOT FOUND).
+	 */
 	@RequestMapping(value = "/twitter", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public ResponseObject socialTwitter(HttpServletResponse response) {
@@ -209,6 +233,11 @@ public class SocialController {
 		return responseObject;
 	}
 	
+	/**
+	 * Logout with twitter
+	 * @param response
+	 * @return {@link ResponseObject} with twitter logout data, status (OK or NOT FOUND) and error message (if status is NOT FOUND).
+	 */
 	@RequestMapping(value = "/twitter", method = RequestMethod.DELETE, produces = "application/json")
 	@ResponseBody
 	public ResponseObject socialTwitterLogout(HttpServletResponse response) {
@@ -243,6 +272,11 @@ public class SocialController {
 		return responseObject;
 	}
 	
+	/**
+	 * Login with linkedin
+	 * @param response
+	 * @return {@link ResponseObject} with link to linkedin login page, status (OK or NOT FOUND) and error message (if status is NOT FOUND).
+	 */
 	@RequestMapping(value = "/linkedin", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public ResponseObject socialLinkedin(HttpServletResponse response) {
@@ -276,6 +310,11 @@ public class SocialController {
 		return responseObject;
 	}
 	
+	/**
+	 * Logout with linkedin
+	 * @param response
+	 * @return {@link ResponseObject} with linkedin logout data, status (OK or NOT FOUND) and error message (if status is NOT FOUND).
+	 */
 	@RequestMapping(value = "/linkedin", method = RequestMethod.DELETE, produces = "application/json")
 	@ResponseBody
 	public ResponseObject socialLinkedinLogout(HttpServletResponse response) {
