@@ -313,7 +313,7 @@ public class SocialController {
 	/**
 	 * Logout with linkedin
 	 * @param response
-	 * @return {@link ResponseObject} with linkedin logout data, status (OK or NOT FOUND) and error message (if status is NOT FOUND).
+	 * @return {@link ResponseObject} with logout linkedin data, status (OK or NOT FOUND) and error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/linkedin", method = RequestMethod.DELETE, produces = "application/json")
 	@ResponseBody

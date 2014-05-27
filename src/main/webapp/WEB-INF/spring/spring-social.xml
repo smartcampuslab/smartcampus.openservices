@@ -72,8 +72,4 @@
 		<aop:scoped-proxy proxy-target-class="false" />
 	</bean>
 	
-	<bean class="org.springframework.social.connect.web.ConnectController">
-		<property name="applicationUrl" value="${application.url}"></property>
-	</bean>
-	
 </beans>
