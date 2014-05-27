@@ -18,6 +18,8 @@ package eu.trentorise.smartcampus.openservices.controllers;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.*;
@@ -40,6 +42,8 @@ public class SocialController {
 
 	private static final Logger logger = LoggerFactory.getLogger(SocialController.class);
 	private RestTemplate temp;
+	@Autowired
+	private Environment env;
 	
 	/**
 	 * Login with facebook
@@ -131,8 +135,9 @@ public class SocialController {
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 		
 		MultiValueMap<String, String> body = new LinkedMultiValueMap<String, String>();
-		body.add("redirect_uri","http://localhost:8080/openservice/"/*URLEncoder.encode("http://localhost:8080/openservice")*/);
+		body.add("redirect_uri","http://localhost:8080/openservice"/*URLEncoder.encode("http://localhost:8080/openservice")*/);
 		body.add("scope", "https://www.googleapis.com/auth/plus.me");
+		body.add("access_type", "offline");
 		
 		HttpEntity<?> httpEntity = new HttpEntity<Object>(body,headers);
 		
@@ -143,7 +148,10 @@ public class SocialController {
 		logger.info("## Status code: {} ", r.getStatusCode());
 		
 		if(r.getHeaders().getLocation()!=null){
-			responseObject.setData(r.getHeaders().getLocation());
+			responseObject.setData(/*"https://accounts.google.com/o/oauth2/auth?client_id="+env.getProperty("google.consumerKey")+
+					"&redirect_uri=http://localhost:8080/openservice" +
+					"&scope=https://www.googleapis.com/auth/plus.me" +
+					"&response_type=code");*/r.getHeaders().getLocation());
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 		}
 		else{
