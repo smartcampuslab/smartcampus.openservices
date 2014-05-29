@@ -125,6 +125,7 @@ public class SocialController {
 	 * @param response
 	 * @return {@link ResponseObject} with link to google login page, status (OK or NOT FOUND) and error message (if status is NOT FOUND).
 	 */
+	/*
 	@RequestMapping(value = "/google", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public ResponseObject socialGooglePlus(HttpServletResponse response) {
@@ -135,7 +136,7 @@ public class SocialController {
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 		
 		MultiValueMap<String, String> body = new LinkedMultiValueMap<String, String>();
-		body.add("redirect_uri","http://localhost:8080/openservice"/*URLEncoder.encode("http://localhost:8080/openservice")*/);
+		body.add("redirect_uri","http://localhost:8080/openservice");//URLEncoder.encode("http://localhost:8080/openservice")
 		body.add("scope", "https://www.googleapis.com/auth/plus.me");
 		body.add("access_type", "offline");
 		
@@ -148,10 +149,8 @@ public class SocialController {
 		logger.info("## Status code: {} ", r.getStatusCode());
 		
 		if(r.getHeaders().getLocation()!=null){
-			responseObject.setData(/*"https://accounts.google.com/o/oauth2/auth?client_id="+env.getProperty("google.consumerKey")+
-					"&redirect_uri=http://localhost:8080/openservice" +
-					"&scope=https://www.googleapis.com/auth/plus.me" +
-					"&response_type=code");*/r.getHeaders().getLocation());
+			responseObject.setData(//"https://accounts.google.com/o/oauth2/auth?client_id="+env.getProperty("google.consumerKey")+"&redirect_uri=http://localhost:8080/openservice&scope=https://www.googleapis.com/auth/plus.me&response_type=code");
+					r.getHeaders().getLocation());
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 		}
 		else{
@@ -162,13 +161,13 @@ public class SocialController {
 		
 		return responseObject;
 	}
-	
+*/	
 	/**
 	 * Logout with google plus
 	 * @param response
 	 * @return {@link ResponseObject} with google plus logout data, status (OK or NOT FOUND) and error message (if status is NOT FOUND).
 	 */
-	@RequestMapping(value = "/google", method = RequestMethod.DELETE, produces = "application/json")
+	/*@RequestMapping(value = "/google", method = RequestMethod.DELETE, produces = "application/json")
 	@ResponseBody
 	public ResponseObject socialGooglePlusLogout(HttpServletResponse response) {
 		ResponseObject responseObject = new ResponseObject();
@@ -178,7 +177,7 @@ public class SocialController {
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 		
 		MultiValueMap<String, String> body = new LinkedMultiValueMap<String, String>();
-		body.add("redirect_uri","http://localhost:8080/openservice/"/*URLEncoder.encode("http://localhost:8080/openservice")*/);
+		body.add("redirect_uri","http://localhost:8080/openservice/");
 		body.add("scope", "https://www.googleapis.com/auth/plus.me");
 		
 		HttpEntity<?> httpEntity = new HttpEntity<Object>(body,headers);
@@ -201,7 +200,7 @@ public class SocialController {
 		
 		return responseObject;
 	}
-	
+	*/
 	/**
 	 * Login with twitter
 	 * @param response

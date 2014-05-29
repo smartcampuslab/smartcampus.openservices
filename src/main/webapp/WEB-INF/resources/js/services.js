@@ -72,10 +72,10 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope', '$window',
                 });
             },
             googleLogin: function (error){
-            	$http.get('api/social/google').success(function(data){
+            	$http.get('api/oauth/google/auth').success(function(data){//api/social/google - api/oauth/google/plus
                 	console.log('Google success, data '+data.data);
-                	//$window.location.href = data.data;
-                	$window.open(data.data);
+                	$window.location.href = data.data;
+                	//$window.open(data.data);
                      
                 }).error(function (data) {
                 	console.log('Google error');
