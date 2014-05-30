@@ -24,6 +24,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +36,8 @@ import eu.trentorise.smartcampus.openservices.entities.Profile;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.entities.User;
 import eu.trentorise.smartcampus.openservices.managers.UserManager;
+import eu.trentorise.smartcampus.openservices.securitymodel.CustomUserDetailsService;
+import eu.trentorise.smartcampus.openservices.securitymodel.SpringSecurityDaoImpl;
 import eu.trentorise.smartcampus.openservices.social.GoogleAuthHelper;
 import eu.trentorise.smartcampus.openservices.social.GoogleUser;
 
@@ -150,7 +156,10 @@ public class GoogleController {
 					user.setUsername(userInfo.getName());
 					userManager.createSocialUser(user);
 				}
-				//authenticate in spring security
+				// authenticate in spring security
+				//Authentication authentication = null;
+				//SecurityContextHolder.getContext().setAuthentication(authentication);
+				
 				
 			} catch (IOException e) {
 				logger.info("IOException ..");
