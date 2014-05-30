@@ -142,7 +142,7 @@ public class GoogleController {
 		}
 		
 		//add data to db or check if user is already in
-		userManager.getUserByUsername("");
+		//userManager.getUserByUsername("");
 		//authenticate in spring security
 		
 		//return "index";
