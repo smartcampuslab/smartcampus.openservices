@@ -126,8 +126,7 @@ public class GoogleController {
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		}else{
 			try {
-				String userInfo = auth.getUserInfoJson(request.getParameter("code"));
-				//GoogleUser userInfo = auth.getUserInfoJson(code);
+				GoogleUser userInfo = auth.getUserInfoJson(code);
 				logger.info("User Info: "+userInfo);
 				responseObj.setData(userInfo);
 				responseObj.setStatus(HttpServletResponse.SC_OK);

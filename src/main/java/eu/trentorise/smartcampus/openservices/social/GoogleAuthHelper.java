@@ -31,6 +31,8 @@ import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.codehaus.jackson.map.ObjectMapper;
+
 /**
  * A helper class for Google's OAuth2 authentication API.
  * 
@@ -41,8 +43,8 @@ import java.util.Collection;
  */
 public final class GoogleAuthHelper {
 
-	private static final String CLIENT_ID = "453601816446-gq5vic5s1n9n7skh96f5freqdmibudgi.apps.googleusercontent.com";
-	private static final String CLIENT_SECRET = "g-4FXAfJar0TXMvWYIvElfk-";
+	private static final String CLIENT_ID = "";
+	private static final String CLIENT_SECRET = "";
 	private static final String CALLBACK_URI = "http://localhost:8080/openservice/api/oauth/google/callback";
 
 	// google authentication constants
@@ -100,11 +102,11 @@ public final class GoogleAuthHelper {
 	 * Expects an Authentication Code, and makes an authenticated request for
 	 * the user's profile information
 	 * 
-	 * @return JSON formatted user profile information
+	 * @return {@link GoogleUser} formatted user profile information
 	 * @param authCode
 	 *            authentication code provided by google
 	 */
-	public /*GoogleUser*/String getUserInfoJson(final String authCode) throws IOException {
+	public GoogleUser getUserInfoJson(final String authCode) throws IOException {
 
 		final GoogleTokenResponse response = flow.newTokenRequest(authCode)
 				.setRedirectUri(CALLBACK_URI).execute();
@@ -117,9 +119,10 @@ public final class GoogleAuthHelper {
 		final HttpRequest request = requestFactory.buildGetRequest(url);
 		request.getHeaders().setContentType("application/json");
 		final String jsonIdentity = request.execute().parseAsString();
-		//GoogleUser jsonIdentity = request.execute().parseAs(GoogleUser.class);
+		
+		GoogleUser user = new ObjectMapper().readValue(jsonIdentity, GoogleUser.class);
 
-		return jsonIdentity;
+		return user;
 
 	}
 
