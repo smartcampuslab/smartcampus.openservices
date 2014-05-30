@@ -116,6 +116,26 @@ public class UserManager {
 	}
 	
 	/**
+	 * Add a new user in database.
+	 * He/she has logged in with a social provider
+	 * Retrieves new user.
+	 * @param user : {@link User} instance
+	 * @return a {@link User} instance
+	 */
+	public User createSocialUser(User user){
+		if(!userDao.isEmailAlreadyUse(user.getEmail())){
+			try{
+				userDao.addUser(user);
+				return userDao.getUserByUsername(user.getUsername());
+			}catch(DataAccessException d){
+				return null;
+			}
+		}else{
+			throw new SecurityException();
+		}
+	}
+	
+	/**
 	 * Modify user data.
 	 * User can modify only profile data and email.
 	 * @param username : String username of user

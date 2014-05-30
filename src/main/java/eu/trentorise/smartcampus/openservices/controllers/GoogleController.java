@@ -27,7 +27,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import eu.trentorise.smartcampus.openservices.Constants;
+import eu.trentorise.smartcampus.openservices.entities.Profile;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
+import eu.trentorise.smartcampus.openservices.entities.User;
 import eu.trentorise.smartcampus.openservices.managers.UserManager;
 import eu.trentorise.smartcampus.openservices.social.GoogleAuthHelper;
 import eu.trentorise.smartcampus.openservices.social.GoogleUser;
@@ -131,6 +134,24 @@ public class GoogleController {
 				responseObj.setData(userInfo);
 				responseObj.setStatus(HttpServletResponse.SC_OK);
 				response.setStatus(HttpServletResponse.SC_OK);
+				
+				//check if user is already in
+				if(userManager.getUserByUsername(userInfo.getName())==null){
+					//add to db
+					User user = new User();
+					user.setEmail(userInfo.getEmail());
+					user.setEnabled(1);
+					Profile p = new Profile();
+					p.setName(userInfo.getGiven_name());
+					p.setSurname(userInfo.getFamily_name());
+					p.setImgAvatar(userInfo.getPicture());
+					user.setProfile(p);
+					user.setRole(Constants.ROLES.ROLE_NORMAL.toString());
+					user.setUsername(userInfo.getName());
+					userManager.createSocialUser(user);
+				}
+				//authenticate in spring security
+				
 			} catch (IOException e) {
 				logger.info("IOException ..");
 				e.printStackTrace();
@@ -139,10 +160,6 @@ public class GoogleController {
 				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			}
 		}
-		
-		//add data to db or check if user is already in
-		//userManager.getUserByUsername("");
-		//authenticate in spring security
 		
 		//return "index";
 		return responseObj;
