@@ -41,8 +41,8 @@ import java.util.Collection;
  */
 public final class GoogleAuthHelper {
 
-	private static final String CLIENT_ID = "";
-	private static final String CLIENT_SECRET = "";
+	private static final String CLIENT_ID = "453601816446-gq5vic5s1n9n7skh96f5freqdmibudgi.apps.googleusercontent.com";
+	private static final String CLIENT_SECRET = "g-4FXAfJar0TXMvWYIvElfk-";
 	private static final String CALLBACK_URI = "http://localhost:8080/openservice/api/oauth/google/callback";
 
 	// google authentication constants
@@ -104,7 +104,7 @@ public final class GoogleAuthHelper {
 	 * @param authCode
 	 *            authentication code provided by google
 	 */
-	public String getUserInfoJson(final String authCode) throws IOException {
+	public /*GoogleUser*/String getUserInfoJson(final String authCode) throws IOException {
 
 		final GoogleTokenResponse response = flow.newTokenRequest(authCode)
 				.setRedirectUri(CALLBACK_URI).execute();
@@ -117,6 +117,7 @@ public final class GoogleAuthHelper {
 		final HttpRequest request = requestFactory.buildGetRequest(url);
 		request.getHeaders().setContentType("application/json");
 		final String jsonIdentity = request.execute().parseAsString();
+		//GoogleUser jsonIdentity = request.execute().parseAs(GoogleUser.class);
 
 		return jsonIdentity;
 
