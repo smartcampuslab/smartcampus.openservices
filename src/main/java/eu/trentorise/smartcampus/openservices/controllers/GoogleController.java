@@ -23,11 +23,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
+import eu.trentorise.smartcampus.openservices.managers.UserManager;
 import eu.trentorise.smartcampus.openservices.social.GoogleAuthHelper;
+import eu.trentorise.smartcampus.openservices.social.GoogleUser;
 
 /**
  * Google controller
@@ -43,6 +46,9 @@ public class GoogleController {
 	private static final Logger logger = LoggerFactory.getLogger(GoogleController.class);
 	private GoogleAuthHelper auth = new GoogleAuthHelper();
 	
+	@Autowired
+	private UserManager userManager;
+	
 	//send authentication request to google
 	@RequestMapping(value = "/auth", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
@@ -50,12 +56,26 @@ public class GoogleController {
 		logger.info("****** Google auth ******");
 		ResponseObject responseObject = new ResponseObject();
 		
-		//token - try to add in cookie
 		String token = auth.getStateToken();
-		Cookie c = new Cookie("state", token);
-		logger.info("cookie - state: "+c.getValue());
-		c.setPath("/openservice/");
-		response.addCookie(c);
+		boolean found = false;
+		/*Search cookie state
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for (int i = 0; i < cookies.length; i++) {
+				if (cookies[i].getName().equalsIgnoreCase("state")) {
+					logger.info("cookie found - state: "+cookies[i].getValue());
+					cookies[i].setValue(token);
+					found = true;
+				}
+			}
+		}*/
+		//token - try to add in cookie
+		//if(!found){
+			Cookie c = new Cookie("state", token);
+			logger.info("cookie - state: "+c.getValue());
+			c.setPath("/openservice/");
+			response.addCookie(c);
+		//}
 		
 		responseObject.setData(auth.buildLoginUrl());
 		responseObject.setStatus(HttpServletResponse.SC_OK);
@@ -76,7 +96,10 @@ public class GoogleController {
 		logger.info("****** Google callback ******");
 		String code = request.getParameter("code");
 		String token = request.getParameter("state");
-		String session_token = request.getSession().getAttribute("state").toString();
+		String session_token = "";
+		if(request.getSession().getAttribute("state")!=null){
+			session_token = request.getSession().getAttribute("state").toString();
+		}
 		
 		logger.info("request code: "+code);
 		logger.info("request token: "+token);
@@ -97,13 +120,14 @@ public class GoogleController {
 		//compare state token in session and state token in response of google
 		//if equals return to home
 		//if not error page
-		if( (code==null || token==null) &&!token.equals(session_token)){
+		if( (code==null || token==null) && (!token.equals(session_token) || !token.equals(cookie_token))){
 			responseObj.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			responseObj.setError("You have to sign in!");
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		}else{
 			try {
 				String userInfo = auth.getUserInfoJson(request.getParameter("code"));
+				//GoogleUser userInfo = auth.getUserInfoJson(code);
 				logger.info("User Info: "+userInfo);
 				responseObj.setData(userInfo);
 				responseObj.setStatus(HttpServletResponse.SC_OK);
@@ -116,6 +140,12 @@ public class GoogleController {
 				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			}
 		}
+		
+		//add data to db or check if user is already in
+		userManager.getUserByUsername("");
+		//authenticate in spring security
+		
+		//return "index";
 		return responseObj;
 	}
 	
