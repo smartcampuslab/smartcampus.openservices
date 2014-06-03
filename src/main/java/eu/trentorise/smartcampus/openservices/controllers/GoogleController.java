@@ -27,17 +27,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import eu.trentorise.smartcampus.openservices.Constants;
 import eu.trentorise.smartcampus.openservices.entities.Profile;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.entities.User;
 import eu.trentorise.smartcampus.openservices.managers.UserManager;
-import eu.trentorise.smartcampus.openservices.securitymodel.CustomUserDetailsService;
-import eu.trentorise.smartcampus.openservices.securitymodel.SpringSecurityDaoImpl;
 import eu.trentorise.smartcampus.openservices.social.GoogleAuthHelper;
 import eu.trentorise.smartcampus.openservices.social.GoogleUser;
 
@@ -57,6 +58,9 @@ public class GoogleController {
 	
 	@Autowired
 	private UserManager userManager;
+	
+	@Autowired
+	private UserDetailsService manager;
 	
 	//send authentication request to google
 	@RequestMapping(value = "/auth", method = RequestMethod.GET, produces = "application/json")
@@ -98,8 +102,8 @@ public class GoogleController {
 	//callback
 	//confirm anti-forgery state token
 	@RequestMapping(value = "/callback", method = RequestMethod.GET, produces = "application/json")
-	@ResponseBody
-	public ResponseObject confirmStateToken(HttpServletRequest request, HttpServletResponse response){
+	//@ResponseBody
+	public String confirmStateToken(HttpServletRequest request, HttpServletResponse response){
 		ResponseObject responseObj = new ResponseObject();
 		
 		logger.info("****** Google callback ******");
@@ -130,6 +134,7 @@ public class GoogleController {
 		//if equals return to home
 		//if not error page
 		if( (code==null || token==null) && (!token.equals(session_token) || !token.equals(cookie_token))){
+			logger.info("Error");
 			responseObj.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			responseObj.setError("You have to sign in!");
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -140,9 +145,11 @@ public class GoogleController {
 				responseObj.setData(userInfo);
 				responseObj.setStatus(HttpServletResponse.SC_OK);
 				response.setStatus(HttpServletResponse.SC_OK);
+				logger.info("Check user data");
 				
 				//check if user is already in
 				if(userManager.getUserByUsername(userInfo.getName())==null){
+					logger.info("Save user data");
 					//add to db
 					User user = new User();
 					user.setEmail(userInfo.getEmail());
@@ -157,9 +164,11 @@ public class GoogleController {
 					userManager.createSocialUser(user);
 				}
 				// authenticate in spring security
-				//Authentication authentication = null;
-				//SecurityContextHolder.getContext().setAuthentication(authentication);
-				
+				logger.info("Set authentication security context holder");
+				UserDetails userDetails = manager.loadUserByUsername(userInfo.getName());
+				Authentication auth = new UsernamePasswordAuthenticationToken(userDetails.getUsername(),userDetails.getPassword(), 
+						userDetails.getAuthorities());
+				SecurityContextHolder.getContext().setAuthentication(auth);
 				
 			} catch (IOException e) {
 				logger.info("IOException ..");
@@ -170,29 +179,7 @@ public class GoogleController {
 			}
 		}
 		
-		//return "index";
-		return responseObj;
-	}
-	
-	@RequestMapping(value = "/logout", method = RequestMethod.DELETE, produces = "application/json")
-	@ResponseBody
-	public void logout(HttpServletRequest request, HttpServletResponse response){
-		//Delete state cookie 
-		Cookie[] cookies = request.getCookies();
-		String cookie_token="";
-		if (cookies != null) {
-			for (int i = 0; i < cookies.length; i++) {
-				if (cookies[i].getName().equalsIgnoreCase("state")) {
-					cookie_token = cookies[i].getValue();
-					
-				}
-			}
-		}
-		logger.info("cookie token: "+cookie_token);
-		//Delete state from session
-		request.getSession().removeAttribute("state");
-		
-		//TODO
-		//link to https://accounts.google.com/logout
+		return "redirect:index";
+		//return responseObj;
 	}
 }
