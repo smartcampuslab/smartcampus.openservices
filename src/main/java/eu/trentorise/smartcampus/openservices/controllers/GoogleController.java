@@ -170,6 +170,11 @@ public class GoogleController {
 						userDetails.getAuthorities());
 				SecurityContextHolder.getContext().setAuthentication(auth);
 				
+				/*add user cookie
+				Cookie cookie = new Cookie("user", "{'username':'"+userDetails.getUsername()+"','role':{'bitMask':4,'title':'ROLE_NORMAL'}}");
+				cookie.setPath("/openservice/");
+				response.addCookie(cookie);*/
+				
 			} catch (IOException e) {
 				logger.info("IOException ..");
 				e.printStackTrace();
