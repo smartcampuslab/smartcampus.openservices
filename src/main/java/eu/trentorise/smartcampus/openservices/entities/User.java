@@ -17,6 +17,9 @@ package eu.trentorise.smartcampus.openservices.entities;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.Index;
+import org.hibernate.annotations.IndexColumn;
+
 /**
  * User Entity for user table
  * primary key, not null, auto increment int(11) id
@@ -37,19 +40,19 @@ public class User {
 	@Id
 	@GeneratedValue
 	private int id;
-	@Column(name="username")
+	@Column(name="username", unique=true, nullable=false)
 	private String username;
 	@Column(name="password")
 	private String password;
-	@Column(name="email")
+	@Column(name="email", unique=true, nullable=false)
 	private String email;
-	@Column(name="enabled")
+	@Column(name="enabled", nullable=false)
 	private int enabled;
 	//adding an object profile - cast to Blob is doing by JPA
 	@Column(name="profile")
 	@Lob
 	private Profile profile;
-	@Column(name="role")
+	@Column(name="role", nullable=false)
 	private String role;
 	
 	/**
