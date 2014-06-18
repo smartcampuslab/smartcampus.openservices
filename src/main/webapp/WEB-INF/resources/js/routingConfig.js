@@ -45,7 +45,7 @@
                 bitMask: intCode,
                 title: roles[role]
             };
-            bitMask = (intCode << 1 ).toString(2)
+            bitMask = (intCode << 1 ).toString(2);
         }
 
         return userRoles;

@@ -5,10 +5,32 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope', '$window',
     function ($http, $cookieStore, $rootScope,$window) {
         var accessLevels = routingConfig.accessLevels,
             userRoles = routingConfig.userRoles;
+        
+        //console.log("AccessLevels "+accessLevels[0]);
+       // console.log("UserRoles "+userRoles[0]);
+        
+        //check if user is a string then json
+        if(typeof $cookieStore.get('user') == 'string'){
+        	//console.log("Cookie user is a string..");
+        	var jsonObj = JSON.parse($cookieStore.get('user'));
+        	//console.log("json Obj username: "+jsonObj.username);
+        	//console.log("json Obj role: "+jsonObj.role);
+        	$rootScope.currentUser = {
+                username: jsonObj.username,
+                role: userRoles[jsonObj.role]
+            };
+        	changeUser($rootScope.currentUser);
+        	$cookieStore.remove('user');
+            $cookieStore.put('user', $rootScope.currentUser);
+        	
+        }else{
+        	//console.log("JSON cookie user or not...");
         $rootScope.currentUser = $cookieStore.get('user') || {
             username: '',
             role: userRoles.public
         };
+        
+        }
 
         //$cookieStore.remove('user');
 
@@ -72,11 +94,11 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope', '$window',
                 });
             },
             googleLogin: function (error){
-            	$http.get('api/oauth/google/auth').success(function(data){//api/social/google - api/oauth/google/plus
+            	$http.get('api/oauth/google/auth')
+            	.success(function(data){
                 	console.log('Google success, data '+data.data);
                 	$window.location.href = data.data;
-                	//$window.open(data.data);
-                     
+                	
                 }).error(function (data) {
                 	console.log('Google error');
                     error(data.error);
@@ -122,7 +144,7 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope', '$window',
                     $cookieStore.remove('user');
                     success();
                 }).error(error);
-            },//add social logout
+            },
             accessLevels: accessLevels,
             userRoles: userRoles,
             user: $rootScope.currentUser

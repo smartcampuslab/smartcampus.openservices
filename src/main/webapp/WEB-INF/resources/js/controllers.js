@@ -1,6 +1,6 @@
 'use strict';
-app.controller('homeCtrl', ['$http', '$scope', '$rootScope', '$location', 'Catalog',
-    function ($http, $scope, $rootScope, $location, Catalog) {
+app.controller('homeCtrl', ['$http', '$scope', '$rootScope', '$location', 'Catalog', 'Auth',
+    function ($http, $scope, $rootScope, $location, Catalog, Auth) {
         $scope.servicesTotal = 0;
         $scope.tagmax = 0;
 
@@ -46,6 +46,7 @@ app.controller('homeCtrl', ['$http', '$scope', '$rootScope', '$location', 'Catal
 
 app.controller('navCtrl', ['$scope', 'Auth', '$location', '$rootScope',
     function ($scope, Auth, $location, $rootScope) {
+	
         if (!Auth.isLoggedIn()) {
             $rootScope.navtemplate = 'partials/nav/_signin.html';
         } else {

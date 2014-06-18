@@ -20,19 +20,29 @@ import java.io.IOException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import net.minidev.json.JSONObject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.google.gson.Gson;
 
 import eu.trentorise.smartcampus.openservices.Constants;
 import eu.trentorise.smartcampus.openservices.entities.Profile;
@@ -41,6 +51,7 @@ import eu.trentorise.smartcampus.openservices.entities.User;
 import eu.trentorise.smartcampus.openservices.managers.UserManager;
 import eu.trentorise.smartcampus.openservices.social.GoogleAuthHelper;
 import eu.trentorise.smartcampus.openservices.social.GoogleUser;
+import eu.trentorise.smartcampus.openservices.support.CookieUser;
 
 /**
  * Google controller
@@ -70,25 +81,6 @@ public class GoogleController {
 		ResponseObject responseObject = new ResponseObject();
 		
 		String token = auth.getStateToken();
-		boolean found = false;
-		/*Search cookie state
-		Cookie[] cookies = request.getCookies();
-		if (cookies != null) {
-			for (int i = 0; i < cookies.length; i++) {
-				if (cookies[i].getName().equalsIgnoreCase("state")) {
-					logger.info("cookie found - state: "+cookies[i].getValue());
-					cookies[i].setValue(token);
-					found = true;
-				}
-			}
-		}*/
-		//token - try to add in cookie
-		//if(!found){
-			Cookie c = new Cookie("state", token);
-			logger.info("cookie - state: "+c.getValue());
-			c.setPath("/openservice/");
-			response.addCookie(c);
-		//}
 		
 		responseObject.setData(auth.buildLoginUrl());
 		responseObject.setStatus(HttpServletResponse.SC_OK);
@@ -102,8 +94,7 @@ public class GoogleController {
 	//callback
 	//confirm anti-forgery state token
 	@RequestMapping(value = "/callback", method = RequestMethod.GET, produces = "application/json")
-	//@ResponseBody
-	public String confirmStateToken(HttpServletRequest request, HttpServletResponse response){
+	public String confirmStateToken(HttpServletRequest request, HttpServletResponse response, Model model){
 		ResponseObject responseObj = new ResponseObject();
 		
 		logger.info("****** Google callback ******");
@@ -118,22 +109,10 @@ public class GoogleController {
 		logger.info("request token: "+token);
 		logger.info("request session token: "+session_token);
 		
-		//Search cookie state
-		Cookie[] cookies = request.getCookies();
-		String cookie_token="";
-		if (cookies != null) {
-			for (int i = 0; i < cookies.length; i++) {
-				if (cookies[i].getName().equalsIgnoreCase("state")) {
-					cookie_token = cookies[i].getValue();
-				}
-			}
-		}
-		logger.info("cookie token: "+cookie_token);
-		
 		//compare state token in session and state token in response of google
 		//if equals return to home
 		//if not error page
-		if( (code==null || token==null) && (!token.equals(session_token) || !token.equals(cookie_token))){
+		if( (code==null || token==null) && (!token.equals(session_token))){
 			logger.info("Error");
 			responseObj.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			responseObj.setError("You have to sign in!");
@@ -165,15 +144,37 @@ public class GoogleController {
 				}
 				// authenticate in spring security
 				logger.info("Set authentication security context holder");
-				UserDetails userDetails = manager.loadUserByUsername(userInfo.getName());
-				Authentication auth = new UsernamePasswordAuthenticationToken(userDetails.getUsername(),userDetails.getPassword(), 
-						userDetails.getAuthorities());
-				SecurityContextHolder.getContext().setAuthentication(auth);
 				
-				/*add user cookie
-				Cookie cookie = new Cookie("user", "{'username':'"+userDetails.getUsername()+"','role':{'bitMask':4,'title':'ROLE_NORMAL'}}");
-				cookie.setPath("/openservice/");
-				response.addCookie(cookie);*/
+				//version 1 of authentication
+				logger.info("1");
+				UserDetails userDetails = manager.loadUserByUsername(userInfo.getName());
+				Authentication auth = new UsernamePasswordAuthenticationToken(userDetails,userDetails.getPassword(), userDetails.getAuthorities());
+				SecurityContextHolder.getContext().setAuthentication(auth);
+				request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
+				
+				//check value and set it to true
+				Cookie[] cookies = request.getCookies();
+				if (cookies != null) {
+					for (int i = 0; i < cookies.length; i++) {
+						if (cookies[i].getName().equalsIgnoreCase("value")) {
+							cookies[i].setValue("true");
+							cookies[i].setPath("/openservice/");
+							response.addCookie(cookies[i]);
+						}
+					}
+				}
+				//user cookie
+				CookieUser cu = new CookieUser();
+				cu.setUsername(userInfo.getName());
+				cu.setRole(Constants.ROLES.ROLE_NORMAL.toString());
+				
+				Gson gson = new Gson();
+				String obj = gson.toJson(cu);
+				
+				Cookie userCookie = new Cookie("user", obj);
+				userCookie.setPath("/openservice/");
+				response.addCookie(userCookie);
+				
 				
 			} catch (IOException e) {
 				logger.info("IOException ..");
@@ -184,7 +185,6 @@ public class GoogleController {
 			}
 		}
 		
-		return "redirect:index";
-		//return responseObj;
+		return "redirect:/";
 	}
 }
