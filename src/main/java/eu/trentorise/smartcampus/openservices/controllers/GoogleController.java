@@ -20,21 +20,15 @@ import java.io.IOException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import net.minidev.json.JSONObject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -127,7 +121,9 @@ public class GoogleController {
 				logger.info("Check user data");
 				
 				//check if user is already in
-				if(userManager.getUserByUsername(userInfo.getName())==null){
+				User userDb = userManager.getUserByUsername(userInfo.getName());
+				if(userDb==null || userDb.getEmail().equalsIgnoreCase(userInfo.getEmail())){
+					if(userDb==null){
 					logger.info("Save user data");
 					//add to db
 					User user = new User();
@@ -141,40 +137,46 @@ public class GoogleController {
 					user.setRole(Constants.ROLES.ROLE_NORMAL.toString());
 					user.setUsername(userInfo.getName());
 					userManager.createSocialUser(user);
-				}
-				// authenticate in spring security
-				logger.info("Set authentication security context holder");
-				
-				//version 1 of authentication
-				logger.info("1");
-				UserDetails userDetails = manager.loadUserByUsername(userInfo.getName());
-				Authentication auth = new UsernamePasswordAuthenticationToken(userDetails,userDetails.getPassword(), userDetails.getAuthorities());
-				SecurityContextHolder.getContext().setAuthentication(auth);
-				request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
-				
-				//check value and set it to true
-				Cookie[] cookies = request.getCookies();
-				if (cookies != null) {
-					for (int i = 0; i < cookies.length; i++) {
-						if (cookies[i].getName().equalsIgnoreCase("value")) {
-							cookies[i].setValue("true");
-							cookies[i].setPath("/openservice/");
-							response.addCookie(cookies[i]);
+					}
+					
+					// authenticate in spring security
+					logger.info("Set authentication security context holder");
+					UserDetails userDetails = manager.loadUserByUsername(userInfo.getName());
+					Authentication auth = new UsernamePasswordAuthenticationToken(userDetails,userDetails.getPassword(), userDetails.getAuthorities());
+					SecurityContextHolder.getContext().setAuthentication(auth);
+					request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
+					
+					//check value and set it to true
+					Cookie[] cookies = request.getCookies();
+					if (cookies != null) {
+						for (int i = 0; i < cookies.length; i++) {
+							if (cookies[i].getName().equalsIgnoreCase("value")) {
+								cookies[i].setValue("true");
+								cookies[i].setPath("/openservice/");
+								response.addCookie(cookies[i]);
+							}
 						}
 					}
+					//user cookie
+					CookieUser cu = new CookieUser();
+					cu.setUsername(userInfo.getName());
+					cu.setRole(Constants.ROLES.ROLE_NORMAL.toString());
+					
+					Gson gson = new Gson();
+					String obj = gson.toJson(cu);
+					
+					Cookie userCookie = new Cookie("user", obj);
+					userCookie.setPath("/openservice/");
+					response.addCookie(userCookie);
+					
+				}else if(userDb.getEmail()!=userInfo.getEmail()){
+					logger.info("Different user with same username");
+					//different email, same username
+					responseObj.setError("Already exists a register user with this username. Please change it before trying to register.");
+					responseObj.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+					response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+					
 				}
-				//user cookie
-				CookieUser cu = new CookieUser();
-				cu.setUsername(userInfo.getName());
-				cu.setRole(Constants.ROLES.ROLE_NORMAL.toString());
-				
-				Gson gson = new Gson();
-				String obj = gson.toJson(cu);
-				
-				Cookie userCookie = new Cookie("user", obj);
-				userCookie.setPath("/openservice/");
-				response.addCookie(userCookie);
-				
 				
 			} catch (IOException e) {
 				logger.info("IOException ..");
