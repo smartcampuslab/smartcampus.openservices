@@ -24,20 +24,37 @@ public class CookieUser {
 	
 	private String username;
 	private String role;
-	
+	/**
+	 * 
+	 * @return String username
+	 */
 	public String getUsername() {
 		return username;
 	}
+	/**
+	 * 
+	 * @param username : String
+	 */
 	public void setUsername(String username) {
 		this.username = username;
 	}
+	/**
+	 * 
+	 * @return String role
+	 */
 	public String getRole() {
 		return role;
 	}
+	/**
+	 * 
+	 * @param role : String
+	 */
 	public void setRole(String role) {
 		this.role = role;
 	}
-	
+	 /**
+	  * toString function
+	  */
 	@Override
 	public String toString(){
 		return "DataObject [username="+username+", role="+role+"]";

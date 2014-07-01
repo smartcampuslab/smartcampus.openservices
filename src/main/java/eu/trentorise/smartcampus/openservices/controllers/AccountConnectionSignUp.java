@@ -23,7 +23,13 @@ import org.springframework.social.connect.UserProfile;
 import eu.trentorise.smartcampus.openservices.dao.UserDao;
 import eu.trentorise.smartcampus.openservices.entities.Profile;
 import eu.trentorise.smartcampus.openservices.entities.User;
-
+/**
+ * Sign up
+ * If user does not exist in UserConnection table, then this class is called.
+ * First user data is saved in UserConnection then it is saved in User table.
+ * @author Giulia Canobbio
+ *
+ */
 public class AccountConnectionSignUp implements ConnectionSignUp{
 
 	@Autowired

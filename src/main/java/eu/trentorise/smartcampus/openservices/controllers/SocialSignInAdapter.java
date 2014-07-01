@@ -15,8 +15,6 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.controllers;
 
-import javax.servlet.http.Cookie;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,16 +25,15 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.web.SignInAdapter;
 import org.springframework.web.context.request.NativeWebRequest;
-
-import com.google.gson.Gson;
-
-import eu.trentorise.smartcampus.openservices.Constants;
-import eu.trentorise.smartcampus.openservices.support.CookieUser;
-
+/**
+ * Sign in class
+ * This class search user data in database.
+ * If user is found, then he/she is logged in.
+ * @author Giulia Canobbio
+ *
+ */
 public class SocialSignInAdapter implements SignInAdapter{
-	
-	//@Autowired
-	//private UserDao userDao;
+
 	@Autowired
 	private UserDetailsService manager;
 
