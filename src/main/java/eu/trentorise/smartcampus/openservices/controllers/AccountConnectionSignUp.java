@@ -34,25 +34,22 @@ public class AccountConnectionSignUp implements ConnectionSignUp{
 		System.out.println("Connection Sign Up......");
 		UserProfile profile = arg0.fetchUserProfile();
 
-		//check if user is already saved. If not saved.
-		//User savedUser = userDao.getUserByEmail(profile.getEmail());
-		//if(savedUser==null){
-			User user = new User();
-			
-			if(profile.getUsername()==null){
-				user.setUsername(profile.getName());
-			}else{
-				user.setUsername(profile.getUsername());
-			}
-			user.setEmail(profile.getEmail());
-			user.setRole("ROLE_NORMAL");
-			user.setEnabled(1);
-			Profile p = new Profile();
-			p.setName(profile.getName());
-			p.setSurname(profile.getLastName());
-			user.setProfile(p);
-			userDao.addUser(user);
-		//}
+		User user = new User();
+
+		if (profile.getUsername() == null) {
+			user.setUsername(profile.getName());
+		} else {
+			user.setUsername(profile.getUsername());
+		}
+		user.setEmail(profile.getEmail());
+		user.setRole("ROLE_NORMAL");
+		user.setEnabled(1);
+		Profile p = new Profile();
+		p.setName(profile.getName());
+		p.setSurname(profile.getLastName());
+		user.setProfile(p);
+		userDao.addUser(user);
+		
 		System.out.println("Connection Sign Up ending...");
 		
 		if(profile.getUsername()==null){

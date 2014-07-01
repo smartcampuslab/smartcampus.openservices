@@ -15,6 +15,8 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.controllers;
 
+import javax.servlet.http.Cookie;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,6 +27,11 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.web.SignInAdapter;
 import org.springframework.web.context.request.NativeWebRequest;
+
+import com.google.gson.Gson;
+
+import eu.trentorise.smartcampus.openservices.Constants;
+import eu.trentorise.smartcampus.openservices.support.CookieUser;
 
 public class SocialSignInAdapter implements SignInAdapter{
 	
@@ -37,22 +44,12 @@ public class SocialSignInAdapter implements SignInAdapter{
 	public String signIn(String arg0, Connection<?> arg1, NativeWebRequest arg2) {
 		System.out.println("Sign in Adapter......");
 		System.out.println("String arg0: "+arg0);
-		//User user = userDao.getUserByUsername(arg0);
+		
 		UserDetails userDetails = manager.loadUserByUsername(arg0);
-		
-		//List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
-		//roles: ADMIN or NORMAL user
-		//roles.add(new SimpleGrantedAuthority(user.getRole()));
-		
-		//SecurityContextHolder.getContext().setAuthentication(
-				//new UsernamePasswordAuthenticationToken(user.getUsername(),null, roles));
-		
 		
 		Authentication auth = new UsernamePasswordAuthenticationToken(userDetails,userDetails.getPassword(), userDetails.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(auth);
 		arg2.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext(),0);
-		
-		//set cookie user
 		
 		System.out.println("Sign in Adapter ending......");
 		return null;
