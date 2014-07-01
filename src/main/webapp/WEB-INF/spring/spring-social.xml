@@ -20,10 +20,10 @@
 					<constructor-arg value="${facebook.clientId}" />
 					<constructor-arg value="${facebook.clientSecret}"/>
 				</bean>
-				<bean class="org.springframework.social.google.connect.GoogleConnectionFactory">
+				<!-- <bean class="org.springframework.social.google.connect.GoogleConnectionFactory">
 					<constructor-arg value="${google.consumerKey}" />
 					<constructor-arg value="${google.consumerSecret}" />
-				</bean>
+				</bean>-->
 				<bean class="org.springframework.social.twitter.connect.TwitterConnectionFactory">
 					<constructor-arg value="${twitter.consumerKey}" />
 					<constructor-arg value="${twitter.consumerSecret}" />

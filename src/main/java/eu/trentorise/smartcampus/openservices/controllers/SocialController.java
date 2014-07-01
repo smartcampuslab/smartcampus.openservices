@@ -215,7 +215,9 @@ public class SocialController {
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 		
 		MultiValueMap<String, String> body = new LinkedMultiValueMap<String, String>();
-		body.add("scope", "r_basicprofile r_emailaddress");
+		body.add("scope", "r_basicprofile r_emailaddress r_fullprofile");
+		body.add("redirect_uri", "http://localhost:8080/openservice/");
+		body.add("state", "lkjhfdswertyooiuhj46g4dfghdfhsf");
 		
 		HttpEntity<?> httpEntity = new HttpEntity<Object>(body,headers);
 		
