@@ -78,15 +78,10 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope', '$window',
                 });
             },
             fbLogin: function (error){
-            	/*$http.post('signin/facebook', $.param({'scope':'email,user_likes,friends_likes,publish_stream'}), {
-            		headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    }
-                })*/
                 $http.get('api/social/fb').success(function(data){
                 	console.log('Fb success, data '+data.data);
-                	//$window.location.href = data.data;
-                	$window.open(data.data);
+                	$window.location.href = data.data;
+                	//$window.open(data.data);
                      
                 }).error(function (data) {
                 	console.log('Fb error, '+data.error);

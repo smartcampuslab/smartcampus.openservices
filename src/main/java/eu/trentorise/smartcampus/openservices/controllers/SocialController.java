@@ -59,6 +59,7 @@ public class SocialController {
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 		
 		MultiValueMap<String, String> body = new LinkedMultiValueMap<String, String>();
+		body.add("redirect_uri", "http://localhost:8080/openservice");
 		body.add("scope", "email,user_likes,friends_likes,publish_stream");
 		
 		HttpEntity<?> httpEntity = new HttpEntity<Object>(body,headers);
@@ -70,10 +71,12 @@ public class SocialController {
 		logger.info("## Status code: {} ", r.getStatusCode());
 		
 		if(r.getHeaders().getLocation()!=null){
+			logger.info("## Get location");
 			responseObject.setData(r.getHeaders().getLocation());
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 		}
 		else{
+			logger.info("## Error");
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			responseObject.setError("Facebook unavailable. Retry Later.");

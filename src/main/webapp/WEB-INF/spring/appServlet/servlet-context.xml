@@ -36,12 +36,12 @@
   <!-- For social provider - Login is /signin/{provederId} -->
    <beans:bean class="org.springframework.social.connect.web.ProviderSignInController">
         <beans:property name="signInUrl" value="/login" />
-        <beans:property name="postSignInUrl" value="${application.url}" />
+        <beans:property name="postSignInUrl" value="http://localhost:8080/openservice" />
     </beans:bean>
-    
+    <!--
     <beans:bean class="org.springframework.social.connect.web.ConnectController">
-		<!--<beans:constructor-arg value="${application.url}" /> -->
+		< <beans:constructor-arg value="${application.url}" /> >
 		<beans:property name="applicationUrl" value="${application.url}" /> 
 	</beans:bean>
-	
+	-->
 </beans:beans>
