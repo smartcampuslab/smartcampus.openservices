@@ -32,9 +32,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
+
+import eu.trentorise.smartcampus.openservices.Constants;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.entities.User;
 import eu.trentorise.smartcampus.openservices.managers.UserManager;
+import eu.trentorise.smartcampus.openservices.support.CookieUser;
 
 /**
  * A controller which handles requests for the application home page.
@@ -111,6 +115,30 @@ public class HomeController {
 		if (cookies != null && !found) {
 			System.out.println("No cookie value in this request");
 			response.addCookie(cookie);
+		}
+		
+		//check if cookie user exists ow. create it if user is authenticated
+		boolean fUser = false;
+		if(value.equalsIgnoreCase("true")){
+			for (int i = 0; i < cookies.length; i++) {
+				name = cookies[i].getName();
+				System.out.println("Found cookies: " + i + ", name: " + name);
+				if (name.equalsIgnoreCase("user")) {
+					fUser = true;
+				}
+			}
+		}
+		if(!fUser){
+			CookieUser cu = new CookieUser();
+			cu.setUsername(username);
+			cu.setRole(Constants.ROLES.ROLE_NORMAL.toString());
+			
+			Gson gson = new Gson();
+			String obj = gson.toJson(cu);
+			
+			Cookie userCookie = new Cookie("user", obj);
+			userCookie.setPath("/openservice/");
+			response.addCookie(userCookie);
 		}
 
 		return "index";
