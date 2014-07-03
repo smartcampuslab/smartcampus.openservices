@@ -107,8 +107,8 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope', '$window',
                 })*/
                 $http.get('api/social/twitter').success(function(data){
                 	console.log('Twitter success, data '+data.data);
-                	//$window.location.href = data.data;
-                	$window.open(data.data);
+                	$window.location.href = data.data;
+                	//$window.open(data.data);
                      
                 }).error(function (data) {
                     error(data.error);
@@ -122,8 +122,8 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope', '$window',
                 }).*/
                 $http.get('api/social/linkedin').success(function(data){
                 	console.log('Linkedin success, data '+data.data);
-                	//$window.location.href = data.data;
-                	$window.open(data.data);
+                	$window.location.href = data.data;
+                	//$window.open(data.data);
                      
                 }).error(function (data) {
                     error(data.error);
