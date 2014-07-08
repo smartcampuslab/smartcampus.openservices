@@ -6,15 +6,9 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope', '$window',
         var accessLevels = routingConfig.accessLevels,
             userRoles = routingConfig.userRoles;
         
-        //console.log("AccessLevels "+accessLevels[0]);
-       // console.log("UserRoles "+userRoles[0]);
-        
         //check if user is a string then json
         if(typeof $cookieStore.get('user') == 'string'){
-        	//console.log("Cookie user is a string..");
         	var jsonObj = JSON.parse($cookieStore.get('user'));
-        	//console.log("json Obj username: "+jsonObj.username);
-        	//console.log("json Obj role: "+jsonObj.role);
         	$rootScope.currentUser = {
                 username: jsonObj.username,
                 role: userRoles[jsonObj.role]
@@ -24,7 +18,6 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope', '$window',
             $cookieStore.put('user', $rootScope.currentUser);
         	
         }else{
-        	//console.log("JSON cookie user or not...");
         $rootScope.currentUser = $cookieStore.get('user') || {
             username: '',
             role: userRoles.public
@@ -81,7 +74,6 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope', '$window',
                 $http.get('api/social/fb').success(function(data){
                 	console.log('Fb success, data '+data.data);
                 	$window.location.href = data.data;
-                	//$window.open(data.data);
                      
                 }).error(function (data) {
                 	console.log('Fb error, '+data.error);
@@ -100,30 +92,18 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope', '$window',
                 });
             },
             twitterLogin: function(error){
-            	/*$http.post('signin/twitter', {
-            		headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    }
-                })*/
-                $http.get('api/social/twitter').success(function(data){
+                $http.get('api/oauth/twitter/auth').success(function(data){
                 	console.log('Twitter success, data '+data.data);
                 	$window.location.href = data.data;
-                	//$window.open(data.data);
                      
                 }).error(function (data) {
                     error(data.error);
                 });
             },
             linkedinLogin: function(error){
-            	/*$http.post('signin/linkedin', $.param({'scope':'r_basicprofile r_emailaddress'}),{
-            		headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    }
-                }).*/
-                $http.get('api/social/linkedin').success(function(data){
+                $http.get('api/oauth/linkedin/auth').success(function(data){
                 	console.log('Linkedin success, data '+data.data);
                 	$window.location.href = data.data;
-                	//$window.open(data.data);
                      
                 }).error(function (data) {
                     error(data.error);
