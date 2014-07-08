@@ -91,7 +91,7 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope', '$window',
                     error(data.error);
                 });
             },
-            twitterLogin: function(error){
+            /*twitterLogin: function(error){
                 $http.get('api/oauth/twitter/auth').success(function(data){
                 	console.log('Twitter success, data '+data.data);
                 	$window.location.href = data.data;
@@ -99,7 +99,7 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope', '$window',
                 }).error(function (data) {
                     error(data.error);
                 });
-            },
+            },*/
             linkedinLogin: function(error){
                 $http.get('api/oauth/linkedin/auth').success(function(data){
                 	console.log('Linkedin success, data '+data.data);

@@ -39,19 +39,7 @@
         <beans:property name="postSignInUrl" value="${application.url}" />
     </beans:bean>
 	
-	<!-- Scribe config - Twitter -->
-	<beans:bean id="twitterServiceConfig" class="eu.trentorise.smartcampus.openservices.scribe.OAuthServiceConfig">
-		<beans:constructor-arg value="${twitter.consumerKey}" />
-		<beans:constructor-arg value="${twitter.consumerSecret}" />
-		<beans:constructor-arg value="${twitter.callback_uri}" />
-		<beans:constructor-arg value="org.scribe.builder.api.TwitterApi.SSL" />
-	</beans:bean>
-	
-	<beans:bean id="twitterServiceProvider" class="eu.trentorise.smartcampus.openservices.scribe.OAuthServiceProvider">
-		<beans:constructor-arg name="config" ref="twitterServiceConfig" />
-	</beans:bean>
-	
-	<!-- Scribe config - LinkedIn -->
+		<!-- Scribe config - LinkedIn -->
 	<beans:bean id="linkedInSC" class="eu.trentorise.smartcampus.openservices.scribe.OAuthServiceConfig">
 		<beans:constructor-arg value="${linkedin.consumerKey}" />
 		<beans:constructor-arg value="${linkedin.consumerSecret}"/>

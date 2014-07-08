@@ -54,39 +54,39 @@ import eu.trentorise.smartcampus.openservices.support.CookieUser;
  * @author Giulia Canobbio
  *
  */
-@Controller
-@RequestMapping(value = "/api/oauth/twitter")
+//@Controller
+//@RequestMapping(value = "/api/oauth/twitter")
 public class TwitterController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(TwitterController.class);
+	//private static final Logger logger = LoggerFactory.getLogger(TwitterController.class);
 	/**
 	 * instance of {@link OAuthServiceProvider}
 	 */
-	@Autowired
+	/*@Autowired
 	@Qualifier("twitterServiceProvider")
-	private OAuthServiceProvider twitterServiceProvider;
+	private OAuthServiceProvider twitterServiceProvider;*/
 	/**
 	 * Instance of {@link Environment} to get all variables in properties file
 	 */
-	@Autowired
-	private Environment env;
+	/*@Autowired
+	private Environment env;*/
 	/**
 	 * Instance of {@link UserManager} to retrieve and save user data.
 	 */
-	@Autowired
-	private UserManager userManager;
+	/*@Autowired
+	private UserManager userManager;*/
 	/**
 	 * Instance of {@link UserDetailsService} to authenticate user in spring security
 	 */
-	@Autowired
-	private UserDetailsService manager;
+	/*@Autowired
+	private UserDetailsService manager;*/
 	
 	/**
 	 * Start oauth authentication with Twitter with scribe
 	 * @param request : instance of {@link HttpServletRequest}
 	 * @return {@link ResponseObject} with redirected url, status (OK) and error message if user is already logged in.
 	 */
-	@RequestMapping(value = "/auth", method = RequestMethod.GET, produces = "application/json")
+	/*@RequestMapping(value = "/auth", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public ResponseObject loginTwitter(HttpServletRequest request){
 		logger.info("Twitter auth .. Starting ..");
@@ -117,14 +117,14 @@ public class TwitterController {
 		logger.info("Redirect to... {}",responseObj.getData());
 		
 		return responseObj;
-	}
+	}*/
 	
 	/**
 	 * Retrieve user data after login and save them in db.
 	 * @param request : instance of {@link HttpServletRequest}
 	 * @return redirect to home page
 	 */
-	@RequestMapping(value = "/callback", method = RequestMethod.GET, produces = "application/json")
+	/*@RequestMapping(value = "/callback", method = RequestMethod.GET, produces = "application/json")
 	public String callbackTwitter( HttpServletRequest request, HttpServletResponse response){
 		logger.info("Twitter Callback.. Starting ..");
 		ResponseObject responseObj = new ResponseObject();
@@ -236,6 +236,6 @@ public class TwitterController {
 		}
 		
 		return "redirect:/";
-	}
+	}*/
 
 }

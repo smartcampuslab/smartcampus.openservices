@@ -106,7 +106,7 @@ app.controller('signinCtrl', ['$scope', '$location', 'Auth', '$rootScope', '$htt
         	});
         };
         
-        $scope.signinTwitter = function(){
+        /*$scope.signinTwitter = function(){
         	console.log('Twitter sign in');
         	Auth.twitterLogin(function(){
         		console.log('Twitter success');
@@ -116,7 +116,7 @@ app.controller('signinCtrl', ['$scope', '$location', 'Auth', '$rootScope', '$htt
         		console.log('Twitter error');
         		$scope.error = error;
         	});
-        };
+        };*/
         
         $scope.signinLinkedin = function(){
         	console.log('Linkedin sign in');
