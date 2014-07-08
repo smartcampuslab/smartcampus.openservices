@@ -20,18 +20,6 @@
 					<constructor-arg value="${facebook.clientId}" />
 					<constructor-arg value="${facebook.clientSecret}"/>
 				</bean>
-				<!-- <bean class="org.springframework.social.google.connect.GoogleConnectionFactory">
-					<constructor-arg value="${google.consumerKey}" />
-					<constructor-arg value="${google.consumerSecret}" />
-				</bean>-->
-				<bean class="org.springframework.social.twitter.connect.TwitterConnectionFactory">
-					<constructor-arg value="${twitter.consumerKey}" />
-					<constructor-arg value="${twitter.consumerSecret}" />
-				</bean>
-				<bean class="org.springframework.social.linkedin.connect.LinkedInConnectionFactory">
-					<constructor-arg value="${linkedin.consumerKey}" />
-					<constructor-arg value="${linkedin.consumerSecret}" />
-				</bean>
 			</list>
 		</property>
 	</bean>
