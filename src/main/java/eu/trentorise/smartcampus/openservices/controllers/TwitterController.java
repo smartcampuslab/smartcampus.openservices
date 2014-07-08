@@ -15,27 +15,38 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.controllers;
 
+import java.io.IOException;
+
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.scribe.model.OAuthRequest;
-import org.scribe.model.Response;
-import org.scribe.model.Token;
-import org.scribe.model.Verb;
-import org.scribe.model.Verifier;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.JsonProcessingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.scribe.model.*;
 import org.scribe.oauth.OAuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.core.env.Environment;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.*;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import com.google.gson.Gson;
+
+import eu.trentorise.smartcampus.openservices.Constants;
+import eu.trentorise.smartcampus.openservices.entities.Profile;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
+import eu.trentorise.smartcampus.openservices.entities.User;
+import eu.trentorise.smartcampus.openservices.managers.UserManager;
 import eu.trentorise.smartcampus.openservices.scribe.OAuthServiceProvider;
+import eu.trentorise.smartcampus.openservices.support.CookieUser;
 
 /**
  * Twitter controller
@@ -59,6 +70,16 @@ public class TwitterController {
 	 */
 	@Autowired
 	private Environment env;
+	/**
+	 * Instance of {@link UserManager} to retrieve and save user data.
+	 */
+	@Autowired
+	private UserManager userManager;
+	/**
+	 * Instance of {@link UserDetailsService} to authenticate user in spring security
+	 */
+	@Autowired
+	private UserDetailsService manager;
 	
 	/**
 	 * Start oauth authentication with Twitter with scribe
@@ -104,8 +125,10 @@ public class TwitterController {
 	 * @return redirect to home page
 	 */
 	@RequestMapping(value = "/callback", method = RequestMethod.GET, produces = "application/json")
-	public String callbackTwitter( HttpServletRequest request){
+	public String callbackTwitter( HttpServletRequest request, HttpServletResponse response){
 		logger.info("Twitter Callback.. Starting ..");
+		ResponseObject responseObj = new ResponseObject();
+		
 		//request token
 		OAuthService service = twitterServiceProvider.getService();
 		Token requestToken = (Token) request.getSession().getAttribute(eu.trentorise.smartcampus.openservices.Constants.OAUTH_REQUEST_TOKEN);
@@ -122,9 +145,95 @@ public class TwitterController {
 		OAuthRequest oauthRequest = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/account/verify_credentials.json");
 		service.signRequest(accessToken, oauthRequest);
 		Response oauthResponse = oauthRequest.send();
-		logger.info("Response .. {}",oauthResponse.getBody());
-		//TODO save user data in db
-		//TODO security
+		String userData = oauthResponse.getBody();
+		logger.info("Response .. {}",userData);
+		
+		//Check user data and if he/she does not exist in db, then save data
+		try {
+			
+			//TwitterUser twuser = new ObjectMapper().readValue(userData, TwitterUser.class);
+			//logger.info("User id {}", twuser.getId());
+			
+			JsonNode jsonNode = new ObjectMapper().readTree(userData);
+			String username = jsonNode.get("screen_name").asText()+"@twitter";
+			String email = "todo.twitter@twitter.todo";
+			String name = jsonNode.get("name").asText().split(" ")[0];
+			String surname = jsonNode.get("name").asText().split(" ")[1];
+			String imgAvatar = jsonNode.get("profile_image_url").asText();
+			
+			logger.info("- User -");
+			logger.info(" username:  {},",username);
+			logger.info(" name {}, ",name);
+			logger.info(" surname {}",surname);
+			
+			User userDb = userManager.getUserByUsername(username);
+			if(userDb==null){
+				logger.info("Save user data");
+				//add to db
+				User user = new User();
+				user.setEmail(email);
+				user.setEnabled(1);
+				Profile p = new Profile();
+				p.setName(name);
+				p.setSurname(surname);
+				p.setImgAvatar(imgAvatar);
+				user.setProfile(p);
+				user.setRole(Constants.ROLES.ROLE_NORMAL.toString());
+				user.setUsername(username);
+				try{
+					userManager.createSocialUser(user);
+				}catch(SecurityException s){
+					logger.info("Different user with same username");
+					//different email, same username
+					responseObj.setError("Already exists a register user with this email address. Please try to login with correct provider.");
+					responseObj.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+					response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+					return "redirect:/";
+				}
+			}
+			
+			// authenticate in spring security
+			logger.info("Set authentication security context holder");
+			UserDetails userDetails = manager.loadUserByUsername(username);
+			Authentication auth = new UsernamePasswordAuthenticationToken(userDetails,userDetails.getPassword(), userDetails.getAuthorities());
+				SecurityContextHolder.getContext().setAuthentication(auth);
+				request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
+				
+				//check value and set it to true
+				Cookie[] cookies = request.getCookies();
+				if (cookies != null) {
+					for (int i = 0; i < cookies.length; i++) {
+						if (cookies[i].getName().equalsIgnoreCase("value")) {
+							cookies[i].setValue("true");
+							cookies[i].setPath("/openservice/");
+							response.addCookie(cookies[i]);
+						}
+					}
+				}
+				//user cookie
+				CookieUser cu = new CookieUser();
+				cu.setUsername(username);
+				cu.setRole(Constants.ROLES.ROLE_NORMAL.toString());
+				
+				Gson gson = new Gson();
+				String obj = gson.toJson(cu);
+				
+				Cookie userCookie = new Cookie("user", obj);
+				userCookie.setPath("/openservice/");
+				response.addCookie(userCookie);
+			
+			
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			responseObj.setError("Openservice server error. Problem in converting data. Retry later!");
+			responseObj.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		} catch (IOException e) {
+			e.printStackTrace();
+			responseObj.setError("Twitter server error. Problem in retrieving user data. Retry later!");
+			responseObj.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		}
 		
 		return "redirect:/";
 	}

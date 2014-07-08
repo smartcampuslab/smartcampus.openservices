@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -59,11 +60,18 @@ import eu.trentorise.smartcampus.openservices.support.CookieUser;
 public class GoogleController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(GoogleController.class);
+	/**
+	 * Instance of {@link GoogleAuthHelper} for oauth google
+	 */
 	private GoogleAuthHelper auth = new GoogleAuthHelper();
-	
+	/**
+	 * Instance of {@link UserManager} to retrieve and save user data
+	 */
 	@Autowired
 	private UserManager userManager;
-	
+	/**
+	 * Instance of {@link UserDetailsService} to authenticate user in spring security
+	 */
 	@Autowired
 	private UserDetailsService manager;
 	
@@ -143,6 +151,7 @@ public class GoogleController {
 						responseObj.setError("Already exists a register user with this email address. Please try to login with correct provider.");
 						responseObj.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 						response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+						return "redirect:/";
 					}
 				}
 				// authenticate in spring security

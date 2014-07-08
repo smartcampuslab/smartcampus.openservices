@@ -15,6 +15,7 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.controllers;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -29,13 +30,28 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
+import com.thoughtworks.xstream.XStream;
+
+import eu.trentorise.smartcampus.openservices.Constants;
+import eu.trentorise.smartcampus.openservices.entities.Profile;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
+import eu.trentorise.smartcampus.openservices.entities.User;
+import eu.trentorise.smartcampus.openservices.managers.UserManager;
 import eu.trentorise.smartcampus.openservices.scribe.OAuthServiceProvider;
+import eu.trentorise.smartcampus.openservices.social.LinkedInUser;
+import eu.trentorise.smartcampus.openservices.support.CookieUser;
 
 @Controller
 @RequestMapping(value = "/api/oauth/linkedin")
@@ -53,6 +69,16 @@ public class LinkedInController {
 	 */
 	@Autowired
 	private Environment env;
+	/**
+	 * Instance of {@link UserManager} to retrieve and save user data.
+	 */
+	@Autowired
+	private UserManager userManager;
+	/**
+	 * Instance of {@link UserDetailsService} to authenticate user in spring security
+	 */
+	@Autowired
+	private UserDetailsService manager;
 	
 	/**
 	 * Start oauth authentication with Twitter with scribe
@@ -98,8 +124,10 @@ public class LinkedInController {
 	 * @return redirect to home page
 	 */
 	@RequestMapping(value = "/callback", method = RequestMethod.GET, produces = "application/json")
-	public String callbackTwitter( HttpServletRequest request){
+	public String callbackTwitter( HttpServletRequest request,  HttpServletResponse response){
 		logger.info("LinkedIn Callback.. Starting ..");
+		ResponseObject responseObj = new ResponseObject();
+		
 		//request token
 		OAuthService service = linServiceProvider.getService();
 		Token requestToken = (Token) request.getSession().getAttribute(eu.trentorise.smartcampus.openservices.Constants.OAUTH_REQUEST_TOKEN);
@@ -117,10 +145,85 @@ public class LinkedInController {
 		OAuthRequest oauthRequest = new OAuthRequest(Verb.GET, "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,email-address,industry,headline)");
 		service.signRequest(accessToken, oauthRequest);
 		Response oauthResponse = oauthRequest.send();
-		logger.info("Response .. {}",oauthResponse.getBody());
+		String responseData = oauthResponse.getBody();
+		logger.info("Response .. {}",responseData);
 		
-		//TODO save user data in db
-		//TODO authenticate in spring security
+		//Unmarshalling data
+		XStream xstream = new XStream();
+		xstream.alias("person", LinkedInUser.class);
+		xstream.aliasField("first-name", LinkedInUser.class, "first_name");
+		xstream.aliasField("last-name", LinkedInUser.class, "last_name");
+		xstream.aliasField("email-address", LinkedInUser.class, "email_address");
+		LinkedInUser lInUser = (LinkedInUser) xstream.fromXML(responseData);
+		
+		logger.info("- User -");
+		logger.info(" id:  {},",lInUser.getId());
+		logger.info(" name {}, ",lInUser.getFirst_name());
+		logger.info(" surname {}",lInUser.getLast_name());
+		
+		String username = lInUser.getId()+"@linkedIn";
+		
+		//save user data in db
+		User userDb = userManager.getUserByUsername(username);
+		if(userDb==null){
+			logger.info("Save user data");
+			//add to db
+			User user = new User();
+			user.setEmail(lInUser.getEmail_address());
+			user.setEnabled(1);
+			Profile p = new Profile();
+			p.setName(lInUser.getFirst_name());
+			p.setSurname(lInUser.getLast_name());
+			//p.setImgAvatar(imgAvatar);
+			user.setProfile(p);
+			user.setRole(Constants.ROLES.ROLE_NORMAL.toString());
+			user.setUsername(username);
+			try{
+				userManager.createSocialUser(user);
+			}catch(SecurityException s){
+				logger.info("Different user with same username");
+				//different email, same username
+				responseObj.setError("Already exists a register user with this email address. Please try to login with correct provider.");
+				responseObj.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				return "redirect:/";
+			}
+		}
+		
+		//authenticate in spring security
+		logger.info("Set authentication security context holder");
+		UserDetails userDetails = manager.loadUserByUsername(username);
+		Authentication auth = new UsernamePasswordAuthenticationToken(
+				userDetails, userDetails.getPassword(),
+				userDetails.getAuthorities());
+		SecurityContextHolder.getContext().setAuthentication(auth);
+		request.getSession()
+				.setAttribute(
+						HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+						SecurityContextHolder.getContext());
+
+		// check value and set it to true
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for (int i = 0; i < cookies.length; i++) {
+				if (cookies[i].getName().equalsIgnoreCase("value")) {
+					cookies[i].setValue("true");
+					cookies[i].setPath("/openservice/");
+					response.addCookie(cookies[i]);
+				}
+			}
+		}
+		// user cookie
+		CookieUser cu = new CookieUser();
+		cu.setUsername(username);
+		cu.setRole(Constants.ROLES.ROLE_NORMAL.toString());
+
+		Gson gson = new Gson();
+		String obj = gson.toJson(cu);
+
+		Cookie userCookie = new Cookie("user", obj);
+		userCookie.setPath("/openservice/");
+		response.addCookie(userCookie);
 		
 		return "redirect:/";
 	}
