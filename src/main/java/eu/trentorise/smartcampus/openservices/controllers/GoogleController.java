@@ -121,9 +121,8 @@ public class GoogleController {
 				logger.info("Check user data");
 				
 				//check if user is already in
-				User userDb = userManager.getUserByUsername(userInfo.getName());
-				if(userDb==null || userDb.getEmail().equalsIgnoreCase(userInfo.getEmail())){
-					if(userDb==null){
+				User userDb = userManager.getUserByUsername(userInfo.getId());
+				if(userDb==null){
 					logger.info("Save user data");
 					//add to db
 					User user = new User();
@@ -135,14 +134,21 @@ public class GoogleController {
 					p.setImgAvatar(userInfo.getPicture());
 					user.setProfile(p);
 					user.setRole(Constants.ROLES.ROLE_NORMAL.toString());
-					user.setUsername(userInfo.getName());
-					userManager.createSocialUser(user);
+					user.setUsername(userInfo.getId());
+					try{
+						userManager.createSocialUser(user);
+					}catch(SecurityException s){
+						logger.info("Different user with same username");
+						//different email, same username
+						responseObj.setError("Already exists a register user with this email address. Please try to login with correct provider.");
+						responseObj.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+						response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 					}
-					
-					// authenticate in spring security
-					logger.info("Set authentication security context holder");
-					UserDetails userDetails = manager.loadUserByUsername(userInfo.getName());
-					Authentication auth = new UsernamePasswordAuthenticationToken(userDetails,userDetails.getPassword(), userDetails.getAuthorities());
+				}
+				// authenticate in spring security
+				logger.info("Set authentication security context holder");
+				UserDetails userDetails = manager.loadUserByUsername(userInfo.getId());
+				Authentication auth = new UsernamePasswordAuthenticationToken(userDetails,userDetails.getPassword(), userDetails.getAuthorities());
 					SecurityContextHolder.getContext().setAuthentication(auth);
 					request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
 					
@@ -169,14 +175,6 @@ public class GoogleController {
 					userCookie.setPath("/openservice/");
 					response.addCookie(userCookie);
 					
-				}else if(userDb.getEmail()!=userInfo.getEmail()){
-					logger.info("Different user with same username");
-					//different email, same username
-					responseObj.setError("Already exists a register user with this username. Please change it before trying to register.");
-					responseObj.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-					response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-					
-				}
 				
 			} catch (IOException e) {
 				logger.info("IOException ..");
