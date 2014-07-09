@@ -220,28 +220,7 @@ public class HomeController {
 			@CookieValue(value = "user", required = false) String user, HttpServletRequest request, HttpServletResponse response)
 			throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 		logger.info("-- Error mapping! --");
-		/*
-		 * String username = null; String password = null; String role = null;
-		 * if(user!=null){ String sub = (String) user.subSequence(1,
-		 * user.indexOf(","));//"username":"sara" logger.info("*****"+sub);
-		 * username = (String)sub.subSequence(sub.indexOf(":\"")+2,
-		 * sub.lastIndexOf("\"")); logger.info("++++++"+username); //get user
-		 * data User userDetails = userManager.getUserByUsername(username);
-		 * password = userDetails.getPassword(); logger.info("++++++"+password);
-		 * role = userDetails.getRole(); logger.info("++++++"+role); }
-		 * 
-		 * if(value!=null){ if(value.equalsIgnoreCase("true")){ if(user!=null &&
-		 * username!=null && password!=null){ //try manual authentication
-		 * CustomUserDetailsService udService = new CustomUserDetailsService();
-		 * logger.info("Print user before load it: "+username); UserDetails
-		 * userDetails = udService.loadUserByUsername(username); Authentication
-		 * authentication = new
-		 * UsernamePasswordAuthenticationToken(userDetails.getUsername(),
-		 * userDetails.getPassword(),userDetails.getAuthorities());
-		 * SecurityContextHolder.getContext().setAuthentication(authentication);
-		 * } } }
-		 */
-		response.setStatus(404);
+		response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		return home(request, response);
 	}
 
@@ -309,7 +288,6 @@ public class HomeController {
 		return responseObject;
 	}
 
-	// User - logout
 	/**
 	 * Logout, it set authentication to false and set cookie value to false.
 	 * Returns index jsp
@@ -348,14 +326,4 @@ public class HomeController {
 		}
 		return "index";
 	}
-	/*
-	 * @ExceptionHandler(ConnectException.class)
-	 * 
-	 * @ResponseBody public ResponseObject catchException(HttpServletResponse
-	 * response){ responseObjetc = new ResponseObject();
-	 * responseObjetc.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
-	 * responseObjetc.setError("We are sorry but now server is down.");
-	 * response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE); return
-	 * responseObjetc; }
-	 */
 }
