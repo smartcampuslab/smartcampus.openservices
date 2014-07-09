@@ -256,8 +256,8 @@ public class HomeController {
 	 *         (You have to sign in)
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	@ResponseBody
-	public ResponseObject login(HttpServletRequest request, HttpServletResponse response) {
+	//@ResponseBody
+	public /*ResponseObject*/String login(HttpServletRequest request, HttpServletResponse response) {
 		logger.info("-- Perform Login --");
 
 		// Check if cookies exist and change them
@@ -279,11 +279,12 @@ public class HomeController {
 			}
 		}
 
-		ResponseObject responseObject = new ResponseObject();
-		responseObject.setError("You have to sign in");
-		responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		//ResponseObject responseObject = new ResponseObject();
+		//responseObject.setError("You have to sign in");
+		//responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-		return responseObject;
+		//return responseObject;
+		return home(request, response);
 	}
 
 	/**
