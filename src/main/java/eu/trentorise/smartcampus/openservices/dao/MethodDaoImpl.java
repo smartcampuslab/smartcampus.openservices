@@ -28,8 +28,8 @@ import org.springframework.transaction.annotation.Transactional;
 import eu.trentorise.smartcampus.openservices.entities.Method;
 
 /**
- * Method Dao Implementation
- * Find, add, modify and delete Method object from database
+ * Method Dao Implementation.
+ * Find, add, modify and delete Method object from database.
  * 
  * @author Giulia Canobbio
  *
@@ -37,11 +37,13 @@ import eu.trentorise.smartcampus.openservices.entities.Method;
 @Repository
 public class MethodDaoImpl implements MethodDao{
 	
+	/**
+	 * Instance of {@link EntityManager}
+	 */
 	@PersistenceContext(unitName="JpaPersistenceUnit")
 	protected EntityManager entityManager;
 	
 	/**
-	 * 
 	 * @return entity manager
 	 */
 	public EntityManager getEntityManager() {
@@ -49,18 +51,7 @@ public class MethodDaoImpl implements MethodDao{
 	}
 
 	/**
-	 * Set entity manager
-	 * @param entityManager
-	 */
-	public void setEntityManager(EntityManager entityManager) {
-		this.entityManager = entityManager;
-	}
-
-	/**
-	 * Retrieve method from database searching by method id
-	 * @param id : int method id
-	 * @return a {@link Method} instance
-	 * @throws DataAccessException
+	 * This method retrieves method from database searching by method id.
 	 */
 	@Transactional
 	@Override
@@ -69,10 +60,7 @@ public class MethodDaoImpl implements MethodDao{
 	}
 
 	/**
-	 * Retrieve method from database searching by method name
-	 * @param name : String method name
-	 * @return a {@link Method} instance
-	 * @throws DataAccessException
+	 * This method retrieves method from database searching by method name.
 	 */
 	@Transactional
 	@Override
@@ -88,11 +76,7 @@ public class MethodDaoImpl implements MethodDao{
 	}
 	
 	/**
-	 * Retrieve list of methods for a service.
-	 * Search methods by service id
-	 * @param service_id : int service id
-	 * @return a list of {@link Method} instance
-	 * @throws DataAccessException
+	 * This method retrieves list of methods for a service.
 	 */
 	@Transactional
 	@Override
@@ -105,9 +89,7 @@ public class MethodDaoImpl implements MethodDao{
 	}
 
 	/**
-	 * Add a new method in database
-	 * @param method : {@link Method} instance
-	 * @throws DataAccessException
+	 * This method adds a new method in database.
 	 */
 	@Transactional
 	@Override
@@ -116,9 +98,7 @@ public class MethodDaoImpl implements MethodDao{
 	}
 
 	/**
-	 * Modify an existing method from database
-	 * @param method : {@link Method} instance
-	 * @throws DataAccessException
+	 * This method modifies an existing method from database.
 	 */
 	@Transactional
 	@Override
@@ -128,9 +108,7 @@ public class MethodDaoImpl implements MethodDao{
 	}
 
 	/**
-	 * Delete an existing method from database
-	 * @param method : {@link Method} instance
-	 * @throws DataAccessException
+	 * This method deletes an existing method from database.
 	 */
 	@Transactional
 	@Override

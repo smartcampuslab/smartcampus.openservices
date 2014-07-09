@@ -31,16 +31,20 @@ public interface CategoryDao {
 	
 	/**
 	 * Get {@link Category} data by id (primary key).
+	 * 
 	 * @param id
+	 * 			: int, category id
 	 * @return a {@link Category} instance
 	 * @throws DataAccessException
 	 */
 	public Category getCategoryById(int id) throws DataAccessException;
 	
 	/**
-	 * Get Category data by name
-	 * name is unique
-	 * @param name
+	 * Get Category data by name.
+	 * Name is unique.
+	 * 
+	 * @param name 
+	 * 			: String, category name
 	 * @return a {@link Category} instance
 	 * @throws DataAccessException
 	 */
@@ -53,22 +57,28 @@ public interface CategoryDao {
 	public List<Category> getCategories() throws DataAccessException;
 	
 	/**
-	 * Add new Category
-	 * @param category : {@link Category} instance
+	 * Add new Category.
+	 * 
+	 * @param category 
+	 * 				: {@link Category} instance
 	 * @throws DataAccessException
 	 */
 	public void addCategory(Category category) throws DataAccessException;
 	
 	/**
-	 * Modify a Category
-	 * @param category : a {@link Category} instance
+	 * Modify a Category.
+	 * 
+	 * @param category 
+	 * 				: a {@link Category} instance
 	 * @throws DataAccessException
 	 */
 	public void modifyCategory(Category category) throws DataAccessException;
 	
 	/**
-	 * Delete a Category
-	 * @param category : a {@link Category} instance
+	 * Delete a Category.
+	 * 
+	 * @param category 
+	 * 				: a {@link Category} instance
 	 * @throws DataAccessException
 	 */
 	public void deleteCategory(Category category) throws DataAccessException;

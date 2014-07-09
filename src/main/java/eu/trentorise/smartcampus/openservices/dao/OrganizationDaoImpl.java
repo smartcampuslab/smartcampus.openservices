@@ -38,7 +38,9 @@ import eu.trentorise.smartcampus.openservices.entities.Organization;
  */
 @Repository
 public class OrganizationDaoImpl implements OrganizationDao {
-
+	/**
+	 * Instance of {@link EntityManager}
+	 */
 	@PersistenceContext(unitName = "JpaPersistenceUnit")
 	protected EntityManager entityManager;
 
@@ -51,18 +53,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
 	}
 
 	/**
-	 * 
-	 * @param entityManager
-	 */
-	public void setEntityManager(EntityManager entityManager) {
-		this.entityManager = entityManager;
-	}
-
-	/**
-	 * Retrieve all organization data from database
-	 * 
-	 * @return List of {@link Organization} instance
-	 * @throws DataAccessException
+	 * This method retrieves all organization data from database.
 	 */
 	@Transactional
 	@Override
@@ -78,12 +69,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
 	}
 
 	/**
-	 * Retrieve user's organizations data from database
-	 * 
-	 * @param id_user
-	 *            int user id
-	 * @return List of {@link Organization} instance
-	 * @throws DataAccessException
+	 * This method retrieves user's organizations data from database.
 	 */
 	@Transactional
 	@Override
@@ -97,12 +83,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
 	}
 
 	/**
-	 * Find organization by its id
-	 * 
-	 * @param org_id
-	 *            int organization id
-	 * @return a {@link Organization} instance
-	 * @throws DataAccessException
+	 * This method finds organization by its id.
 	 */
 	@Transactional
 	@Override
@@ -111,12 +92,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
 	}
 
 	/**
-	 * Find organization by name
-	 * 
-	 * @param org_name
-	 *            String organization name
-	 * @return a {@link Organization} instance
-	 * @throws DataAccessException
+	 * This method finds organization by name.
 	 */
 	@Override
 	public Organization getOrganizationByName(String org_name) throws DataAccessException {
@@ -129,11 +105,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
 	}
 
 	/**
-	 * Add a new organization
-	 * 
-	 * @param org
-	 *            {@link Organization} instance
-	 * @throws DataAccessException
+	 * This method adds a new organization.
 	 */
 	@Transactional
 	@Override
@@ -142,11 +114,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
 	}
 
 	/**
-	 * Modify an existing organization from database
-	 * 
-	 * @param org
-	 *            {@link Organization} instance
-	 * @throws DataAccessException
+	 * This method modifies an existing organization from database.
 	 */
 	@Transactional
 	@Override
@@ -156,11 +124,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
 	}
 
 	/**
-	 * Delete an existing organziation from database
-	 * 
-	 * @param org
-	 *            int organization id
-	 * @throws DataAccessException
+	 * This method deletes an existing organization from database.
 	 */
 	@Transactional
 	@Override
@@ -170,12 +134,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
 	}
 
 	/**
-	 * Find all organization where user is an organization owner
-	 * 
-	 * @param owner_id
-	 *            int organization owner id
-	 * @return List of {@link Organization} instance
-	 * @throws DataAccessException
+	 * This method finds all organization where user is an organization owner.
 	 */
 	@Transactional
 	@Override
@@ -190,12 +149,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
 	}
 
 	/**
-	 * Retrieve organization where its name contains a token. Simple search
-	 * 
-	 * @param token
-	 *            String token
-	 * @return List of {@link Organization} instance
-	 * @throws DataAccessException
+	 * This method retrieves organization where its name contains a token. Simple search.
 	 */
 	@Transactional
 	@Override
@@ -210,14 +164,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
 	}
 
 	/**
-	 * Browse organization by category OR geography
-	 * 
-	 * @param category
-	 *            int category id
-	 * @param geography
-	 *            String geography
-	 * @return List of {@link Organization} instance
-	 * @throws DataAccessException
+	 * This method retrieves organization by category OR geography.
 	 */
 	@Transactional
 	@Override
@@ -241,14 +188,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
 	}
 
 	/**
-	 * Browse organization by categories OR geography
-	 * 
-	 * @param categories
-	 *            int[] categories ids
-	 * @param geography
-	 *            String geography
-	 * @return List of {@link Organization} instance
-	 * @throws DataAccessException
+	 * This method retrieves organization by categories OR geography.
 	 */
 	@Transactional
 	@Override
@@ -279,12 +219,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
 	}
 
 	/**
-	 * Find organization by category
-	 * 
-	 * @param id
-	 *            int category id
-	 * @return List of {@link Organization} instance
-	 * @throws DataAccessException
+	 * This method finds organization by category.
 	 */
 	@Transactional
 	@Override
@@ -296,7 +231,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
 	}
 
 	/**
-	 * Count organization
+	 * This method counts organization saved in database.
 	 */
 	@Transactional
 	@Override

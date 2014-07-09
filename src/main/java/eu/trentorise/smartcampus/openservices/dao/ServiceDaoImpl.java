@@ -44,7 +44,9 @@ import eu.trentorise.smartcampus.openservices.entities.User;
  */
 @Repository
 public class ServiceDaoImpl implements ServiceDao {
-
+	/**
+	 * Instance of {@link EntityManager}
+	 */
 	@PersistenceContext(unitName = "JpaPersistenceUnit")
 	protected EntityManager entityManager;
 	/**
@@ -72,20 +74,9 @@ public class ServiceDaoImpl implements ServiceDao {
 	}
 
 	/**
-	 * Set entity manager
-	 * 
-	 * @param entityManager
-	 */
-	public void setEntityManager(EntityManager entityManager) {
-		this.entityManager = entityManager;
-	}
-
-	/**
-	 * Retrieve all service data from database Publish, Unpublish and Deprecated
+	 * This method retrieves all service data from database.
+	 * It does not matter if a service is Published, Unpublished and Deprecated
 	 * service.
-	 * 
-	 * @return List of {@link Service} instance
-	 * @throws DataAccessException
 	 */
 	@Transactional
 	@Override
@@ -96,10 +87,7 @@ public class ServiceDaoImpl implements ServiceDao {
 	}
 
 	/**
-	 * Retrieve all service data but unpublished from database
-	 * 
-	 * @return List of {@link Service} instance
-	 * @throws DataAccessException
+	 * This method retrieves all service data but unpublished from database.
 	 */
 	@Transactional
 	@Override
@@ -118,12 +106,7 @@ public class ServiceDaoImpl implements ServiceDao {
 	}
 
 	/**
-	 * Retrieve all user's service from database
-	 * 
-	 * @param username
-	 *            String username
-	 * @return List of {@link Service} instance
-	 * @throws DataAccessException
+	 * This method retrieves all user's service from database.
 	 */
 	@Transactional
 	@Override
@@ -145,12 +128,7 @@ public class ServiceDaoImpl implements ServiceDao {
 	}
 
 	/**
-	 * Retrieve service data from database Searching by service name
-	 * 
-	 * @param service_name
-	 *            String service name
-	 * @return {@link Service} instance
-	 * @throws DataAccessException
+	 * This method retrieves service data from database Searching by service name.
 	 */
 	@Transactional
 	@Override
@@ -165,11 +143,7 @@ public class ServiceDaoImpl implements ServiceDao {
 	}
 
 	/**
-	 * Add a new service in database
-	 * 
-	 * @param service
-	 *            {@link Service}
-	 * @throws DataAccessException
+	 * This method adds a new service in database.
 	 */
 	@Transactional
 	@Override
@@ -178,11 +152,7 @@ public class ServiceDaoImpl implements ServiceDao {
 	}
 
 	/**
-	 * Modify an existing service from database
-	 * 
-	 * @param service
-	 *            {@link Service}
-	 * @throws DataAccessException
+	 * This method modifies an existing service from database.
 	 */
 	@Transactional
 	@Override
@@ -191,11 +161,7 @@ public class ServiceDaoImpl implements ServiceDao {
 	}
 
 	/**
-	 * Delete an existing service from database
-	 * 
-	 * @param service
-	 *            {@link Service}
-	 * @throws DataAccessException
+	 * This method deletes an existing service from database.
 	 */
 	@Transactional
 	@Override
@@ -204,12 +170,7 @@ public class ServiceDaoImpl implements ServiceDao {
 	}
 
 	/**
-	 * Retrieve organization data for a particular service Search by service id
-	 * 
-	 * @param service_id
-	 *            int service id
-	 * @return {@link Organization} instance
-	 * @throws DataAccessException
+	 * This method retrieves organization data for a particular service searching by service id.
 	 */
 	@Transactional
 	@Override
@@ -219,12 +180,7 @@ public class ServiceDaoImpl implements ServiceDao {
 	}
 
 	/**
-	 * Retrieve user data for a particular service in which user is owner
-	 * 
-	 * @param service_id
-	 *            int service id
-	 * @return {@link User} instance
-	 * @throws DataAccessException
+	 * This method retrieves user data for a particular service in which user is owner.
 	 */
 	@Transactional
 	@Override
@@ -234,12 +190,7 @@ public class ServiceDaoImpl implements ServiceDao {
 	}
 
 	/**
-	 * Find service by its id
-	 * 
-	 * @param service_id
-	 *            int service id
-	 * @return {@link Service} instance
-	 * @throws DataAccessException
+	 * This method finds service by its id.
 	 */
 	@Transactional
 	@Override
@@ -248,12 +199,7 @@ public class ServiceDaoImpl implements ServiceDao {
 	}
 
 	/**
-	 * Find a service by its owner
-	 * 
-	 * @param id_owner
-	 *            int service owner id
-	 * @return {@link Service} instance
-	 * @throws DataAccessException
+	 * This method finds a service by its owner.
 	 */
 	@Transactional
 	@Override
@@ -265,12 +211,7 @@ public class ServiceDaoImpl implements ServiceDao {
 	}
 
 	/**
-	 * Find a service by its organization id
-	 * 
-	 * @param id_org
-	 *            int organization id
-	 * @return {@link Service} instance
-	 * @throws DataAccessException
+	 * This method finds a service by its organization id.
 	 */
 	@Transactional
 	@Override
@@ -284,12 +225,7 @@ public class ServiceDaoImpl implements ServiceDao {
 	}
 
 	/**
-	 * Retrieve all services but unpublished one Search by a token in name
-	 * 
-	 * @param token
-	 *            String token
-	 * @return a list of {@link Service} instance
-	 * @throws DataAccessException
+	 * This method retrieves all services but unpublished one Search by a token in name.
 	 */
 	@Transactional
 	@Override
@@ -312,14 +248,7 @@ public class ServiceDaoImpl implements ServiceDao {
 	}
 
 	/**
-	 * Browse all services but unpublished one by category and tags
-	 * 
-	 * @param category
-	 *            int category id
-	 * @param tags
-	 *            String tags
-	 * @return list of {@link Service} instance
-	 * @throws DataAccessException
+	 * This method browses all services but unpublished one by category and tags.
 	 */
 	@Transactional
 	@Override
@@ -339,14 +268,7 @@ public class ServiceDaoImpl implements ServiceDao {
 	}
 
 	/**
-	 * Browse all services but unpublished one by categories and tags
-	 * 
-	 * @param categories
-	 *            int[] categories ids
-	 * @param tags
-	 *            String tags
-	 * @return list of {@link Service} instance
-	 * @throws DataAccessException
+	 * This method browses all services but unpublished one by categories and tags.
 	 */
 	@Transactional
 	@Override
@@ -372,7 +294,7 @@ public class ServiceDaoImpl implements ServiceDao {
 	}
 
 	/**
-	 * Retrieve Services searching by tag
+	 * This method retrieves Services searching by tag.
 	 */
 	@Transactional
 	@Override
@@ -391,12 +313,7 @@ public class ServiceDaoImpl implements ServiceDao {
 	}
 
 	/**
-	 * Retrieve services by category
-	 * 
-	 * @param id
-	 *            int category id
-	 * @return list of {@link Service} instance
-	 * @throws DataAccessException
+	 * This method retrieves services by category.
 	 */
 	@Transactional
 	@Override
@@ -407,10 +324,7 @@ public class ServiceDaoImpl implements ServiceDao {
 	}
 
 	/**
-	 * Retrieve how many services there are group by categories
-	 * 
-	 * @return Map<Integer,Integer> res
-	 * @throws DataAccessException
+	 * This method retrieves how many services there are group by categories.
 	 */
 	@SuppressWarnings("unchecked")
 	@Transactional
@@ -429,7 +343,7 @@ public class ServiceDaoImpl implements ServiceDao {
 	}
 
 	/**
-	 * Count all services saved in database with state different from unpublish
+	 * This method counts all services saved in database but unpublished ones.
 	 */
 	@Transactional
 	@Override
@@ -438,6 +352,9 @@ public class ServiceDaoImpl implements ServiceDao {
 				.getSingleResult();
 	}
 
+	/**
+	 * This method counts services resulted from simple search by name.
+	 */
 	@Transactional
 	@Override
 	public Long countServiceSimpleSearch(String token) throws DataAccessException {
@@ -446,6 +363,9 @@ public class ServiceDaoImpl implements ServiceDao {
 				.setParameter("token", "%" + token + "%").getSingleResult();
 	}
 
+	/**
+	 *  This method counts services resulted from search by organization id.
+	 */
 	@Transactional
 	@Override
 	public Long countServiceByOrgSearch(int id_org) throws DataAccessException {
@@ -453,7 +373,10 @@ public class ServiceDaoImpl implements ServiceDao {
 				.createQuery("SELECT COUNT(s) FROM Service S WHERE S.organizationId=:id_org " + "AND s.state!='UNPUBLISH'")
 				.setParameter("id_org", id_org).getSingleResult();
 	}
-
+	
+	/**
+	 *  This method counts services resulted from search by category.
+	 */
 	@Transactional
 	@Override
 	public Long countServiceCategorySearch(int category) throws DataAccessException {
@@ -462,6 +385,9 @@ public class ServiceDaoImpl implements ServiceDao {
 				.setParameter("category", category).getSingleResult();
 	}
 
+	/**
+	 *  This method counts services resulted from search by tag.
+	 */
 	@Transactional
 	@Override
 	public Long countServiceTagsSearch(String tag) throws DataAccessException {
@@ -471,7 +397,7 @@ public class ServiceDaoImpl implements ServiceDao {
 	}
 
 	/**
-	 * Return a map with tag name and total number of tag
+	 * This method returns a map with tag name and total number of tag.
 	 */
 	@Transactional
 	@Override

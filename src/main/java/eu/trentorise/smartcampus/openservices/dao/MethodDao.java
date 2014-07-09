@@ -29,46 +29,57 @@ import eu.trentorise.smartcampus.openservices.entities.Method;
 public interface MethodDao {
 	
 	/**
-	 * Get Method data by id (primary key)
+	 * Get Method data by id (primary key).
+	 * 
 	 * @param id
+	 * 			: int, method id
 	 * @return a {@link Method} instance
 	 * @throws DataAccessException
 	 */
 	public Method getMethodById(int id) throws DataAccessException;
 	
 	/**
-	 * Get Method data by name
-	 * name is unique
+	 * Get Method data by name.
+	 * Name is unique.
+	 * 
 	 * @param name
+	 * 			: String, method name
 	 * @return a {@link Method} instance
 	 * @throws DataAccessException
 	 */
 	public Method getMethodByName(String name, int service_id) throws DataAccessException;
 	
 	/**
-	 * Get a list of method for a given service
+	 * Get a list of method for a given service.
+	 * 
 	 * @param service_id
+	 * 				: int
 	 * @return a {@link Method} instance
 	 * @throws DataAccessException
 	 */
 	public List<Method> getMethodByServiceId(int service_id) throws DataAccessException;
 	
 	/**
-	 * Add new method
-	 * @param method : a {@link Method} instance
+	 * Add new method.
+	 * 
+	 * @param method 
+	 * 			: a {@link Method} instance
 	 * @throws DataAccessException
 	 */
 	public void addMethod(Method method) throws DataAccessException;
 	
 	/**
-	 * Modify a method
-	 * @param method : a {@link Method} instance
+	 * Modify a method.
+	 * 
+	 * @param method 
+	 * 			: a {@link Method} instance
 	 * @throws DataAccessException
 	 */
 	public void modifyMethod(Method method) throws DataAccessException;
 	
 	/**
-	 * Delete a method
+	 * Delete a method.
+	 * 
 	 * @param method : a {@link Method} instance
 	 * @throws DataAccessException
 	 */

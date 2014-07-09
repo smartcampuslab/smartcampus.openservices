@@ -31,7 +31,7 @@ import eu.trentorise.smartcampus.openservices.entities.User;
  * @author Giulia Canobbio
  * 
  */
-public interface ServiceDao { // extends JpaRepository<Service, Integer>{
+public interface ServiceDao {
 
 	/**
 	 * Show all service.
@@ -53,6 +53,7 @@ public interface ServiceDao { // extends JpaRepository<Service, Integer>{
 	 * Show all service of a given user.
 	 * 
 	 * @param username
+	 * 				: String
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
@@ -62,6 +63,7 @@ public interface ServiceDao { // extends JpaRepository<Service, Integer>{
 	 * User can interact and use a chosen service.
 	 * 
 	 * @param service_name
+	 * 				: String
 	 * @return a {@link Service} instance
 	 * @throws DataAccessException
 	 */
@@ -99,6 +101,7 @@ public interface ServiceDao { // extends JpaRepository<Service, Integer>{
 	 * Get organization of service.
 	 * 
 	 * @param service_id
+	 * 				: int
 	 * @return a {@link Organization} instance
 	 * @throws DataAccessException
 	 */
@@ -108,6 +111,7 @@ public interface ServiceDao { // extends JpaRepository<Service, Integer>{
 	 * Get owner of service.
 	 * 
 	 * @param service_id
+	 * 				: int
 	 * @return a {@link User} instance
 	 * @throws DataAccessException
 	 */
@@ -117,6 +121,7 @@ public interface ServiceDao { // extends JpaRepository<Service, Integer>{
 	 * Get service by id.
 	 * 
 	 * @param service_id
+	 * 				: int
 	 * @return a {@link Service} instance
 	 * @throws DataAccessException
 	 */
@@ -126,6 +131,7 @@ public interface ServiceDao { // extends JpaRepository<Service, Integer>{
 	 * Get service by owner id.
 	 * 
 	 * @param id_owner
+	 * 				: int
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
@@ -135,9 +141,13 @@ public interface ServiceDao { // extends JpaRepository<Service, Integer>{
 	 * Get service by organization id.
 	 * 
 	 * @param id_org
+	 * 			: int, organization id
 	 * @param firstResult
+	 * 			: int, start index
 	 * @param maxResult
+	 * 			: int, number of services in list
 	 * @param param_order
+	 * 			: String, parameter order
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
@@ -145,12 +155,16 @@ public interface ServiceDao { // extends JpaRepository<Service, Integer>{
 			throws DataAccessException;
 
 	/**
-	 * Find services having in name the token in input
+	 * Find services having in name the token in input.
 	 * 
-	 * @param token
-	 * @param firstResult
-	 * @param maxResult
-	 * @param param_order
+	 * @param token 
+	 * 			: String
+	 * @param firstResult 
+	 * 			: int, start index
+	 * @param maxResult 
+	 * 			: int, number of element in list
+	 * @param param_order 
+	 * 			: String, parameter order for list
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
@@ -158,10 +172,16 @@ public interface ServiceDao { // extends JpaRepository<Service, Integer>{
 			throws DataAccessException;
 
 	/**
-	 * Browse services having input category and tags
+	 * Browse services having input category and tags.
 	 * 
-	 * @param category
-	 * @param tags
+	 * @param category 
+	 * 			: Integer, category id
+	 * @param firstResult 
+	 * 			: int, start index
+	 * @param maxResult 
+	 * 			: int, number of element in list
+	 * @param param_order 
+	 * 			: String, parameter order for list
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
@@ -169,10 +189,16 @@ public interface ServiceDao { // extends JpaRepository<Service, Integer>{
 			throws DataAccessException;
 
 	/**
-	 * Browse services having input categories and tags
+	 * Browse services having input categories and tags.
 	 * 
-	 * @param category
-	 * @param tags
+	 * @param categories 
+	 * 			: integer list of category id
+	 * @param firstResult 
+	 * 			: int, start index
+	 * @param maxResult 
+	 * 			: int, number of element in list
+	 * @param param_order 
+	 * 			: String, parameter order for list
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
@@ -180,12 +206,16 @@ public interface ServiceDao { // extends JpaRepository<Service, Integer>{
 			throws DataAccessException;
 
 	/**
-	 * Retrieve service searching by tag
+	 * Retrieve service searching by tag.
 	 * 
-	 * @param tag
-	 * @param firstResult
-	 * @param maxResult
-	 * @param param_order
+	 * @param tag 
+	 * 			: String
+	 * @param firstResult 
+	 * 			: int, start index
+	 * @param maxResult 
+	 * 			: int, number of element in list
+	 * @param param_order 
+	 * 			: String, parameter oder for list
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
@@ -193,13 +223,18 @@ public interface ServiceDao { // extends JpaRepository<Service, Integer>{
 			throws DataAccessException;
 
 	/**
+	 * Finds category by id.
+	 * 
 	 * @param id
+	 * 			: int
 	 * @return list {@link Service} instances in a specific category
 	 * @throws DataAccessException
 	 */
 	public List<Service> findByCategory(int id);
 
 	/**
+	 * Find category services.
+	 * 
 	 * @return Map<Integer, Integer>: category, number of services for each
 	 *         category;
 	 * @throws DataAccessException
@@ -207,6 +242,7 @@ public interface ServiceDao { // extends JpaRepository<Service, Integer>{
 	public Map<Integer, Integer> findCategoryServices() throws DataAccessException;
 
 	/**
+	 * Counts services saved in db.
 	 * 
 	 * @return number of saved services in db
 	 * @throws DataAccessException
@@ -216,39 +252,49 @@ public interface ServiceDao { // extends JpaRepository<Service, Integer>{
 	/**
 	 * 
 	 * @param token
-	 *            String
+	 * 			: String
 	 * @return number of services retrieved by simple search
 	 * @throws DataAccessException
 	 */
 	public Long countServiceSimpleSearch(String token) throws DataAccessException;
 
 	/**
+	 * Count services retrieve from a search by organization id.
+	 * 
 	 * @param id_org
+	 * 			: int, organization id
 	 * @return number of services retrieved by searching by organization id
 	 * @throws DataAccessException
 	 */
 	public Long countServiceByOrgSearch(int id_org) throws DataAccessException;
 
 	/**
+	 * Count services retrieve from a search by tag.
 	 * 
 	 * @param tags
+	 * 			: String
 	 * @return number of services retrieved by searching by tags
 	 * @throws DataAccessException
 	 */
 	public Long countServiceTagsSearch(String tags) throws DataAccessException;
 
 	/**
+	 * Count services retrieve from a search by category id.
 	 * 
-	 * @param category
+	 * @param category 
+	 * 			: int, category id
 	 * @return number of services retrieved by searching by category
 	 * @throws DataAccessException
 	 */
 	public Long countServiceCategorySearch(int category) throws DataAccessException;
 
 	/**
+	 * Find tag and its services.
 	 * 
-	 * @param order
 	 * @param group
+	 * 			: String
+	 * @param order
+	 * 			: String
 	 * @return Map<String, Integer>: tag name, number of services for each tag;
 	 * @throws DataAccessException
 	 */

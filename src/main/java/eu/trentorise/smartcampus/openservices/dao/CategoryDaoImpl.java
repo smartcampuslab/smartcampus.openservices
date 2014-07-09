@@ -38,6 +38,9 @@ import eu.trentorise.smartcampus.openservices.entities.Category;
 @Repository
 public class CategoryDaoImpl implements CategoryDao {
 	
+	/**
+	 * Instance of {@link EntityManager}
+	 */
 	@PersistenceContext(unitName="JpaPersistenceUnit")
 	protected EntityManager entityManager;
 	
@@ -50,10 +53,7 @@ public class CategoryDaoImpl implements CategoryDao {
 	}
 
 	/**
-	 * Return {@link Category} instance searching by category id
-	 * @param id : int category id
-	 * @return a {@link Category} instance
-	 * @throws DataAccessException
+	 * This method returns {@link Category} instance searching by category id.
 	 */
 	@Transactional
 	@Override
@@ -62,10 +62,7 @@ public class CategoryDaoImpl implements CategoryDao {
 	}
 
 	/**
-	 * Return {@link Category} instance searching by category name
-	 * @param name : string name
-	 * @return a {@link Category} instance
-	 * @throws DataAccessException
+	 * This method returns {@link Category} instance searching by category name.
 	 */
 	@Transactional
 	@Override
@@ -80,9 +77,7 @@ public class CategoryDaoImpl implements CategoryDao {
 	}
 	
 	/**
-	 * Return a list of all categories
-	 * @return a {@link Category} instance list
-	 * @throws DataAccessException
+	 * This method returns a list of all categories.
 	 */
 	@Override
 	public List<Category> getCategories() throws DataAccessException {
@@ -91,9 +86,7 @@ public class CategoryDaoImpl implements CategoryDao {
 	}
 
 	/**
-	 * Save a new category in database
-	 * @param category : {@link Category} 
-	 * @throws DataAccessException
+	 * This method saves a new category in database.
 	 */
 	@Transactional
 	@Override
@@ -102,9 +95,7 @@ public class CategoryDaoImpl implements CategoryDao {
 	}
 
 	/**
-	 * Modify an existing category
-	 * @param category : {@link Category}
-	 * @throws DataAccessException
+	 * This method modifies an existing category.
 	 */
 	@Transactional
 	@Override
@@ -114,9 +105,7 @@ public class CategoryDaoImpl implements CategoryDao {
 	}
 
 	/**
-	 * Delete an existing category from database
-	 * @param category : {@link Category}
-	 * @throws DataAccessException
+	 * This method deletes an existing category from database.
 	 */
 	@Transactional
 	@Override

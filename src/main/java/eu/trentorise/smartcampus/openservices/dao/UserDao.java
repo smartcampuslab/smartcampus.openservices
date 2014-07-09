@@ -69,7 +69,7 @@ public interface UserDao {
 	
 	/**
 	 * disable a user.
-	 * @param id
+	 * @param user_id : int
 	 * @throws DataAccessException
 	 */
 	public void disableUser(int user_id) throws DataAccessException;
@@ -91,7 +91,7 @@ public interface UserDao {
 	
 	/**
 	 * Retrieve user by email
-	 * @param username
+	 * @param email : String 
 	 * @return an instance of {@link User}
 	 * @throws DataAccessException
 	 */
@@ -99,10 +99,9 @@ public interface UserDao {
 	
 	/**
 	 * Modify user password
-	 * @param username
-	 * @param oldPassw
-	 * @param newPassw
-	 * @return
+	 * @param username : String
+	 * @param newPassw : String new password
+	 * @return boolean value, true if operation is done, otherwise false
 	 * @throws DataAccessException
 	 */
 	public boolean modifyPassword(String username, String newPassw) throws DataAccessException;
