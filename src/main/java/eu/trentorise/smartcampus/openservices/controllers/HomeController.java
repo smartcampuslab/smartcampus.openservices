@@ -127,18 +127,18 @@ public class HomeController {
 					fUser = true;
 				}
 			}
-		}
-		if(!fUser){
-			CookieUser cu = new CookieUser();
-			cu.setUsername(username);
-			cu.setRole(Constants.ROLES.ROLE_NORMAL.toString());
-			
-			Gson gson = new Gson();
-			String obj = gson.toJson(cu);
-			
-			Cookie userCookie = new Cookie("user", obj);
-			userCookie.setPath("/openservice/");
-			response.addCookie(userCookie);
+			if(!fUser){
+				CookieUser cu = new CookieUser();
+				cu.setUsername(username);
+				cu.setRole(Constants.ROLES.ROLE_NORMAL.toString());
+				
+				Gson gson = new Gson();
+				String obj = gson.toJson(cu);
+				
+				Cookie userCookie = new Cookie("user", obj);
+				userCookie.setPath("/openservice/");
+				response.addCookie(userCookie);
+			}
 		}
 
 		return "index";

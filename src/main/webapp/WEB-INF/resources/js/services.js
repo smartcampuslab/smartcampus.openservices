@@ -8,20 +8,22 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope', '$window',
         
         //check if user is a string then json
         if(typeof $cookieStore.get('user') == 'string'){
+        	console.log("Found cookie user");
         	var jsonObj = JSON.parse($cookieStore.get('user'));
         	$rootScope.currentUser = {
                 username: jsonObj.username,
                 role: userRoles[jsonObj.role]
             };
+        	console.log("username: "+$rootScope.currentUser.username);
         	changeUser($rootScope.currentUser);
         	$cookieStore.remove('user');
             $cookieStore.put('user', $rootScope.currentUser);
         	
         }else{
-        $rootScope.currentUser = $cookieStore.get('user') || {
-            username: '',
-            role: userRoles.public
-        };
+        	$rootScope.currentUser = $cookieStore.get('user') || {
+        		username: '',
+        		role: userRoles.public
+        	};
         
         }
 
