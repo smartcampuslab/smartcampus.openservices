@@ -38,14 +38,25 @@ import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 public class SocialController {
 
 	private static final Logger logger = LoggerFactory.getLogger(SocialController.class);
+	/**
+	 * Instance of {@link RestTemplate}
+	 */
 	private RestTemplate temp;
+	/**
+	 * Instance of {@link Environment}
+	 */
 	@Autowired
 	private Environment env;
 	
 	/**
-	 * Login with facebook
-	 * @param response
-	 * @return {@link ResponseObject} with link to facebook login page, status (OK or NOT FOUND) and error message (if status is NOT FOUND).
+	 * Login with Facebook.
+	 * Rest service called for handling redirect url.
+	 * 
+	 * @param response 
+	 * 			: {@link HttpServletResponse} which returns status of response 
+	 *            OK or NOT FOUND
+	 * @return {@link ResponseObject} with link to Facebook login page, status 
+	 * 			(OK or NOT FOUND) and error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/fb", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
@@ -57,12 +68,12 @@ public class SocialController {
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 		
 		MultiValueMap<String, String> body = new LinkedMultiValueMap<String, String>();
-		body.add("redirect_uri", "http://localhost:8080/openservice");
+		body.add("redirect_uri", env.getProperty("application.url"));
 		body.add("scope", "email,user_likes,friends_likes,publish_stream");
 		
 		HttpEntity<?> httpEntity = new HttpEntity<Object>(body,headers);
 		
-		ResponseEntity<Object> r =temp.exchange("http://localhost:8080/openservice/signin/facebook", HttpMethod.POST, httpEntity, Object.class);
+		ResponseEntity<Object> r =temp.exchange(env.getProperty("application.url")+"signin/facebook", HttpMethod.POST, httpEntity, Object.class);
 		
 		logger.info("## ResponseEntity Headers: {}  ##",r.getHeaders().getLocation());
 		logger.info("## ResponseEntity Body: {} ##",r.getBody());
@@ -84,9 +95,13 @@ public class SocialController {
 	}
 	
 	/**
-	 * Logout with facebook
-	 * @param response
-	 * @return {@link ResponseObject} with facebook logout data, status (OK or NOT FOUND) and error message (if status is NOT FOUND).
+	 * Logout with Facebook.
+	 * 
+	 * @param response 
+	 * 			: {@link HttpServletResponse} which returns status of response 
+	 *            OK or NOT FOUND
+	 * @return {@link ResponseObject} with link to Facebook login page, status 
+	 * 			(OK or NOT FOUND) and error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/fb", method = RequestMethod.DELETE, produces = "application/json")
 	@ResponseBody
@@ -101,7 +116,7 @@ public class SocialController {
 		
 		HttpEntity<?> httpEntity = new HttpEntity<Object>(body,headers);
 		
-		ResponseEntity<Object> r =temp.exchange("http://localhost:8080/openservice/signin/facebook", HttpMethod.DELETE, httpEntity, Object.class);
+		ResponseEntity<Object> r =temp.exchange(env.getProperty("application.url")+"signin/facebook", HttpMethod.DELETE, httpEntity, Object.class);
 		
 		logger.info("## ResponseEntity Headers: {}  ##",r.getHeaders().getLocation());
 		logger.info("## ResponseEntity Body: {} ##",r.getBody());

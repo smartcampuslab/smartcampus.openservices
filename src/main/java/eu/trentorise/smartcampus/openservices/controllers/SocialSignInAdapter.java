@@ -34,9 +34,16 @@ import org.springframework.web.context.request.NativeWebRequest;
  */
 public class SocialSignInAdapter implements SignInAdapter{
 
+	/**
+	 * Instance of {@link UserDetailsService}
+	 */
 	@Autowired
 	private UserDetailsService manager;
 
+	/**
+	 * Signin function that authenticates user in spring security,
+	 * after find him/her in db.
+	 */
 	@Override
 	public String signIn(String arg0, Connection<?> arg1, NativeWebRequest arg2) {
 		System.out.println("Sign in Adapter......");

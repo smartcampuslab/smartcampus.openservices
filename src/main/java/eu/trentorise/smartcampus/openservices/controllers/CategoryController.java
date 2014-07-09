@@ -55,13 +55,13 @@ public class CategoryController {
 	private CategoryManager categoryManager;
 
 	/**
-	 * Retrieve category data searching by category id
+	 * Retrieve category data searching by category id.
 	 * 
 	 * @param category
-	 *            int, category id
+	 *            : int, category id
 	 * @param response
-	 *            {@link HttpServletResponse} which returns status of response
-	 *            OK or NOT FOUND
+	 *            : {@link HttpServletResponse} which returns status of response
+	 *               OK or NOT FOUND
 	 * @return {@link ResponseObject} with category data, status (OK or NOT
 	 *         FOUND) and error message (if status is NOT FOUND).
 	 */
@@ -86,7 +86,7 @@ public class CategoryController {
 	 * Retrieve all categories data.
 	 * 
 	 * @param response
-	 *            : {@link HttpServletResponse} which returns status of response
+	 *          : {@link HttpServletResponse} which returns status of response
 	 *            OK or NOT FOUND
 	 * @return {@link ResponseObject} with category data, status (OK or NOT
 	 *         FOUND) and error message (if status is NOT FOUND).
@@ -112,9 +112,9 @@ public class CategoryController {
 	 * Add a new category to database.
 	 * 
 	 * @param category
-	 *            : {@link Category} object
+	 *          : {@link Category} object
 	 * @param response
-	 *            : {@link HttpServletResponse} which returns status of response
+	 *          : {@link HttpServletResponse} which returns status of response
 	 *            OK or NOT FOUND
 	 * @return {@link ResponseObject} with new added category data, status (OK
 	 *         or NOT FOUND) and error message (if status is NOT FOUND).
@@ -146,9 +146,9 @@ public class CategoryController {
 	 * Modify a category.
 	 * 
 	 * @param category
-	 *            : {@link Category} object
+	 *          : {@link Category} object
 	 * @param response
-	 *            : {@link HttpServletResponse} which returns status of response
+	 *          : {@link HttpServletResponse} which returns status of response
 	 *            OK or NOT FOUND
 	 * @return {@link ResponseObject} with modified category data, status (OK or
 	 *         NOT FOUND) and error message (if status is NOT FOUND).
@@ -179,10 +179,10 @@ public class CategoryController {
 	/**
 	 * Delete a category by its id.
 	 * 
-	 * @param category
-	 *            : int category id
+	 * @param id
+	 *          : int category id
 	 * @param response
-	 *            : {@link HttpServletResponse} which returns status of response
+	 *          : {@link HttpServletResponse} which returns status of response
 	 *            OK or NOT FOUND
 	 * @return {@link ResponseObject} with true/false value result of delete
 	 *         operation, status (OK or NOT FOUND) and error message (if status

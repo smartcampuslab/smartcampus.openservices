@@ -66,14 +66,11 @@ public class CatalogController {
 	/**
 	 * Retrieve services count
 	 * 
-	 * @param token
-	 *            String
-	 * @param response
-	 *            {@link HttpServletResponse} which is needed for status of
-	 *            response (OK, BAD REQUEST or NOT FOUND)
+	 * @param response 
+	 * 			: {@link HttpServletResponse} which is needed for status of
+	 * 			response (OK, BAD REQUEST or NOT FOUND)
 	 * @return {@link ResponseObject} with services data, status (OK, BAD
-	 *         REQUEST or NOT FOUND) and error message (if status is BAD REQUEST
-	 *         or NOT FOUND).
+	 *  		REQUEST or NOT FOUND) and error message (if status is BAD REQUEST or NOT FOUND).
 	 */
 	@RequestMapping(value = "/servicecount", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
@@ -104,15 +101,15 @@ public class CatalogController {
 	 * name and description, or searching by tag.
 	 * 
 	 * @param token
-	 *            String
+	 *            : String
 	 * @param firstResult
-	 *            Integer
+	 *            : Integer start index
 	 * @param maxResult
-	 *            Integer
+	 *            : Integer number of element in list
 	 * @param param_order
-	 *            String
+	 *            : String parameter order
 	 * @param tag
-	 *            String
+	 *            : String
 	 * @param response
 	 *            {@link HttpServletResponse} which is needed for status of
 	 *            response (OK, BAD REQUEST or NOT FOUND)
@@ -182,13 +179,13 @@ public class CatalogController {
 	 * Retrieve data of a specific service, which must be published or
 	 * deprecated. Search is done by service id.
 	 * 
-	 * @param service_id
-	 *            int id of published or deprecated service.
-	 * @param response
-	 *            {@link HttpServletResponse} which is needed for status of
-	 *            response (OK or NOT FOUND)
+	 * @param serviceId 
+	 * 				: int id of published or deprecated service.
+	 * @param response 
+	 * 				: {@link HttpServletResponse} which is needed for status of
+	 * 				  response (OK or NOT FOUND)
 	 * @return {@link ResponseObject} with services data, status (OK or NOT
-	 *         FOUND) and error message (if status is NOT FOUND).
+	 * 			FOUND) and error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/service/{serviceId}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
@@ -211,11 +208,11 @@ public class CatalogController {
 	 * Retrieve methods data of a specific published or deprecated service.
 	 * Search by service id.
 	 * 
-	 * @param service_id
-	 *            int id of published or deprecated service.
+	 * @param serviceId
+	 *            : int id of published or deprecated service.
 	 * @param response
-	 *            {@link HttpServletResponse} which is needed for status of
-	 *            response (OK or NOT FOUND)
+	 *            : {@link HttpServletResponse} which is needed for status of
+	 *              response (OK or NOT FOUND)
 	 * @return {@link ResponseObject} with services method data, status (OK or
 	 *         NOT FOUND) and error message (if status is NOT FOUND).
 	 */
@@ -237,13 +234,13 @@ public class CatalogController {
 	}
 
 	/**
-	 * Retrieve data history of a specific service. Search by service id
+	 * Retrieve data history of a specific service. Search by service id.
 	 * 
-	 * @param service_id
-	 *            int id of published or deprecated service.
+	 * @param serviceId
+	 *            : int id of published or deprecated service.
 	 * @param response
-	 *            {@link HttpServletResponse} which is needed for status of
-	 *            response (OK or NOT FOUND)
+	 *            : {@link HttpServletResponse} which is needed for status of
+	 *              response (OK or NOT FOUND)
 	 * @return {@link ResponseObject} with services history data, status (OK or
 	 *         NOT FOUND) and error message (if status is NOT FOUND).
 	 */
@@ -265,14 +262,21 @@ public class CatalogController {
 	}
 
 	/**
+	 * /**
 	 * Browse service in catalog by category. Every category has its own id and
 	 * search is done by category id.
-	 * 
-	 * @param category
-	 *            int category id
+	 *
+	 * @param categoryId
+	 *            : int category id
+	 * @param firstResult
+	 * 			  : start index
+	 * @param maxResult
+	 * 			  : number of elements
+	 * @param param_order
+	 * 			  : order parameter for resulted list
 	 * @param response
-	 *            {@link HttpServletResponse} which is needed for status of
-	 *            response (OK or NOT FOUND)
+	 *            : {@link HttpServletResponse} which is needed for status of
+	 *              response (OK or NOT FOUND)
 	 * @return {@link ResponseObject} with list of service data, status (OK or
 	 *         NOT FOUND) and error message (if status is NOT FOUND).
 	 */
@@ -302,9 +306,17 @@ public class CatalogController {
 	/**
 	 * Browse service in catalog by multiple categories.
 	 * 
+	 * @param firstResult
+	 * 			  : start index
+	 * @param maxResult
+	 * 			  : number of elements
+	 * @param param_order
+	 * 			  : order parameter for resulted list
+	 * @param categoriesIds
+	 * 			  : string of category id list
 	 * @param response
-	 *            {@link HttpServletResponse} which is needed for status of
-	 *            response (OK or NOT FOUND)
+	 *            : {@link HttpServletResponse} which is needed for status of
+	 *              response (OK or NOT FOUND)
 	 * @return {@link ResponseObject} with list of service data, status (OK or
 	 *         NOT FOUND) and error message (if status is NOT FOUND).
 	 */
@@ -352,10 +364,16 @@ public class CatalogController {
 	 * id.
 	 * 
 	 * @param org
-	 *            int organization id
+	 *            : int organization id
+	 * @param firstResult
+	 * 			  : start index
+	 * @param maxResult
+	 * 			  : number of elements
+	 * @param param_order
+	 * 			  : order parameter for resulted list
 	 * @param response
-	 *            {@link HttpServletResponse} which is needed for status of
-	 *            response (OK or NOT FOUND)
+	 *            : {@link HttpServletResponse} which is needed for status of
+	 *              response (OK or NOT FOUND)
 	 * @return {@link ResponseObject} with list of service data, status (OK or
 	 *         NOT FOUND) and error message (if status is NOT FOUND).
 	 */
@@ -391,19 +409,19 @@ public class CatalogController {
 
 	/**
 	 * Retrieve list of all organizations or a partial one search by free text
-	 * in name and description
+	 * in name and description.
 	 * 
 	 * @param token
-	 *            String
+	 *            : String
 	 * @param firstResult
-	 *            Integer
+	 * 			  : start index
 	 * @param maxResult
-	 *            Integer
+	 * 			  : number of elements
 	 * @param param_order
-	 *            String
+	 * 			  : order parameter for resulted list
 	 * @param response
-	 *            {@link HttpServletResponse} which is needed for status of
-	 *            response (OK, BAD REQUEST or NOT FOUND)
+	 *            : {@link HttpServletResponse} which is needed for status of
+	 *               response (OK, BAD REQUEST or NOT FOUND)
 	 * @return {@link ResponseObject} with organizations data, status (OK, BAD
 	 *         REQUEST or NOT FOUND) and error message (if status is BAD REQUEST
 	 *         or NOT FOUND).
@@ -457,9 +475,9 @@ public class CatalogController {
 	 * Retrieve data of a specific organization. Search by its id.
 	 * 
 	 * @param id
-	 *            int organization id
+	 *          : int organization id
 	 * @param response
-	 *            {@link HttpServletResponse} which is needed for status of
+	 *          : {@link HttpServletResponse} which is needed for status of
 	 *            response (OK or NOT FOUND)
 	 * @return {@link ResponseObject} with organization data, status (OK or NOT
 	 *         FOUND) and error message (if status is NOT FOUND).
@@ -485,11 +503,17 @@ public class CatalogController {
 	 * Browse organization by category. Every category has its own id and search
 	 * is done by category id.
 	 * 
-	 * @param category
-	 *            path variable
+	 * @param categoryId
+	 *            : int path variable category id
+	 * @param firstResult
+	 * 			  : start index
+	 * @param maxResult
+	 * 			  : number of elements
+	 * @param param_order
+	 * 			  : order parameter for resulted list
 	 * @param response
-	 *            {@link HttpServletResponse} which is needed for status of
-	 *            response (OK or NOT FOUND)
+	 *            : {@link HttpServletResponse} which is needed for status of
+	 *              response (OK, BAD REQUEST or NOT FOUND)
 	 * @return {@link ResponseObject} with list of organization data, status (OK
 	 *         or NOT FOUND) and error message (if status is NOT FOUND).
 	 */
@@ -524,15 +548,21 @@ public class CatalogController {
 	}
 
 	/**
-	 * Browse organization by categoris.
+	 * Browse organization by categories.
 	 * 
-	 * @param categories
-	 *            path variable
+	 * @param firstResult 
+	 * 				: start index
+	 * @param maxResult
+	 * 				: number of element in list
+	 * @param param_order
+	 * 				: parameter for ordering list
+	 * @param categoriesIds
+	 * 				: id of categories
 	 * @param response
-	 *            {@link HttpServletResponse} which is needed for status of
-	 *            response (OK or NOT FOUND)
-	 * @return {@link ResponseObject} with list of organization data, status (OK
-	 *         or NOT FOUND) and error message (if status is NOT FOUND).
+	 * 				: instance of {@link HttpServletResponse} that is needed for status
+	 * 				  of response (OK, BAD REQUEST or NOT FOUND)
+	 * @return {@link ResponseObject} with list of organization in the category, status (OK, BAD REQUEST
+	 *         or NOT FOUND) and error message (if status is BAD REQUEST or NOT FOUND).
 	 */
 	@RequestMapping(value = "/org/category", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
@@ -603,10 +633,12 @@ public class CatalogController {
 	}
 
 	/**
-	 * Retrieve news
+	 * Retrieve news.
 	 * 
+	 * @param n
+	 * 			: int, number of news that are retrieved
 	 * @param response
-	 *            {@link HttpServletResponse} which is needed for status of
+	 *          : {@link HttpServletResponse} which is needed for status of
 	 *            response (OK or NOT FOUND)
 	 * @return {@link ResponseObject} with list of service history (news),
 	 *         status (OK or NOT FOUND) and error message (if status is NOT
@@ -631,10 +663,14 @@ public class CatalogController {
 	}
 
 	/**
-	 * Retrieve tag counter
+	 * Retrieve tag counter.
 	 * 
+	 * @param group
+	 * 			: String, its values are tag or counter. This parameter orders list of tagged services
+	 * @param order
+	 * 			: String, its values are ASC or DESC.
 	 * @param response
-	 *            {@link HttpServletResponse} which is needed for status of
+	 * 			: {@link HttpServletResponse} which is needed for status of
 	 *            response (OK, BAD REQUEST or NOT FOUND)
 	 * @return {@link ResponseObject} with list of tag counter, status (OK, BAD
 	 *         REQUEST or NOT FOUND) and error message (if status is NOT FOUND

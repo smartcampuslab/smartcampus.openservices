@@ -138,37 +138,6 @@ public class OrganizationController {
 		return responseObject;
 	}
 
-	// Organization - View organization data
-	/**
-	 * Retrieves all organization data.
-	 * 
-	 * @param response
-	 *            : {@link HttpServletResponse} which returns status of response
-	 *            OK or NOT FOUND
-	 * @return {@link ResponseObject} with list of organization data, status (OK
-	 *         or NOT FOUND) and error message (if status is NOT FOUND).
-	 */
-	/*
-	 * @RequestMapping(value = "/list", method = RequestMethod.GET,
-	 * produces="application/json")
-	 * 
-	 * @ResponseBody public ResponseObject getOrganizations(HttpServletResponse
-	 * response){ logger.info("-- View organization list --"); try{
-	 * List<Organization> orgs = organizationManager.getOrganizations(0,
-	 * 100000000, "name"); ResponseObject responseObject = new ResponseObject();
-	 * if(orgs==null || orgs.size()==0){
-	 * responseObject.setError("There is no organization");
-	 * responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-	 * response.setStatus(HttpServletResponse.SC_NOT_FOUND); } else{
-	 * responseObject.setData(orgs);
-	 * responseObject.setStatus(HttpServletResponse.SC_OK); }
-	 * }catch(SecurityException s){
-	 * responseObject.setError("Order is wrong. It can be name or id.");
-	 * responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-	 * response.setStatus(HttpServletResponse.SC_BAD_REQUEST); } return
-	 * responseObject; }
-	 */
-
 	// Organization - View organization activity history
 	/**
 	 * Retrieves history of services belonging to an organization. Search by
@@ -238,7 +207,7 @@ public class OrganizationController {
 	 * User can delete an organization from database, only if he/she has role
 	 * 'organization owner' for this organization and if there is no published
 	 * service. Delete operation causes delete of all services, methods and
-	 * service histories which belogns to this organization.
+	 * service histories which belongs to this organization.
 	 * 
 	 * @param id
 	 *            : int organization id
@@ -328,10 +297,10 @@ public class OrganizationController {
 	 * Add organization owner to an organization. User who send invitation must
 	 * be an organization owner.
 	 * 
-	 * @param org_id
-	 *            : int organization id
-	 * @param email
-	 *            : String new user email
+	 * @param data 
+	 * 			: instance of {@link UserInvitation}
+	 * @param req 
+	 * 			: instance of {@link HttpServletRequest} which returns status of response
 	 * @return {@link ResponseObject} with status (OK or UNAUTHORIZED) and error
 	 *         message (if status is UNAUTHORIZED).
 	 */
@@ -434,12 +403,10 @@ public class OrganizationController {
 	 * Delete owner from an organization. User who deletes other owners must be
 	 * organization owner.
 	 * 
-	 * @param org_id
-	 *            : int organization id
-	 * @param user_id
-	 *            : int user id
+	 * @param data 
+	 * 			: instance of {@link UserInvitation}
 	 * @param response
-	 *            : : {@link HttpServletResponse} which returns status of
+	 *            : {@link HttpServletResponse} which returns status of
 	 *            response OK, SERVICE UNAVAILABLE or UNAUTHORIZED
 	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE, BAD
 	 *         REQUEST or UNAUTHORIZED) and error message (if status is SERVICE
@@ -490,8 +457,11 @@ public class OrganizationController {
 	 * 
 	 * @param organization_id
 	 *            : int
-	 * @return {@link ResponseObject} with status (OK or INTERNAL SERVER ERROR)
-	 *         and error message (if status is INTERNAL SERVER ERROR).
+	 * @param response
+	 *            : {@link HttpServletResponse} which returns status of
+	 *            response OK or SERVICE UNAVAILABLE
+	 * @return {@link ResponseObject} with status (OK or SERVICE UNAVAILABLE)
+	 *         and error message (if status is SERVICE UNAVAILABLE).
 	 */
 	@RequestMapping(value = "/members/{organization_id}", method = RequestMethod.GET)
 	@ResponseBody
@@ -504,9 +474,9 @@ public class OrganizationController {
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 
 		} else {
-			responseObject.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 			responseObject.setError("Connection problem");
-			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 		}
 		return responseObject;
 	}

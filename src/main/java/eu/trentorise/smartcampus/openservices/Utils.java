@@ -27,8 +27,8 @@ public class Utils {
 
 	/**
 	 * Construct the root address of the app using virtual host if any
-	 * @param req
-	 * @return
+	 * @param req : instance of {@link HttpServletRequest}
+	 * @return root address
 	 */
 	public static String getAppURL(HttpServletRequest req) {
 		String res = req.getScheme()+"://"+ req.getServerName();

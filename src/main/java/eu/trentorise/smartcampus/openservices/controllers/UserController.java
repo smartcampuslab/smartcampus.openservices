@@ -75,13 +75,13 @@ public class UserController {
 	 */
 
 	/**
-	 * Retrieve User data by user id. User id is a primary key. This operation
+	 * It retrieves User data by user id. User id is a primary key. This operation
 	 * is for admin user.
 	 * 
 	 * @param id
-	 *            int user id
+	 *          : int user id
 	 * @param response
-	 *            {@link HttpServletResponse} which returns status of response
+	 *          : {@link HttpServletResponse} which returns status of response
 	 *            OK or NOT FOUND
 	 * @return {@link ResponseObject} with user data, status (OK or NOT FOUND)
 	 *         and error message (if status is NOT FOUND).
@@ -104,14 +104,13 @@ public class UserController {
 	}
 
 	/**
-	 * Retrieves user data for logged user. This operation is for logged user.
+	 * It retrieves user data for logged user. This operation is for logged user.
 	 * 
 	 * @param response
-	 *            {@link HttpServletResponse} which returns status of response
+	 *         : {@link HttpServletResponse} which returns status of response
 	 *            OK or SERVICE UNAVAILABLE
 	 * @return {@link ResponseObject} with user data, status (OK or SERVICE
-	 *         UNAVAILABLE) and error message (if status is SERVICE
-	 *         UNAVAILABLE).
+	 *         UNAVAILABLE) and error message (if status is SERVICE UNAVAILABLE).
 	 */
 	@RequestMapping(value = "/my", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
@@ -132,13 +131,15 @@ public class UserController {
 	}
 
 	/**
-	 * Get in input a User data and add it to User table. First check if
+	 * It gets in input a User data and add it to User table. First check if
 	 * username is already in use. Return saved user.
 	 * 
 	 * @param user
-	 *            {@link User} instance
+	 *          : {@link eu.trentorise.smartcampus.openservices.entities.User} instance
+	 * @param req 
+	 * 			: {@link HttpServletRequest} for having application url
 	 * @param response
-	 *            {@link HttpServletResponse} which returns status of response
+	 *          : {@link HttpServletResponse} which returns status of response
 	 *            CREATED, FORBIDDEN or SERVICE UNAVAILABLE
 	 * @return {@link ResponseObject} with new user data, status (OK, FORBIDDEN,
 	 *         BAD REQUEST or SERVICE UNAVAILABLE) and error message (if status
@@ -195,11 +196,16 @@ public class UserController {
 	}
 
 	/**
-	 * Verify user email, sending an email with a link to a rest service which
+	 * It verifies user email, sending an email with a link to a rest service which
 	 * enable user's account.
 	 * 
 	 * @param user
-	 *            {@link User} instance that wants to enable account.
+	 *          : {@link User} instance that wants to enable account.
+	 * @param req 
+	 * 			: {@link HttpServletRequest} for having application url
+	 * @param response
+	 *          : {@link HttpServletResponse} which returns status of response
+	 *            SERVICE UNAVAILABLE or UNAUTHORIZED
 	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE or
 	 *         UNAUTHORIZED) and error message (if status is SERIVCE UNAVAILABLE
 	 *         or UNAUTHORIZED).
@@ -238,12 +244,13 @@ public class UserController {
 	}
 
 	/**
-	 * Enables user account verifying username and key.
+	 * It enables user account verifying username and key.
 	 * 
-	 * @param username
-	 *            String username, user who wants to enable his/her account
 	 * @param key
-	 *            String key sent by email to user
+	 *         : String key sent by email to user
+	 * @param response
+	 *          : {@link HttpServletResponse} which returns status of response
+	 *            SERVICE UNAVAILABLE or NOT FOUND
 	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE or
 	 *         NOT FOUND) and error message (if status is SERIVCE UNAVAILABLE or
 	 *         NOT FOUND).
@@ -273,13 +280,13 @@ public class UserController {
 	}
 
 	/**
-	 * Modify user account and update data in db. This operation is only for
+	 * It modifies user account and update data in db. This operation is only for
 	 * logged user.
 	 * 
 	 * @param user
-	 *            {@link User} instance
+	 *          : {@link eu.trentorise.smartcampus.openservices.entities.User} instance
 	 * @param response
-	 *            {@link HttpServletResponse} which returns status of response
+	 *          : {@link HttpServletResponse} which returns status of response
 	 *            OK or SERVICE UNAVAILABLE
 	 * @return {@link ResponseObject} with modified user data, status (OK or
 	 *         SERVICE UNAVAILABLE) and error message (if status is SERVICE
@@ -306,13 +313,13 @@ public class UserController {
 	}
 
 	/**
-	 * Disabled a user by his/her username. Therefore user cannot login. Then
+	 * It disables a user by his/her username. Therefore user cannot login. Then
 	 * retrieve disabled user. This operation is only for admin user.
 	 * 
 	 * @param username
-	 *            String username of user that admin wants to disable
+	 *          : String username of user that admin wants to disable
 	 * @param response
-	 *            {@link HttpServletResponse} which returns status of response
+	 *          : {@link HttpServletResponse} which returns status of response
 	 *            OK or SERVICE UNAVAILABLE
 	 * @return {@link ResponseObject} with disabled user data, status (OK or
 	 *         SERVICE UNAVAILABLE) and error message (if status is SERVICE
@@ -336,14 +343,12 @@ public class UserController {
 	}
 
 	/**
-	 * Modify a user's password
+	 * It modifies a user's password.
 	 * 
-	 * @param oldP
-	 *            String old password saved in db
-	 * @param newP
-	 *            Strign new password
+	 * @param passw 
+	 * 			: instance of {@link Password}
 	 * @param response
-	 *            {@link HttpServletResponse} which returns status of response
+	 *          : {@link HttpServletResponse} which returns status of response
 	 *            OK, SERVICE UNAVAILABLE or NOT FOUND
 	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE or
 	 *         NOT FOUND) and error message (if status is SERVICE UNAVAILABLE or
@@ -351,12 +356,7 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/passw/modify", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
-	public ResponseObject modifyUserPassword(@RequestBody Password passw,// String
-																			// oldP,
-																			// @RequestBody
-																			// String
-																			// newP,
-			HttpServletResponse response) {
+	public ResponseObject modifyUserPassword(@RequestBody Password passw, HttpServletResponse response) {
 		logger.info("-- Modify User password --");
 		logger.info("-- OldP-- " + passw.getOldP());
 		logger.info("-- NewP-- " + passw.getNewP());
@@ -380,13 +380,13 @@ public class UserController {
 	}
 
 	/**
-	 * Reset a user's password when password is forgotten. This function reset
+	 * It resets a user's password when password is forgotten. This function reset
 	 * password in db with a new random value and send it via email to user.
 	 * 
 	 * @param email
-	 *            String user's email
+	 *          : String user's email
 	 * @param response
-	 *            a {@link HttpServletResponse} which returns status of response
+	 *          : a {@link HttpServletResponse} which returns status of response
 	 *            OK, FORBIDDEN, SERVICE UNAVAILABLE or NOT FOUND
 	 * @return {@link ResponseObject} with status (OK, FORBIDDEN, SERVICE
 	 *         UNAVAILABLE or NOT FOUND) and error message (if status is
@@ -396,7 +396,6 @@ public class UserController {
 	@ResponseBody
 	public ResponseObject resetUserPassword(@RequestBody String email, HttpServletResponse response) {
 		logger.info("-- Reset User password --");
-		// TODO
 		ResponseObject responseObject = new ResponseObject();
 		// Check email
 		EmailValidator ev = new EmailValidator();

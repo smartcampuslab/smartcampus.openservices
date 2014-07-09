@@ -53,6 +53,13 @@ import eu.trentorise.smartcampus.openservices.scribe.OAuthServiceProvider;
 import eu.trentorise.smartcampus.openservices.social.LinkedInUser;
 import eu.trentorise.smartcampus.openservices.support.CookieUser;
 
+/**
+ * LinkedIn controller uses scribe to connect user with their linkedIn profile.
+ * It retrieves user data and saved in db, if possible.
+ * 
+ * @author Giulia Canobbio
+ *
+ */
 @Controller
 @RequestMapping(value = "/api/oauth/linkedin")
 public class LinkedInController {
@@ -81,8 +88,13 @@ public class LinkedInController {
 	private UserDetailsService manager;
 	
 	/**
-	 * Start oauth authentication with Twitter with scribe
-	 * @param request : instance of {@link HttpServletRequest}
+	 * LoginTwitter starts oauth authentication with Twitter.
+	 * First it searches in session for access and request token, because if they are not null then user
+	 * is already logged in, otherwise it generates new request token.
+	 * Then request token is saved in session and authorization url for login is created.
+	 * 
+	 * @param request 
+	 * 			: instance of {@link HttpServletRequest}
 	 * @return {@link ResponseObject} with redirected url, status (OK) and error message if user is already logged in.
 	 */
 	@RequestMapping(value = "/auth", method = RequestMethod.GET, produces = "application/json")
@@ -119,14 +131,25 @@ public class LinkedInController {
 	}
 	
 	/**
-	 * Retrieve user data after login and save them in db.
-	 * @param request : instance of {@link HttpServletRequest}
+	 * CallbackTwitter is the url called back from LinkedIn after successful login from user.
+	 * It gets request token from session. 
+	 * Then it gets access token from request token and a verifier, and stores it in session.
+	 * Using this tokens, it is possible to retrieve user data.
+	 * After that data is unmarshalled with XStream (xml format) and saved in db.
+	 * If email is already in use, a security warning is thrown and user is redirected to home page 
+	 * without authentication and response status UNAUTHORIZED.
+	 * Otherwise user is authenticated and cookie user is added, then user is redirected to home page.
+	 * 
+	 * @param request 
+	 * 			: instance of {@link HttpServletRequest}
+	 * @param response
+	 * 			: response of {@link HttpServletResponse}
 	 * @return redirect to home page
 	 */
 	@RequestMapping(value = "/callback", method = RequestMethod.GET, produces = "application/json")
 	public String callbackTwitter( HttpServletRequest request,  HttpServletResponse response){
 		logger.info("LinkedIn Callback.. Starting ..");
-		ResponseObject responseObj = new ResponseObject();
+		//ResponseObject responseObj = new ResponseObject();
 		
 		//request token
 		OAuthService service = linServiceProvider.getService();
@@ -181,10 +204,10 @@ public class LinkedInController {
 			try{
 				userManager.createSocialUser(user);
 			}catch(SecurityException s){
-				logger.info("Different user with same username");
+				logger.info("Error: Already exists a register user with this email address. Please try to login with correct provider.");
 				//different email, same username
-				responseObj.setError("Already exists a register user with this email address. Please try to login with correct provider.");
-				responseObj.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				//responseObj.setError("Already exists a register user with this email address. Please try to login with correct provider.");
+				//responseObj.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 				return "redirect:/";
 			}

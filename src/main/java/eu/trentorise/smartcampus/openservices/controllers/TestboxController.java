@@ -43,7 +43,7 @@ import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.entities.TestInfo;
 
 /**
- * Controller that performs test on service method
+ * Class that performs test on service method
  * 
  * @author raman
  * 
@@ -64,9 +64,11 @@ public class TestboxController {
 	 * method of test.
 	 * 
 	 * @param req
-	 *            {@link HttpServletRequest} request
+	 *          : {@link HttpServletRequest} request
 	 * @param test
-	 *            {@link TestInfo} test information
+	 *          : {@link TestInfo} test information
+	 * @param response
+	 * 			: {@link HttpServletResponse} which returns status of response OK or BAD REQUEST
 	 * @return {@link ResponseObject} with response data, status (OK or BAD
 	 *         REQUEST) and error message (if status is BAD REQUEST).
 	 * @throws TestBoxException
@@ -168,11 +170,11 @@ public class TestboxController {
 	 * Set up response for POST method
 	 * 
 	 * @param url
-	 *            String url that user wants to test
+	 *          : String url that user wants to test
 	 * @param body
-	 *            String body that test needs
+	 *          : String body that test needs
 	 * @param headers
-	 *            Map<String,String> headers that test needs
+	 *          : Map<String,String> headers that test needs
 	 * @return String response, data response if it is ok, else
 	 *         {@link TestBoxException} instance
 	 * @throws TestBoxException
@@ -207,11 +209,11 @@ public class TestboxController {
 	 * Set up response for PUT method
 	 * 
 	 * @param url
-	 *            String url that user wants to test
+	 *          : String url that user wants to test
 	 * @param body
-	 *            String body that test needs
+	 *          : String body that test needs
 	 * @param headers
-	 *            Map<String,String> headers that test needs
+	 *          : Map<String,String> headers that test needs
 	 * @return String response, data response if it is ok, else
 	 *         {@link TestBoxException} instance
 	 * @throws TestBoxException
@@ -246,9 +248,9 @@ public class TestboxController {
 	 * Set up response for DELETE method
 	 * 
 	 * @param url
-	 *            String url that user wants to test
+	 *           : String url that user wants to test
 	 * @param headers
-	 *            Map<String,String> headers that test needs
+	 *            : Map<String,String> headers that test needs
 	 * @return String response, data response if it is ok, else
 	 *         {@link TestBoxException} instance
 	 * @throws TestBoxException
@@ -280,9 +282,9 @@ public class TestboxController {
 	 * Set up response for GET method
 	 * 
 	 * @param url
-	 *            String url that user wants to test
+	 *           : String url that user wants to test
 	 * @param headers
-	 *            Map<String,String> headers that test needs
+	 *            : Map<String,String> headers that test needs
 	 * @return String response, data response if it is ok, else
 	 *         {@link TestBoxException} instance
 	 * @throws TestBoxException
@@ -321,7 +323,11 @@ public class TestboxController {
 		private static final long serialVersionUID = 1L;
 
 		int status;
-
+		/**
+		 * 
+		 * @param status 
+		 * 			: int
+		 */
 		public TestBoxException(int status) {
 			super();
 			this.status = status;
@@ -329,7 +335,9 @@ public class TestboxController {
 
 		/**
 		 * @param message
+		 * 			: String
 		 * @param e
+		 * 			: Exception
 		 */
 		public TestBoxException(String message, Exception e) {
 		}

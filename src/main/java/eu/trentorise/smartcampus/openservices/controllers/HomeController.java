@@ -58,14 +58,18 @@ public class HomeController {
 	private UserManager userManager;
 
 	/**
-	 * Home view rendering home jsp and save or modified a cookie called value.
-	 * This cookie is true if user is logged in, otherwise it is false.
+	 * Home service that returns user to home page.
+	 * It checks if user is authenticated and changes cookie value accordingly.
+	 * If cookie value is true then user is authenticated, otherwise it is false.
+	 * Due to social login, it checks if cookie user already exists if user is 
+	 * authenticated. If this cookie does not exists and cookie value is true, then
+	 * it creates it.
 	 * 
 	 * @param request
-	 *            {@link HttpServletRequest} which is needed to find out if a
+	 *          : {@link HttpServletRequest} which is needed to find out if a
 	 *            specific cookie exists.
 	 * @param response
-	 *            {@link HttpServletResponse} which returns a new cookie or if
+	 *          : {@link HttpServletResponse} which returns a new cookie or if
 	 *            it already exists, modified it.
 	 * @return home jsp
 	 */
@@ -145,14 +149,14 @@ public class HomeController {
 	}
 
 	/**
-	 * Retrieve user data, it is called after login in. It returns user data and
-	 * set cookie value to true.
+	 * Welcome rest service retrieves user data and it is called after login in. 
+	 * It returns user data and sets cookie value to true.
 	 * 
 	 * @param request
-	 *            {@link HttpServletRequest} which is needed to find out if a
+	 *          : {@link HttpServletRequest} which is needed to find out if a
 	 *            specific cookie exists.
 	 * @param response
-	 *            {@link HttpServletResponse} which returns a new cookie or if
+	 *          : {@link HttpServletResponse} which returns a new cookie or if
 	 *            it already exists, modified it.
 	 * @return {@link ResponseObject} with user data, status (OK or NOT FOUND)
 	 *         and error message (if status is NOT FOUND).
@@ -194,45 +198,38 @@ public class HomeController {
 	}
 
 	/**
-	 * Return to home jsp with an error code of NOT FOUND. It is called when
-	 * user request wrong urls.
+	 * Error rest service returns to home jsp with response status NOT FOUND. It is called when
+	 * user do wrong requests.
 	 * 
 	 * @param value
-	 *            {@link Cookie} object, it contains value cookie set to false
+	 *          : {@link Cookie} object, it contains value cookie set to false
 	 *            or true.
 	 * @param user
-	 *            {@link Cookie} object, it contains user data such as username
+	 *          : {@link Cookie} object, it contains user data such as username
 	 *            and roles.
 	 * @param request
-	 *            {@link HttpServletRequest} DO NOTHING NOW
+	 *          : {@link HttpServletRequest} DO NOTHING NOW
 	 * @param response
-	 *            {@link HttpServletResponse} which returns an error response
-	 *            (404, NOT FOUND).
+	 *           : {@link HttpServletResponse} which returns an error response (404, NOT FOUND).
 	 * @return home jsp
-	 * @throws SecurityException
-	 * @throws NoSuchFieldException
-	 * @throws IllegalArgumentException
-	 * @throws IllegalAccessException
 	 */
 
 	@RequestMapping()
 	public String error(@CookieValue(value = "value", required = false) String value,
-			@CookieValue(value = "user", required = false) String user, HttpServletRequest request, HttpServletResponse response)
-			throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+			@CookieValue(value = "user", required = false) String user, HttpServletRequest request, HttpServletResponse response){
 		logger.info("-- Error mapping! --");
 		response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		return home(request, response);
 	}
 
 	/**
-	 * Login rest, checking if cookie already exists and change their value.
+	 * Login rest checks if cookie value already exists and change its value to false.
 	 * 
 	 * @param request
-	 *            {@link HttpServletRequest}
+	 *            : instance of {@link HttpServletRequest}
 	 * @param response
-	 *            {@link HttpServletResponse}
-	 * @return a {@link ResponseObject} with status (UNAUTHORIZED) and error
-	 *         (You have to sign in)
+	 *            : instance of {@link HttpServletResponse}
+	 * @return home page with response UNAUTHORIZED
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	//@ResponseBody
@@ -267,15 +264,14 @@ public class HomeController {
 	}
 
 	/**
-	 * Login failed. Returns an error message, because user does not exists or
+	 * Login failed returns an error message, because user does not exists or
 	 * insert wrong credentials.
 	 * 
 	 * @param response
-	 *            {@link HttpServletResponse} which returns an error response
+	 *          : {@link HttpServletResponse} which returns an error response
 	 *            (404, NOT FOUND).
 	 * @return {@link ResponseObject} with status (401, UNAUTHORIZED) and error
 	 *         message.
-	 * @throws IOException
 	 */
 	@RequestMapping(value = "/loginfailed", method = RequestMethod.GET)
 	@ResponseBody
@@ -289,14 +285,14 @@ public class HomeController {
 	}
 
 	/**
-	 * Logout, it set authentication to false and set cookie value to false.
-	 * Returns index jsp
+	 * Logout rest sets authentication to false and cookie value to false.
+	 * It redirects users to home page.
 	 * 
 	 * @param request
-	 *            {@link HttpServletRequest} which is needed to find out if a
+	 *          : {@link HttpServletRequest} which is needed to find out if a
 	 *            specific cookie exists.
 	 * @param response
-	 *            {@link HttpServletResponse} which returns a new cookie or if
+	 *         :  {@link HttpServletResponse} which returns a new cookie or if
 	 *            it already exists, modified it.
 	 * @return home jsp
 	 */

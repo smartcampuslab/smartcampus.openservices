@@ -51,15 +51,15 @@ public class Constants {
 	 */
 	public enum ASCDESC {ASC, DESC};
 	/**
-	 * OAuth parameter
+	 * OAuth request parameter
 	 */
 	public static final String OAUTH_REQUEST_TOKEN = "oauthRequestToken";
 	/**
-	 * OAuth parameter
+	 * OAuth access parameter
 	 */
 	public static final String OAUTH_ACCESS_TOKEN = "oauthAccessToken";
 	/**
-	 * OAuth parameter
+	 * OAuth verifier parameter
 	 */
 	public static final String OAUTH_VERIFIER = "oauth_verifier";
 }

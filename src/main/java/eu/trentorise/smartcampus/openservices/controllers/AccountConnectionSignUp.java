@@ -31,10 +31,16 @@ import eu.trentorise.smartcampus.openservices.entities.User;
  *
  */
 public class AccountConnectionSignUp implements ConnectionSignUp{
-
+	/**
+	 * Instance of {@link UserDao}
+	 */
 	@Autowired
 	private UserDao userDao;
 	
+	/**
+	 * Retrieve user data and save it in db.
+	 * This method returns username string.
+	 */
 	@Override
 	public String execute(Connection<?> arg0) {
 		System.out.println("Connection Sign Up......");

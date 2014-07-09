@@ -62,22 +62,17 @@ public class FileController {
 	@Autowired
 	private Environment env;
 
-	@RequestMapping(value = "home")
-	public String fileShow() {
-		return "file";
-	}
-
 	/**
 	 * Retrieve an image and save it.
 	 * 
 	 * @param organizationId
-	 *            int
+	 *            : int
 	 * @param file
-	 *            {@MultipartFile}
+	 *            : {@link MultipartFile}
 	 * @param request
-	 *            HttpServletRequest
+	 *            : instance of {@link HttpServletRequest}
 	 * @param response
-	 *            HttpServletResponse
+	 *            : instance of {@link HttpServletResponse}
 	 * @return {@link ResponseObject} with filename, status (OK, NOT ACCEPTABLE,
 	 *         BAD REQUEST or NOT FOUND) and error message (if status is NOT
 	 *         ACCEPTABLE, BAD REQUEST or NOT FOUND).

@@ -49,8 +49,7 @@ import eu.trentorise.smartcampus.openservices.social.GoogleUser;
 import eu.trentorise.smartcampus.openservices.support.CookieUser;
 
 /**
- * Google controller
- * Connect to google and retrieve user data
+ * Google controller connects to google and retrieve user data.
  * 
  * @author Giulia Canobbio
  *
@@ -75,7 +74,17 @@ public class GoogleController {
 	@Autowired
 	private UserDetailsService manager;
 	
-	//send authentication request to google
+	/**
+	 * This rest web services sends an authentication request to Google.
+	 * First it creates state token and then it builds login url for Google.
+	 * After that state token is saved in current session.
+	 * 
+	 * @param response 
+	 * 			: instance of {@link HttpServletResponse}
+	 * @param request
+	 * 			: instance of {@link HtttpServletRequest}
+	 * @return {@link ResponseObject} with redirect google login url, status (OK)
+	 */
 	@RequestMapping(value = "/auth", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public ResponseObject socialGooglePlus(HttpServletResponse response, HttpServletRequest request) {
@@ -93,11 +102,25 @@ public class GoogleController {
 		return responseObject;
 	}
 	
-	//callback
-	//confirm anti-forgery state token
+	/**
+	 * This rest web service is the one that google called after login (callback url).
+	 * First it retrieve code and token that google sends back. 
+	 * It checks if code and token are not null, then if token is the same that was saved in session.
+	 * If it is not response status is UNAUTHORIZED, otherwise it retrieves user data.
+	 * If user is not already saved in db, then user is added in db, iff email is not already used, otherwise
+	 * it sends an UNAUTHORIZED status and redirect user to home page without authenticating him/her.
+	 * If it is all ok, then it authenticates user in spring security and create cookie user.
+	 * Then redirects authenticated user to home page where user can access protected resources.
+	 * 
+	 * @param request
+	 * 			: instance of {@link HtttpServletRequest}
+	 * @param response 
+	 * 			: instance of {@link HttpServletResponse}
+	 * @return redirect to home page
+	 */
 	@RequestMapping(value = "/callback", method = RequestMethod.GET, produces = "application/json")
-	public String confirmStateToken(HttpServletRequest request, HttpServletResponse response, Model model){
-		ResponseObject responseObj = new ResponseObject();
+	public String confirmStateToken(HttpServletRequest request, HttpServletResponse response){
+		//ResponseObject responseObj = new ResponseObject();
 		
 		logger.info("****** Google callback ******");
 		String code = request.getParameter("code");
@@ -115,16 +138,16 @@ public class GoogleController {
 		//if equals return to home
 		//if not error page
 		if( (code==null || token==null) && (!token.equals(session_token))){
-			logger.info("Error");
-			responseObj.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			responseObj.setError("You have to sign in!");
+			logger.info("Error: You have to sign in!");
+			//responseObj.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			//responseObj.setError("You have to sign in!");
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		}else{
 			try {
 				GoogleUser userInfo = auth.getUserInfoJson(code);
 				logger.info("User Info: "+userInfo);
-				responseObj.setData(userInfo);
-				responseObj.setStatus(HttpServletResponse.SC_OK);
+				//responseObj.setData(userInfo);
+				//responseObj.setStatus(HttpServletResponse.SC_OK);
 				response.setStatus(HttpServletResponse.SC_OK);
 				logger.info("Check user data");
 				
@@ -146,10 +169,9 @@ public class GoogleController {
 					try{
 						userManager.createSocialUser(user);
 					}catch(SecurityException s){
-						logger.info("Different user with same username");
-						//different email, same username
-						responseObj.setError("Already exists a register user with this email address. Please try to login with correct provider.");
-						responseObj.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+						logger.info("Error: Already exists a register user with this email address. Please try to login with correct provider.");
+						//responseObj.setError("Already exists a register user with this email address. Please try to login with correct provider.");
+						//responseObj.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 						response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 						return "redirect:/";
 					}
@@ -186,10 +208,10 @@ public class GoogleController {
 					
 				
 			} catch (IOException e) {
-				logger.info("IOException ..");
+				logger.info("IOException .. Problem in reading user data.");
 				e.printStackTrace();
-				responseObj.setError("Problem in reading user data");
-				responseObj.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				//responseObj.setError("Problem in reading user data");
+				//responseObj.setStatus(HttpServletResponse.SC_NOT_FOUND);
 				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			}
 		}

@@ -57,10 +57,6 @@ public class ServiceController {
 	@Autowired
 	private ServiceManager serviceManager;
 
-	/*
-	 * REST WEB SERVICE
-	 */
-
 	// User - Access my data: service
 	/**
 	 * Logged user retrieves his/her list of service data. Service can be
@@ -90,34 +86,10 @@ public class ServiceController {
 		return responseObject;
 	}
 
-	// Service - View Service
-	/**
-	 * Retrieve all service data for logged user.
-	 * 
-	 * @param response
-	 *            : {@link HttpServletResponse} which returns status of response
-	 *            OK or NOT FOUND
-	 * @return {@link ResponseObject} with list of service data, status (OK or
-	 *         NOT FOUND) and error message (if status is NOT FOUND).
-	 */
-	/*
-	 * @RequestMapping(value = "/view", method = RequestMethod.GET,
-	 * produces="application/json")
-	 * 
-	 * @ResponseBody public ResponseObject viewServices(HttpServletResponse
-	 * response){ logger.info("-- View Services --"); List<Service> services =
-	 * Service.fromServiceEntities(serviceManager.getServices()); responseObject
-	 * = new ResponseObject(); if(services==null || services.size()==0){
-	 * responseObject.setError("There is no available service");
-	 * responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-	 * response.setStatus(HttpServletResponse.SC_NOT_FOUND); } else{
-	 * responseObject.setData(services);
-	 * response.setStatus(HttpServletResponse.SC_OK); } return responseObject; }
-	 */
-
 	// Service - View Service - view service description
 	/**
-	 * View data of a specific service. Searching by service id.
+	 * It retrieves data of a specific service. 
+	 * This search is done by service id.
 	 * 
 	 * @param service_id
 	 *            : int service id
@@ -146,8 +118,8 @@ public class ServiceController {
 
 	// Service - View Service - view service method
 	/**
-	 * Retrieve all methods for a specific service. Search is done by service
-	 * id.
+	 * It retrieves all methods for a specific service. 
+	 * This search is done by service service id.
 	 * 
 	 * @param service_id
 	 *            : int service id
@@ -174,40 +146,10 @@ public class ServiceController {
 		return responseObject;
 	}
 
-	// Service - View Service - view service history
-	/**
-	 * Retrieve all service history data of a specific service. Search is done
-	 * by service id.
-	 * 
-	 * @param service_id
-	 *            : int service id
-	 * @param response
-	 *            : {@link HttpServletResponse} which returns status of response
-	 *            OK or NOT FOUND
-	 * @return {@link ResponseObject} with list of service history data, status
-	 *         (OK or NOT FOUND) and error message (if status is NOT FOUND).
-	 */
-	/*
-	 * @RequestMapping(value = "/view/history/{service_id}", method =
-	 * RequestMethod.GET, produces="application/json")
-	 * 
-	 * @ResponseBody public ResponseObject viewServiceHistory(@PathVariable int
-	 * service_id, HttpServletResponse response){
-	 * logger.info("-- View service history --"); List<ServiceHistory> sh =
-	 * serviceManager.getServiceHistoryByServiceId(service_id); responseObject =
-	 * new ResponseObject(); if(sh==null || sh.size()==0){
-	 * responseObject.setError("There is no history for this service");
-	 * responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-	 * response.setStatus(HttpServletResponse.SC_NOT_FOUND); } else{
-	 * responseObject.setData(sh);
-	 * responseObject.setStatus(HttpServletResponse.SC_OK); } return
-	 * responseObject; }
-	 */
-
 	// Service - Manage Service - create Service
 	/**
-	 * Add a new service to an organization. User must have role 'organization
-	 * owner' or 'service owner'.
+	 * It adds a new service to an organization. 
+	 * User must have role 'organization owner' or 'service owner' in this organization.
 	 * 
 	 * @param service
 	 *            : {@link Service} service object
@@ -255,7 +197,7 @@ public class ServiceController {
 
 	// Service - Manage Service - modify Service
 	/**
-	 * Modify an existing service in database. User must have role 'organization
+	 * It modifies an existing service in database. User must have role 'organization
 	 * owner' for organization service and can modify the following service
 	 * fields: description, tags, category, documentation, access information,
 	 * expiration, implementation, license and version.
@@ -300,7 +242,7 @@ public class ServiceController {
 	// Service - Manage Service - publish Service (create
 	// ServiceHistory.operation)
 	/**
-	 * Publish a service. User must have role 'organization owner' for
+	 * It publishes a service. User must have role 'organization owner' for
 	 * organization service.
 	 * 
 	 * @param id
@@ -339,7 +281,7 @@ public class ServiceController {
 	// Service - Manage Service - unpublish Service (create
 	// ServiceHistory.operation)
 	/**
-	 * Unpublish a service. User must have role 'organization owner' for
+	 * It unpublishes a service. User must have role 'organization owner' for
 	 * organization service.
 	 * 
 	 * @param id
@@ -378,7 +320,7 @@ public class ServiceController {
 	// Service - Manage Service - deprecate Service (create
 	// ServiceHistory.operation)
 	/**
-	 * Deprecate a service. User must have role 'organization owner' for
+	 * It deprecates a service. User must have role 'organization owner' for
 	 * organization service.
 	 * 
 	 * @param id
@@ -417,7 +359,7 @@ public class ServiceController {
 	// Service - Manage Service - deprecate Service (create
 	// ServiceHistory.operation)
 	/**
-	 * Delete an existing service. User must have role 'organization owner' for
+	 * It deletes an existing service. User must have role 'organization owner' for
 	 * service organization.
 	 * 
 	 * @param id
@@ -456,7 +398,7 @@ public class ServiceController {
 	// Service - Manage Service method - create Method (create
 	// ServiceHistory.operation)
 	/**
-	 * Add a new method to a service. User must have role 'organization owner'
+	 * It adds a new method to a service. User must have role 'organization owner'
 	 * for organization service.
 	 * 
 	 * @param method
@@ -499,7 +441,7 @@ public class ServiceController {
 	// Service - Manage Service method - modify Method (create
 	// ServiceHistory.operation)
 	/**
-	 * Modify a service method. User must have role 'organization owner' for
+	 * It modifies a service method. User must have role 'organization owner' for
 	 * organization service and can modify only the following fields: name,
 	 * synopsis, test, documentation.
 	 * 
@@ -541,10 +483,14 @@ public class ServiceController {
 	}
 
 	/**
-	 * Retrieves method data of a specific method. Searching by method id.
+	 * It retrieves method data of a specific method. 
+	 * Search is done by method id.
 	 * 
 	 * @param method_id
 	 *            : int method id
+	 * @param response
+	 *            : {@link HttpServletResponse} which returns status of response
+	 *            	OK or NOT FOUND
 	 * @return {@link ResponseObject} with method data, status (OK or NOT FOUND)
 	 *         and error message (if status is NOT FOUND).
 	 */
@@ -567,7 +513,7 @@ public class ServiceController {
 	// Service - Manage Service method - delete method (create
 	// ServiceHistory.operation)
 	/**
-	 * Delete a service method from a service. User must have role 'organization
+	 * It deletes a service method from a service. User must have role 'organization
 	 * owner' for organization service.
 	 * 
 	 * @param id
@@ -604,7 +550,7 @@ public class ServiceController {
 	}
 
 	/**
-	 * Add a test to a service method. User must have role 'organization owner'
+	 * It adds a test to a service method. User must have role 'organization owner'
 	 * for organization service.
 	 * 
 	 * @param testinfo
@@ -647,7 +593,7 @@ public class ServiceController {
 	}
 
 	/**
-	 * Update a test to a service method. User must have role 'organization
+	 * It updates a test to a service method. User must have role 'organization
 	 * owner' for organization service and can modify all test information.
 	 * 
 	 * @param testinfo
@@ -693,7 +639,7 @@ public class ServiceController {
 	}
 
 	/**
-	 * Delete a test from a service method. User must have role 'organization
+	 * It deletes a test from a service method. User must have role 'organization
 	 * owner' for organization service.
 	 * 
 	 * @param id
