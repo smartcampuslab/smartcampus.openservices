@@ -81,8 +81,14 @@ public class CatalogManager {
 	private CategoryManager categoryManager;
 
 	/**
-	 * Get list of published and deprecated services
+	 * Get list of published and deprecated services.
 	 * 
+	 * @param firstResult
+	 * 			: int, start index
+	 * @param maxResult
+	 * 			: int, number of element in list
+	 * @param param_order
+	 * 			: String, parameter order
 	 * @return all {@link Service} instances
 	 */
 	public List<Service> catalogServices(int firstResult, int maxResult, String param_order) {
@@ -102,6 +108,13 @@ public class CatalogManager {
 		}
 	}
 
+	/**
+	 * Returns a list of services after cleaning authentication data.
+	 * 
+	 * @param services
+	 * 			: list of {@link Service}
+	 * @return a list of {@link Service}
+	 */
 	private List<Service> cleanAuthenticationData(List<Service> services) {
 		if (services != null) {
 			for (Service s : services) {
@@ -111,6 +124,13 @@ public class CatalogManager {
 		return services;
 	}
 
+	/**
+	 * Get a Service data and clean authentication.
+	 * 
+	 * @param s
+	 * 			: instance of {@link Service}
+	 * @return instance of {@link Service}
+	 */
 	private Service cleanAuthenticationData(Service s) {
 		if (s == null)
 			return null;
@@ -123,6 +143,13 @@ public class CatalogManager {
 		return s;
 	}
 
+	/**
+	 * Returns a list of methods after cleaning authentication data.
+	 * 
+	 * @param methods
+	 * 			: list of {@link Method}
+	 * @return a list of {@link Method}
+	 */
 	private List<Method> cleanMethodAuthenticationData(List<Method> methods) {
 		if (methods != null) {
 			for (Method m : methods) {
@@ -132,6 +159,13 @@ public class CatalogManager {
 		return methods;
 	}
 
+	/**
+	 * Get a method data and clean authentication.
+	 * 
+	 * @param m
+	 * 			: instance of {@link Method}
+	 * @return instance of {@link Method}
+	 */
 	private Method cleanMethodAuthenticationData(Method m) {
 		if (m == null)
 			return null;
@@ -145,7 +179,7 @@ public class CatalogManager {
 	}
 
 	/**
-	 * Get Service data, searching by id
+	 * Get Service data, searching by id.
 	 * 
 	 * @param service_id
 	 *            : int service id
@@ -165,7 +199,7 @@ public class CatalogManager {
 	}
 
 	/**
-	 * Get list of methods for a given Service. Search by service id
+	 * Get list of methods for a given Service. Search by service id.
 	 * 
 	 * @param service_id
 	 *            : int service id
@@ -180,7 +214,7 @@ public class CatalogManager {
 	}
 
 	/**
-	 * Get list of service history for a given Service. Search by service id
+	 * Get list of service history for a given Service. Search by service id.
 	 * 
 	 * @param service_id
 	 *            : int service id
@@ -198,7 +232,13 @@ public class CatalogManager {
 	 * Get list of all services. Their name contains token.
 	 * 
 	 * @param token
-	 *            String token compared with service name
+	 * 			: String token compared with service name
+	 * @param firstResult
+	 * 			: int, start index
+	 * @param maxResult
+	 * 			: int, number of element in list of services
+	 * @param param_order
+	 * 			: String, parameter order
 	 * @return all {@link Service} instances
 	 */
 	public List<Service> catalogServiceSimpleSearch(String token, int firstResult, int maxResult, String param_order) {
@@ -222,7 +262,13 @@ public class CatalogManager {
 	 * Get list of all services, searching by category.
 	 * 
 	 * @param category
-	 *            int, category id
+	 *          : int, category id
+	 * @param firstResult
+	 * 			: int, start index
+	 * @param maxResult
+	 * 			: int, number of element in list of services
+	 * @param param_order
+	 * 			: String, parameter order
 	 * @return all {@link Service} instances
 	 */
 	public List<Service> catalogServiceBrowseByCategory(int category, int firstResult, int maxResult, String param_order) {
@@ -245,7 +291,13 @@ public class CatalogManager {
 	 * Get list of all services, searching by categories.
 	 * 
 	 * @param categories
-	 *            int[] categories ids
+	 *          : int[] categories ids
+	 * @param firstResult
+	 * 			: int, start index
+	 * @param maxResult
+	 * 			: int, number of element in list of services
+	 * @param param_order
+	 * 			: String, parameter order
 	 * @return all {@link Service} instances
 	 */
 	public List<Service> catalogServiceBrowseByCategories(int[] categories, int firstResult, int maxResult, String param_order) {
@@ -265,10 +317,16 @@ public class CatalogManager {
 	}
 
 	/**
-	 * Retrieve all service of a specific organization
+	 * Retrieve all service of a specific organization.
 	 * 
 	 * @param org
-	 *            : id of organization
+	 *          : id of organization
+	 * @param firstResult
+	 * 			: int, start index
+	 * @param maxResult
+	 * 			: int, number of element in list of services
+	 * @param param_order
+	 * 			: String, parameter order
 	 * @return all {@link Service} instances
 	 */
 	public List<Service> catalogServiceBrowseByOrg(int org, int firstResult, int maxResult, String param_order) {
@@ -294,10 +352,16 @@ public class CatalogManager {
 	}
 
 	/**
-	 * Get list of all services, searching by tags
+	 * Get list of all services, searching by tags.
 	 * 
-	 * @param tags
-	 *            : String tags for searching in service tags
+	 * @param tag 
+	 * 			: String tag for searching in service tags
+	 * @param firstResult
+	 * 			: int, start index
+	 * @param maxResult
+	 * 			: int, number of element in list of services
+	 * @param param_order
+	 * 			: String, parameter order
 	 * @return all {@link Service} instances
 	 */
 	public List<Service> catalogServiceBrowseByTags(String tag, int firstResult, int maxResult, String param_order) {
@@ -316,8 +380,14 @@ public class CatalogManager {
 	}
 
 	/**
-	 * Get list of organizations
+	 * Get list of organizations.
 	 * 
+	 * @param firstResult
+	 * 			: int, start index
+	 * @param maxResult
+	 * 			: int, number of element in list of services
+	 * @param param_order
+	 * 			: String, parameter order
 	 * @return all {@link Organization} instances
 	 */
 	public List<Organization> catalogOrg(int firstResult, int maxResult, String param_order) {
@@ -339,7 +409,13 @@ public class CatalogManager {
 	 * Simple search for organization. Their names contains token.
 	 * 
 	 * @param token
-	 *            : String token for comparing it with organization name
+	 * 			: String token for comparing it with organization name
+	 * @param firstResult
+	 * 			: int, start index
+	 * @param maxResult
+	 * 			: int, number of element in list of services
+	 * @param param_order
+	 * 			: String, parameter order
 	 * @return all {@link Organization} instances
 	 */
 	public List<Organization> catalogOrgSimpleSearch(String token, int firstResult, int maxResult, String param_order) {
@@ -356,10 +432,16 @@ public class CatalogManager {
 	}
 
 	/**
-	 * Get list of organization searching by category
+	 * Get list of organization searching by category.
 	 * 
 	 * @param category
-	 *            int category id
+	 * 			: int category id
+	 * @param firstResult
+	 * 			: int, start index
+	 * @param maxResult
+	 * 			: int, number of element in list of services
+	 * @param param_order
+	 * 			: String, parameter order
 	 * @return all {@link Organization} instances
 	 */
 	public List<Organization> catalogOrgBrowseByCategory(int category, int firstResult, int maxResult, String param_order) {
@@ -378,10 +460,16 @@ public class CatalogManager {
 	}
 
 	/**
-	 * Get list of organization searching by categories
+	 * Get list of organization searching by categories.
 	 * 
 	 * @param categories
-	 *            int[] categories ids
+	 * 			: int[] categories ids
+	 * @param firstResult
+	 * 			: int, start index
+	 * @param maxResult
+	 * 			: int, number of element in list of services
+	 * @param param_order
+	 * 			: String, parameter order
 	 * @return all {@link Organization} instances
 	 */
 	public List<Organization> catalogOrgBrowseByCategories(int[] categories, int firstResult, int maxResult, String param_order) {
@@ -400,10 +488,10 @@ public class CatalogManager {
 	}
 
 	/**
-	 * Retrieve organization data searching by its id
+	 * Retrieve organization data searching by its id.
 	 * 
 	 * @param id
-	 *            int organization id
+	 * 			: int organization id
 	 * @return {@link Organization} instance
 	 */
 	public Organization catalogOrgById(int id) {
@@ -415,7 +503,7 @@ public class CatalogManager {
 	}
 
 	/**
-	 * Browse services by category
+	 * Browse services by category.
 	 * 
 	 * @return {@link CategoryServices} instance
 	 */
@@ -440,6 +528,7 @@ public class CatalogManager {
 	}
 
 	/**
+	 * Count services saved in db.
 	 * 
 	 * @return number of services saved in database
 	 */
@@ -448,6 +537,7 @@ public class CatalogManager {
 	}
 
 	/**
+	 * Count services resulted from simple search.
 	 * 
 	 * @param token
 	 *            : String
@@ -458,6 +548,7 @@ public class CatalogManager {
 	}
 
 	/**
+	 * Count services resulted from search by organization id.
 	 * 
 	 * @param id_org
 	 *            : organization id
@@ -468,6 +559,7 @@ public class CatalogManager {
 	}
 
 	/**
+	 * Count services resulted from search by tag.
 	 * 
 	 * @param tag
 	 *            : String
@@ -478,6 +570,7 @@ public class CatalogManager {
 	}
 
 	/**
+	 * Count services resulted from search by category.
 	 * 
 	 * @param category
 	 *            : int category id
@@ -488,6 +581,7 @@ public class CatalogManager {
 	}
 
 	/**
+	 * Count organization saved in db.
 	 * 
 	 * @return number of organizations saved in database
 	 */
@@ -495,22 +589,15 @@ public class CatalogManager {
 		return orgDao.countOrganization();
 	}
 
-	/*
-	 * public Long countOrgSimpleSearch(){ return orgDao.countOrgSimpleSearch();
-	 * }
-	 * 
-	 * public Long countOrgCategorySearch(){ return
-	 * orgDao.countOrgCategorySearch; }
-	 */
-
 	/**
-	 * Retrieve news from database
+	 * Retrieve news from database.
 	 * 
+	 * @param n
+	 * 			: int, number of news in resulted list
 	 * @return list of {@link ServiceHistory} instances
 	 */
-	public List<News /* ServiceHistory */> getNews(int n) {
+	public List<News> getNews(int n) {
 		try {
-			// return shDao.getNews(n);
 			List<News> news = new ArrayList<News>();
 			List<ServiceHistory> shlist = shDao.getNews(n);
 			for (ServiceHistory sh : shlist) {
@@ -525,12 +612,12 @@ public class CatalogManager {
 	}
 
 	/**
-	 * Retrieve counter of tags
+	 * Retrieve counter of tags.
 	 * 
 	 * @param order
-	 *            value tag or counter
+	 * 			: String, value tag or counter
 	 * @param group
-	 *            value ASC or DESC
+	 * 			: String, value ASC or DESC
 	 * @return a list of {@link TagCounter} instances
 	 */
 	public List<TagCounter> getTagsServicesCounter(String group, String order) {

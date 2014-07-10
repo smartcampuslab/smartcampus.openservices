@@ -75,11 +75,14 @@ public class ServiceManager {
 	private MethodDao methodDao;
 
 	/**
-	 * Add a new service in database
-	 * @param username : String username of logged in user
-	 * @param service : {@link Service} instance
-	 * @return boolean value: true if it is ok, false otherwise
-	 * @throw SecurityException if user has not a role in service organization
+	 * Add a new service in database.
+	 * 
+	 * @param username 
+	 * 			: String username of logged in user
+	 * @param service 
+	 * 			: {@link Service} instance
+	 * @return boolean value: true if it is ok, false otherwise throw SecurityException 
+	 * if user has not a role in service organization
 	 */
 	@Transactional
 	public boolean createService(String username, Service service) {
@@ -115,14 +118,17 @@ public class ServiceManager {
 
 	/**
 	 * Update an existing service from database.
-	 * @param username : String username of logged in user
-	 * @param service : {@link Service} instance
+	 * Throw SecurityException if user has not a role in service organization.
+	 * 
+	 * @param username 
+	 * 			: String username of logged in user
+	 * @param service 
+	 * 			: {@link Service} instance
 	 * @return boolean value: true if it is ok, false otherwise
-	 * @throw SecurityException if user has not a role in service organization
+	 * 
 	 */
 	@Transactional
 	public boolean updateService(String username, Service service) {
-		//TODO
 		try {
 			User user = userDao.getUserByUsername(username);
 
@@ -166,15 +172,17 @@ public class ServiceManager {
 	}
 
 	/**
-	 * Change service state, which can be
-	 * publish
-	 * unpublish
-	 * deprecate
-	 * @param username : String username of logged in user
-	 * @param serviceId : int service id
-	 * @param state : String state that service will have
+	 * Change service state.
+	 * Possible values are: publish, unpublish and deprecate.
+	 * Throw SecurityException if user has not a role in service organization.
+	 * 
+	 * @param username 
+	 * 			: String username of logged in user
+	 * @param serviceId 
+	 * 			: int service id
+	 * @param state 
+	 * 			: String state that service will have
 	 * @return boolean value: true if it is ok, false otherwise
-	 * @throw SecurityException if user has not a role in service organization
 	 */
 	@Transactional
 	public boolean changeState(String username, int serviceId, String state) {
@@ -205,11 +213,14 @@ public class ServiceManager {
 	}
 
 	/**
-	 * Delete an existing service from database
-	 * @param username : String username of logged in user
-	 * @param id : int service id that user wants to delete
+	 * Delete an existing service from database.
+	 * Throw SecurityException if user has not a role in service organization.
+	 * 
+	 * @param username 
+	 * 			: String username of logged in user
+	 * @param id 
+	 * 			: int service id that user wants to delete
 	 * @return boolean value: true if it is ok, false otherwise
-	 * @throw SecurityException if user has not a role in service organization
 	 */
 	public boolean deleteService(String username, int id) {
 		try {
@@ -235,6 +246,8 @@ public class ServiceManager {
 	}
 
 	/**
+	 * Get list of all services but unpublished ones.
+	 * 
 	 * @return all {@link Service} instances
 	 */
 	@Transactional
@@ -247,8 +260,10 @@ public class ServiceManager {
 	}
 
 	/**
-	 * Retrieve all user services, even unpublished services
-	 * @param username : String username of logged in user
+	 * Retrieve all user services, even unpublished services.
+	 * 
+	 * @param username 
+	 * 			: String username of logged in user
 	 * @return all the {@link Service} instances the user can see/modify (i.e., all
 	 * the services of the organizations the user is member of)
 	 */
@@ -281,8 +296,10 @@ public class ServiceManager {
 	}
 
 	/**
-	 * Retrieve service data searching by service id
-	 * @param service_id : int service id
+	 * Retrieve service data searching by service id.
+	 * 
+	 * @param service_id 
+	 * 			: int service id
 	 * @return {@link Service} instance with the specified ID
 	 */
 	@Transactional
@@ -295,7 +312,10 @@ public class ServiceManager {
 	}
 
 	/**
-	 * @param service_id : int service id
+	 * Get list of methods by service id.
+	 * 
+	 * @param service_id 
+	 * 			: int service id
 	 * @return all the {@link Method} instances of the specified service
 	 */
 	@Transactional
@@ -308,7 +328,10 @@ public class ServiceManager {
 	}
 
 	/**
-	 * @param service_id : int service id
+	 * Get history of a service by service id.
+	 * 
+	 * @param service_id 
+	 * 			: int service id
 	 * @return {@link ServiceHistory} instances of the specified service
 	 */
 	@Transactional
@@ -323,10 +346,13 @@ public class ServiceManager {
 	/**
 	 * Add a new service method in database.
 	 * Only user has role in organization which service belongs can add a new service.
-	 * @param username : String username of logged in user
-	 * @param method : a new {@link Method} instance
+	 * Throw SecurityException if user has not a role in service organization.
+	 * 
+	 * @param username 
+	 * 			: String username of logged in user
+	 * @param method 
+	 * 			: a new {@link Method} instance
 	 * @return boolean value: true if it is ok, false otherwise
-	 * @throw SecurityException if user has not a role in service organization
 	 */
 	@Transactional
 	public boolean addMethod(String username, Method method) {
@@ -368,10 +394,13 @@ public class ServiceManager {
 	/**
 	 * Modify an existing service method from database.
 	 * Only user being part of organization can modify a service.
-	 * @param username : String username of logged in user
-	 * @param method : a modified {@link Method} instance
+	 * Throw SecurityException if user has not a role in service organization.
+	 * 
+	 * @param username 
+	 * 			: String username of logged in user
+	 * @param method 
+	 * 			: a modified {@link Method} instance
 	 * @return boolean value: true if it is ok, false otherwise
-	 * @throw SecurityException if user has not a role in service organization
 	 */
 	@Transactional
 	public boolean updateMethod(String username, Method method) {
@@ -411,11 +440,14 @@ public class ServiceManager {
 	}
 	
 	/**
-	 * Delete a service method from database
-	 * @param username : String username of logged user
-	 * @param methodId : int id of method that user wants to delete
+	 * Delete a service method from database.
+	 * Throw SecurityException if user has not a role in service organization.
+	 * 
+	 * @param username 
+	 * 			: String username of logged user
+	 * @param methodId 
+	 * 			: int id of method that user wants to delete
 	 * @return boolean value: true if it is ok, false otherwise
-	 * @throw SecurityException if user has not a role in service organization
 	 */
 	@Transactional
 	public boolean deleteMethod(String username, int methodId) {
@@ -445,8 +477,10 @@ public class ServiceManager {
 	}
 
 	/**
-	 * Retrieve service method searching by method id
-	 * @param method: id of service method
+	 * Retrieve service method searching by method id.
+	 * 
+	 * @param method
+	 * 			: id of service method
 	 * @return {@link Method} instance
 	 */
 	@Transactional
@@ -459,12 +493,16 @@ public class ServiceManager {
 	}
 
 	/**
-	 * Add a test to an existing service method from database
-	 * @param username : String username of user
-	 * @param id : int method id
-	 * @param testinfo : {@link TestInfo} instance
+	 * Add a test to an existing service method from database.
+	 * Throw SecurityException if user has not a role in service organization.
+	 * 
+	 * @param username 
+	 * 			: String username of user
+	 * @param id 
+	 * 			: int method id
+	 * @param testinfo 
+	 * 			: {@link TestInfo} instance
 	 * @return boolean value: true if it is ok, false otherwise
-	 * @throw SecurityException if user has not a role in service organization
 	 */
 	public boolean addTest(String username, int id, TestInfo testinfo) {
 		try {
@@ -500,13 +538,18 @@ public class ServiceManager {
 	}
 
 	/**
-	 * Modify an existing test for a service method from database
-	 * @param username : String username
-	 * @param id : method id
-	 * @param pos : position of existing test in array (index)
-	 * @param testinfo : {@link TestInfo} instance
+	 * Modify an existing test for a service method from database.
+	 * Throw SecurityException if user has not a role in service organization.
+	 * 
+	 * @param username 
+	 * 			: String username
+	 * @param id 
+	 * 			: method id
+	 * @param pos 
+	 * 			: position of existing test in array (index)
+	 * @param testinfo 
+	 * 			: {@link TestInfo} instance
 	 * @return boolean value: true if it is ok, false otherwise
-	 * @throw SecurityException if user has not a role in service organization
 	 */
 	public boolean modifyTest(String username, int id, int pos, TestInfo testinfo) {
 		try {
@@ -534,12 +577,16 @@ public class ServiceManager {
 	}
 
 	/**
-	 * Delete an existing test for a service method from database
-	 * @param username : String username of logged user
-	 * @param id : method id
-	 * @param pos : position of existing test in array (index)
+	 * Delete an existing test for a service method from database.
+	 * Throw SecurityException if user has not a role in service organization.
+	 * 
+	 * @param username 
+	 * 			: String username of logged user
+	 * @param id 
+	 * 			: method id
+	 * @param pos 
+	 * 			: position of existing test in array (index)
 	 * @return boolean value: true if it is ok, false otherwise
-	 * @throw SecurityException if user has not a role in service organization
 	 */
 	public boolean deleteTest(String username, int id, int pos) {
 		try {

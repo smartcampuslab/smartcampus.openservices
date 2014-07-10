@@ -33,7 +33,7 @@ import eu.trentorise.smartcampus.openservices.entities.Organization;
 import eu.trentorise.smartcampus.openservices.entities.Service;
 
 /**
- * Manager that retrieves, adds, modifies and deletes category from database
+ * Manager that retrieves, adds, modifies and deletes category from database.
  * 
  * @author raman
  *
@@ -57,14 +57,15 @@ public class CategoryManager {
 	private OrganizationDao organizationDao;
 
 	/**
-	 * Retrieve category data from database
-	 * searching by id
-	 * @param id : int category id
+	 * Retrieve category data from database 
+	 * searching by id.
+	 * 
+	 * @param id 
+	 * 			: int category id
 	 * @return a {@link Category} instance
-	 * @throws DataAccessException
 	 */
 	@Transactional
-	public Category getCategoryById(int id) throws DataAccessException {
+	public Category getCategoryById(int id){
 		try{
 			return categoryDao.getCategoryById(id);
 		}catch(DataAccessException d){
@@ -74,13 +75,14 @@ public class CategoryManager {
 	
 	/**
 	 * Retrieve category data from database
-	 * Searching by category name
-	 * @param name : String category name
+	 * searching by category name.
+	 * 
+	 * @param name 
+	 * 			: String category name
 	 * @return {@link Category} instance
-	 * @throws DataAccessException
 	 */
 	@Transactional
-	public Category getCategoryByName(String name) throws DataAccessException {
+	public Category getCategoryByName(String name){
 		try{
 			return categoryDao.getCategoryByName(name);
 		}catch(DataAccessException d){
@@ -89,12 +91,13 @@ public class CategoryManager {
 	}
 
 	/**
-	 * Retrieve all category data from database
+	 * Retrieve all category data from database.
+	 * 
 	 * @return all {@link Category} instances
 	 * @throws DataAccessException
 	 */
 	@Transactional
-	public List<Category> getCategories() throws DataAccessException {
+	public List<Category> getCategories(){
 		try{
 			return categoryDao.getCategories();
 		}catch(DataAccessException d){
@@ -103,13 +106,14 @@ public class CategoryManager {
 	}
 	
 	/**
-	 * Add a new category in database
-	 * @param category : {@link Category} instance
+	 * Add a new category in database.
+	 * 
+	 * @param category 
+	 * 			: {@link Category} instance
 	 * @return a added {@link Category} instance
-	 * @throws DataAccessException
 	 */
 	@Transactional
-	public Category addCategory(Category category) throws DataAccessException {
+	public Category addCategory(Category category){
 		try {
 			if (categoryDao.getCategoryByName(category.getName()) != null) {
 				throw new EntityExistsException();
@@ -122,13 +126,14 @@ public class CategoryManager {
 	} 
 	
 	/**
-	 * Modify category data from database
-	 * @param category : {@link Category} instance
+	 * Modify category data from database.
+	 * 
+	 * @param category 
+	 * 			: {@link Category} instance
 	 * @return a modified {@link Category} instance
-	 * @throws DataAccessException
 	 */
 	@Transactional
-	public Category modifyCategory(Category category) throws DataAccessException {
+	public Category modifyCategory(Category category){
 		try {
 			Category old = categoryDao.getCategoryByName(category.getName());
 			if (old != null && old.getId() != category.getId()) {
@@ -142,14 +147,14 @@ public class CategoryManager {
 	}
 	
 	/**
-	 * Delete category data from database
-	 * @param id : int category id
-	 * @return boolean: true if it is ok else false
-	 * @throw EntityExistsException if delete is not successful
-	 * @throws DataAccessException
+	 * Delete category data from database.
+	 * 
+	 * @param id 
+	 * 			: int category id
+	 * @return boolean: true if it is ok else false or throw EntityExistsException if delete is not successful
 	 */
 	@Transactional
-	public boolean deleteCategory(int id) throws DataAccessException {
+	public boolean deleteCategory(int id){
 		try {
 			List<Organization> orgs = organizationDao.findByCategory(id);
 			if (orgs != null && !orgs.isEmpty())

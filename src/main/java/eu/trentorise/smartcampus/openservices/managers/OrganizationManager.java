@@ -86,13 +86,16 @@ public class OrganizationManager {
 
 	/**
 	 * Delete an existing organization from database if published services do not exist.
-	 * @param username : String username of logged in user
-	 * @param orgId : int organizatin id
+	 * Throws SecurityException when user has not correct role
+	 * 
+	 * @param username 
+	 * 			: String username of logged in user
+	 * @param orgId 
+	 * 			: int organizatin id
 	 * @return boolean: true if it is ok, else false
-	 * @throws SecurityException when user has not correct role
 	 */
 	@Transactional
-	public boolean deleteOrganization(String username, int orgId) throws SecurityException {
+	public boolean deleteOrganization(String username, int orgId){
 		try {
 			User user = userDao.getUserByUsername(username);
 			// check user role
@@ -143,10 +146,13 @@ public class OrganizationManager {
 	}
 	
 	/**
-	 * Add a new organization in database
-	 * Add organization owner role to this user
-	 * @param username : String username of user
-	 * @param org : Organization data
+	 * Add a new organization in database.
+	 * Add organization owner role to this user.
+	 * 
+	 * @param username 
+	 * 			: String username of user
+	 * @param org 
+	 * 			: Organization data
 	 * @return boolean: true if it is ok, else false
 	 */
 	@Transactional
@@ -173,11 +179,14 @@ public class OrganizationManager {
 	}
 
 	/**
-	 * Update an existing organization data from database
-	 * @param username : String username of user
-	 * @param org : Organization data
+	 * Update an existing organization data from database.
+	 * Throws SecurityException when user has not correct role.
+	 * 
+	 * @param username 
+	 * 			: String username of user
+	 * @param org 
+	 * 			: Organization data
 	 * @return boolean: true if it is ok, else false
-	 * @throws SecurityException when user has not correct role
 	 */
 	@Transactional
 	public boolean updateOrganization(String username, Organization org) {
@@ -209,7 +218,10 @@ public class OrganizationManager {
 	}
 
 	/**
-	 * @param username : String username of user
+	 * Retrieves organizations in which user is owner.
+	 * 
+	 * @param username 
+	 * 			: String username of user
 	 * @return list of organizations, where the user is org owner or data owner
 	 */
 	public List<Organization> getUserOrganizations(String username) {
@@ -224,17 +236,22 @@ public class OrganizationManager {
 	}
 	
 	/**
-	 * Invite a user to become part of an organization
-	 * User who send invitation must have role organization owner for this organization
-	 * The invitation create a temporary link object with a key
-	 * @param username : String, user who invites new organization owner
-	 * @param org_id : int organization id
-	 * @param role : String, role for new organization owner
-	 * @param email : String, email of new organization owner
+	 * Invite a user to become part of an organization.
+	 * User who send invitation must have role organization owner for this organization.
+	 * The invitation create a temporary link object with a key.
+	 * Throws SecurityException when user has not correct role.
+	 * 
+	 * @param username 
+	 * 			: String, user who invites new organization owner
+	 * @param org_id 
+	 * 			: int organization id
+	 * @param role 
+	 * 			: String, role for new organization owner
+	 * @param email 
+	 * 			: String, email of new organization owner
 	 * @return String key
-	 * @throws SecurityException when user has not correct role
 	 */
-	public String createInvitation(String username, int org_id, String role, String email) throws SecurityException {
+	public String createInvitation(String username, int org_id, String role, String email){
 		try {
 			User user = userDao.getUserByUsername(username);
 			System.out.println("User data: "+user.getUsername()+", "+user.getPassword());
@@ -266,7 +283,10 @@ public class OrganizationManager {
 	}
 
 	/**
-	 * @param org_id : int organization id
+	 * Get organization by id.
+	 * 
+	 * @param org_id 
+	 * 			: int organization id
 	 * @return {@link Organization} instance
 	 */
 	public Organization getOrganizationById(int org_id) {
@@ -278,6 +298,14 @@ public class OrganizationManager {
 	}
 
 	/**
+	 * Retrieves list of organization.
+	 * 
+	 * @param firstResult
+	 * 			: int, start index
+	 * @param maxResult
+	 * 			: int, number of element in resulted list
+	 * @param param_order
+	 * 			: String, parameter order
 	 * @return all {@link Organization} instances
 	 */
 	public List<Organization> getOrganizations(int firstResult, int maxResult, String param_order) {
@@ -294,7 +322,10 @@ public class OrganizationManager {
 	}
 
 	/**
-	 * @param org_id : String organization id
+	 * Get service history by organization id.
+	 * 
+	 * @param org_id 
+	 * 			: String organization id
 	 * @return list of {@link ServiceHistory} instances for the organization
 	 */
 	public List<ServiceHistory> getHistory(int org_id) {
@@ -306,15 +337,19 @@ public class OrganizationManager {
 	}
 
 	/**
-	 * New organization owner user must use its username and key to connect with organization
-	 * If it is ok, then a new user role is created and user become an organization owner
-	 * @param username : String username of logged in user
-	 * @param key : String private key of invitation
+	 * New organization owner user must use its username and key to connect with organization.
+	 * If it is ok, then a new user role is created and user become an organization owner.
+	 * Throws SecurityException when user has not correct role
+	 * and EntityNotFoundException when temporary link object does not exist.
+	 * 
+	 * @param username 
+	 * 			: String username of logged in user
+	 * @param key 
+	 * 			: String private key of invitation
 	 * @return boolean: true if it is ok, else false
-	 * @throws SecurityException when user has not correct role
-	 * @throws EntityNotFoundException when temporary link object does not exist
+	 * 
 	 */
-	public boolean addOwner(String username, String key) throws SecurityException, EntityNotFoundException {
+	public boolean addOwner(String username, String key){
 		try {
 			User user = userDao.getUserByUsername(username);
 			// Check in table TemporaryLink if this key is saved and if user is
@@ -341,13 +376,17 @@ public class OrganizationManager {
 	}
 	
 	/**
-	 * Remove an organization owner from organization
-	 * @param username : String username of logged in user
-	 * @param org_id : int organization id
-	 * @param user_id : int user id of user we want to delete
+	 * Remove an organization owner from organization.
+	 * Throws SecurityException when user has not correct role
+	 * and UnsupportedOperationException when users try to delete themselves.
+	 * 
+	 * @param username 
+	 * 			: String username of logged in user
+	 * @param org_id 
+	 * 			: int organization id
+	 * @param user_id 
+	 * 			: int user id of user we want to delete
 	 * @return boolean: true if it is ok, else false
-	 * @throws SecurityException when user has not correct role
-	 * @throws UnsupportedOperationException when users try to delete themselves
 	 */
 	public boolean deleteOrgUser(String username, int org_id, int user_id) {
 		try {
@@ -372,8 +411,10 @@ public class OrganizationManager {
 	
 	/**
 	 * Retrieve members of an organization.
-	 * Search by organization id
+	 * Search by organization id.
+	 * 
 	 * @param org_id
+	 * 			: int, organization id
 	 * @return instances of {@link User}
 	 */
 	public List<Members> organizationMembers(int org_id){

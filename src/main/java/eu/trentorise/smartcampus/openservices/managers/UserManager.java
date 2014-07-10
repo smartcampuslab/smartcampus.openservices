@@ -60,8 +60,10 @@ public class UserManager {
 	private ApplicationMailer mailer;
 	
 	/**
-	 * Get user data by id
-	 * @param id : int id of user 
+	 * Get user data by id.
+	 * 
+	 * @param id 
+	 * 			: int id of user 
 	 * @return a {@link User} instance
 	 */
 	public User getUserById( int id){
@@ -73,8 +75,10 @@ public class UserManager {
 	}
 	
 	/**
-	 * Get user by username
-	 * @param username : String username of user
+	 * Get user by username.
+	 * 
+	 * @param username 
+	 * 			: String username of user
 	 * @return a {@link User} instance
 	 */
 	public User getUserByUsername(String username){
@@ -88,7 +92,10 @@ public class UserManager {
 	/**
 	 * Add a new user in database.
 	 * Retrieves new user.
-	 * @param user : {@link User} instance
+	 * Throw SecurityException if email address is already used.
+	 * 
+	 * @param user 
+	 * 			: {@link User} instance
 	 * @return a {@link User} instance
 	 */
 	public User createUser(User user, String host, String from, String object,
@@ -119,7 +126,10 @@ public class UserManager {
 	 * Add a new user in database.
 	 * He/she has logged in with a social provider
 	 * Retrieves new user.
-	 * @param user : {@link User} instance
+	 * Throw SecurityException if email address is already used.
+	 * 
+	 * @param user 
+	 * 			: {@link User} instance
 	 * @return a {@link User} instance
 	 */
 	public User createSocialUser(User user){
@@ -138,8 +148,11 @@ public class UserManager {
 	/**
 	 * Modify user data.
 	 * User can modify only profile data and email.
-	 * @param username : String username of user
-	 * @param user : {@link User} instance
+	 * 
+	 * @param username 
+	 * 			: String username of user
+	 * @param user 
+	 * 			: {@link User} instance
 	 * @return a {@link User} instance
 	 */
 	public User modifyUserData(String username, User user){
@@ -158,7 +171,9 @@ public class UserManager {
 	/**
 	 * Enable user.
 	 * This can be done by verifying email.
-	 * @param username : String username of user
+	 * 
+	 * @param username 
+	 * 			: String username of user
 	 * @return a {@link User} instance of enabled user
 	 */
 	public User enableUser(String username){
@@ -175,7 +190,9 @@ public class UserManager {
 	/**
 	 * Disable a user.
 	 * Only admin user can disable a user.
-	 * @param username : String username of user that admin wants to disable.
+	 * 
+	 * @param username 
+	 * 			: String username of user that admin wants to disable.
 	 * @return a {@link User} instance of disabled user
 	 */
 	public User disabledUser(String username){
@@ -193,7 +210,9 @@ public class UserManager {
 	/**
 	 * Save in temporary link table, key and email address of user.
 	 * After doing registration, link + key value to enable his/her account is sent by email.
-	 * @param username : String username of user that we want to verify email address
+	 * 
+	 * @param username 
+	 * 			: String username of user that we want to verify email address
 	 * @return String value, it is key value if it is ok, else it is null. In case user is enable then 
 	 * a security exception is threw.
 	 */
@@ -225,8 +244,9 @@ public class UserManager {
 	/**
 	 * Enable user account by checking user email and key.
 	 * After finding key in database, this object is deleted.
-	 * @param username : String username of user that wants to enable his/her account
-	 * @param key : String key sent by email for verifying email address
+	 * 
+	 * @param key : 
+	 * 			String key sent by email for verifying email address
 	 * @return {@link User} instance of enabled account otherwise if key does not exist then EntityNotFoundException
 	 */
 	public User enableUserAfterVerification(/*String username,*/ String key){
@@ -250,9 +270,13 @@ public class UserManager {
 	 * Modify user password.
 	 * This function retrieves user data and check if password is the same.
 	 * If it is correct then user password is modify with new one, otherwise an exception is thrown.
-	 * @param username : String
-	 * @param oldPassw : String
- 	 * @param newPassw : String
+	 * 
+	 * @param username 
+	 * 			: String
+	 * @param oldPassw 
+	 * 			: String, old password
+ 	 * @param newPassw 
+ 	 * 			: String, new password
 	 * @return a boolean value: true if there is no error, false otherwise. Throw a SecurityException if 
 	 * user's old password is wrong
 	 */
@@ -277,8 +301,10 @@ public class UserManager {
 	}
 	
 	/**
-	 * Reset user password, and change it with a random string
-	 * @param email : String
+	 * Reset user password, and change it with a random string.
+	 * 
+	 * @param email 
+	 * 			: String
 	 * @return temporary password : String
 	 */
 	public String resetPassword(String email){
