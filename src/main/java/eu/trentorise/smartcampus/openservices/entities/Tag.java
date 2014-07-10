@@ -18,10 +18,11 @@ package eu.trentorise.smartcampus.openservices.entities;
 import javax.persistence.*;
 
 /**
- * Tag entity for table Tag
- * id : primary key, auto increment, int(11)
- * id_service : not null, int(11)
- * name : not null, varchar(45)
+ * Tag entity for table Tag:
+ * id : primary key, auto increment, int(11);
+ * id_service : not null, int(11);
+ * name : not null, varchar(45).
+ * 
  * @author Giulia Canobbio
  *
  */
@@ -36,6 +37,7 @@ public class Tag {
 	private String name;
 
 	/**
+	 * Get id of tag.
 	 * 
 	 * @return id : int
 	 */
@@ -44,14 +46,17 @@ public class Tag {
 	}
 	
 	/**
+	 * Set id of tag.
 	 * 
-	 * @param id : int
+	 * @param id 
+	 * 			: int
 	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 	
 	/**
+	 * Get name of tag.
 	 * 
 	 * @return name : String
 	 */
@@ -60,8 +65,10 @@ public class Tag {
 	}
 	
 	/**
+	 * Set name of tag.
 	 * 
-	 * @param name : String
+	 * @param name 
+	 * 			: String
 	 */
 	public void setName(String name) {
 		this.name = name;

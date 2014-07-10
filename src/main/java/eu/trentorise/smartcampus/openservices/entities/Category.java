@@ -22,10 +22,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * Category Entity for table Category
- * primary key, not null, auto increment int(11) id
- * not null, unique index varchar(45) name
- * varchar(100) description
+ * Category Entity for table Category:
+ * id: primary key, not null, auto increment int(11);
+ * name: not null, unique index varchar(45);
+ * description: varchar(100).
  * 
  * @author Giulia Canobbio
  *
@@ -43,14 +43,15 @@ public class Category {
 	private String description;
 	
 	/**
-	 * New instance of {@link Category}
+	 * New instance of {@link Category}.
 	 */
 	public Category(){
 		
 	}
 
 	/**
-	 * Get id of category
+	 * Get id of category.
+	 * 
 	 * @return int id
 	 */
 	public int getId() {
@@ -58,15 +59,17 @@ public class Category {
 	}
 
 	/**
-	 * Set id of category
+	 * Set id of category.
 	 * @param id
+	 * 			: int
 	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 
 	/**
-	 * Get name of category
+	 * Get name of category.
+	 * 
 	 * @return String name
 	 */
 	public String getName() {
@@ -74,15 +77,18 @@ public class Category {
 	}
 
 	/**
-	 * Set name of category
+	 * Set name of category.
+	 * 
 	 * @param name
+	 * 			: String
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
 	/**
-	 * Get description of category
+	 * Get description of category.
+	 * 
 	 * @return String description
 	 */
 	public String getDescription() {
@@ -90,8 +96,10 @@ public class Category {
 	}
 
 	/**
-	 * Set description of category
+	 * Set description of category.
+	 * 
 	 * @param description
+	 * 			: String
 	 */
 	public void setDescription(String description) {
 		this.description = description;

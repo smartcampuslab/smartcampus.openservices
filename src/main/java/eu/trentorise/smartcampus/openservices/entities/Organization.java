@@ -23,15 +23,15 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 
 /**
- * Organization Entity for organization table
- * primary key, not null, auto increment int(11) id
- * not null, unique index varchar(45) name
- * varchar(255) description
- * varchar(45) activityArea
- * int(11) category
- * MediumBlob contacts
- * int(11) creator id
- * varchar(255) logo
+ * Organization Entity for organization table:
+ * id: primary key, not null, auto increment int(11);
+ * name: not null, unique index varchar(45);
+ * description: varchar(255);
+ * activity area: varchar(45);
+ * category: int(11);
+ * contacts: MediumBlob;
+ * creator id: int(11);
+ * logo: varchar(255).
  * 
  * @author Giulia Canobbio
  *
@@ -61,14 +61,15 @@ public class Organization{
 	private String logo;
 	
 	/**
-	 * New {@link Organization} instance
+	 * New {@link Organization} instance.
 	 */
 	public Organization(){
 		
 	}
 
 	/**
-	 * Get id 
+	 * Get id.
+	 * 
 	 * @return int id
 	 */
 	public int getId() {
@@ -76,15 +77,18 @@ public class Organization{
 	}
 
 	/**
-	 * Set id 
-	 * @param id : int
+	 * Set id.
+	 * 
+	 * @param id 
+	 * 			: int
 	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 
 	/**
-	 * Get name
+	 * Get name.
+	 * 
 	 * @return String name
 	 */
 	public String getName() {
@@ -92,15 +96,18 @@ public class Organization{
 	}
 
 	/**
-	 * Set name
-	 * @param name : String
+	 * Set name.
+	 * 
+	 * @param name 
+	 * 			: String
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
 	/**
-	 * Get activity area
+	 * Get activity area.
+	 * 
 	 * @return String activity area
 	 */
 	public String getActivityArea() {
@@ -108,15 +115,18 @@ public class Organization{
 	}
 
 	/**
-	 * Set activity area
+	 * Set activity area.
+	 * 
 	 * @param activityArea
+	 * 			: String
 	 */
 	public void setActivityArea(String activityArea) {
 		this.activityArea = activityArea;
 	}
 
 	/**
-	 * Get category
+	 * Get category.
+	 * 
 	 * @return int category
 	 */
 	public int getCategory() {
@@ -124,15 +134,18 @@ public class Organization{
 	}
 
 	/**
-	 * Set category
+	 * Set category.
+	 * 
 	 * @param category
+	 * 			: int
 	 */
 	public void setCategory(int category) {
 		this.category = category;
 	}
 
 	/**
-	 * Get {@link Contact} instance
+	 * Get {@link Contact} instance.
+	 * 
 	 * @return {@link Contact} instance
 	 */
 	public Contact getContacts() {
@@ -140,50 +153,67 @@ public class Organization{
 	}
 
 	/**
-	 * Set {@link Contact} instance
-	 * @param contacts : {@link Contact}
+	 * Set {@link Contact} instance.
+	 * 
+	 * @param contacts 
+	 * 			: {@link Contact}
 	 */
 	public void setContacts(Contact contacts) {
 		this.contacts = contacts;
 	}
 
 	/**
-	 * @return the description
+	 * Get description.
+	 * 
+	 * @return the description, String
 	 */
 	public String getDescription() {
 		return description;
 	}
 
 	/**
-	 * @param description the description to set
+	 * Set description.
+	 * 
+	 * @param description
+	 * 				: String, the description to set
 	 */
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
 	/**
-	 * @return the creatorId
+	 * Get creator id of organization.
+	 * 
+	 * @return the creatorId, int
 	 */
 	public int getCreatorId() {
 		return creatorId;
 	}
 
 	/**
-	 * @param creatorId the creatorId to set
+	 * Set creator id.
+	 * 
+	 * @param creatorId
+	 * 			: int, the creatorId to set
 	 */
 	public void setCreatorId(int creatorId) {
 		this.creatorId = creatorId;
 	}
 
 	/**
-	 * @return the logo
+	 * Get logo of organization.
+	 * 
+	 * @return url of logo, String
 	 */
 	public String getLogo() {
 		return logo;
 	}
 
 	/**
-	 * @param logo the logo to set
+	 * Set logo.
+	 * 
+	 * @param logo
+	 * 			: String, the logo to set
 	 */
 	public void setLogo(String logo) {
 		this.logo = logo;

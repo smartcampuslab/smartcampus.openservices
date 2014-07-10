@@ -18,11 +18,11 @@ package eu.trentorise.smartcampus.openservices.entities;
 import javax.persistence.*;
 
 /**
- * UserRole Entity for user role table
- * primary key, not null, auto increment int(11) id
- * not null int(11) user id
- * not null int(11) organization id
- * not null varchar(45) role
+ * UserRole Entity for user role table:
+ * id: primary key, not null, auto increment int(11);
+ * user id: not null int(11);
+ * organization id: not null int(11);
+ * role: not null varchar(45).
  * 
  * Relation between organizationa and user is saved in this table.
  * 
@@ -44,17 +44,21 @@ public class UserRole {
 	private String role;
 	
 	/**
-	 * New {@UserRole} instance
+	 * New {@link UserRole} instance.
 	 */
 	public UserRole(){
 		
 	}
 	
 	/**
-	 * New {@UserRole} instance
+	 * New {@link UserRole} instance.
+	 * 
 	 * @param id_user
+	 * 			: int
 	 * @param id_org
+	 * 			: int
 	 * @param role
+	 * 			: String
 	 */
 	public UserRole(int id_user, int id_org, String role){
 		this.id_user=id_user;
@@ -63,64 +67,76 @@ public class UserRole {
 	}
 
 	/**
+	 * Get id.
 	 * 
-	 * @return int id of {@UserRole} instance
+	 * @return int id of {@link UserRole} instance
 	 */
 	public int getId() {
 		return id;
 	}
 
 	/**
+	 * Set id.
 	 * 
-	 * @param id in {@UserRole} instance
+	 * @param id 
+	 * 			: int
 	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 
 	/**
+	 * Get user id.
 	 * 
-	 * @return int user id of {@UserRole} instance
+	 * @return int user id of {@link UserRole} instance
 	 */
 	public int getId_user() {
 		return id_user;
 	}
 
 	/**
+	 * Set user id.
 	 * 
-	 * @param id_user in {@UserRole} instance
+	 * @param id_user 
+	 * 			: int
 	 */
 	public void setId_user(int id_user) {
 		this.id_user = id_user;
 	}
 
 	/**
+	 * Get organization id.
 	 * 
-	 * @return int organization id of {@UserRole} instance
+	 * @return int organization id of {@link UserRole} instance
 	 */
 	public int getId_org() {
 		return id_org;
 	}
 
 	/**
+	 * Set organization id.
 	 * 
-	 * @param id_org of {@UserRole} instance
+	 * @param id_org 
+	 * 			: int
 	 */
 	public void setId_org(int id_org) {
 		this.id_org = id_org;
 	}
 
 	/**
+	 * Get role.
 	 * 
-	 * @return String role of {@UserRole} instance
+	 * @return String role of {@link UserRole} instance
 	 */
 	public String getRole() {
 		return role;
 	}
 
 	/**
+	 * Set role.
 	 * 
-	 * @param role in {@UserRole} instance
+	 * @param role 
+	 * 			: String
 	 */
 	public void setRole(String role) {
 		this.role = role;

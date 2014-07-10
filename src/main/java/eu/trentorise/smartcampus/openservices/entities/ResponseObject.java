@@ -30,13 +30,14 @@ public class ResponseObject {
 	private Long totalNumber;
 	
 	/**
-	 * New {@link ResponseObject} instance
+	 * New {@link ResponseObject} instance.
 	 */
 	public ResponseObject(){
 		
 	}
 
 	/**
+	 * Get data.
 	 * 
 	 * @return Object data
 	 */
@@ -45,14 +46,17 @@ public class ResponseObject {
 	}
 
 	/**
+	 * Set data.
 	 * 
-	 * @param data : Object
+	 * @param data 
+	 * 			: Object
 	 */
 	public void setData(Object data) {
 		this.data = data;
 	}
 
 	/**
+	 * Get status: 202 OK or status error.
 	 * 
 	 * @return int status 
 	 */
@@ -61,14 +65,17 @@ public class ResponseObject {
 	}
 
 	/**
+	 * Set status: 200 OK otherwise status error.
 	 * 
-	 * @param status : int
+	 * @param status 
+	 * 			: int
 	 */
 	public void setStatus(int status) {
 		this.status = status;
 	}
 
 	/**
+	 * Get error: not null when status is different from 200.
 	 * 
 	 * @return String error
 	 */
@@ -77,14 +84,19 @@ public class ResponseObject {
 	}
 
 	/**
+	 * Set error: only when status is different from 200.
 	 * 
-	 * @param error : String
+	 * @param error 
+	 * 			: String
 	 */
 	public void setError(String error) {
 		this.error = error;
 	}
 	
 	/**
+	 * Get total number.
+	 * Total number is used for pagination when data is a list 
+	 * and it contains the total number of element saved in db.
 	 * 
 	 * @return tota number : Long
 	 */
@@ -93,8 +105,12 @@ public class ResponseObject {
 	}
 
 	/**
+	 * Set total number.
+	 * Total number is used for pagination when data is a list 
+	 * and it contains the total number of element saved in db.
 	 * 
-	 * @param totalNumber : Long
+	 * @param totalNumber 
+	 * 			: Long
 	 */
 	public void setTotalNumber(Long totalNumber) {
 		this.totalNumber = totalNumber;

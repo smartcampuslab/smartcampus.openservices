@@ -21,14 +21,14 @@ import org.hibernate.annotations.Index;
 import org.hibernate.annotations.IndexColumn;
 
 /**
- * User Entity for user table
- * primary key, not null, auto increment int(11) id
- * not null, unique index varchar(45) username
- * not null varchar(45) password
- * not null, unique index varchar(145) password
- * not null int(11) enabled
- * mediumblob profile
- * not null varchar(45) role
+ * User Entity for user table:
+ * id: primary key, not null, auto increment int(11);
+ * username: not null, unique index varchar(45);
+ * password: not null varchar(45);
+ * email: not null, unique index varchar(145);
+ * enabled: not null int(11);
+ * profile: mediumblob;
+ * role: not null varchar(45).
  * 
  * @author Giulia Canobbio
  *
@@ -56,13 +56,14 @@ public class User {
 	private String role;
 	
 	/**
-	 * New {@link User} instance
+	 * New {@link User} instance.
 	 */
 	public User(){
 		
 	}
 
 	/**
+	 * Get user id.
 	 * 
 	 * @return int user id
 	 */
@@ -71,14 +72,17 @@ public class User {
 	}
 
 	/**
+	 * Set user id.
 	 * 
-	 * @param id : int
+	 * @param id 
+	 * 			: int
 	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 
 	/**
+	 * Get username.
 	 * 
 	 * @return String username
 	 */
@@ -87,14 +91,17 @@ public class User {
 	}
 
 	/**
+	 * Set username.
 	 * 
-	 * @param username : String
+	 * @param username 
+	 * 			: String
 	 */
 	public void setUsername(String username) {
 		this.username = username;
 	}
 
 	/**
+	 * Get password.
 	 * 
 	 * @return String password
 	 */
@@ -103,14 +110,17 @@ public class User {
 	}
 
 	/**
+	 * Set password.
 	 * 
-	 * @param password : String
+	 * @param password 
+	 * 			: String
 	 */
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
 	/**
+	 * Get email address.
 	 * 
 	 * @return String email
 	 */
@@ -119,16 +129,21 @@ public class User {
 	}
 
 	/**
+	 * Set email address.
 	 * 
-	 * @param email : String
+	 * @param email 
+	 * 			: String
 	 */
 	public void setEmail(String email) {
 		this.email = email;
 	}
 
 	/**
-	 * 0 - if user is not enabled
-	 * 1- if user is enabled
+	 * Get enabled value.
+	 * Possible values are: 
+	 * 0 - if user is not enabled,
+	 * 1- if user is enabled.
+	 * 
 	 * @return int enabled
 	 */
 	public int getEnabled() {
@@ -136,15 +151,20 @@ public class User {
 	}
 
 	/**
-	 * 0 - if user is not enabled
-	 * 1 - if user is enabled
-	 * @param enabled : int
+	 * Set enabled value.
+	 * Possible values are:
+	 * 0 - if user is not enabled,
+	 * 1 - if user is enabled.
+	 * 
+	 * @param enabled 
+	 * 			: int
 	 */
 	public void setEnabled(int enabled) {
 		this.enabled = enabled;
 	}
 	
 	/**
+	 * Get ser profile.
 	 * 
 	 * @return {@link Profile} instance 
 	 */
@@ -153,15 +173,19 @@ public class User {
 	}
 
 	/**
+	 * Set user profile.
 	 * 
-	 * @param profile : {@link Profile}
+	 * @param profile 
+	 * 			: {@link Profile}
 	 */
 	public void setProfile(Profile profile) {
 		this.profile = profile;
 	}
 
 	/**
-	 * Role can be: normal user or admin
+	 * Get user role.
+	 * Role can be: normal user or admin.
+	 * 
 	 * @return String role
 	 */
 	public String getRole() {
@@ -169,8 +193,11 @@ public class User {
 	}
 
 	/**
-	 * Role can be: normal user or admin
-	 * @param role : String
+	 * Set user role.
+	 * Role can be: normal user or admin.
+	 * 
+	 * @param role 
+	 * 			: String
 	 */
 	public void setRole(String role) {
 		this.role = role;

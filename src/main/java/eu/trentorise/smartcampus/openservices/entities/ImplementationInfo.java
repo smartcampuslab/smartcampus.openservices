@@ -19,11 +19,12 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Blob object for Implementation Info in table Service
- * executive environment
- * service dependencies
- * hosting
- * source code
+ * Blob object for Implementation Info in table Service:
+ * executive environment,
+ * service dependencies,
+ * hosting,
+ * source code.
+ * 
  * @author Giulia Canobbio
  *
  */
@@ -36,14 +37,15 @@ public class ImplementationInfo implements Serializable{
 	private String sourceCode;
 	
 	/**
-	 * new instance of {@link ImplementationInfo}
+	 * New instance of {@link ImplementationInfo}.
 	 */
 	public ImplementationInfo(){
 		
 	}
 
 	/**
-	 * Get executive environment
+	 * Get executive environment.
+	 * 
 	 * @return String executive environment
 	 */
 	public String getExecutionEnvironment() {
@@ -51,15 +53,18 @@ public class ImplementationInfo implements Serializable{
 	}
 
 	/**
-	 * Set executive environment
+	 * Set executive environment.
+	 * 
 	 * @param executionEnvironment
+	 * 			: String
 	 */
 	public void setExecutionEnvironment(String executionEnvironment) {
 		this.executionEnvironment = executionEnvironment;
 	}
 
 	/**
-	 * Get source code 
+	 * Get source code.
+	 * 
 	 * @return String source code
 	 */
 	public String getSourceCode() {
@@ -67,15 +72,18 @@ public class ImplementationInfo implements Serializable{
 	}
 
 	/**
-	 * Set source code
+	 * Set source code.
+	 * 
 	 * @param sourceCode
+	 * 			: String
 	 */
 	public void setSourceCode(String sourceCode) {
 		this.sourceCode = sourceCode;
 	}
 
 	/**
-	 * get list of service dependencies
+	 * Get list of service dependencies.
+	 * 
 	 * @return List<Integer> service dependencies
 	 */
 	public List<Integer> getServiceDependencies() {
@@ -83,15 +91,18 @@ public class ImplementationInfo implements Serializable{
 	}
 
 	/**
-	 * Set service dependencies
+	 * Set service dependencies.
+	 * 
 	 * @param serviceDependencies
+	 * 			: list of integer
 	 */
 	public void setServiceDependencies(List<Integer> serviceDependencies) {
 		this.serviceDependencies = serviceDependencies;
 	}
 
 	/**
-	 * Get hosting
+	 * Get hosting.
+	 * 
 	 * @return String hosting
 	 */
 	public String getHosting() {
@@ -99,8 +110,10 @@ public class ImplementationInfo implements Serializable{
 	}
 
 	/**
-	 * Set hosting
+	 * Set hosting.
+	 * 
 	 * @param hosting
+	 * 			: String
 	 */
 	public void setHosting(String hosting) {
 		this.hosting = hosting;

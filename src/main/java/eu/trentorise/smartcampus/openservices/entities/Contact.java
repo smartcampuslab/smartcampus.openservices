@@ -19,10 +19,11 @@ import java.util.HashMap;
 
 /**
  * Blob Object for Organization table:
- * email
- * phone
- * fax
- * web
+ * email,
+ * phone,
+ * fax,
+ * web.
+ * 
  * @author Giulia Canobbio
  *
  */

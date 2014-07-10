@@ -20,18 +20,18 @@ import java.io.Serializable;
 import java.util.Map;
 
 /**
- * TestInfo object for TestBoxProperties
- * name
- * description
- * request path
- * request path editable
- * request body
- * request body editable
- * request method
- * headers
- * response
+ * TestInfo object for TestBoxProperties:
+ * name,
+ * description,
+ * request path,
+ * request path editable,
+ * request body,
+ * request body editable,
+ * request method,
+ * headers,
+ * response.
  * 
- * Used to test service method
+ * Used to test service method.
  * 
  * @author raman
  *
@@ -50,6 +50,7 @@ public class TestInfo implements Serializable {
 	private String response;
 	
 	/**
+	 * Get name.
 	 * 
 	 * @return String name
 	 */
@@ -58,14 +59,17 @@ public class TestInfo implements Serializable {
 	}
 	
 	/**
+	 * Set name.
 	 * 
-	 * @param name : String
+	 * @param name 
+	 * 			: String
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 	
 	/**
+	 * Get description.
 	 * 
 	 * @return String description
 	 */
@@ -74,14 +78,17 @@ public class TestInfo implements Serializable {
 	}
 	
 	/**
+	 * Set description.
 	 * 
-	 * @param description : String
+	 * @param description 
+	 * 			: String
 	 */
 	public void setDescription(String description) {
 		this.description = description;
 	}
 	
 	/**
+	 * Get request path.
 	 * 
 	 * @return String request path
 	 */
@@ -90,30 +97,36 @@ public class TestInfo implements Serializable {
 	}
 	
 	/**
+	 * Set request path.
 	 * 
-	 * @param requestPath : String
+	 * @param requestPath 
+	 * 			: String
 	 */
 	public void setRequestPath(String requestPath) {
 		this.requestPath = requestPath;
 	}
 	
 	/**
+	 * Check if request path is editable
 	 * 
-	 * @return if request path is editable
+	 * @return boolean, true if request path is editable otherwise false.
 	 */
 	public boolean isRequestPathEditable() {
 		return requestPathEditable;
 	}
 	
 	/**
+	 * Set request path editable.
 	 * 
-	 * @param requestPathEditable : boolean
+	 * @param requestPathEditable 
+	 * 			: boolean
 	 */
 	public void setRequestPathEditable(boolean requestPathEditable) {
 		this.requestPathEditable = requestPathEditable;
 	}
 	
 	/**
+	 * Get request body.
 	 * 
 	 * @return String request body
 	 */
@@ -122,30 +135,36 @@ public class TestInfo implements Serializable {
 	}
 	
 	/**
+	 * Set request body.
 	 * 
-	 * @param requestBody : String
+	 * @param requestBody 
+	 * 				: String
 	 */
 	public void setRequestBody(String requestBody) {
 		this.requestBody = requestBody;
 	}
 	
 	/**
+	 * Check if request body is editable.
 	 * 
-	 * @return if a request body is editable
+	 * @return boolean true if a request body is editable, otherwise false.
 	 */
 	public boolean isRequestBodyEditable() {
 		return requestBodyEditable;
 	}
 	
 	/**
+	 * Set request body editable.
 	 * 
-	 * @param requestBodyEditable : boolean
+	 * @param requestBodyEditable 
+	 * 			: boolean
 	 */
 	public void setRequestBodyEditable(boolean requestBodyEditable) {
 		this.requestBodyEditable = requestBodyEditable;
 	}
 	
 	/**
+	 * Get request method.
 	 * 
 	 * @return String request method 
 	 */
@@ -154,6 +173,7 @@ public class TestInfo implements Serializable {
 	}
 	
 	/**
+	 * Set request method.
 	 * 
 	 * @param requestMethod : String
 	 */
@@ -162,6 +182,7 @@ public class TestInfo implements Serializable {
 	}
 	
 	/**
+	 * Get headers.
 	 * 
 	 * @return Map<String,String> headers
 	 */
@@ -170,14 +191,17 @@ public class TestInfo implements Serializable {
 	}
 	
 	/**
+	 * Set headers.
 	 * 
-	 * @param headers : Map<String,String>
+	 * @param headers 
+	 * 				: Map<String,String>
 	 */
 	public void setHeaders(Map<String, String> headers) {
 		this.headers = headers;
 	}
 	
 	/**
+	 * Get response.
 	 * 
 	 * @return String response
 	 */
@@ -186,8 +210,10 @@ public class TestInfo implements Serializable {
 	}
 	
 	/**
+	 * Set response.
 	 * 
-	 * @param response : String
+	 * @param response 
+	 * 				: String
 	 */
 	public void setResponse(String response) {
 		this.response = response;

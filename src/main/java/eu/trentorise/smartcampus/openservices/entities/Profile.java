@@ -20,14 +20,14 @@ import java.io.Serializable;
 /**
  * Class profile which will become Blob Object for Users table.
  * Having field:
- * imgAvatar
- * name
- * surname
- * birthday
- * address
- * country
- * hobby
- * interest
+ * imgAvatar,
+ * name,
+ * surname,
+ * birthday,
+ * address,
+ * country,
+ * hobby,
+ * interest.
  * 
  * @author Giulia Canobbio
  *
@@ -46,18 +46,23 @@ public class Profile implements Serializable{
 	private String mobile;
 	
 	/**
-	 * new {@link Profile} instance
+	 * New {@link Profile} instance.
 	 */
 	public Profile(){
 		
 	}
 	
 	/**
-	 * New {@link Profile} instance with params
+	 * New {@link Profile} instance with params.
+	 * 
 	 * @param name
+	 * 			: String
 	 * @param surname
+	 * 			: String
 	 * @param hobby
+	 * 			: String
 	 * @param birthday
+	 * 			: String
 	 */
 	public Profile(String name, String surname, String hobby, String birthday){
 		this.name=name;
@@ -67,22 +72,27 @@ public class Profile implements Serializable{
 	}
 
 	/**
-	 * @return String name of profile
+	 * Get name.
+	 * 
+	 * @return String, name of profile
 	 */
 	public String getName() {
 		return name;
 	}
 
 	/**
-	 * Set name
-	 * @param name : String 
+	 * Set name.
+	 * 
+	 * @param name 
+	 * 			: String 
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
 	/**
-	 * Get surname
+	 * Get surname.
+	 * 
 	 * @return String surname
 	 */
 	public String getSurname() {
@@ -90,62 +100,74 @@ public class Profile implements Serializable{
 	}
 
 	/**
-	 * Set surname
+	 * Set surname.
+	 * 
 	 * @param surname
+	 * 			: String
 	 */
 	public void setSurname(String surname) {
 		this.surname = surname;
 	}
 
 	/**
+	 * Get hobby.
 	 * 
-	 * @return String hobby of profile
+	 * @return String, hobby of profile
 	 */
 	public String getHobby() {
 		return hobby;
 	}
 
 	/**
+	 * Set hobby.
 	 * 
-	 * @param hobby of profile
+	 * @param hobby
+	 * 			: String
 	 */
 	public void setHobby(String hobby) {
 		this.hobby = hobby;
 	}
 
 	/**
+	 * Get birthday.
 	 * 
-	 * @return String birthday of profile
+	 * @return String, birthday of profile
 	 */
 	public String getBirthday() {
 		return birthday;
 	}
 
 	/**
+	 * Set birthday.
 	 * 
 	 * @param birthday
+	 * 			: String
 	 */
 	public void setBirthday(String birthday) {
 		this.birthday = birthday;
 	}
 
 	/**
+	 * Get image of profile.
 	 * 
-	 * @return String url avatar profile
+	 * @return String, url avatar profile
 	 */
 	public String getImgAvatar() {
 		return imgAvatar;
 	}
 
 	/**
+	 * Set image of profile.
 	 * 
-	 * @param imgAvatar, which is url avatar
+	 * @param imgAvatar 
+	 * 			: String, url of user avatar
 	 */
 	public void setImgAvatar(String imgAvatar) {
 		this.imgAvatar = imgAvatar;
 	}
 
 	/**
+	 * Get address.
 	 * 
 	 * @return String address
 	 */
@@ -154,14 +176,17 @@ public class Profile implements Serializable{
 	}
 
 	/**
+	 * Set address.
 	 * 
 	 * @param address
+	 * 			: String
 	 */
 	public void setAddress(String address) {
 		this.address = address;
 	}
 
 	/**
+	 * Get country.
 	 * 
 	 * @return String country
 	 */
@@ -170,14 +195,17 @@ public class Profile implements Serializable{
 	}
 
 	/**
+	 * Set country.
 	 * 
 	 * @param country
+	 * 			: String
 	 */
 	public void setCountry(String country) {
 		this.country = country;
 	}
 
 	/**
+	 * Get interest.
 	 * 
 	 * @return String interest
 	 */
@@ -186,14 +214,16 @@ public class Profile implements Serializable{
 	}
 
 	/**
-	 * 
-	 * @param interest in profile
+	 * Set interest. 
+	 * @param interest
+	 * 				: String
 	 */
 	public void setInterest(String interest) {
 		this.interest = interest;
 	}
 
 	/**
+	 * Get phone number.
 	 * 
 	 * @return String phone of profile
 	 */
@@ -202,14 +232,17 @@ public class Profile implements Serializable{
 	}
 
 	/**
+	 * Set phone number.
 	 * 
-	 * @param phone in profile
+	 * @param phone
+	 * 				: String
 	 */
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
 
 	/**
+	 * Get mobile phone number.
 	 * 
 	 * @return String mobile phone of profile
 	 */
@@ -218,8 +251,10 @@ public class Profile implements Serializable{
 	}
 
 	/**
+	 * Set mobile phone number.
 	 * 
-	 * @param mobile in profile
+	 * @param mobile
+	 * 			: String, mobile phone number
 	 */
 	public void setMobile(String mobile) {
 		this.mobile = mobile;

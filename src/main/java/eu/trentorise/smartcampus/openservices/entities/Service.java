@@ -29,12 +29,20 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
- * Service Entity for service table primary key, not null, auto increment
- * int(11) id not null, unique index varchar(45) name varchar(45) description
- * varchar(45) tags int(11) category text license not null varchar(45) version
- * mediumblob access information varchar(45) documentation bigint(20) expiration
- * not null varchar(10) state not null int(11) creator id longblob
- * implementation not null int(11) organization id
+ * Service Entity for service table: 
+ * id: primary key not null, auto increment int(11); 
+ * name: not null, unique index varchar(45);
+ * description: varchar(45);
+ * category: int(11);
+ * license: text;
+ * version: not null, varchar(45);
+ * access information: mediumblob;
+ * documentation: varchar(45);
+ * expiration: bigint(20);
+ * state: not null, varchar(10);
+ * creator id: not null, int(11);
+ * implementation: longblob;
+ * organization id: not null, int(11).
  * 
  * @author Giulia Canobbio
  * 
@@ -82,13 +90,14 @@ public class Service {
 	private List<Tag> tags;
 
 	/**
-	 * New {@link Service} instance
+	 * New {@link Service} instance.
 	 */
 	public Service() {
 
 	}
 
 	/**
+	 * Get service id.
 	 * 
 	 * @return int id
 	 */
@@ -97,6 +106,7 @@ public class Service {
 	}
 
 	/**
+	 * Set service id.
 	 * 
 	 * @param id
 	 *            : int
@@ -106,6 +116,7 @@ public class Service {
 	}
 
 	/**
+	 * Get name of service.
 	 * 
 	 * @return String name
 	 */
@@ -114,6 +125,7 @@ public class Service {
 	}
 
 	/**
+	 * Set name of service.
 	 * 
 	 * @param name
 	 *            : String
@@ -123,6 +135,7 @@ public class Service {
 	}
 
 	/**
+	 * Get description of service.
 	 * 
 	 * @return String description
 	 */
@@ -131,6 +144,7 @@ public class Service {
 	}
 
 	/**
+	 * Set description of service.
 	 * 
 	 * @param description
 	 *            : String
@@ -140,21 +154,7 @@ public class Service {
 	}
 
 	/**
-	 * 
-	 * @return String tags
-	 */
-	/*
-	 * public String getTags() { return tags; }
-	 */
-	/**
-	 * 
-	 * @param tags
-	 *            : String
-	 */
-	/*
-	 * public void setTags(String tags) { this.tags = tags; }
-	 */
-	/**
+	 * Get category of service.
 	 * 
 	 * @return int category
 	 */
@@ -163,6 +163,7 @@ public class Service {
 	}
 
 	/**
+	 * Set category of service.
 	 * 
 	 * @param category
 	 *            : int
@@ -172,6 +173,7 @@ public class Service {
 	}
 
 	/**
+	 * Get license of service.
 	 * 
 	 * @return String license
 	 */
@@ -180,6 +182,7 @@ public class Service {
 	}
 
 	/**
+	 * Set license of service.
 	 * 
 	 * @param license
 	 *            : String
@@ -189,6 +192,7 @@ public class Service {
 	}
 
 	/**
+	 * Get version of service.
 	 * 
 	 * @return String version
 	 */
@@ -197,6 +201,7 @@ public class Service {
 	}
 
 	/**
+	 * Set version of service.
 	 * 
 	 * @param version
 	 *            : String
@@ -206,6 +211,7 @@ public class Service {
 	}
 
 	/**
+	 * Get access information.
 	 * 
 	 * @return {@link AccessInformation} instance
 	 */
@@ -214,6 +220,7 @@ public class Service {
 	}
 
 	/**
+	 * Set access information.
 	 * 
 	 * @param accessInformation
 	 *            : {@link AccessInformation}
@@ -223,6 +230,7 @@ public class Service {
 	}
 
 	/**
+	 * Get documentation of service.
 	 * 
 	 * @return String documentation
 	 */
@@ -231,6 +239,7 @@ public class Service {
 	}
 
 	/**
+	 * Set documentation of service.
 	 * 
 	 * @param documentation
 	 *            : String
@@ -240,6 +249,7 @@ public class Service {
 	}
 
 	/**
+	 * Get expiration.
 	 * 
 	 * @return long expiration
 	 */
@@ -248,6 +258,7 @@ public class Service {
 	}
 
 	/**
+	 * Set expiration.
 	 * 
 	 * @param expiration
 	 *            : long
@@ -257,6 +268,8 @@ public class Service {
 	}
 
 	/**
+	 * Get state of service.
+	 * Possible values are: publish, unpublish or deprecate.
 	 * 
 	 * @return String state
 	 */
@@ -265,6 +278,8 @@ public class Service {
 	}
 
 	/**
+	 * Set state of service.
+	 * Possible values are: publish, unpublish or deprecate.
 	 * 
 	 * @param state
 	 *            : String
@@ -274,6 +289,7 @@ public class Service {
 	}
 
 	/**
+	 * Get id of creator.
 	 * 
 	 * @return int creator id
 	 */
@@ -282,6 +298,7 @@ public class Service {
 	}
 
 	/**
+	 * Set id of creator.
 	 * 
 	 * @param creatorId
 	 *            : int
@@ -291,6 +308,7 @@ public class Service {
 	}
 
 	/**
+	 * Get id of organization that service belongs.
 	 * 
 	 * @return int organizaton id
 	 */
@@ -299,6 +317,7 @@ public class Service {
 	}
 
 	/**
+	 * Set id of organization that service belongs.
 	 * 
 	 * @param organizationId
 	 *            : int
@@ -308,6 +327,7 @@ public class Service {
 	}
 
 	/**
+	 * Get implemantation info.
 	 * 
 	 * @return a {@link ImplementationInfo} instance
 	 */
@@ -316,6 +336,7 @@ public class Service {
 	}
 
 	/**
+	 * Set implementation info.
 	 * 
 	 * @param implementation
 	 *            : {@link ImplementationInfo}
@@ -325,6 +346,7 @@ public class Service {
 	}
 
 	/**
+	 * Get list of tags.
 	 * 
 	 * @return list of {@link Tag} instances
 	 */
@@ -333,6 +355,7 @@ public class Service {
 	}
 
 	/**
+	 * Set list of tags.
 	 * 
 	 * @param tags
 	 *            : list of {@link Tag} instances

@@ -19,9 +19,9 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
- * Blob Object for Method table
- * authentication descriptor
- * a list of tests
+ * Blob Object for Method table: 
+ * authentication descriptor,
+ * a list of tests.
  * 
  * @author raman
  *
@@ -33,12 +33,13 @@ public class TestBoxProperties implements Serializable{
 	private List<TestInfo> tests;//request string, input, output
 	
 	/**
-	 * New {@link TestBoxProperties} instance
+	 * New {@link TestBoxProperties} instance.
 	 */
 	public TestBoxProperties() {
 	}
 
 	/**
+	 * Get authentication descriptor.
 	 * 
 	 * @return {@link Authentication} instance
 	 */
@@ -47,14 +48,17 @@ public class TestBoxProperties implements Serializable{
 	}
 
 	/**
+	 * Set authentication descriptor.
 	 * 
-	 * @param authenticationDescriptor : {@link Authentication} instance
+	 * @param authenticationDescriptor 
+	 * 			: {@link Authentication} instance
 	 */
 	public void setAuthenticationDescriptor(Authentication authenticationDescriptor) {
 		this.authenticationDescriptor = authenticationDescriptor;
 	}
 
 	/**
+	 * Get list of tests.
 	 * 
 	 * @return list of {@link TestInfo} instance
 	 */
@@ -63,8 +67,10 @@ public class TestBoxProperties implements Serializable{
 	}
 
 	/**
+	 * Set list of test.
 	 * 
-	 * @param tests : {@link TestInfo} instance
+	 * @param tests 
+	 * 			: {@link TestInfo} instance
 	 */
 	public void setTests(List<TestInfo> tests) {
 		this.tests = tests;

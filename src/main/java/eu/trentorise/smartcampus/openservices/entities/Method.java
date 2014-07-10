@@ -23,13 +23,14 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 
 /**
- * Method Entity for Method table
- * primary key, not null, auto increment int(11) id
- * not null, unique index varchar(45) name
- * varchar(45) synopsis
- * varchar(45) documentation
- * int(11) service id
- * longBlob testbox proprieties
+ * Method Entity for Method table:
+ * id: primary key, not null, auto increment int(11);
+ * name: not null, unique index varchar(45);
+ * synopsis: varchar(45);
+ * documentation: varchar(45);
+ * service id: int(11);
+ * properties: longBlob.
+ * 
  * @author Giulia Canobbio
  *
  */
@@ -53,14 +54,15 @@ public class Method {
 	private TestBoxProperties testboxProperties;
 	
 	/**
-	 * New instance of {@link Method}
+	 * New instance of {@link Method}.
 	 */
 	public Method(){
 		
 	}
 
 	/**
-	 * Get id
+	 * Get id.
+	 * 
 	 * @return int id
 	 */
 	public int getId() {
@@ -68,15 +70,18 @@ public class Method {
 	}
 
 	/**
-	 * Set id
+	 * Set id.
+	 * 
 	 * @param id
+	 * 			: int
 	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 
 	/**
-	 * Get name
+	 * Get name.
+	 * 
 	 * @return String name
 	 */
 	public String getName() {
@@ -84,15 +89,18 @@ public class Method {
 	}
 
 	/**
-	 * Set name
+	 * Set name.
+	 * 
 	 * @param name
+	 * 			: String
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
 	/**
-	 * Get synopsis
+	 * Get synopsis.
+	 * 
 	 * @return String synopsis
 	 */
 	public String getSynopsis() {
@@ -100,15 +108,18 @@ public class Method {
 	}
 
 	/**
-	 * Set synopsis
+	 * Set synopsis.
+	 * 
 	 * @param synopsis
+	 * 			: String
 	 */
 	public void setSynopsis(String synopsis) {
 		this.synopsis = synopsis;
 	}
 
 	/**
-	 * Get documentation
+	 * Get documentation.
+	 * 
 	 * @return String documentation
 	 */
 	public String getDocumentation() {
@@ -116,15 +127,18 @@ public class Method {
 	}
 
 	/**
-	 * Set documentation
+	 * Set documentation.
+	 * 
 	 * @param documentation
+	 * 			: String
 	 */
 	public void setDocumentation(String documentation) {
 		this.documentation = documentation;
 	}
 
 	/**
-	 * Get service id
+	 * Get service id.
+	 * 
 	 * @return int service id
 	 */
 	public int getServiceId() {
@@ -132,15 +146,18 @@ public class Method {
 	}
 
 	/**
-	 * Set service id
+	 * Set service id.
+	 * 
 	 * @param serviceId
+	 * 			: int
 	 */
 	public void setServiceId(int serviceId) {
 		this.serviceId = serviceId;
 	}
 
 	/**
-	 * Get {@link TestBoxProperties} instance
+	 * Get {@link TestBoxProperties} instance.
+	 * 
 	 * @return a {@link TestBoxProperties} instance
 	 */
 	public TestBoxProperties getTestboxProperties() {
@@ -148,8 +165,10 @@ public class Method {
 	}
 
 	/**
-	 * Set {@link TestBoxProperties} instance
-	 * @param testboxProperties : a {@link TestBoxProperties} instance
+	 * Set {@link TestBoxProperties} instance.
+	 * 
+	 * @param testboxProperties 
+	 * 			: a {@link TestBoxProperties} instance
 	 */
 	public void setTestboxProprieties(TestBoxProperties testboxProperties) {
 		this.testboxProperties = testboxProperties;

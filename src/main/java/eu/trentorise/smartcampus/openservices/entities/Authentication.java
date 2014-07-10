@@ -20,9 +20,9 @@ import java.io.Serializable;
 import java.util.Map;
 
 /**
- * Authentication object for AccessInformation
- * access protocol
- * access attributes
+ * Authentication object for AccessInformation:
+ * access protocol,
+ * access attributes.
  * @author raman
  *
  */
@@ -33,23 +33,27 @@ public class Authentication implements Serializable {
 	private Map<String,Object> accessAttributes;
 	
 	/**
-	 * Get String access protocol
-	 * @return
+	 * Get String access protocol.
+	 * 
+	 * @return String access protocol
 	 */
 	public String getAccessProtocol() {
 		return accessProtocol;
 	}
 	
 	/**
-	 * Set String access protocol
-	 * @param String accessProtocol
+	 * Set String access protocol.
+	 * 
+	 * @param accessProtocol 
+	 * 			: String
 	 */
 	public void setAccessProtocol(String accessProtocol) {
 		this.accessProtocol = accessProtocol;
 	}
 	
 	/**
-	 * Get Map<String,Object> access attributes
+	 * Get Map<String,Object> access attributes.
+	 * 
 	 * @return Map<String,Object> access attributes
 	 */
 	public Map<String, Object> getAccessAttributes() {
@@ -57,8 +61,10 @@ public class Authentication implements Serializable {
 	}
 	
 	/**
-	 * Set Map<String,Object> access attributes
-	 * @param Map<String,Object> accessAttributes
+	 * Set Map<String,Object> access attributes.
+	 * 
+	 * @param accessAttributes 
+	 * 			: Map<String,Object> 
 	 */
 	public void setAccessAttributes(Map<String, Object> accessAttributes) {
 		this.accessAttributes = accessAttributes;

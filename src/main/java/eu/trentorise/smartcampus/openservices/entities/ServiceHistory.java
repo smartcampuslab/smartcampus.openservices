@@ -24,12 +24,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * Service History Entity for service history table
- * primary key, not null, auto increment int(11) id
- * not null varchar(45) operation
- * not null int(11) id service
- * int(11) id service method
- * not null date date
+ * Service History Entity for service history table:
+ * id: primary key, not null, auto increment int(11);
+ * operation: not null varchar(45);
+ * id service: not null int(11);
+ * id service method: int(11);
+ * date: not null date date.
  * 
  * @author Giulia Canobbio
  *
@@ -55,13 +55,14 @@ public class ServiceHistory {
 	private String methodName;
 	
 	/**
-	 * New {@link ServiceHistory} instance
+	 * New {@link ServiceHistory} instance.
 	 */
 	public ServiceHistory(){
 		
 	}
 
 	/**
+	 * Get id of service history.
 	 * 
 	 * @return int id
 	 */
@@ -70,14 +71,18 @@ public class ServiceHistory {
 	}
 
 	/**
+	 * Set id of service history.
 	 * 
-	 * @param id : int
+	 * @param id 
+	 * 			: int
 	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 
 	/**
+	 * Get operation done on a specific service or method.
+	 * Possible values are: ADD, MODIFY or DELETE.
 	 * 
 	 * @return String operation
 	 */
@@ -86,14 +91,18 @@ public class ServiceHistory {
 	}
 
 	/**
+	 * Set operation done on a specific service or method.
+	 * Possible values are: ADD, MODIFY or DELETE.
 	 * 
-	 * @param operation : String
+	 * @param operation 
+	 * 			: String
 	 */
 	public void setOperation(String operation) {
 		this.operation = operation;
 	}
 
 	/**
+	 * Get service id.
 	 * 
 	 * @return int service id 
 	 */
@@ -102,14 +111,17 @@ public class ServiceHistory {
 	}
 
 	/**
+	 * Set service id.
 	 * 
-	 * @param id_service : int 
+	 * @param id_service 
+	 * 			: int 
 	 */
 	public void setId_service(int id_service) {
 		this.id_service = id_service;
 	}
 
 	/**
+	 * Get method id of a service.
 	 * 
 	 * @return int service method id
 	 */
@@ -118,30 +130,36 @@ public class ServiceHistory {
 	}
 
 	/**
+	 * Set method id of a service.
 	 * 
-	 * @param id_serviceMethod : int 
+	 * @param id_serviceMethod 
+	 * 			: int 
 	 */
 	public void setId_serviceMethod(int id_serviceMethod) {
 		this.id_serviceMethod = id_serviceMethod;
 	}
 
 	/**
+	 * Get date of operation.
 	 * 
-	 * @return Date date of creation
+	 * @return Date date
 	 */
 	public Date getDate() {
 		return date;
 	}
 
 	/**
+	 * Set date of operation.
 	 * 
-	 * @param date of creation : Date
+	 * @param date of creation 
+	 * 			: Date
 	 */
 	public void setDate(Date date) {
 		this.date = date;
 	}
 
 	/**
+	 * Get service name.
 	 * 
 	 * @return service name : String
 	 */
@@ -150,14 +168,17 @@ public class ServiceHistory {
 	}
 
 	/**
+	 * Set service name.
 	 * 
-	 * @param serviceName : String
+	 * @param serviceName 
+	 * 			: String
 	 */
 	public void setServiceName(String serviceName) {
 		this.serviceName = serviceName;
 	}
 
 	/**
+	 * Get method name.
 	 * 
 	 * @return method name : String
 	 */
@@ -166,8 +187,10 @@ public class ServiceHistory {
 	}
 
 	/**
+	 * Set method name.
 	 * 
-	 * @param methodName : String
+	 * @param methodName 
+	 * 			: String
 	 */
 	public void setMethodName(String methodName) {
 		this.methodName = methodName;
