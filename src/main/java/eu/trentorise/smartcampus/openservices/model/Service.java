@@ -25,7 +25,8 @@ import eu.trentorise.smartcampus.openservices.entities.ImplementationInfo;
 import eu.trentorise.smartcampus.openservices.entities.Tag;
 
 /**
- * Model of service
+ * Model of service.
+ * 
  * @author raman
  *
  */
@@ -47,15 +48,17 @@ public class Service {
 	private List<String> tags;
 
 	/**
-	 * New instance of {@link Service}
+	 * New instance of {@link Service}.
 	 */
 	public Service() {
 		super();
 	}
 	/**
 	 * New instance of {@link Service} from an instance of 
-	 * {@link eu.trentorise.smartcampus.openservices.entities.Service}
-	 * @param s : a {@link eu.trentorise.smartcampus.openservices.entities.Service} instance
+	 * {@link eu.trentorise.smartcampus.openservices.entities.Service}.
+	 * 
+	 * @param s 
+	 * 			: a {@link eu.trentorise.smartcampus.openservices.entities.Service} instance
 	 */
 	private Service(eu.trentorise.smartcampus.openservices.entities.Service s) {
 		setAccessInformation(s.getAccessInformation());
@@ -80,6 +83,7 @@ public class Service {
 	} 
 	
 	/**
+	 * Get service id.
 	 * 
 	 * @return service id : int
 	 */
@@ -87,13 +91,16 @@ public class Service {
 		return id;
 	}
 	/**
+	 * Set service id.
 	 * 
-	 * @param id : int
+	 * @param id 
+	 * 			: int
 	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 	/**
+	 * Get service name.
 	 * 
 	 * @return service name : String
 	 */
@@ -101,13 +108,16 @@ public class Service {
 		return name;
 	}
 	/**
+	 * Set service name.
 	 * 
-	 * @param name : String
+	 * @param name 
+	 * 			: String
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 	/**
+	 * Get creator id.
 	 * 
 	 * @return id of creator : int 
 	 */
@@ -115,13 +125,16 @@ public class Service {
 		return creatorId;
 	}
 	/**
+	 * Set creator id.
 	 * 
-	 * @param creatorId : int
+	 * @param creatorId 
+	 * 			: int
 	 */
 	public void setCreatorId(int creatorId) {
 		this.creatorId = creatorId;
 	}
 	/**
+	 * Get organization id.
 	 * 
 	 * @return organization id : int
 	 */
@@ -129,13 +142,16 @@ public class Service {
 		return organizationId;
 	}
 	/**
+	 * Set organization id.
 	 * 
-	 * @param organizationId : int
+	 * @param organizationId 
+	 * 			: int
 	 */
 	public void setOrganizationId(int organizationId) {
 		this.organizationId = organizationId;
 	}
 	/**
+	 * Get description.
 	 * 
 	 * @return description : String
 	 */
@@ -143,13 +159,16 @@ public class Service {
 		return description;
 	}
 	/**
+	 * Set description.
 	 * 
-	 * @param description : String
+	 * @param description 
+	 * 				: String
 	 */
 	public void setDescription(String description) {
 		this.description = description;
 	}
 	/**
+	 * Get category id.
 	 * 
 	 * @return category id : int
 	 */
@@ -157,13 +176,16 @@ public class Service {
 		return category;
 	}
 	/**
+	 * Set category id.
 	 * 
-	 * @param category : int 
+	 * @param category 
+	 * 			: int 
 	 */
 	public void setCategory(int category) {
 		this.category = category;
 	}
 	/**
+	 * Get license.
 	 * 
 	 * @return license : String
 	 */
@@ -171,13 +193,16 @@ public class Service {
 		return license;
 	}
 	/**
+	 * Set license.
 	 * 
-	 * @param license : String
+	 * @param license 
+	 * 			: String
 	 */
 	public void setLicense(String license) {
 		this.license = license;
 	}
 	/**
+	 * Get version.
 	 * 
 	 * @return version : String
 	 */
@@ -185,13 +210,16 @@ public class Service {
 		return version;
 	}
 	/**
+	 * Set version.
 	 * 
-	 * @param version : String
+	 * @param version 
+	 * 			: String
 	 */
 	public void setVersion(String version) {
 		this.version = version;
 	}
 	/**
+	 * Get expiration.
 	 * 
 	 * @return expiration : long
 	 */
@@ -199,13 +227,16 @@ public class Service {
 		return expiration;
 	}
 	/**
+	 * Set expiration.
 	 * 
-	 * @param expiration : long
+	 * @param expiration 
+	 * 				: long
 	 */
 	public void setExpiration(long expiration) {
 		this.expiration = expiration;
 	}
 	/**
+	 * Get documentation.
 	 * 
 	 * @return documentation : String
 	 */
@@ -213,27 +244,33 @@ public class Service {
 		return documentation;
 	}
 	/**
+	 * Set documentation.
 	 * 
-	 * @param documentation : String 
+	 * @param documentation 
+	 * 			: String 
 	 */
 	public void setDocumentation(String documentation) {
 		this.documentation = documentation;
 	}
 	/**
-	 * State value can be: PUBLISH, UNPUBLISH, DEPRECATE
+	 * State value can be: PUBLISH, UNPUBLISH, DEPRECATE.
+	 * 
 	 * @return state of service : String
 	 */
 	public String getState() {
 		return state;
 	}
 	/**
-	 * State value can be: PUBLISH, UNPUBLISH, DEPRECATE
-	 * @param state : String
+	 * State value can be: PUBLISH, UNPUBLISH, DEPRECATE.
+	 * 
+	 * @param state 
+	 * 			: String
 	 */
 	public void setState(String state) {
 		this.state = state;
 	}
 	/**
+	 * Get access information.
 	 * 
 	 * @return a {@link AccessInformation} instance 
 	 */
@@ -241,13 +278,16 @@ public class Service {
 		return accessInformation;
 	}
 	/**
+	 * Set access information.
 	 * 
-	 * @param accessInformation : a {@link AccessInformation} instance 
+	 * @param accessInformation 
+	 * 			: a {@link AccessInformation} instance 
 	 */
 	public void setAccessInformation(AccessInformation accessInformation) {
 		this.accessInformation = accessInformation;
 	}
 	/**
+	 * Get implementation info.
 	 * 
 	 * @return a {@link ImplementationInfo} instance 
 	 */
@@ -255,13 +295,16 @@ public class Service {
 		return implementation;
 	}
 	/**
+	 * Set implementation info.
 	 * 
-	 * @param implementation : a {@link ImplementationInfo} instance 
+	 * @param implementation 
+	 * 			: a {@link ImplementationInfo} instance 
 	 */
 	public void setImplementation(ImplementationInfo implementation) {
 		this.implementation = implementation;
 	}
 	/**
+	 * Get list of tags.
 	 * 
 	 * @return a list of tag
 	 */
@@ -269,15 +312,18 @@ public class Service {
 		return tags;
 	}
 	/**
+	 * Set list of tags.
 	 * 
-	 * @param tags : String list of tag
+	 * @param tags 
+	 * 			: String list of tag
 	 */
 	public void setTags(List<String> tags) {
 		this.tags = tags;
 	}
 	
 	/**
-	 * Cast from a {@link Service} to {@link eu.trentorise.smartcampus.openservices.entities.Service} instance
+	 * Cast from a {@link Service} to {@link eu.trentorise.smartcampus.openservices.entities.Service} instance.
+	 * 
 	 * @return a {@link eu.trentorise.smartcampus.openservices.entities.Service} instance
 	 */
 	public eu.trentorise.smartcampus.openservices.entities.Service toServiceEntity() {
@@ -307,8 +353,10 @@ public class Service {
 	}
 	
 	/**
-	 * Cast list from a {@link Service} to {@link eu.trentorise.smartcampus.openservices.entities.Service} instance
-	 * @param services : collection of {@link eu.trentorise.smartcampus.openservices.entities.Service} instances
+	 * Cast list from a {@link Service} to {@link eu.trentorise.smartcampus.openservices.entities.Service} instance.
+	 * 
+	 * @param services 
+	 * 			: collection of {@link eu.trentorise.smartcampus.openservices.entities.Service} instances
 	 * @return a list of {@link Service}
 	 */
 	public static List<Service> fromServiceEntities(Collection<eu.trentorise.smartcampus.openservices.entities.Service> services) {
@@ -323,8 +371,10 @@ public class Service {
 	}
 	
 	/**
-	 * Cast from a {@link eu.trentorise.smartcampus.openservices.entities.Service} to {@link Service} instance
-	 * @param service : a {@link eu.trentorise.smartcampus.openservices.entities.Service} instance
+	 * Cast from a {@link eu.trentorise.smartcampus.openservices.entities.Service} to {@link Service} instance.
+	 * 
+	 * @param service 
+	 * 			: a {@link eu.trentorise.smartcampus.openservices.entities.Service} instance
 	 * @return a {@link Service} instance
 	 */
 	public static Service fromServiceEntity(eu.trentorise.smartcampus.openservices.entities.Service service) {

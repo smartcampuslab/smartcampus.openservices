@@ -21,7 +21,8 @@ import java.util.List;
 
 import eu.trentorise.smartcampus.openservices.entities.Profile;
 /**
- * Model of user data
+ * Model of user data.
+ * 
  * @author Giulia Canobbio
  *
  */
@@ -33,15 +34,17 @@ public class User {
 	private String role;
 	
 	/**
-	 * New instance of {@link User}
+	 * New instance of {@link User}.
 	 */
 	public User() {
 		super();
 	}
 	
 	/**
-	 * Cast from {@link eu.trentorise.smartcampus.openservices.entities.User} to {@link User} instance
-	 * @param u : {@link eu.trentorise.smartcampus.openservices.entities.User}
+	 * Cast from {@link eu.trentorise.smartcampus.openservices.entities.User} to {@link User} instance.
+	 * 
+	 * @param u 
+	 * 			: {@link eu.trentorise.smartcampus.openservices.entities.User}
 	 */
 	public User(eu.trentorise.smartcampus.openservices.entities.User u){
 		setUsername(u.getUsername());
@@ -51,6 +54,7 @@ public class User {
 	}
 	
 	/**
+	 * Get username.
 	 * 
 	 * @return username : String
 	 */
@@ -58,13 +62,16 @@ public class User {
 		return username;
 	}
 	/**
+	 * Set username.
 	 * 
-	 * @param username : String
+	 * @param username 
+	 * 			: String
 	 */
 	public void setUsername(String username) {
 		this.username = username;
 	}
 	/**
+	 * Get email address.
 	 * 
 	 * @return email : String
 	 */
@@ -72,13 +79,16 @@ public class User {
 		return email;
 	}
 	/**
+	 * Set email address.
 	 * 
-	 * @param email : String
+	 * @param email 
+	 * 			: String
 	 */
 	public void setEmail(String email) {
 		this.email = email;
 	}
 	/**
+	 * Get user profile.
 	 * 
 	 * @return profile : {@link Profile} instance
 	 */
@@ -86,29 +96,35 @@ public class User {
 		return profile;
 	}
 	/**
+	 * Set user profile.
 	 * 
-	 * @param profile : {@link Profile} instance
+	 * @param profile 
+	 * 			: {@link Profile} instance
 	 */
 	public void setProfile(Profile profile) {
 		this.profile = profile;
 	}
 	/**
-	 * User role can be: ROLE_ADMIN, ROLE_NORMAL
+	 * User role can be: ROLE_ADMIN, ROLE_NORMAL.
+	 * 
 	 * @return role of user : String
 	 */
 	public String getRole() {
 		return role;
 	}
 	/**
-	 * User role can be: ROLE_ADMIN, ROLE_NORMAL
-	 * @param role : String
+	 * User role can be: ROLE_ADMIN, ROLE_NORMAL.
+	 * 
+	 * @param role 
+	 * 			: String
 	 */
 	public void setRole(String role) {
 		this.role = role;
 	}
 	
 	/**
-	 * Cast from a {@link User} to {@link eu.trentorise.smartcampus.openservices.entities.User} instance
+	 * Cast from a {@link User} to {@link eu.trentorise.smartcampus.openservices.entities.User} instance.
+	 * 
 	 * @return a {@link eu.trentorise.smartcampus.openservices.entities.User} instance
 	 */
 	public eu.trentorise.smartcampus.openservices.entities.User toUserEntity() {
@@ -122,8 +138,10 @@ public class User {
 	}
 	
 	/**
-	 * Cast list from a {@link User} to {@link eu.trentorise.smartcampus.openservices.entities.User} instance
-	 * @param users : collection of {@link eu.trentorise.smartcampus.openservices.entities.User} instances
+	 * Cast list from a {@link User} to {@link eu.trentorise.smartcampus.openservices.entities.User} instance.
+	 * 
+	 * @param users 
+	 * 			: collection of {@link eu.trentorise.smartcampus.openservices.entities.User} instances
 	 * @return a list of {@link User}
 	 */
 	public static List<User> fromUserEntities(Collection<eu.trentorise.smartcampus.openservices.entities.User> users) {
@@ -138,8 +156,10 @@ public class User {
 	}
 	
 	/**
-	 * Cast from a {@link eu.trentorise.smartcampus.openservices.entities.User} to {@link User} instance
-	 * @param service : a {@link eu.trentorise.smartcampus.openservices.entities.User} instance
+	 * Cast from a {@link eu.trentorise.smartcampus.openservices.entities.User} to {@link User} instance.
+	 * 
+	 * @param user 
+	 * 			: a {@link eu.trentorise.smartcampus.openservices.entities.User} instance
 	 * @return a {@link User} instance
 	 */
 	public static User fromUserEntity(eu.trentorise.smartcampus.openservices.entities.User user) {

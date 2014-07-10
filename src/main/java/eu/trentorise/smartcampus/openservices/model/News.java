@@ -18,7 +18,8 @@ package eu.trentorise.smartcampus.openservices.model;
 import java.util.Date;
 
 /**
- * Model of service history
+ * Model of service history.
+ * 
  * @author Giulia Canobbio
  *
  */
@@ -33,13 +34,20 @@ public class News {
 	private int methodId;
 	
 	/**
-	 * New instance of {@link News}
-	 * @param service : String
-	 * @param method : String
-	 * @param state : String
-	 * @param date : Date
-	 * @param serviceId : int
-	 * @param methodId : int
+	 * New instance of {@link News}.
+	 * 
+	 * @param service 
+	 * 			: String, service name
+	 * @param method 
+	 * 			: String, method name
+	 * @param state 
+	 * 			: String
+	 * @param date 
+	 * 			: Date
+	 * @param serviceId 
+	 * 			: int
+	 * @param methodId 
+	 * 			: int
 	 */
 	public News(String service, String method, String state, Date date, int serviceId, int methodId) {
 		this.service=service;
@@ -50,6 +58,7 @@ public class News {
 		this.methodId=methodId;
 	}
 	/**
+	 * Get service name.
 	 * 
 	 * @return service name : String
 	 */
@@ -57,13 +66,16 @@ public class News {
 		return service;
 	}
 	/**
+	 * Set service name.
 	 * 
-	 * @param service : String service name
+	 * @param service 
+	 * 			: String service name
 	 */
 	public void setService(String service) {
 		this.service = service;
 	}
 	/**
+	 * Get method name.
 	 * 
 	 * @return method name : String
 	 */
@@ -71,27 +83,33 @@ public class News {
 		return method;
 	}
 	/**
+	 * Set method name.
 	 * 
-	 * @param method : String method name
+	 * @param method 
+	 * 			: String method name
 	 */
 	public void setMethod(String method) {
 		this.method = method;
 	}
 	/**
-	 * State value can be: Add, Modify, Delete, PUBLISH, UNPUBLISH, DEPRECATE
+	 * State value can be: Add, Modify, Delete, PUBLISH, UNPUBLISH, DEPRECATE.
+	 * 
 	 * @return state : String operation on method or service
 	 */
 	public String getState() {
 		return state;
 	}
 	/**
-	 * State value can be: Add, Modify, Delete, PUBLISH, UNPUBLISH, DEPRECATE
-	 * @param state : String
+	 * State value can be: Add, Modify, Delete, PUBLISH, UNPUBLISH, DEPRECATE.
+	 * 
+	 * @param state 
+	 * 			: String
 	 */
 	public void setState(String state) {
 		this.state = state;
 	}
 	/**
+	 * Get date.
 	 * 
 	 * @return date of operation on method or service : Date
 	 */
@@ -99,13 +117,16 @@ public class News {
 		return date;
 	}
 	/**
+	 * Set date.
 	 * 
-	 * @param date : Date
+	 * @param date 
+	 * 			: Date
 	 */
 	public void setDate(Date date) {
 		this.date = date;
 	}
 	/**
+	 * Get service id.
 	 * 
 	 * @return service id : int
 	 */
@@ -113,13 +134,16 @@ public class News {
 		return serviceId;
 	}
 	/**
+	 * Set service id.
 	 * 
-	 * @param serviceId : int
+	 * @param serviceId 
+	 * 			: int
 	 */
 	public void setServiceId(int serviceId) {
 		this.serviceId = serviceId;
 	}
 	/**
+	 * Get method id.
 	 * 
 	 * @return method id : int
 	 */
@@ -127,8 +151,10 @@ public class News {
 		return methodId;
 	}
 	/**
+	 * Set method id.
 	 * 
-	 * @param methodId : ints
+	 * @param methodId 
+	 * 			: ints
 	 */
 	public void setMethodId(int methodId) {
 		this.methodId = methodId;
