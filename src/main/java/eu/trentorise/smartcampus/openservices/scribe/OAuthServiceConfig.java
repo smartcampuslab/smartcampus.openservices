@@ -48,7 +48,7 @@ public class OAuthServiceConfig {
 	 * @param callback 
 	 * 				: String, callback url
 	 * @param apiClass 
-	 * 				: Class<? extends Api>
+	 * 				: Class extends Api
 	 */
 	public OAuthServiceConfig(String apiKey, String apiSecret, String callback, Class<? extends Api> apiClass){
 		super();
@@ -111,7 +111,7 @@ public class OAuthServiceConfig {
 	/**
 	 * Get api class.
 	 * 
-	 * @return Class<? extends Api> apiClass
+	 * @return Class extends Api, apiClass
 	 */
 	public Class<? extends Api> getApiClass() {
 		return apiClass;
@@ -120,7 +120,7 @@ public class OAuthServiceConfig {
 	 * Set api class.
 	 * 
 	 * @param apiClass 
-	 * 			: Class<? extends Api>
+	 * 			: Class extends Api
 	 */
 	public void setApiClass(Class<? extends Api> apiClass) {
 		this.apiClass = apiClass;
