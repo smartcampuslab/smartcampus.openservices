@@ -47,12 +47,17 @@ public class AccountConnectionSignUp implements ConnectionSignUp{
 		UserProfile profile = arg0.fetchUserProfile();
 
 		User user = new User();
+		
+		String username;
 
 		if (profile.getUsername() == null) {
-			user.setUsername(profile.getName());
+			username = profile.getName()+"@facebook";
+			//user.setUsername(profile.getName());
 		} else {
-			user.setUsername(profile.getUsername());
+			username = profile.getUsername()+"@facebook";
+			//user.setUsername(profile.getUsername());
 		}
+		user.setUsername(username);
 		user.setEmail(profile.getEmail());
 		user.setRole("ROLE_NORMAL");
 		user.setEnabled(1);
@@ -64,11 +69,7 @@ public class AccountConnectionSignUp implements ConnectionSignUp{
 		
 		System.out.println("Connection Sign Up ending...");
 		
-		if(profile.getUsername()==null){
-			return profile.getName();
-		}else{
-			return profile.getUsername();
-		}
+		return username;
 	}
 
 }
