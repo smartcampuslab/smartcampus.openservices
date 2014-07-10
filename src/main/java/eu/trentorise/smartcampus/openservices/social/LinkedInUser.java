@@ -16,7 +16,8 @@
 package eu.trentorise.smartcampus.openservices.social;
 
 /**
- * Model for linkedIn user data
+ * Model for linkedIn user data.
+ * 
  * @author Giulia Canobbio
  *
  */
@@ -28,6 +29,7 @@ public class LinkedInUser {
 	private String email_address;
 	private String headline;
 	/**
+	 * Get linkedIn user id.
 	 * 
 	 * @return String id
 	 */
@@ -35,13 +37,16 @@ public class LinkedInUser {
 		return id;
 	}
 	/**
+	 * Set id.
 	 * 
-	 * @param id : String
+	 * @param id 
+	 * 			: String
 	 */
 	public void setId(String id) {
 		this.id = id;
 	}
 	/**
+	 * Get first name.
 	 * 
 	 * @return String first name
 	 */
@@ -49,13 +54,16 @@ public class LinkedInUser {
 		return first_name;
 	}
 	/**
+	 * Set first name.
 	 * 
-	 * @param first_name : String
+	 * @param first_name 
+	 * 			: String
 	 */
 	public void setFirst_name(String first_name) {
 		this.first_name = first_name;
 	}
 	/**
+	 * Get last name.
 	 * 
 	 * @return String last name
 	 */
@@ -63,13 +71,16 @@ public class LinkedInUser {
 		return last_name;
 	}
 	/**
+	 * Set last name.
 	 * 
-	 * @param last_name : String
+	 * @param last_name 
+	 * 			: String
 	 */
 	public void setLast_name(String last_name) {
 		this.last_name = last_name;
 	}
 	/**
+	 * Get email address.
 	 * 
 	 * @return String email address
 	 */
@@ -77,13 +88,16 @@ public class LinkedInUser {
 		return email_address;
 	}
 	/**
+	 * Set email address.
 	 * 
-	 * @param email_address : String
+	 * @param email_address 
+	 * 				: String
 	 */
 	public void setEmail_address(String email_address) {
 		this.email_address = email_address;
 	}
 	/**
+	 * Get headline.
 	 * 
 	 * @return String headline
 	 */
@@ -91,8 +105,10 @@ public class LinkedInUser {
 		return headline;
 	}
 	/**
+	 * Set headline.
 	 * 
-	 * @param headline : String
+	 * @param headline 
+	 * 			: String
 	 */
 	public void setHeadline(String headline) {
 		this.headline = headline;

@@ -16,7 +16,8 @@
 package eu.trentorise.smartcampus.openservices.social;
 
 /**
- * Model for user's info logged by Google
+ * Model for user's info logged by Google.
+ * 
  * @author Giulia Canobbio
  *
  */
@@ -41,6 +42,7 @@ public class GoogleUser{
 	private String hd;
 	
 	/**
+	 * Get google user id.
 	 * 
 	 * @return String id
 	 */
@@ -48,13 +50,16 @@ public class GoogleUser{
 		return id;
 	}
 	/**
+	 * Set google user id.
 	 * 
-	 * @param id : String
+	 * @param id 
+	 * 			: String
 	 */
 	public void setId(String id) {
 		this.id = id;
 	}
 	/**
+	 * Get email address.
 	 * 
 	 * @return String email
 	 */
@@ -62,13 +67,16 @@ public class GoogleUser{
 		return email;
 	}
 	/**
+	 * Set email address.
 	 * 
-	 * @param email : String
+	 * @param email 
+	 * 			: String
 	 */
 	public void setEmail(String email) {
 		this.email = email;
 	}
 	/**
+	 * Check if email is verified.
 	 * 
 	 * @return boolean true if email is verified in Google o.w. false
 	 */
@@ -76,13 +84,16 @@ public class GoogleUser{
 		return verified_email;
 	}
 	/**
+	 * Set email verified value.
 	 * 
-	 * @param verified_email : boolean
+	 * @param verified_email 
+	 * 			: boolean
 	 */
 	public void setVerified_email(boolean verified_email) {
 		this.verified_email = verified_email;
 	}
 	/**
+	 * Get username.
 	 * 
 	 * @return String name : username in Google
 	 */
@@ -90,27 +101,33 @@ public class GoogleUser{
 		return name;
 	}
 	/**
+	 * Set username.
 	 * 
-	 * @param name : String username
+	 * @param name 
+	 * 			: String username
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 	/**
+	 * Get first name.
 	 * 
-	 * @return String birthname
+	 * @return String first name
 	 */
 	public String getGiven_name() {
 		return given_name;
 	}
 	/**
+	 * Set first name.
 	 * 
-	 * @param given_name : String birthname
+	 * @param given_name 
+	 * 			: String first name
 	 */
 	public void setGiven_name(String given_name) {
 		this.given_name = given_name;
 	}
 	/**
+	 * Get surname.
 	 * 
 	 * @return String family name
 	 */
@@ -118,13 +135,16 @@ public class GoogleUser{
 		return family_name;
 	}
 	/**
+	 * Set surname.
 	 * 
-	 * @param family_name : String
+	 * @param family_name 
+	 * 			: String
 	 */
 	public void setFamily_name(String family_name) {
 		this.family_name = family_name;
 	}
 	/**
+	 * Get image.
 	 * 
 	 * @return String link to picture
 	 */
@@ -132,13 +152,16 @@ public class GoogleUser{
 		return picture;
 	}
 	/**
+	 * Set image.
 	 * 
-	 * @param picture : String link to picture
+	 * @param picture 
+	 * 			: String link to picture
 	 */
 	public void setPicture(String picture) {
 		this.picture = picture;
 	}
 	/**
+	 * Get locale.
 	 * 
 	 * @return String locale
 	 */
@@ -146,13 +169,16 @@ public class GoogleUser{
 		return locale;
 	}
 	/**
+	 * Set locale.
 	 * 
-	 * @param locale : String
+	 * @param locale 
+	 * 			: String
 	 */
 	public void setLocale(String locale) {
 		this.locale = locale;
 	}
 	/**
+	 * Get host domain.
 	 * 
 	 * @return host domain : String
 	 */
@@ -160,8 +186,10 @@ public class GoogleUser{
 		return hd;
 	}
 	/**
+	 * Set host domain.
 	 * 
-	 * @param hd : String host domain
+	 * @param hd 
+	 * 			: String host domain
 	 */
 	public void setHd(String hd) {
 		this.hd = hd;
