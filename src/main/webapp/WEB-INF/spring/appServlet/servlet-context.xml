@@ -16,6 +16,7 @@
 	</beans:bean>
 	
 	<context:component-scan base-package="eu.trentorise.smartcampus.openservices.controllers,eu.trentorise.smartcampus.openservices.managers" />
+	<context:property-placeholder location="classpath:openservice.properties" />
 	
 	<!-- Static resources -->
 	<!-- <resources mapping="/resources/**" location="/WEB-INF/resources/" />  -->
@@ -39,7 +40,7 @@
         <beans:property name="postSignInUrl" value="${application.url}" />
     </beans:bean>
 	
-		<!-- Scribe config - LinkedIn -->
+	<!-- Scribe config - LinkedIn -->
 	<beans:bean id="linkedInSC" class="eu.trentorise.smartcampus.openservices.scribe.OAuthServiceConfig">
 		<beans:constructor-arg value="${linkedin.consumerKey}" />
 		<beans:constructor-arg value="${linkedin.consumerSecret}"/>
