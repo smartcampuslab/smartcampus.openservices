@@ -35,7 +35,7 @@ import eu.trentorise.smartcampus.openservices.entities.User;
 /**
  * Custom User Details Service
  * retrieve data of user during login for spring security
- * and put them in security context holder
+ * and put them in security context holder.
  * 
  * @author Giulia Canobbio
  *
@@ -43,9 +43,14 @@ import eu.trentorise.smartcampus.openservices.entities.User;
 @Service
 @Transactional
 public class CustomUserDetailsService implements UserDetailsService{
-	
+	/**
+	 * Instance of {@link UserDao}.
+	 */
 	@Autowired
 	private UserDao userDao;
+	/**
+	 * Instance of {@link UserRoleDao}.
+	 */
 	@Autowired
 	private UserRoleDao usDao;
 

@@ -18,7 +18,7 @@ package eu.trentorise.smartcampus.openservices.securitymodel;
 import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
 
 /**
- * Simple empty class for jdbc dao implementation
+ * Simple empty class for jdbc dao implementation.
  * 
  * @author Giulia Canobbio
  *
