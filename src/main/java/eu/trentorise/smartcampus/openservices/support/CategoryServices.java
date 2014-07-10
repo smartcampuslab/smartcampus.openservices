@@ -21,6 +21,8 @@ import java.util.List;
 import eu.trentorise.smartcampus.openservices.entities.Category;
 
 /**
+ * Class that associates category and services.
+ * 
  * @author raman
  *
  */
@@ -29,25 +31,35 @@ public class CategoryServices {
 	private List<Category> categories;
 	private List<Integer> services;
 	/**
-	 * @return the categories
+	 * Get list of categories.
+	 * 
+	 * @return list of {@link Category}
 	 */
 	public List<Category> getCategories() {
 		return categories;
 	}
 	/**
-	 * @param categories the categories to set
+	 * Set list of categories.
+	 * 
+	 * @param categories 
+	 * 			: instance of {@link Category}
 	 */
 	public void setCategories(List<Category> categories) {
 		this.categories = categories;
 	}
 	/**
-	 * @return the services
+	 * Get list of services.
+	 * 
+	 * @return list of services id
 	 */
 	public List<Integer> getServices() {
 		return services;
 	}
 	/**
-	 * @param services the services to set
+	 * Set list of services.
+	 * 
+	 * @param services 
+	 * 			: list of services id
 	 */
 	public void setServices(List<Integer> services) {
 		this.services = services;

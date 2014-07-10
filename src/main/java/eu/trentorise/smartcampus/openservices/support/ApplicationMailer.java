@@ -21,27 +21,40 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 /**
  * Service mailService for sending email
- * with configured properties in file root-context.xml
+ * with configured properties in file root-context.xml.
  * 
  * @author Giulia Canobbio
  *
  */
 @Service("mailService")
 public class ApplicationMailer {
-	
+	/**
+	 * Instance of {@link MailSender}
+	 */
 	@Autowired
 	private MailSender mailSender;
 
+	/**
+	 * Set mail sender.
+	 * 
+	 * @param mailSender
+	 * 			: instance of {@link MailSender}
+	 */
 	public void setMailSender(MailSender mailSender) {
 		this.mailSender = mailSender;
 	}
 	
 	/**
-	 * Send an email with all input parameters
+	 * Send an email with all input parameters.
+	 * 
 	 * @param from
+	 * 			: String
 	 * @param to
+	 * 			: String
 	 * @param subject
+	 * 			: String
 	 * @param msg
+	 * 			: String 
 	 */
 	public void sendMail(String from, String to, String subject, String msg) {
 		 

@@ -16,7 +16,8 @@
 package eu.trentorise.smartcampus.openservices.support;
 /**
  * Members class 
- * Having a few value of user data in order to avoid important data such as password.
+ * having a few value of user data in order to avoid important data such as password.
+ * 
  * @author Giulia Canobbio
  *
  */
@@ -26,6 +27,7 @@ public class Members {
 	private String username;
 	private String email;
 	/**
+	 * Get username.
 	 * 
 	 * @return username : String
 	 */
@@ -33,13 +35,15 @@ public class Members {
 		return username;
 	}
 	/**
-	 * 
-	 * @param username : String
+	 * Set username.
+	 * @param username 
+	 * 			: String
 	 */
 	public void setUsername(String username) {
 		this.username = username;
 	}
 	/**
+	 * Get email.
 	 * 
 	 * @return email : String
 	 */
@@ -47,13 +51,16 @@ public class Members {
 		return email;
 	}
 	/**
+	 * Set email.
 	 * 
-	 * @param email : String
+	 * @param email 
+	 * 			: String
 	 */
 	public void setEmail(String email) {
 		this.email = email;
 	}
 	/**
+	 * Get user id.
 	 * 
 	 * @return user id : int
 	 */
@@ -61,8 +68,9 @@ public class Members {
 		return id;
 	}
 	/**
-	 * 
-	 * @param id : int
+	 * Set user id.
+	 * @param id 
+	 * 			: int
 	 */
 	public void setId(int id) {
 		this.id = id;

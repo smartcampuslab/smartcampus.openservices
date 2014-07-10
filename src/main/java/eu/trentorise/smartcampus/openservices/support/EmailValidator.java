@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
  * This class checks if an email is valid or not.
  * code from 
  * http://www.mkyong.com/regular-expressions/how-to-validate-email-address-with-regular-expression/
+ * 
  * @author Giulia Canobbio
  *
  */
@@ -34,7 +35,7 @@ public class EmailValidator {
 			"[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 	
 	/**
-	 * New instance of {@link EmailValidator}
+	 * New instance of {@link EmailValidator}.
 	 */
 	public EmailValidator(){
 		pattern = Pattern.compile(EMAIL_PATTERN);
@@ -42,8 +43,10 @@ public class EmailValidator {
 	
 	/**
 	 * Validate email, checking if it matches pattern.
-	 * @param hex
-	 * @return
+	 * 
+	 * @param hex 
+	 * 			: String to validate
+	 * @return boolean value true if it matches otherwise false
 	 */
 	public boolean validate(final String hex){
 		matcher = pattern.matcher(hex);

@@ -16,7 +16,8 @@
 package eu.trentorise.smartcampus.openservices.support;
 
 /**
- * Class for cookie user
+ * Class for cookie user.
+ * 
  * @author Giulia Canobbio
  *
  */
@@ -25,6 +26,7 @@ public class CookieUser {
 	private String username;
 	private String role;
 	/**
+	 * Get username.
 	 * 
 	 * @return String username
 	 */
@@ -32,13 +34,16 @@ public class CookieUser {
 		return username;
 	}
 	/**
+	 * Set username.
 	 * 
-	 * @param username : String
+	 * @param username 
+	 * 			: String
 	 */
 	public void setUsername(String username) {
 		this.username = username;
 	}
 	/**
+	 * Get role.
 	 * 
 	 * @return String role
 	 */
@@ -46,8 +51,10 @@ public class CookieUser {
 		return role;
 	}
 	/**
+	 * Set role.
 	 * 
-	 * @param role : String
+	 * @param role 
+	 * 			: String
 	 */
 	public void setRole(String role) {
 		this.role = role;

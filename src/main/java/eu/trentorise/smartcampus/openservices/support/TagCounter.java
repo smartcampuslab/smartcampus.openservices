@@ -17,6 +17,7 @@ package eu.trentorise.smartcampus.openservices.support;
 
 /**
  * Class support for retrieving counter of tags.
+ * 
  * @author Giulia Canobbio
  *
  */
@@ -26,6 +27,7 @@ public class TagCounter {
 	private int counter;
 	
 	/**
+	 * Get counter.
 	 * 
 	 * @return total number for specific tag
 	 */
@@ -34,14 +36,17 @@ public class TagCounter {
 	}
 	
 	/**
+	 * Set counter.
 	 * 
-	 * @param counter : int
+	 * @param counter 
+	 * 			: int
 	 */
 	public void setCounter(int counter) {
 		this.counter = counter;
 	}
 	
 	/**
+	 * Get tag name.
 	 * 
 	 * @return tag name : String
 	 */
@@ -50,8 +55,10 @@ public class TagCounter {
 	}
 	
 	/**
+	 * Set tag name.
 	 * 
-	 * @param tag : String
+	 * @param tag 
+	 * 			: String
 	 */
 	public void setTag(String tag) {
 		this.tag = tag;

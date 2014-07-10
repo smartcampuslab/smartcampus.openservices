@@ -15,12 +15,19 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.support;
 
+/**
+ * Support class for request parameter.
+ * 
+ * @author Giulia Canobbio
+ *
+ */
 public class UserInvitation {
 
 	private int org_id;
 	private int user_id;
 	private String email;
 	/**
+	 * Get organization id.
 	 * 
 	 * @return organization id : int
 	 */
@@ -28,13 +35,16 @@ public class UserInvitation {
 		return org_id;
 	}
 	/**
+	 * Set organization id.
 	 * 
-	 * @param org_id : int
+	 * @param org_id 
+	 * 			: int
 	 */
 	public void setOrg_id(int org_id) {
 		this.org_id = org_id;
 	}
 	/**
+	 * Get user id.
 	 * 
 	 * @return user id : int
 	 */
@@ -42,13 +52,16 @@ public class UserInvitation {
 		return user_id;
 	}
 	/**
+	 * Set user id.
 	 * 
-	 * @param user_id : int
+	 * @param user_id 
+	 * 			: int
 	 */
 	public void setUser_id(int user_id) {
 		this.user_id = user_id;
 	}
 	/**
+	 * Get email address.
 	 * 
 	 * @return email : String
 	 */
@@ -57,8 +70,10 @@ public class UserInvitation {
 	}
 	
 	/**
+	 * Set email address.
 	 * 
-	 * @param email : String
+	 * @param email 
+	 * 			: String
 	 */
 	public void setEmail(String email) {
 		this.email = email;

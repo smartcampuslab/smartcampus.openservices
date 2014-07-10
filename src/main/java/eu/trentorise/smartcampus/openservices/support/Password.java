@@ -15,7 +15,8 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.support;
 /**
- * Support class for input parameters of user controller
+ * Support class for input parameters of user controller.
+ * 
  * @author Giulia Canobbio
  *
  */
@@ -24,6 +25,7 @@ public class Password {
 	private String oldP;
 	private String newP;
 	/**
+	 * Get old password.
 	 * 
 	 * @return old password : String
 	 */
@@ -31,13 +33,16 @@ public class Password {
 		return oldP;
 	}
 	/**
+	 * Set old password.
 	 * 
-	 * @param oldP : String old password
+	 * @param oldP 
+	 * 			: String old password
 	 */
 	public void setOldP(String oldP) {
 		this.oldP = oldP;
 	}
 	/**
+	 * Get new password.
 	 * 
 	 * @return new password : String
 	 */
@@ -45,8 +50,10 @@ public class Password {
 		return newP;
 	}
 	/**
+	 * Set new password.
 	 * 
-	 * @param newP : String new password
+	 * @param newP 
+	 * 			: String new password
 	 */
 	public void setNewP(String newP) {
 		this.newP = newP;
