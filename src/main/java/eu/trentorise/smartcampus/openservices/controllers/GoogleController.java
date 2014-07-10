@@ -82,7 +82,7 @@ public class GoogleController {
 	 * @param response 
 	 * 			: instance of {@link HttpServletResponse}
 	 * @param request
-	 * 			: instance of {@link HtttpServletRequest}
+	 * 			: instance of {@link HttpServletRequest}
 	 * @return {@link ResponseObject} with redirect google login url, status (OK)
 	 */
 	@RequestMapping(value = "/auth", method = RequestMethod.GET, produces = "application/json")
@@ -113,7 +113,7 @@ public class GoogleController {
 	 * Then redirects authenticated user to home page where user can access protected resources.
 	 * 
 	 * @param request
-	 * 			: instance of {@link HtttpServletRequest}
+	 * 			: instance of {@link HttpServletRequest}
 	 * @param response 
 	 * 			: instance of {@link HttpServletResponse}
 	 * @return redirect to home page
