@@ -19,7 +19,7 @@ import org.scribe.builder.api.Api;
 
 /**
  * Source code from http://java.dzone.com/articles/spring-mvc-and-scribe-simple
- * Configuration class for OAuth
+ * Configuration class for OAuth.
  * Details of provider and other properties in spring configuration file.
  * 
  * @author Giulia Canobbio
@@ -33,17 +33,22 @@ public class OAuthServiceConfig {
 	private Class<? extends Api> apiClass;
 	
 	/**
-	 * Constructor
+	 * New instance of {@link OAuthServiceConfig}.
 	 */
 	public OAuthServiceConfig(){
 		
 	}
 	/**
-	 * Constructor with parameters for configuration file
-	 * @param apiKey : String
-	 * @param apiSecret : String
-	 * @param callback : String
-	 * @param apiClass : Class<? extends Api>
+	 * New instance of {@link OAuthServiceConfig} with parameters for configuration file.
+	 * 
+	 * @param apiKey 
+	 * 				: String
+	 * @param apiSecret 
+	 * 				: String
+	 * @param callback 
+	 * 				: String, callback url
+	 * @param apiClass 
+	 * 				: Class<? extends Api>
 	 */
 	public OAuthServiceConfig(String apiKey, String apiSecret, String callback, Class<? extends Api> apiClass){
 		super();
@@ -53,6 +58,7 @@ public class OAuthServiceConfig {
 		this.apiClass=apiClass;
 	}
 	/**
+	 * Get api key.
 	 * 
 	 * @return String apiKey
 	 */
@@ -60,13 +66,16 @@ public class OAuthServiceConfig {
 		return apiKey;
 	}
 	/**
+	 * Set api key.
 	 * 
-	 * @param apiKey : String
+	 * @param apiKey 
+	 * 			: String
 	 */
 	public void setApiKey(String apiKey) {
 		this.apiKey = apiKey;
 	}
 	/**
+	 * Get api secret.
 	 * 
 	 * @return String apiSecret
 	 */
@@ -74,13 +83,16 @@ public class OAuthServiceConfig {
 		return apiSecret;
 	}
 	/**
+	 * Set api secret.
 	 * 
-	 * @param apiSecret : String
+	 * @param apiSecret 
+	 * 			: String
 	 */
 	public void setApiSecret(String apiSecret) {
 		this.apiSecret = apiSecret;
 	}
 	/**
+	 * Get callback url.
 	 * 
 	 * @return String callback uri
 	 */
@@ -88,13 +100,16 @@ public class OAuthServiceConfig {
 		return callback;
 	}
 	/**
+	 * Set callback url.
 	 * 
-	 * @param callback : String
+	 * @param callback 
+	 * 			: String
 	 */
 	public void setCallback(String callback) {
 		this.callback = callback;
 	}
 	/**
+	 * Get api class.
 	 * 
 	 * @return Class<? extends Api> apiClass
 	 */
@@ -102,8 +117,10 @@ public class OAuthServiceConfig {
 		return apiClass;
 	}
 	/**
+	 * Set api class.
 	 * 
-	 * @param apiClass : Class<? extends Api>
+	 * @param apiClass 
+	 * 			: Class<? extends Api>
 	 */
 	public void setApiClass(Class<? extends Api> apiClass) {
 		this.apiClass = apiClass;

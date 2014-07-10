@@ -19,31 +19,36 @@ import org.scribe.builder.ServiceBuilder;
 import org.scribe.oauth.OAuthService;
 
 /**
- * Source code from http://java.dzone.com/articles/spring-mvc-and-scribe-simple
- * Class that create a connection with twitter or linkedin
+ * Source code from http://java.dzone.com/articles/spring-mvc-and-scribe-simple.
+ * Class that create a connection with linkedin.
  * @author smartcampus
  *
  */
 public class OAuthServiceProvider {
-	
+	/**
+	 * Instance of {@link OAuthServiceConfig}.
+	 */
 	private OAuthServiceConfig config;
 	
 	/**
-	 * Constructor
+	 * New instance of {@link OAuthServiceProvider}.
 	 */
 	public OAuthServiceProvider(){
 		
 	}
 	/**
-	 * Constructor with a parameter
-	 * @param config : instance of {@link OAuthServiceConfig}
+	 * New instance of {@link OAuthServiceProvider} with a parameter.
+	 * 
+	 * @param config 
+	 * 			: instance of {@link OAuthServiceConfig}
 	 */
 	public OAuthServiceProvider(OAuthServiceConfig config){
 		this.config=config;
 	}
 	
 	/**
-	 * Method that builds a connection with provider
+	 * Method that builds a connection with provider.
+	 * 
 	 * @return instace of {@link OAuthService}
 	 */
 	public OAuthService getService(){
