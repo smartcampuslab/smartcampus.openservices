@@ -30,7 +30,9 @@ public interface UserRoleDao {
 	
 	/**
 	 * Get a list of User_Role data by user id.
+	 * 
 	 * @param id_user
+	 * 			: int
 	 * @return list of {@link UserRole} instances
 	 * @throws DataAccessException
 	 */
@@ -38,7 +40,9 @@ public interface UserRoleDao {
 	
 	/**
 	 * Get a list of User_Role data by organization id.
+	 * 
 	 * @param id_org
+	 * 			: int, organization id
 	 * @return list of {@link UserRole} instances
 	 * @throws DataAccessException
 	 */
@@ -48,41 +52,55 @@ public interface UserRoleDao {
 	 * Get list of role of a user in User_Role, which can be:
 	 * ROLE_ORGOWNER and 
 	 * ROLE_SERVICEOWNER.
+	 * 
 	 * @param user_id
-	 * @return string list of user'roles
+	 * 			: int
+	 * @return string list of user's roles
 	 * @throws DataAccessException
 	 */
 	public List<String> getRoleOfUser(int user_id) throws DataAccessException;
 	
 	/**
-	 * Get role of a user in a given organization
+	 * Get role of a user in a given organization.
+	 * 
 	 * @param user_id
+	 * 			: int
 	 * @param org_id
+	 * 			: int, organization id
 	 * @return a {@link UserRole} instance
 	 * @throws DataAccessException
 	 */
 	public UserRole getRoleOfUser(int user_id, int org_id) throws DataAccessException;
 	
 	/**
-	 * Create a new User_Role data
+	 * Create a new User_Role data.
+	 * 
 	 * @param user_id
+	 * 			: int
 	 * @param org_id
+	 * 			: int, organization id
 	 * @param role
+	 * 			: String
 	 * @throws DataAccessException
 	 */
 	public void createUserRole(int user_id, int org_id, String role) throws DataAccessException;
 	
 	/**
-	 * Delete a User_Role data
-	 * @param ur : {@link UserRole} instance
+	 * Delete a User_Role data.
+	 * 
+	 * @param ur 
+	 * 			: {@link UserRole} instance
 	 * @throws DataAccessException
 	 */
 	public void deleteUserRole(UserRole ur) throws DataAccessException;
 	
 	/**
 	 * Get a list of User_Role data where user has id and his/her role is role.
+	 * 
 	 * @param user_id
+	 * 			: int
 	 * @param role
+	 * 			: String
 	 * @return a list of {@link UserRole} instances
 	 * @throws DataAccessException
 	 */

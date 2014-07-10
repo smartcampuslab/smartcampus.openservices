@@ -36,7 +36,9 @@ import eu.trentorise.smartcampus.openservices.entities.UserRole;
  */
 @Repository
 public class UserRoleDaoImpl implements UserRoleDao{
-	
+	/**
+	 * Instance of {@link EntityManager}
+	 */
 	@PersistenceContext(unitName="JpaPersistenceUnit")
 	protected EntityManager entityManager;
 
@@ -49,18 +51,7 @@ public class UserRoleDaoImpl implements UserRoleDao{
 	}
 
 	/**
-	 * Set entity manager
-	 * @param entityManager
-	 */
-	public void setEntityManager(EntityManager entityManager) {
-		this.entityManager = entityManager;
-	}
-
-	/**
-	 * Retrieve all user role of a specified user
-	 * @param id_user : int
-	 * @return list of {@link UserRole} instances
-	 * @throws DataAccessException
+	 * This method retrieves all user role of a specified user.
 	 */
 	@Transactional
 	@Override
@@ -72,10 +63,7 @@ public class UserRoleDaoImpl implements UserRoleDao{
 	}
 
 	/**
-	 * Retrieve all user role for a specific organization.
-	 * @param id_org : int organization id
-	 * @return list of {@link UserRole} instances
-	 * @throws DataAccessException
+	 * This method retrieves all user role for a specific organization.
 	 */
 	@Transactional
 	@Override
@@ -87,11 +75,7 @@ public class UserRoleDaoImpl implements UserRoleDao{
 	}
 
 	/**
-	 * Add a new role for a user in an organization.
-	 * @param user_id : int user id
-	 * @param org_id : int organization id
-	 * @param role : String user's role
-	 * @throws DataAccessException
+	 * This method adds a new role for a user in an organization.
 	 */
 	@Transactional
 	@Override
@@ -102,10 +86,7 @@ public class UserRoleDaoImpl implements UserRoleDao{
 	}
 
 	/**
-	 * Retrieve all roles for a user
-	 * @param user_id : int user id
-	 * @return String list of user's roles
-	 * @throws DataAccessException
+	 * This method retrieves all roles for a user.
 	 */
 	@Transactional
 	@Override
@@ -125,11 +106,7 @@ public class UserRoleDaoImpl implements UserRoleDao{
 	}
 	
 	/**
-	 * Retrieve user's role in a specific organization
-	 * @param user_id : int
-	 * @param org_id : int organization id
-	 * @return a {@link UserRole} instances
-	 * @throws DataAccessException
+	 * This method retrieves user's role in a specific organization.
 	 */
 	@Transactional
 	@Override
@@ -144,11 +121,9 @@ public class UserRoleDaoImpl implements UserRoleDao{
 	}
 
 	/**
-	 * Delete an existing user's role.
-	 * This can happend because organization is deleted
+	 * This method deletes an existing user's role.
+	 * This can happen because organization is deleted
 	 * or user is removed from an organization.
-	 * @param ur : {@link UserRole} instances
-	 * @throws DataAccessException
 	 */
 	@Transactional
 	@Override
@@ -158,12 +133,8 @@ public class UserRoleDaoImpl implements UserRoleDao{
 	}
 
 	/**
-	 * Retrieve all user's role data to know in which organization user has the wanted role.
+	 * This method retrieves all user's role data to know in which organization user has the wanted role.
 	 * Searching by user id and role.
-	 * @param user_id : int
-	 * @param role : String
-	 * @return list of {@link UserRole} instances
-	 * @throws DataAccessException
 	 */
 	@Transactional
 	@Override

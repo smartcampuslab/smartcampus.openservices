@@ -26,25 +26,34 @@ import eu.trentorise.smartcampus.openservices.entities.*;
  * @author Giulia Canobbio
  *
  */
-public interface TemporaryLinkDao /*extends Repository<TemporaryLink, Long>*/{
+public interface TemporaryLinkDao{
 	
 	/**
-	 * Find a TemporaryLink data by key 
-	 * key is primary key of table TemporaryLink
+	 * Find a TemporaryLink data by key.
+	 * Key is primary key of table TemporaryLink.
+	 * 
 	 * @param key
+	 * 			: String
 	 * @return a {@link TemporaryLink} instance
+	 * @throws DataAccessException
 	 */
 	public TemporaryLink getTLByKey(String key) throws DataAccessException;
 	
 	/**
-	 * Save a TemporaryLink data in db
-	 * @param tl : a {@link TemporaryLink} instance
+	 * Save a TemporaryLink data in db.
+	 * 
+	 * @param tl 
+	 * 			: a {@link TemporaryLink} instance
+	 * @throws DataAccessException
 	 */
 	public void save(TemporaryLink tl) throws DataAccessException;
 	
 	/**
-	 * Delete TemporaryLink by key
+	 * Delete TemporaryLink by key.
+	 * 
 	 * @param key
+	 * 			: String
+	 * @throws DataAccessException
 	 */
 	public void delete(String key) throws DataAccessException;
 	

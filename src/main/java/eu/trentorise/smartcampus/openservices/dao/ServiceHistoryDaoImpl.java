@@ -36,7 +36,9 @@ import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
  */
 @Repository
 public class ServiceHistoryDaoImpl implements ServiceHistoryDao{
-
+	/**
+	 * Instance of {@link EntityManager}
+	 */
 	@PersistenceContext(unitName="JpaPersistenceUnit")
 	protected EntityManager entityManager;
 	
@@ -49,18 +51,7 @@ public class ServiceHistoryDaoImpl implements ServiceHistoryDao{
 	}
 
 	/**
-	 * Set entity manager
-	 * @param entityManager
-	 */
-	public void setEntityManager(EntityManager entityManager) {
-		this.entityManager = entityManager;
-	}
-
-	/**
-	 * Retrieve service history by its id
-	 * @param id : int service history id
-	 * @return {@link ServiceHistory} instance
-	 * @throws DataAccessException
+	 * This method retrieves service history by its id.
 	 */
 	@Transactional
 	@Override
@@ -70,10 +61,7 @@ public class ServiceHistoryDaoImpl implements ServiceHistoryDao{
 	}
 
 	/**
-	 * Retrieve service history by service id
-	 * @param service_id : int service id
-	 * @return list of {@link ServiceHistory} instance
-	 * @throws DataAccessException
+	 * This method retrieves service history by service id.
 	 */
 	@Transactional
 	@Override
@@ -86,9 +74,7 @@ public class ServiceHistoryDaoImpl implements ServiceHistoryDao{
 	}
 
 	/**
-	 * Add a new service history instance in database
-	 * @param serviceHistory : {@link ServiceHistory} instance
-	 * @throws DataAccessException
+	 * This method adds a new service history instance in database.
 	 */
 	@Transactional
 	@Override
@@ -98,9 +84,7 @@ public class ServiceHistoryDaoImpl implements ServiceHistoryDao{
 	}
 
 	/**
-	 * Modify an existing service history instance in database
-	 * @param serviceHistory : {@link ServiceHistory} instance
-	 * @throws DataAccessException
+	 * This method modifies an existing service history instance in database.
 	 */
 	@Transactional
 	@Override
@@ -110,9 +94,7 @@ public class ServiceHistoryDaoImpl implements ServiceHistoryDao{
 	}
 
 	/**
-	 * Delete an existing service history instance in database
-	 * @param serviceHistory : {@link ServiceHistory} instance
-	 * @throws DataAccessException
+	 * This method deletes an existing service history instance in database.
 	 */
 	@Transactional
 	@Override
@@ -122,10 +104,7 @@ public class ServiceHistoryDaoImpl implements ServiceHistoryDao{
 	}
 
 	/**
-	 * Retrieve service history by organization id
-	 * @param org_id : int organization id
-	 * @return list of {@link ServiceHistory} instances for given organization
-	 * @throws DataAccessException
+	 * This method retrieves service history by organization id.
 	 */
 	@Transactional
 	@Override
@@ -138,7 +117,7 @@ public class ServiceHistoryDaoImpl implements ServiceHistoryDao{
 	}
 
 	/**
-	 * Retrieve n news on service
+	 * This method retrieves n news on service.
 	 */
 	@Transactional
 	@Override

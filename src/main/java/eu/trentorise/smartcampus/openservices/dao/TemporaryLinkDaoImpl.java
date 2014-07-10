@@ -36,7 +36,9 @@ import eu.trentorise.smartcampus.openservices.entities.TemporaryLink;
  */
 @Repository
 public class TemporaryLinkDaoImpl implements TemporaryLinkDao{
-
+	/**
+	 * Instance of {@link EntityManager}
+	 */
 	@PersistenceContext(name="JpaPersistenceUnit")
 	protected EntityManager entityManager;
 
@@ -49,19 +51,8 @@ public class TemporaryLinkDaoImpl implements TemporaryLinkDao{
 	}
 
 	/**
-	 * Set entity manager
-	 * @param entityManager
-	 */
-	public void setEntityManager(EntityManager entityManager) {
-		this.entityManager = entityManager;
-	}
-
-	/**
-	 * Retrieve temporary link data from database by key,
+	 * This method retrieves temporary link data from database by key,
 	 * which is a unique index.
-	 * @param key : String
-	 * @return {@link TemporaryLink} instance
-	 * @throws DataAccessException
 	 */
 	@Transactional
 	@Override
@@ -76,9 +67,7 @@ public class TemporaryLinkDaoImpl implements TemporaryLinkDao{
 	}
 
 	/**
-	 * Add a new temporary link in database.
-	 * @param tl : {@link TemporaryLink} instance
-	 * @throws DataAccessException
+	 * This method adds a new temporary link in database.
 	 */
 	@Transactional
 	@Override
@@ -88,10 +77,8 @@ public class TemporaryLinkDaoImpl implements TemporaryLinkDao{
 	}
 
 	/**
-	 * Delete an existing temporary link from database
+	 * This method deletes an existing temporary link from database
 	 * Searching by key, unique index.
-	 * @param key : String
-	 * @throws DataAccessException
 	 */
 	@Transactional
 	@Override

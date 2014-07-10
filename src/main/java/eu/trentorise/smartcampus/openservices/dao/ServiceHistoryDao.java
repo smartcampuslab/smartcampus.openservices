@@ -32,7 +32,9 @@ public interface ServiceHistoryDao {
 	/**
 	 * Get ServiceHistory data by id,
 	 * which is a primary key.
+	 * 
 	 * @param id
+	 * 			: id of service history
 	 * @return a {@link ServiceHistory} instance
 	 * @throws DataAccessException
 	 */
@@ -40,7 +42,9 @@ public interface ServiceHistoryDao {
 	
 	/**
 	 * Get a list of ServiceHistory data by service_id.
+	 * 
 	 * @param service_id
+	 * 			: int
 	 * @return list of {@link ServiceHistory} instances
 	 * @throws DataAccessException
 	 */
@@ -48,28 +52,36 @@ public interface ServiceHistoryDao {
 	
 	/**
 	 * Add a new ServiceHistory data.
-	 * @param serviceHistory : a {@link ServiceHistory} instance
+	 * 
+	 * @param serviceHistory 
+	 * 			: a {@link ServiceHistory} instance
 	 * @throws DataAccessException
 	 */
 	public void addServiceHistory(ServiceHistory serviceHistory) throws DataAccessException;
 	
 	/**
 	 * Modify a ServiceHistory data.
-	 * @param serviceHistory : a {@link ServiceHistory} instance
+	 * 
+	 * @param serviceHistory 
+	 * 			: a {@link ServiceHistory} instance
 	 * @throws DataAccessException
 	 */
 	public void modifyServiceHistory(ServiceHistory serviceHistory) throws DataAccessException;
 	
 	/**
 	 * Delete a ServiceHistory data.
-	 * @param serviceHistory : a {@link ServiceHistory} instance
+	 * 
+	 * @param serviceHistory 
+	 * 			: a {@link ServiceHistory} instance
 	 * @throws DataAccessException
 	 */
 	public void deleteServiceHistory(ServiceHistory serviceHistory) throws DataAccessException;
 	
 	/**
 	 * Get a list of ServiceHistory data by organization id.
+	 * 
 	 * @param org_id
+	 * 			: int, organization id
 	 * @return list of {@link ServiceHistory} instances
 	 * @throws DataAccessException
 	 */
@@ -77,7 +89,9 @@ public interface ServiceHistoryDao {
 	
 	/**
 	 * Retrieve a list of n news, where n is the number of news.
-	 * @param n : int
+	 * 
+	 * @param n 
+	 * 			: int, number of news in result list
 	 * @return list of {@link ServiceHistory} instances
 	 * @throws DataAccessException
 	 */

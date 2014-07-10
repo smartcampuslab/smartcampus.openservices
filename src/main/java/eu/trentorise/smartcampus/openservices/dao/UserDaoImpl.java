@@ -37,7 +37,9 @@ import eu.trentorise.smartcampus.openservices.entities.*;
  */
 @Repository
 public class UserDaoImpl implements UserDao{
-	
+	/**
+	 * Instance of {@link EntityManager}
+	 */
 	@PersistenceContext(unitName="JpaPersistenceUnit")
 	protected EntityManager entityManager;
 
@@ -50,22 +52,11 @@ public class UserDaoImpl implements UserDao{
 	}
 
 	/**
-	 * Set entity manager
-	 * @param entityManager
-	 */
-	public void setEntityManager(EntityManager entityManager) {
-		this.entityManager = entityManager;
-	}
-
-	/**
-	 * Retrieve all user data from database
-	 * @return list of {@link User} instance
-	 * @throws DataAccessException
+	 * This method retrieves all user data from database.
 	 */
 	@Transactional
 	@Override
 	public List<User> getUsers() throws DataAccessException{
-		// TODO Auto-generated method stub
 		Query q = getEntityManager().createQuery("FROM User");
 		List<User> users = q.getResultList();
 		if(users.size()==0){
@@ -75,10 +66,7 @@ public class UserDaoImpl implements UserDao{
 	}
 
 	/**
-	 * Retrieve user data by user id
-	 * @param id : int user id
-	 * @return {@link User} instance
-	 * @throws DataAccessException
+	 * This method retrieves user data by user id.
 	 */
 	@Transactional
 	@Override
@@ -87,15 +75,11 @@ public class UserDaoImpl implements UserDao{
 	}
 
 	/**
-	 * Retrieve user data by username
-	 * @param username : String
-	 * @return {@link User} instance
-	 * @throws DataAccessException
+	 * This method retrieves user data by username.
 	 */
 	@Transactional
 	@Override
 	public User getUserByUsername(String username) throws DataAccessException{
-		// TODO Auto-generated method stub
 		Query q = getEntityManager().createQuery("FROM User WHERE username=:username")
 				.setParameter("username", username);
 		List<User> users = q.getResultList();
@@ -106,11 +90,7 @@ public class UserDaoImpl implements UserDao{
 	}
 
 	/**
-	 * Modify an existing user profile from database
-	 * if password is different (not null) then save new password in database
-	 * @param user_id : int
-	 * @param user : {@link User} instance with modified fields
-	 * @throws DataAccessException
+	 * This method modifies an existing user profile from database.
 	 */
 	@Transactional
 	@Override
@@ -122,9 +102,7 @@ public class UserDaoImpl implements UserDao{
 	}
 
 	/**
-	 * Add a new user to database
-	 * @param user : {@link User} instance
-	 * @throws DataAccessException
+	 * This method adds a new user to database.
 	 */
 	@Transactional
 	@Override
@@ -139,9 +117,7 @@ public class UserDaoImpl implements UserDao{
 	}
 
 	/**
-	 * Disable a user
-	 * @param user_id : int
-	 * @throws DataAccessException
+	 * This method changes user's status to disabled (zero value).
 	 */
 	@Transactional
 	@Override
@@ -153,9 +129,7 @@ public class UserDaoImpl implements UserDao{
 	}
 	
 	/**
-	 * Enable a user
-	 * @param user_id : int
-	 * @throws DataAccessException
+	 * This method changes user's status to enabled (one value).
 	 */
 	@Transactional
 	@Override
@@ -165,6 +139,9 @@ public class UserDaoImpl implements UserDao{
 		getEntityManager().merge(oldUser);
 	}
 
+	/**
+	 * This method checks if an email address is already saved in db.
+	 */
 	@Transactional
 	@Override
 	public boolean isEmailAlreadyUse(String email) throws DataAccessException {
@@ -176,6 +153,9 @@ public class UserDaoImpl implements UserDao{
 		return false;
 	}
 
+	/**
+	 * This method retrieves user by his/her email address.
+	 */
 	@Transactional
 	@Override
 	public User getUserByEmail(String email) throws DataAccessException {
@@ -188,6 +168,9 @@ public class UserDaoImpl implements UserDao{
 		else return users.get(0);
 	}
 
+	/**
+	 * This method modifies user's password.
+	 */
 	@Transactional
 	@Override
 	public boolean modifyPassword(String username, String newPassw) throws DataAccessException {
