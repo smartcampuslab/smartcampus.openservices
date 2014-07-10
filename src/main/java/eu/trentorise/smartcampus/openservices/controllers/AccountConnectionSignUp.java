@@ -62,7 +62,7 @@ public class AccountConnectionSignUp implements ConnectionSignUp{
 		user.setRole("ROLE_NORMAL");
 		user.setEnabled(1);
 		Profile p = new Profile();
-		p.setName(profile.getName());
+		p.setName(profile.getFirstName());
 		p.setSurname(profile.getLastName());
 		user.setProfile(p);
 		userDao.addUser(user);

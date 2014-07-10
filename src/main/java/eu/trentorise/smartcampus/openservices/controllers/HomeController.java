@@ -298,9 +298,9 @@ public class HomeController {
 	public String logout(HttpServletRequest request, HttpServletResponse response) {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		logger.info("-- Logout " + username + " --" + SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
-		String sessionId = ((WebAuthenticationDetails) SecurityContextHolder.getContext().getAuthentication().getDetails())
-				.getSessionId();
-		logger.info("-- JSessionID: --" + sessionId);
+		/*String sessionId = ((WebAuthenticationDetails) SecurityContextHolder.getContext().getAuthentication().getDetails())
+				.getSessionId();*/
+		//logger.info("-- JSessionID: --" + sessionId);
 		SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
 
 		// check if cookie value exists and set it

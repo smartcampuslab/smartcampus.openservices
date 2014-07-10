@@ -49,7 +49,14 @@ public class SocialSignInAdapter implements SignInAdapter{
 		System.out.println("Sign in Adapter......");
 		System.out.println("String arg0: "+arg0);
 		
-		UserDetails userDetails = manager.loadUserByUsername(arg0);
+		String username;
+		if(arg0.contains("@facebook")){
+			username = arg0;
+		}else{
+			username = arg0+"@facebook";
+		}
+		
+		UserDetails userDetails = manager.loadUserByUsername(username);
 		
 		Authentication auth = new UsernamePasswordAuthenticationToken(userDetails,userDetails.getPassword(), userDetails.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(auth);
