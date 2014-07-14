@@ -10,10 +10,20 @@
 </div>
 <div class="row" id="members">
     <div class="col-md-2 col-sm-6 col-xs-6" ng-repeat="member in members">
-        <a href="#">
-            <img gravatar="{{member.email}}" size="160" />
-        </a>
-        <br>
-        <button ng-click="remove($index)" class="center-block btn btn-default btn-sm">Remove</button>
+        
+        <table cellspacing="0">
+        
+        	<tr><a href="#">
+            	<img gravatar="{{member.email}}" size="120" />
+       		</a></tr>
+        	<tr><b>{{member.username}}</b></tr>
+        	<br>
+        	<tr>{{member.email}}</tr>
+        
+        	<br>
+        	<button ng-click="remove($index)" class="center-block btn btn-default btn-sm">Remove</button>
+        
+        </table>
+        
     </div>
 </div>
