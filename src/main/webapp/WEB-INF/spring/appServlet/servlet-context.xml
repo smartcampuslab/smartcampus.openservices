@@ -52,5 +52,11 @@
 		<beans:constructor-arg name="config" ref="linkedInSC" />
 	</beans:bean>
 	
+	<!-- Google Helper -->
+	<beans:bean id="googleHelper" class="eu.trentorise.smartcampus.openservices.social.GoogleAuthHelper">
+		<beans:constructor-arg value="${google.consumerKey}" />
+		<beans:constructor-arg value="${google.consumerSecret}" />
+		<beans:constructor-arg value="${google.callback_uri}" />
+	</beans:bean>
 	
 </beans:beans>

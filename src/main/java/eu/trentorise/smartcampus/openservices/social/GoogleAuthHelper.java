@@ -26,12 +26,17 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson.JacksonFactory;
+
+
+
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Collection;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Service;
 
 /**
  * A helper class for Google's OAuth2 authentication API.
@@ -39,13 +44,15 @@ import org.codehaus.jackson.map.ObjectMapper;
  * @version 20130224
  * @author Matyas Danter
  * 
- * Modified by Giulia Canobbio
+ * Modified by Giulia Canobbio.
  */
+@Service("googleHelper")
+@PropertySource("classpath:openservice.properties")
 public final class GoogleAuthHelper {
 
-	private static final String CLIENT_ID = "";
-	private static final String CLIENT_SECRET = "";
-	private static final String CALLBACK_URI = "http://localhost:8080/openservice/api/oauth/google/callback";
+	private final String CLIENT_ID;
+	private final String CLIENT_SECRET;
+	private final String CALLBACK_URI;
 
 	// google authentication constants
 	private static final Iterable<String> SCOPE = Arrays
@@ -60,17 +67,34 @@ public final class GoogleAuthHelper {
 
 	/**
 	 * Constructor initializes the Google Authorization Code Flow with CLIENT
-	 * ID, SECRET, and SCOPE
+	 * ID, SECRET, and SCOPE.
+	 * 
+	 * @param client_id
+	 * 				: String
+	 * @param client_secret
+	 * 				: String
+	 * @param callback_uri
+	 * 				: String
 	 */
-	public GoogleAuthHelper() {
+	public GoogleAuthHelper(String client_id, String client_secret, String callback_uri) {
+		
+		CLIENT_ID=client_id;
+		CLIENT_SECRET=client_secret;
+		CALLBACK_URI=callback_uri;
+		
+		System.out.println("CLIENT ID: "+CLIENT_ID);
+		System.out.println("CLIENT SECRET: "+CLIENT_SECRET);
+		System.out.println("CALLBACK: "+CALLBACK_URI);
+		
 		flow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT,
 				JSON_FACTORY, CLIENT_ID, CLIENT_SECRET, (Collection<String>) SCOPE).build();
 
 		generateStateToken();
+
 	}
 
 	/**
-	 * Builds a login URL based on client ID, secret, callback URI, and scope
+	 * Builds a login URL based on client ID, secret, callback URI, and scope.
 	 */
 	public String buildLoginUrl() {
 
@@ -81,7 +105,7 @@ public final class GoogleAuthHelper {
 	}
 
 	/**
-	 * Generates a secure state token
+	 * Generates a secure state token.
 	 */
 	private void generateStateToken() {
 
@@ -92,7 +116,7 @@ public final class GoogleAuthHelper {
 	}
 
 	/**
-	 * Accessor for state token
+	 * Accessor for state token.
 	 */
 	public String getStateToken() {
 		return stateToken;
@@ -100,11 +124,12 @@ public final class GoogleAuthHelper {
 
 	/**
 	 * Expects an Authentication Code, and makes an authenticated request for
-	 * the user's profile information
+	 * the user's profile information.
 	 * 
-	 * @return {@link GoogleUser} formatted user profile information
 	 * @param authCode
-	 *            authentication code provided by google
+	 * 			: String, authentication code provided by google
+	 * @return {@link GoogleUser} formatted user profile information
+	 * @throws IOException
 	 */
 	public GoogleUser getUserInfoJson(final String authCode) throws IOException {
 

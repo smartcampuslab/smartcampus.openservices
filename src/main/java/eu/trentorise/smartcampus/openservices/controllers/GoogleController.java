@@ -60,7 +60,8 @@ public class GoogleController {
 	/**
 	 * Instance of {@link GoogleAuthHelper} for oauth google
 	 */
-	private GoogleAuthHelper auth = new GoogleAuthHelper();
+	@Autowired
+	private GoogleAuthHelper auth;
 	/**
 	 * Instance of {@link UserManager} to retrieve and save user data
 	 */
@@ -194,7 +195,7 @@ public class GoogleController {
 					}
 					//user cookie
 					CookieUser cu = new CookieUser();
-					cu.setUsername(userInfo.getName());
+					cu.setUsername(userInfo.getId());
 					cu.setRole(Constants.ROLES.ROLE_NORMAL.toString());
 					
 					Gson gson = new Gson();
