@@ -41,6 +41,10 @@ public class GoogleUser{
 	
 	private String hd;
 	
+	private String link;
+	
+	private String gender;
+	
 	/**
 	 * Get google user id.
 	 * 
@@ -193,6 +197,40 @@ public class GoogleUser{
 	 */
 	public void setHd(String hd) {
 		this.hd = hd;
+	}
+	/**
+	 * Get link.
+	 * 
+	 * @return String link
+	 */
+	public String getLink() {
+		return link;
+	}
+	/**
+	 * Set link.
+	 * 
+	 * @param link 
+	 * 			: String
+	 */
+	public void setLink(String link) {
+		this.link = link;
+	}
+	/**
+	 * Get gender.
+	 * 
+	 * @return String gender.
+	 */
+	public String getGender() {
+		return gender;
+	}
+	/**
+	 * Set gender.
+	 * 
+	 * @param gender 
+	 * 			: String
+	 */
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 	
 	

@@ -34,7 +34,9 @@ import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.introspect.NopAnnotationIntrospector;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
@@ -145,7 +147,11 @@ public final class GoogleAuthHelper {
 		request.getHeaders().setContentType("application/json");
 		final String jsonIdentity = request.execute().parseAsString();
 		
-		GoogleUser user = new ObjectMapper().readValue(jsonIdentity, GoogleUser.class);
+		ObjectMapper obMapper = new ObjectMapper();
+		obMapper.setAnnotationIntrospector(NopAnnotationIntrospector.nopInstance());
+	    obMapper.disable(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES);
+
+		GoogleUser user = obMapper.readValue(jsonIdentity, GoogleUser.class);
 
 		return user;
 
