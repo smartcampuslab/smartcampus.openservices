@@ -73,6 +73,10 @@ public class HomeController {
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(HttpServletRequest request, HttpServletResponse response) {
+		
+		logger.info("Context Path: {}", request.getContextPath());
+		
+		
 		logger.info("-- Welcome home! --");
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		response.setHeader("User", username);
@@ -93,7 +97,7 @@ public class HomeController {
 		}
 		logger.info("-- Welcome home! Authenticated: " + value + " --");
 		Cookie cookie = new Cookie("value", value);
-		cookie.setPath("/openservice/");
+		cookie.setPath(request.getContextPath()+"/");
 
 		boolean found = false;
 		Cookie[] cookies = request.getCookies();
@@ -104,7 +108,7 @@ public class HomeController {
 				System.out.println("Found cookies: " + i + ", name: " + name);
 				if (name.equalsIgnoreCase("value")) {
 					cookies[i].setValue(value);
-					cookies[i].setPath("/openservice/");
+					cookies[i].setPath(request.getContextPath()+"/");
 					// cookies[i].setMaxAge(0);
 					found = true;
 					response.addCookie(cookies[i]);
@@ -138,7 +142,7 @@ public class HomeController {
 				String obj = gson.toJson(cu);
 				
 				Cookie userCookie = new Cookie("user", obj);
-				userCookie.setPath("/openservice/");
+				userCookie.setPath(request.getContextPath()+"/");
 				response.addCookie(userCookie);
 			}
 		}
@@ -185,7 +189,7 @@ public class HomeController {
 				name = cookies[i].getName();
 				if (name.equalsIgnoreCase("value")) {
 					cookies[i].setValue(value + "");
-					cookies[i].setPath("/openservice/");
+					cookies[i].setPath(request.getContextPath()+"/");
 					response.addCookie(cookies[i]);
 				}
 
@@ -243,7 +247,7 @@ public class HomeController {
 				System.out.println("Found cookies: " + i + ", name: " + name);
 				if (name.equalsIgnoreCase("value")) {
 					cookies[i].setValue("false");
-					cookies[i].setPath("/openservice/");
+					cookies[i].setPath(request.getContextPath()+"/");
 					response.addCookie(cookies[i]);
 				}
 				if (name.equalsIgnoreCase("user")) {
@@ -312,7 +316,7 @@ public class HomeController {
 				name = cookies[i].getName();
 				if (name.equalsIgnoreCase("value")) {
 					cookies[i].setValue(value + "");
-					cookies[i].setPath("/openservice/");
+					cookies[i].setPath(request.getContextPath()+"/");
 					response.addCookie(cookies[i]);
 				}
 

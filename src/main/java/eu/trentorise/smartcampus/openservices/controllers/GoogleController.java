@@ -188,7 +188,7 @@ public class GoogleController {
 						for (int i = 0; i < cookies.length; i++) {
 							if (cookies[i].getName().equalsIgnoreCase("value")) {
 								cookies[i].setValue("true");
-								cookies[i].setPath("/openservice/");
+								cookies[i].setPath(request.getContextPath()+"/");
 								response.addCookie(cookies[i]);
 							}
 						}
@@ -202,7 +202,7 @@ public class GoogleController {
 					String obj = gson.toJson(cu);
 					
 					Cookie userCookie = new Cookie("user", obj);
-					userCookie.setPath("/openservice/");
+					userCookie.setPath(request.getContextPath()+"/");
 					response.addCookie(userCookie);
 					
 				
