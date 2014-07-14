@@ -165,7 +165,7 @@ public class LinkedInController {
 		
 		logger.info("Retrieve user data");
 		//get user data
-		OAuthRequest oauthRequest = new OAuthRequest(Verb.GET, "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,email-address,industry,headline)");
+		OAuthRequest oauthRequest = new OAuthRequest(Verb.GET, "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,email-address)");
 		service.signRequest(accessToken, oauthRequest);
 		Response oauthResponse = oauthRequest.send();
 		String responseData = oauthResponse.getBody();
