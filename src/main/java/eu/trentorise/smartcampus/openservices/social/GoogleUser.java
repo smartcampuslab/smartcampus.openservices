@@ -39,12 +39,6 @@ public class GoogleUser{
 	
 	private String locale;
 	
-	private String hd;
-	
-	private String link;
-	
-	private String gender;
-	
 	/**
 	 * Get google user id.
 	 * 
@@ -181,58 +175,5 @@ public class GoogleUser{
 	public void setLocale(String locale) {
 		this.locale = locale;
 	}
-	/**
-	 * Get host domain.
-	 * 
-	 * @return host domain : String
-	 */
-	public String getHd() {
-		return hd;
-	}
-	/**
-	 * Set host domain.
-	 * 
-	 * @param hd 
-	 * 			: String host domain
-	 */
-	public void setHd(String hd) {
-		this.hd = hd;
-	}
-	/**
-	 * Get link.
-	 * 
-	 * @return String link
-	 */
-	public String getLink() {
-		return link;
-	}
-	/**
-	 * Set link.
-	 * 
-	 * @param link 
-	 * 			: String
-	 */
-	public void setLink(String link) {
-		this.link = link;
-	}
-	/**
-	 * Get gender.
-	 * 
-	 * @return String gender.
-	 */
-	public String getGender() {
-		return gender;
-	}
-	/**
-	 * Set gender.
-	 * 
-	 * @param gender 
-	 * 			: String
-	 */
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
 	
-	
-
 }
