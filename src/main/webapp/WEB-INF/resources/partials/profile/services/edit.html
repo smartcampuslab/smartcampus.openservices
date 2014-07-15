@@ -145,7 +145,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" ng-click="cancel()" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" ng-click="keep()" ng-disabled="form.$invalid" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+                <button type="button" ng-click="keep()" ng-disabled="form.$invalid && accessInformation.authentication.accessProtocol === 'OAuth2'" class="btn btn-primary" data-dismiss="modal">Save changes</button>
             </div>
         </div>
         <!-- /.modal-content -->
