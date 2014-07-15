@@ -337,6 +337,7 @@ public class OrganizationController {
 					responseObject.setError("User cannot invite other users to an organization");
 					response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 				} catch (org.springframework.mail.MailSendException m) {
+					m.printStackTrace();
 					responseObject.setError("User invitation is not allowed. Try again later.");
 					responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

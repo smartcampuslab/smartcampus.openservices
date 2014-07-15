@@ -13,12 +13,15 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', 'hljsService
         $locationProvider.html5Mode(true);
 
         $httpProvider.interceptors.push(function ($q, $location) {
+        	console.log('Interceptor ........');
             return {
                 'responseError': function (response) {
                     if (response.status === 401) {
+                    	console.log("Error 401 found");
                         $location.path('signin');
                         return $q.reject(response);
                     } else {
+                    	console.log("Error 401 NOT found");
                         return $q.reject(response);
                     }
                 }
