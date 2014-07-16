@@ -500,6 +500,7 @@ app.controller('editMethodCtrl', ['$scope', '$http', '$location', '$routeParams'
 app.controller('newTestCtrl', ['$scope', '$http', '$location', '$routeParams', 'Service',
     function ($scope, $http, $location, $routeParams, Service) {
         $scope.title = 'New';
+        $scope.test = {};
         $scope.method = {
             serviceId: $routeParams.id,
             id: $routeParams.method
@@ -510,11 +511,8 @@ app.controller('newTestCtrl', ['$scope', '$http', '$location', '$routeParams', '
                 $scope.test.headers = {};
             }
             $scope.test.headers[$scope.nheader.name] = $scope.nheader.value;
-            /*if (!test.headers) {
-        		test.headers = {};
-        	}*/
-        	//test.headers.push($scope.nheader);
         };
+        
         $scope.submit = function () {
             Service.createTest({
                     id: $scope.method.id
