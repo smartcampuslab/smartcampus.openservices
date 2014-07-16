@@ -85,8 +85,9 @@ public class Service {
 	@Lob
 	private ImplementationInfo implementation;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_service")
+	@OneToMany(cascade = { CascadeType.PERSIST,
+			CascadeType.REMOVE, CascadeType.MERGE }, fetch = FetchType.EAGER)//cascade = CascadeType.ALL
+	@JoinColumn(name = "id_service", nullable=false)
 	private List<Tag> tags;
 
 	/**

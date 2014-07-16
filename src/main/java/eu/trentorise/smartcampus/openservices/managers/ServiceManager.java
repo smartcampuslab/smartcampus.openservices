@@ -73,6 +73,11 @@ public class ServiceManager {
 	 */
 	@Autowired
 	private MethodDao methodDao;
+	/**
+	 * Instance of {@link TagDao}.
+	 */
+	@Autowired
+	private TagDao tagDao;
 
 	/**
 	 * Add a new service in database.
@@ -147,6 +152,8 @@ public class ServiceManager {
 			
 			s.setName(service.getName());
 			s.setDescription(service.getDescription());
+			//delete tag data before update
+			tagDao.deleteTag(s.getTags());
 			s.setTags(service.getTags());
 			s.setCategory(service.getCategory());
 			s.setDocumentation(service.getDocumentation());
