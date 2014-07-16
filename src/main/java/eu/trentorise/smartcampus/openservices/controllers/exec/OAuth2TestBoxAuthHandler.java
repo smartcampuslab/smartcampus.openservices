@@ -17,6 +17,7 @@
 package eu.trentorise.smartcampus.openservices.controllers.exec;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -97,6 +98,9 @@ public class OAuth2TestBoxAuthHandler extends AbstractTestBoxAuthHandler {
 			String clientSecret = (String)accessAttributes.get("client_secret");
 			String authUrl = (String)accessAttributes.get("authorizationUrl");
 			token = generateClientToken(authUrl, clientId, clientSecret);
+		}
+		if(params.requestHeaders==null){
+			params.requestHeaders = new HashMap<String, String>();
 		}
 		params.requestHeaders.put("Authorization", "Bearer "+token);
 		return execute(params);
