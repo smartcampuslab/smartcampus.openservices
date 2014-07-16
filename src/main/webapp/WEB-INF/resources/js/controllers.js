@@ -295,6 +295,7 @@ app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service'
 app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service', 'Org', 'Category',
     function ($scope, $http, $location, Service, Org, Category) {
         $scope.protocols = ['OAuth2', 'OpenID', 'Public'];
+        $scope.formats = ['json', 'xml', 'yaml', 'txt'];
         $scope.accessInformation = {
             authentication: {
                 accessProtocol: null,
