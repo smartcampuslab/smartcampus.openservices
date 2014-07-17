@@ -7,7 +7,7 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope', '$window',
             userRoles = routingConfig.userRoles;
         
         //check if user is a string then json
-        if(typeof $cookieStore.get('user') == 'string'){
+        if(typeof $cookieStore.get('user') == 'string' && $cookieStore.get('user')!==""){
         	console.log("Found cookie user");
         	var jsonObj = JSON.parse($cookieStore.get('user'));
         	$rootScope.currentUser = {
