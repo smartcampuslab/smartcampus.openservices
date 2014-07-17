@@ -1193,7 +1193,9 @@ app.controller('serviceCtrl', ['$scope', '$rootScope', '$routeParams', 'Catalog'
                 for (var key in val.sample.headers) {
                     $scope.req += toTitleCase(key) + ': ' + val.sample.headers[key] + '\n';
                 }
-                $scope.req += '\n' + val.sample.requestBody;
+                if(val.sample.requestBody){
+                	$scope.req += '\n' + val.sample.requestBody;
+                }
             }
         }, true);
 
