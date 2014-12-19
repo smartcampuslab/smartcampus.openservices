@@ -15,6 +15,7 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.controllers;
 
+import javax.inject.Inject;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,12 +23,17 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 
 import com.google.gson.Gson;
 
@@ -44,6 +50,7 @@ import eu.trentorise.smartcampus.openservices.support.CookieUser;
  * 
  */
 @Controller
+@PropertySource("classpath:openservice.properties")
 public class HomeController {
 
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
@@ -53,6 +60,11 @@ public class HomeController {
 	 */
 	@Autowired
 	private UserManager userManager;
+	/**
+	 * Instance of {@link Environment}
+	 */
+	@Inject
+	private Environment env;
 
 	/**
 	 * Home service that returns user to home page.
@@ -233,8 +245,7 @@ public class HomeController {
 	 * @return home page with response UNAUTHORIZED
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	//@ResponseBody
-	public /*ResponseObject*/String login(HttpServletRequest request, HttpServletResponse response) {
+	public String login(HttpServletRequest request, HttpServletResponse response) {
 		logger.info("-- Perform Login --");
 
 		// Check if cookies exist and change them
@@ -255,12 +266,8 @@ public class HomeController {
 				}
 			}
 		}
-
-		//ResponseObject responseObject = new ResponseObject();
-		//responseObject.setError("You have to sign in");
-		//responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-		//return responseObject;
+
 		return home(request, response);
 	}
 
@@ -322,5 +329,62 @@ public class HomeController {
 			}
 		}
 		return "index";
+	}
+	
+	/**
+	 * Callback api manager service with username.
+	 * 
+	 * @param request 
+	 * 				: instance of {@link HttpServletRequest}
+	 * @param response 
+	 * 				: instance of {@link HttpServletResponse}
+	 * @return instance of {@link ResponseObject} with status (200 or 400) and error
+	 *         message.
+	 */
+	@RequestMapping(value = "/apimanager/callback", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseObject apimanagercallback(HttpServletRequest request, HttpServletResponse response) {
+		logger.info("Welcome after redirection from apiManager!");
+		
+		//set value cookie like welcome
+		ResponseObject welcome = printWelcome(request, response);
+		logger.info("After login: {}", welcome);
+		//then callback api manager
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		//set cookie user
+		CookieUser cu = new CookieUser();
+		cu.setUsername(username);
+		cu.setRole(Constants.ROLES.ROLE_NORMAL.toString());
+		
+		Gson gson = new Gson();
+		String obj = gson.toJson(cu);
+		
+		Cookie userCookie = new Cookie("user", obj);
+		userCookie.setPath(request.getContextPath()+"/");
+		response.addCookie(userCookie);
+		
+		
+		//POST request to apimanager
+		RestTemplate restTemplate = new RestTemplate();
+		
+		ResponseEntity<String> respEnt = restTemplate.postForEntity(
+				env.getProperty("apimanager.callback_uri"), username ,String.class);
+		
+		logger.info("Headers {}", respEnt.getHeaders());
+		logger.info("Body {}", respEnt.getBody());
+		logger.info("Status Code {}", respEnt.getStatusCode());
+		
+		ResponseObject responseObject = new ResponseObject();
+		if(respEnt.getStatusCode()==HttpStatus.OK){
+			responseObject.setData(respEnt.getBody());
+			responseObject.setStatus(HttpServletResponse.SC_OK);
+		}else{
+			responseObject.setStatus(400);
+			responseObject.setError("Invalid Request. Need username parameter.");
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+		}
+		
+		return responseObject;
 	}
 }

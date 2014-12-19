@@ -84,6 +84,11 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', 'hljsService
             templateUrl: 'partials/signin.html',
             access: access.public
         }).
+        when('/signin/apimanager', {
+            controller: 'signinCtrl',
+            templateUrl: 'partials/signin.html',
+            access: access.public
+        }).
         when('/signup', {
             controller: 'signUpCtrl',
             templateUrl: 'partials/signup.html',
