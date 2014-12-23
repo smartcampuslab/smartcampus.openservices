@@ -2,6 +2,7 @@
 /.settings
 /.classpath
 /.project
+/.springWebflow
 /LICENSE-2.0.html
 /bin
 /.externalToolBuilders
