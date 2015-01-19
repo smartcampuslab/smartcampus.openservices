@@ -8,13 +8,11 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope', '$window',
         
         //check if user is a string then json
         if(typeof $cookieStore.get('user') == 'string' && $cookieStore.get('user')!==""){
-        	console.log("Found cookie user");
         	var jsonObj = JSON.parse($cookieStore.get('user'));
         	$rootScope.currentUser = {
                 username: jsonObj.username,
                 role: userRoles[jsonObj.role]
             };
-        	console.log("username: "+$rootScope.currentUser.username);
         	changeUser($rootScope.currentUser);
         	$cookieStore.remove('user');
             $cookieStore.put('user', $rootScope.currentUser);
@@ -68,6 +66,20 @@ services.factory('Auth', ['$http', '$cookieStore', '$rootScope', '$window',
                     $cookieStore.remove('user');
                     $cookieStore.put('user', $rootScope.currentUser);
                     success(user);
+                }).error(function (data) {
+                    error(data.error);
+                });
+            },
+            apiLogin: function (user, success, error) {
+                $http.post('apimanager/perform_login', $.param(user), {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                }).success(function (data) {
+                	console.log('Service apiLogin');
+                	console.log(data);
+                	$window.location.href = data.data;
+                    
                 }).error(function (data) {
                     error(data.error);
                 });

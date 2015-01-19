@@ -174,7 +174,7 @@ public class ServiceController {
 					responseObject.setStatus(HttpServletResponse.SC_CREATED);
 					response.setStatus(HttpServletResponse.SC_CREATED);
 				} else {
-					responseObject.setError("Organization is not created");
+					responseObject.setError("Service is not created");
 					responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				}

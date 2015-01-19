@@ -68,7 +68,10 @@ app.controller('breadCtrl', [
 
 app.controller('signinCtrl', ['$scope', '$location', 'Auth', '$rootScope', '$http','$window',
     function ($scope, $location, Auth, $rootScope,$http,$window) {
-
+	
+		var url = $location.path();
+		console.log(url);
+		
         $scope.signin = function () {
             Auth.login($scope.user, function () {
                     $rootScope.navtemplate = 'partials/nav/_menu.html';
@@ -78,6 +81,19 @@ app.controller('signinCtrl', ['$scope', '$location', 'Auth', '$rootScope', '$htt
                 }
 
             );
+        };
+        
+        $scope.signInApiManager = function(){
+        	console.log('Api Manager sign in');
+        	console.log($scope.user);
+        	Auth.apiLogin($scope.user, function () {
+        		console.log('success api manager login');
+                $rootScope.navtemplate = 'partials/nav/_menu.html';
+                $location.path('profile');
+            }, function (error) {
+                $scope.error = error;
+            }
+        	);
         };
         
         $scope.signinFb = function(){
