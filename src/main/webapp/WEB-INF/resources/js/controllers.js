@@ -716,14 +716,6 @@ app.controller('categoryCtrl', ['$scope', '$rootScope', '$http', '$location', 'C
     }
 ]);
 
-app.controller('searchCtrl',['$scope','$rootScope', '$http', '$routeParams',function($scope,$rootScope,$http, $routeParams) {
-	console.log("search");
-	$scope.filter = function(){
-		console.log("Service search");
-		console.log("" + $scope.query);
-	};
-}]);
-
 app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams','$filter', 'Catalog', 'Category',
     function ($scope, $rootScope, $http, $routeParams, $filter, Catalog, Category) {
         $scope.orderByOptions = [{
@@ -795,7 +787,6 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
         $scope.getServiceByCategories = function () {
         	var ids = $scope.categoriesFilter;
 
-        	console.log("Search");
             console.log("Search categories with values: " + ids);
 
             var cats = '';
