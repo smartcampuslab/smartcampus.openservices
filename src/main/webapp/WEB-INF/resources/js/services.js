@@ -394,7 +394,7 @@ services.factory('Gravatar', ['$http', '$rootScope',
             picture: function (size, email) {
                 var MD5 = function (s) {
                     function L(k, d) {
-                        return (k << d) | (k >>> (32 - d))
+                        return (k << d) | (k >>> (32 - d));
                     }
 
                     function K(G, k) {
@@ -405,53 +405,53 @@ services.factory('Gravatar', ['$http', '$rootScope',
                         d = (k & 1073741824);
                         x = (G & 1073741823) + (k & 1073741823);
                         if (I & d) {
-                            return (x ^ 2147483648 ^ F ^ H)
+                            return (x ^ 2147483648 ^ F ^ H);
                         }
                         if (I | d) {
                             if (x & 1073741824) {
-                                return (x ^ 3221225472 ^ F ^ H)
+                                return (x ^ 3221225472 ^ F ^ H);
                             } else {
-                                return (x ^ 1073741824 ^ F ^ H)
+                                return (x ^ 1073741824 ^ F ^ H);
                             }
                         } else {
-                            return (x ^ F ^ H)
+                            return (x ^ F ^ H);
                         }
                     }
 
                     function r(d, F, k) {
-                        return (d & F) | ((~d) & k)
+                        return (d & F) | ((~d) & k);
                     }
 
                     function q(d, F, k) {
-                        return (d & k) | (F & (~k))
+                        return (d & k) | (F & (~k));
                     }
 
                     function p(d, F, k) {
-                        return (d ^ F ^ k)
+                        return (d ^ F ^ k);
                     }
 
                     function n(d, F, k) {
-                        return (F ^ (d | (~k)))
+                        return (F ^ (d | (~k)));
                     }
 
                     function u(G, F, aa, Z, k, H, I) {
                         G = K(G, K(K(r(F, aa, Z), k), I));
-                        return K(L(G, H), F)
+                        return K(L(G, H), F);
                     }
 
                     function f(G, F, aa, Z, k, H, I) {
                         G = K(G, K(K(q(F, aa, Z), k), I));
-                        return K(L(G, H), F)
+                        return K(L(G, H), F);
                     }
 
                     function D(G, F, aa, Z, k, H, I) {
                         G = K(G, K(K(p(F, aa, Z), k), I));
-                        return K(L(G, H), F)
+                        return K(L(G, H), F);
                     }
 
                     function t(G, F, aa, Z, k, H, I) {
                         G = K(G, K(K(n(F, aa, Z), k), I));
-                        return K(L(G, H), F)
+                        return K(L(G, H), F);
                     }
 
                     function e(G) {
@@ -467,14 +467,14 @@ services.factory('Gravatar', ['$http', '$rootScope',
                             Z = (H - (H % 4)) / 4;
                             d = (H % 4) * 8;
                             aa[Z] = (aa[Z] | (G.charCodeAt(H) << d));
-                            H++
+                            H++;
                         }
                         Z = (H - (H % 4)) / 4;
                         d = (H % 4) * 8;
                         aa[Z] = aa[Z] | (128 << d);
                         aa[I - 2] = F << 3;
                         aa[I - 1] = F >>> 29;
-                        return aa
+                        return aa;
                     }
 
                     function B(x) {
@@ -484,9 +484,9 @@ services.factory('Gravatar', ['$http', '$rootScope',
                         for (d = 0; d <= 3; d++) {
                             G = (x >>> (d * 8)) & 255;
                             F = "0" + G.toString(16);
-                            k = k + F.substr(F.length - 2, 2)
+                            k = k + F.substr(F.length - 2, 2);
                         }
-                        return k
+                        return k;
                     }
 
                     function J(k) {
@@ -495,19 +495,19 @@ services.factory('Gravatar', ['$http', '$rootScope',
                         for (var F = 0; F < k.length; F++) {
                             var x = k.charCodeAt(F);
                             if (x < 128) {
-                                d += String.fromCharCode(x)
+                                d += String.fromCharCode(x);
                             } else {
                                 if ((x > 127) && (x < 2048)) {
                                     d += String.fromCharCode((x >> 6) | 192);
-                                    d += String.fromCharCode((x & 63) | 128)
+                                    d += String.fromCharCode((x & 63) | 128);
                                 } else {
                                     d += String.fromCharCode((x >> 12) | 224);
                                     d += String.fromCharCode(((x >> 6) & 63) | 128);
-                                    d += String.fromCharCode((x & 63) | 128)
+                                    d += String.fromCharCode((x & 63) | 128);
                                 }
                             }
                         }
-                        return d
+                        return d;
                     }
                     var C = Array();
                     var P, h, E, v, g, Y, X, W, V;
@@ -605,17 +605,17 @@ services.factory('Gravatar', ['$http', '$rootScope',
                         Y = K(Y, h);
                         X = K(X, E);
                         W = K(W, v);
-                        V = K(V, g)
+                        V = K(V, g);
                     }
                     var i = B(Y) + B(X) + B(W) + B(V);
-                    return i.toLowerCase()
+                    return i.toLowerCase();
                 };
 
                 var size = size || 80;
                 return 'http://www.gravatar.com/avatar/' + MD5(email) + '.jpg?s=' + size;
 
             }
-        }
+        };
     }
 ]);
 

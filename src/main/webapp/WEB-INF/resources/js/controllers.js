@@ -785,7 +785,6 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
 
         if ( !! $routeParams.tag) {
             $scope.queryTag = $routeParams.tag;
-            //$scope.tag = true;
         }
 
         if ( !! $scope.categoryActive) {
@@ -802,7 +801,7 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
             var cats = '';
             for (var i = 0; i < ids.length; i++) {
                 if (i > 0) {
-                    cats += ','
+                    cats += ',';
                 }
                 cats += ids[i];
             }
@@ -853,7 +852,7 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
             } else {
                 $scope.services = [];
             }
-        }
+        };
 
         $scope.goToPage = function (p) {
             $scope.page = p;
@@ -865,7 +864,7 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
             $scope.totalServices = totalServicesCount;
             var lop = $scope.firstOfPage + $scope.resultsPerPage + 1;
             $scope.lastOfPage = lop > $scope.totalServices ? $scope.totalServices : lop;
-        }
+        };
 
         $rootScope.searchQuery = null;
         $scope.query = null;
@@ -967,7 +966,7 @@ app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routePar
             var cats = '';
             for (var i = 0; i < ids.length; i++) {
                 if (i > 0) {
-                    cats += ','
+                    cats += ',';
                 }
                 cats += ids[i];
             }
@@ -985,7 +984,7 @@ app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routePar
             }, function (res) {
                 $scope.orgs = null;
             });
-        }
+        };
 
         $scope.getOrgsAll = function () {
             Catalog.listOrgs({
@@ -1000,7 +999,7 @@ app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routePar
             }, function (res) {
                 $scope.orgs = null;
             });
-        }
+        };
 
         $scope.update = function (resetPages) {
             if (resetPages == true) {
@@ -1015,7 +1014,7 @@ app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routePar
             } else {
                 $scope.orgs = null;
             }
-        }
+        };
 
         $scope.goToPage = function (p) {
             $scope.page = p;
@@ -1027,7 +1026,7 @@ app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routePar
             $scope.totalServices = totalServicesCount;
             var lop = $scope.firstOfPage + $scope.resultsPerPage + 1;
             $scope.lastOfPage = lop > $scope.totalServices ? $scope.totalServices : lop;
-        }
+        };
 
         $rootScope.searchQuery = null;
         $scope.query = null;
