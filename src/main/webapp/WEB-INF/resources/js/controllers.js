@@ -44,6 +44,7 @@ app.controller('homeCtrl', ['$http', '$scope', '$rootScope', '$location', 'Catal
     }
 ]);
 
+
 app.controller('navCtrl', ['$scope', 'Auth', '$location', '$rootScope',
     function ($scope, Auth, $location, $rootScope) {
 	
@@ -715,8 +716,16 @@ app.controller('categoryCtrl', ['$scope', '$rootScope', '$http', '$location', 'C
     }
 ]);
 
-app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams', 'Catalog', 'Category',
-    function ($scope, $rootScope, $http, $routeParams, Catalog, Category) {
+app.controller('searchCtrl',['$scope','$rootScope', '$http', '$routeParams',function($scope,$rootScope,$http, $routeParams) {
+	console.log("search");
+	$scope.filter = function(){
+		console.log("Service search");
+		console.log("" + $scope.query);
+	};
+}]);
+
+app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams','$filter', 'Catalog', 'Category',
+    function ($scope, $rootScope, $http, $routeParams, $filter, Catalog, Category) {
         $scope.orderByOptions = [{
             key: 'A - Z',
             value: 'name'
@@ -769,6 +778,8 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
         $scope.pagePerPagination = 5;
         $scope.currentPage = 1;
         $scope.lastOfPage = 0;
+        $scope.services = [];
+        $scope.query = '';
 
         $rootScope.locTitles = $rootScope.searchQuery ? ['search'] : ['services'];
 
@@ -781,24 +792,11 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
             $scope.categoryActive = undefined;
         }
 
-        // $scope.getServicesByCategory = function (id) {
-        //     console.log("Search");
-        //     console.log("Search category with value: " + id);
-        //     Catalog.browseServiceCat({
-        //         category: id,
-        //         first: $scope.start,
-        //         last: $scope.end,
-        //         order: $scope.orderBySelected.value
-        //     }, function (services) {
-        //         $scope.totalServices = services.totalNumber;
-        //         $scope.services = services.data;
-        //     }, function (res) {
-        //         $scope.services = null;
-        //     });
-        // };
 
-        $scope.getServiceByCategories = function (ids) {
-            console.log("Search");
+        $scope.getServiceByCategories = function () {
+        	var ids = $scope.categoriesFilter;
+
+        	console.log("Search");
             console.log("Search categories with values: " + ids);
 
             var cats = '';
@@ -815,10 +813,15 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
                 last: $scope.resultsPerPage,
                 order: $scope.orderBySelected.value
             }, function (services) {
-                $scope.services = services.data;
+            	$scope.services.splice(0,$scope.services.length);
+            	services.data.forEach(function(s){
+            		if(!$scope.query || s.name.indexOf($scope.query) >= 0) {
+            			$scope.services.push(s);
+            		}
+            	});
                 $scope.updateCounters(services.totalNumber);
             }, function (res) {
-                $scope.services = null;
+                $scope.services = [];
             });
         };
 
@@ -827,13 +830,13 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
                 first: $scope.firstOfPage,
                 last: $scope.resultsPerPage,
                 order: $scope.orderBySelected.value,
-                q: $rootScope.searchQuery,
+                q: $scope.query,
                 tag: $scope.queryTag
             }, function (services) {
-                $scope.services = services.data;
+            	$scope.services = services.data;
                 $scope.updateCounters(services.totalNumber);
             }, function (res) {
-                $scope.services = null;
+                $scope.services = [];
             });
         };
 
@@ -846,9 +849,9 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
             if ($scope.categoriesFilter.length == $scope.categories.length) {
                 $scope.getServicesAll();
             } else if ($scope.categoriesFilter.length < $scope.categories.length && $scope.categoriesFilter.length > 0) {
-                $scope.getServiceByCategories($scope.categoriesFilter);
+                $scope.getServiceByCategories();
             } else {
-                $scope.services = null;
+                $scope.services = [];
             }
         }
 
