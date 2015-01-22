@@ -953,7 +953,8 @@ app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routePar
             $scope.categoryActive = undefined;
         }
 
-        $scope.getOrgsByCategories = function (ids) {
+        $scope.getOrgsByCategories = function () {
+        	var ids = $scope.categoriesFilter;
             var cats = '';
             for (var i = 0; i < ids.length; i++) {
                 if (i > 0) {
@@ -969,11 +970,16 @@ app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routePar
                 order: $scope.orderBySelected.value,
                 q: $rootScope.searchQuery
             }, function (data) {
-                $scope.orgs = data.data;
+            	$scope.orgs.splice(0,$scope.orgs.length);
+            	data.data.forEach(function(s){
+            		if(!$scope.query || s.name.indexOf($scope.query) >= 0) {
+            			$scope.orgs.push(s);
+            		}
+            	});
                 $scope.fillOrgsCategoryName($scope.orgs);
                 $scope.updateCounters(data.totalNumber);
             }, function (res) {
-                $scope.orgs = null;
+                $scope.orgs = [];
             });
         };
 
@@ -988,7 +994,7 @@ app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routePar
                 $scope.fillOrgsCategoryName($scope.orgs);
                 $scope.updateCounters(data.totalNumber);
             }, function (res) {
-                $scope.orgs = null;
+                $scope.orgs = [];
             });
         };
 
@@ -1001,9 +1007,9 @@ app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routePar
             if ($scope.categoriesFilter.length == $scope.categories.length) {
                 $scope.getOrgsAll();
             } else if ($scope.categoriesFilter.length < $scope.categories.length && $scope.categoriesFilter.length > 0) {
-                $scope.getOrgsByCategories($scope.categoriesFilter);
+                $scope.getOrgsByCategories();
             } else {
-                $scope.orgs = null;
+                $scope.orgs = [];
             }
         };
 
