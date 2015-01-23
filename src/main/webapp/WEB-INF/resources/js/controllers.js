@@ -718,23 +718,7 @@ app.controller('categoryCtrl', ['$scope', '$rootScope', '$http', '$location', 'C
 
 app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams','$filter', 'Catalog', 'Category',
     function ($scope, $rootScope, $http, $routeParams, $filter, Catalog, Category) {
-        $scope.orderByOptions = [{
-            key: 'A - Z',
-            value: 'name'
-        }, {
-            key: 'Z - A',
-            value: 'namedesc'
-        }, {
-            key: 'date',
-            value: 'date'
-        }];
-
-        // default: A - Z
-        $scope.orderBySelected = $scope.orderByOptions[0];
-
-        $scope.categories = [];
-        $scope.categoriesFilter = [];
-
+      
         $scope.selectCategory = function (catId) {
             if ( !! catId) {
                 // Category checkbox
@@ -764,26 +748,6 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
             $scope.update(true);
         };
 
-        $scope.totalServices = 0;
-        $scope.firstOfPage = 0;
-        $scope.resultsPerPage = 10;
-        $scope.pagePerPagination = 5;
-        $scope.currentPage = 1;
-        $scope.lastOfPage = 0;
-        $scope.services = [];
-        $scope.query = '';
-
-        $rootScope.locTitles = $rootScope.searchQuery ? ['search'] : ['services'];
-
-        if ( !! $routeParams.tag) {
-            $scope.queryTag = $routeParams.tag;
-        }
-
-        if ( !! $scope.categoryActive) {
-            $scope.categoryActive = undefined;
-        }
-
-
         $scope.getServiceByCategories = function () {
         	var ids = $scope.categoriesFilter;
 
@@ -801,7 +765,7 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
                 categories: cats,
                 first: $scope.firstOfPage,
                 last: $scope.resultsPerPage,
-                order: $scope.orderBySelected.value
+                order: $scope.orderBySelected.value,
             }, function (services) {
             	$scope.services.splice(0,$scope.services.length);
             	services.data.forEach(function(s){
@@ -814,7 +778,7 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
                 $scope.services = [];
             });
         };
-
+        
         $scope.getServicesAll = function () {
             Catalog.listServices({
                 first: $scope.firstOfPage,
@@ -857,10 +821,6 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
             $scope.lastOfPage = lop > $scope.totalServices ? $scope.totalServices : lop;
         };
 
-        $rootScope.searchQuery = null;
-        $scope.query = null;
-        $scope.servicesActive = [];
-
         $scope.isServiceActive = function (service) {
             return $scope.servicesActive.indexOf(service) > -1;
         };
@@ -876,14 +836,57 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
             }
         };
 
-        // Start!
+        $scope.orderByOptions = [{
+            key: 'A - Z',
+            value: 'name'
+        }, {
+            key: 'Z - A',
+            value: 'namedesc'
+        }, {
+            key: 'date',
+            value: 'date'
+        }];
+        
+        // default: A - Z
+        $scope.orderBySelected = $scope.orderByOptions[0];
+
+        $scope.categories = [];
+        $scope.categoriesFilter = [];
+        
+        $scope.totalServices = 0;
+        $scope.firstOfPage = 0;
+        $scope.resultsPerPage = 10;
+        $scope.pagePerPagination = 5;
+        $scope.currentPage = 1;
+        $scope.lastOfPage = 0;
+        $scope.services = [];
+        $scope.query = null;
+
+        $rootScope.locTitles = $rootScope.searchQuery ? ['search'] : ['services'];
+
+        if ( !! $routeParams.tag) {
+            $scope.queryTag = $routeParams.tag;
+        }
+
+        if ( !! $scope.categoryActive) {
+            $scope.categoryActive = undefined;
+        }
+        
+     // Start!
         Category.list({}, function (data) {
             $scope.categories = data.data;
             for (var i = 0; i < $scope.categories.length; i++) {
                 $scope.categoriesFilter.push($scope.categories[i].id);
             }
             $scope.update();
-        });
+        });   
+        
+        if($rootScope.searchQuery != null) {
+        	$scope.query =  $rootScope.searchQuery;
+        	$scope.categoriesFilter = $scope.categories;
+        	$scope.getServiceByCategories();
+        	$rootScope.searchQuery = null;
+        }
     }
 ]);
 
