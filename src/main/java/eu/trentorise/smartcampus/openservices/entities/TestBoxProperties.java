@@ -21,7 +21,8 @@ import java.util.*;
 /**
  * Blob Object for Method table: 
  * authentication descriptor,
- * a list of tests.
+ * a list of test case data, 
+ * whether the method is testable.
  * 
  * @author raman
  *
@@ -29,6 +30,8 @@ import java.util.*;
 public class TestBoxProperties implements Serializable{
 	private static final long serialVersionUID = 1L;
 
+	private boolean testable;
+	
 	private Authentication authenticationDescriptor;
 	private List<TestInfo> tests;//request string, input, output
 	
@@ -75,4 +78,20 @@ public class TestBoxProperties implements Serializable{
 	public void setTests(List<TestInfo> tests) {
 		this.tests = tests;
 	}
+
+	/**
+	 * @return the testable
+	 */
+	public boolean isTestable() {
+		return testable;
+	}
+
+	/**
+	 * @param testable the testable to set
+	 */
+	public void setTestable(boolean testable) {
+		this.testable = testable;
+	}
+	
+	
 }

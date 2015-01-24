@@ -186,6 +186,7 @@ public class UserController {
 					responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				} catch (org.springframework.mail.MailSendException m) {
+					m.printStackTrace();
 					responseObject.setError("Registration is not allowed. Try again later.");
 					responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

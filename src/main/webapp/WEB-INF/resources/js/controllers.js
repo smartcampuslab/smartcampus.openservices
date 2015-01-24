@@ -222,10 +222,23 @@ app.controller('enableOrgCtrl', ['$scope', '$routeParams', 'Org', '$location',
     }
 ]);
 
-app.controller('profileCtrl', ['$scope', '$http', '$location', 'User', 'Service', 'Org', 'Category',
-    function ($scope, $http, $location, User, Service, Org, Category) {
+app.controller('profileCtrl', ['$scope', '$routeParams', '$http', '$location', 'User', 'Service', 'Org', 'Category',
+    function ($scope, $routeParams, $http, $location, User, Service, Org, Category) {
         $scope.errorMsg = null;
-        $scope.template = 'partials/profile/_details.html';
+        
+        $scope.switchTo = function(view) {
+            if (view == 'services') {
+                $scope.template = 'partials/profile/services/show.html';
+                $location.path('/profile/services', false);
+            } else if (view == 'organizations') {
+                $scope.template = 'partials/profile/organizations/show.html';
+                $location.path('/profile/organizations', false);
+            } else {
+                $scope.template = 'partials/profile/_details.html';
+                $location.path('/profile', false);
+            }
+        }
+    	$scope.switchTo($routeParams.view);
 
         $scope.deleteOrg = function (i) {
             Org.remove({
@@ -452,130 +465,107 @@ app.controller('viewServiceCtrl', ['$scope', '$routeParams', '$location', 'Servi
     }
 ]);
 
-app.controller('newMethodCtrl', ['$scope', '$http', '$location', '$routeParams', 'Service',
-    function ($scope, $http, $location, $routeParams, Service) {
-        $scope.title = 'New';
-        $scope.method = {
-            serviceId: $routeParams.id,
-            testboxProperties: {
-                tests: []
-            }
-        };
-
-        $scope.submit = function () {
-            Service.createMethod($scope.method, function () {
-                    $location.path('profile/services/' + $scope.method.serviceId + '/view');
-                },
-                function (res) {
-                    $scope.errorMsg = res.data.error;
-                });
-        };
-    }
-]);
-
-app.controller('viewMethodCtrl', ['$scope', '$http', '$location', '$routeParams', 'Service',
-    function ($scope, $http, $location, $routeParams, Service) {
-
+app.controller('methodCtrl', ['$scope', '$http', '$location', '$routeParams', 'Service',
+  function($scope, $http, $location, $routeParams, Service) {
+	if (!!$routeParams.method) {
         Service.getMethod({
             id: $routeParams.method
         }, function (data) {
             $scope.method = data.data;
         });
-
-        $scope.deleteTest = function (i) {
-            Service.deleteTest({
-                id: $scope.method.id,
-                pos: i
-            }, $scope.test, function () {
-                $scope.method.testboxProperties.tests.splice(i, 1);
-            });
-        };
-    }
-]);
-
-app.controller('editMethodCtrl', ['$scope', '$http', '$location', '$routeParams', 'Service',
-    function ($scope, $http, $location, $routeParams, Service) {
-
-        Service.getMethod({
-            id: $routeParams.method
-        }, function (data) {
-            $scope.method = data.data;
-        });
-
         $scope.submit = function () {
             Service.updateMethod($scope.method, function () {
-                    $location.path('profile/services/' + $scope.method.serviceId + '/view');
+                    $location.path('profile/services/'+$routeParams.id);
                 },
                 function (res) {
                     $scope.errorMsg = res.data.error;
                 });
         };
-
+	} else {
+		$scope.title = 'New';
+		$scope.method = {
+			serviceId : $routeParams.id,
+			testboxProperties : {
+				tests : []
+			},
+			executionProperties : {}
+		};
+		$scope.submit = function() {
+			Service.createMethod($scope.method, function() {
+					$location.path('profile/services/'+$routeParams.id);
+				}, function(res) {
+					$scope.errorMsg = res.data.error;
+				});
+			};
+	}
+    $scope.deleteTest = function (i) {
+    	$scope.method.testboxProperties.tests.splice(i,1);
+    };
+    
+    $scope.editTest = function(idx) {
+		$scope.testErrorMsg = null;
+    	if (idx >= 0) {
+    		$scope.test = angular.copy($scope.method.testboxProperties.tests[idx]);
+    	} else {
+    		$scope.test = {};
+    	}
+		$scope.ntestheader = null;
+    	$scope.testIdx = idx;
     }
-]);
-
-app.controller('newTestCtrl', ['$scope', '$http', '$location', '$routeParams', 'Service',
-    function ($scope, $http, $location, $routeParams, Service) {
-        $scope.title = 'New';
-        $scope.test = {};
-        $scope.method = {
-            serviceId: $routeParams.id,
-            id: $routeParams.method
-        };
-
-        $scope.addHeader = function () {
-            if (!$scope.test.headers) {
-                $scope.test.headers = {};
-            }
-            $scope.test.headers[$scope.nheader.name] = $scope.nheader.value;
-        };
-        
-        $scope.submit = function () {
-            Service.createTest({
-                    id: $scope.method.id
-                }, $scope.test, function () {
-                    $location.path('profile/services/' + $scope.method.serviceId + '/methods/' + $scope.method.id + '/view');
-                },
-                function (res) {
-                    $scope.errorMsg = res.data.error;
-                });
-        };
+    
+    $scope.addTest = function() {
+    	for (var i = 0; i < $scope.method.testboxProperties.tests.length;i++) {
+    		if (i ==$scope.testIdx) continue;
+    		if ($scope.method.testboxProperties.tests[i].name==$scope.test.name) {
+    			$scope.testErrorMsg = 'Duplicate test name';
+    			return false;
+    		}
+    	}
+    	if ($scope.testIdx >= 0) {
+    		$scope.method.testboxProperties.tests[$scope.testIdx] = $scope.test;
+    	} else {
+    		$scope.method.testboxProperties.tests.push($scope.test);
+    	}
+    	$('#testModal').modal('hide');
     }
-]);
-
-app.controller('editTestCtrl', ['$scope', '$http', '$location', '$routeParams', 'Service',
-    function ($scope, $http, $location, $routeParams, Service) {
-        $scope.title = 'Edit';
-        Service.getMethod({
-            id: $routeParams.method
-        }, function (data) {
-            $scope.method = data.data;
-            $scope.test = $scope.method.testboxProperties.tests[$routeParams.pos];
-        });
-
-        $scope.addHeader = function () {
-            if (!$scope.test.headers) {
-                $scope.test.headers = {};
-            }
-            $scope.test.headers[$scope.nheader.name] = $scope.nheader.value;
-        };
-        $scope.deleteHeader = function (n) {
-            delete $scope.test.headers[n];
-        };
-
-        $scope.submit = function () {
-            Service.updateTest({
-                    id: $scope.method.id,
-                    pos: $routeParams.pos
-                }, $scope.test, function () {
-                    $location.path('profile/services/' + $scope.method.serviceId + '/methods/' + $scope.method.id + '/view');
-                },
-                function (res) {
-                    $scope.errorMsg = res.data.error;
-                });
-        };
+    
+    $scope.addHeader = function () {
+        if (!$scope.method.executionProperties.headers) {
+        	$scope.method.executionProperties.headers = {};
+        }
+        var vals = $scope.nheader.value.split(',');
+        for (var i = 0; i < vals.length; i++) {
+        	vals[i] = vals[i].trim();
+        }
+        $scope.method.executionProperties.headers[$scope.nheader.name] = vals;
+    };
+    $scope.deleteHeader = function (n) {
+        delete $scope.method.executionProperties.headers[n];
+    };
+    $scope.methodValid = function() {
+    	return !!$scope.method && !!$scope.method.name && !!$scope.method.executionProperties.httpMethod;
     }
-]);
+
+    $scope.addTestHeader = function () {
+        if (!$scope.test.headers) {
+            $scope.test.headers = {};
+        }
+        $scope.test.headers[$scope.ntestheader.name] = $scope.ntestheader.value;
+    };
+    $scope.deleteTestHeader = function (n) {
+        delete $scope.test.headers[n];
+    };
+    
+    $scope.testHasBody = function() {
+    	return !!$scope.method && ($scope.method.executionProperties.httpMethod == 'POST' ||
+    		   $scope.method.executionProperties.httpMethod == 'PUT');
+    }
+    $scope.testValid = function() {
+    	return !!$scope.test && !!$scope.test.name && !!$scope.test.description && !!$scope.test.requestPath;
+    }
+    
+}]);
+
 
 app.controller('newOrgCtrl', ['$scope', '$http', '$location', 'Org', 'Category',
     function ($scope, $http, $location, Org, Category) {

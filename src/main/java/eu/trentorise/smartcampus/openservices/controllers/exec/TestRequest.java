@@ -16,6 +16,8 @@
 
 package eu.trentorise.smartcampus.openservices.controllers.exec;
 
+import java.util.Map;
+
 /**
  * @author raman
  *
@@ -26,6 +28,7 @@ public class TestRequest {
 	private String requestUrl;
 	private String requestBody;
 	private Object credentials;
+	private Map<String,String> headers;
 	
 	/**
 	 * @return the requestBody
@@ -75,5 +78,16 @@ public class TestRequest {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+	/**
+	 * @return the headers
+	 */
+	public Map<String, String> getHeaders() {
+		return headers;
+	}
+	/**
+	 * @param headers the headers to set
+	 */
+	public void setHeaders(Map<String, String> headers) {
+		this.headers = headers;
+	}
 }

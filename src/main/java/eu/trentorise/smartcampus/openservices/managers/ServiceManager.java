@@ -430,7 +430,8 @@ public class ServiceManager {
 			m.setName(method.getName());
 			m.setSynopsis(method.getSynopsis());
 			m.setDocumentation(method.getDocumentation());
-			m.setTestboxProprieties(method.getTestboxProperties());
+			m.setTestboxProperties(method.getTestboxProperties());
+			m.setExecutionProperties(method.getExecutionProperties());
 			methodDao.modifyMethod(m);
 			//Add history
 			ServiceHistory sh = new ServiceHistory();
@@ -523,7 +524,7 @@ public class ServiceManager {
 			TestBoxProperties props = m.getTestboxProperties();
 			if (props == null) {
 				props = new TestBoxProperties();
-				m.setTestboxProprieties(props);
+				m.setTestboxProperties(props);
 			}
 			List<TestInfo> tests = props.getTests();
 			if (tests == null) {

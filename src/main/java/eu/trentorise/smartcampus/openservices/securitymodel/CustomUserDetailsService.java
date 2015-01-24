@@ -67,67 +67,78 @@ public class CustomUserDetailsService implements UserDetailsService{
 		if(domainUser.getPassword()!=null){
 			if(domainUser.getPassword().equalsIgnoreCase("") /*|| domainUser.getPassword()==null*/) throw new SecurityException();
 		}
-		
-		return new UserDetails() {
-			
-			/**
-			 * Check if user is enabled
-			 */
-			@Override
-			public boolean isEnabled() {
-				int enabled = domainUser.getEnabled();
-				if(enabled==0){
-					return false;
-				}
-				else{
-					return true;
-				}
-			}
-			
-			@Override
-			public boolean isCredentialsNonExpired() {
-				return true;
-			}
-			
-			@Override
-			public boolean isAccountNonLocked() {
-				return true;
-			}
-			
-			@Override
-			public boolean isAccountNonExpired() {
-				return true;
-			}
-			
-			/**
-			 * Get username
-			 */
-			@Override
-			public String getUsername() {
-				return domainUser.getUsername();
-			}
-			
-			/**
-			 * Get password
-			 */
-			@Override
-			public String getPassword() {
-				return domainUser.getPassword();
-			}
-			
-			/**
-			 * Find user role in database and put them in authority
-			 */
-			@Override
-			public Collection<? extends GrantedAuthority> getAuthorities() {
-				List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
-				
-				//roles: ADMIN or NORMAL user
-				roles.add(new SimpleGrantedAuthority(domainUser.getRole()));
-				
-				return roles;
-			}
-		};
+		return new CustomUserDetails(domainUser.getEnabled(), domainUser.getUsername(), domainUser.getPassword(), domainUser.getRole());
 	}
-	
+
+	public static class CustomUserDetails implements UserDetails {
+		private int enabled;
+		private String username;
+		private String password;
+		private String role;
+
+		public CustomUserDetails(int enabled, String username, String password, String role) {
+			super();
+			this.enabled = enabled;
+			this.username = username;
+			this.password = password;
+			this.role = role;
+		}
+
+		/**
+		 * Check if user is enabled
+		 */
+		@Override
+		public boolean isEnabled() {
+			if(enabled==0){
+				return false;
+			}
+			else{
+				return true;
+			}
+		}
+		
+		@Override
+		public boolean isCredentialsNonExpired() {
+			return true;
+		}
+		
+		@Override
+		public boolean isAccountNonLocked() {
+			return true;
+		}
+		
+		@Override
+		public boolean isAccountNonExpired() {
+			return true;
+		}
+		
+		/**
+		 * Get username
+		 */
+		@Override
+		public String getUsername() {
+			return username;
+		}
+		
+		/**
+		 * Get password
+		 */
+		@Override
+		public String getPassword() {
+			return password;
+		}
+		
+		/**
+		 * Find user role in database and put them in authority
+		 */
+		@Override
+		public Collection<? extends GrantedAuthority> getAuthorities() {
+			List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
+			
+			//roles: ADMIN or NORMAL user
+			roles.add(new SimpleGrantedAuthority(role));
+			
+			return roles;
+		}
+	}
 }

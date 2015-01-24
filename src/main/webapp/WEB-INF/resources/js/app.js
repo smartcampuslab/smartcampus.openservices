@@ -161,6 +161,13 @@ app
 												access : access.ROLE_NORMAL
 											})
 									.when(
+											'/profile/:view',
+											{
+												controller : 'profileCtrl',
+												templateUrl : 'partials/profile/show.html',
+												access : access.ROLE_NORMAL
+											})
+									.when(
 											'/profile/services/new',
 											{
 												controller : 'newServiceCtrl',
@@ -184,36 +191,15 @@ app
 									.when(
 											'/profile/services/:id/methods/new',
 											{
-												controller : 'newMethodCtrl',
-												templateUrl : 'partials/profile/methods/edit.html',
-												access : access.ROLE_NORMAL
-											})
-									.when(
-											'/profile/services/:id/methods/:method/edit',
-											{
-												controller : 'editMethodCtrl',
+												controller : 'methodCtrl',
 												templateUrl : 'partials/profile/methods/edit.html',
 												access : access.ROLE_NORMAL
 											})
 									.when(
 											'/profile/services/:id/methods/:method/view',
 											{
-												controller : 'viewMethodCtrl',
-												templateUrl : 'partials/profile/methods/view.html',
-												access : access.ROLE_NORMAL
-											})
-									.when(
-											'/profile/services/:id/methods/:method/tests/new',
-											{
-												controller : 'newTestCtrl',
-												templateUrl : 'partials/profile/methods/test.html',
-												access : access.ROLE_NORMAL
-											})
-									.when(
-											'/profile/services/:id/methods/:method/tests/:pos/edit',
-											{
-												controller : 'editTestCtrl',
-												templateUrl : 'partials/profile/methods/test.html',
+												controller : 'methodCtrl',
+												templateUrl : 'partials/profile/methods/edit.html',
 												access : access.ROLE_NORMAL
 											})
 									.when(
@@ -255,7 +241,18 @@ app
 									});
 
 						} ])
-		.run(function($rootScope, $location, Auth, $routeParams, $cookieStore) {
+		.run(function($rootScope, $location, Auth, $route, $routeParams, $cookieStore) {
+			var original = $location.path;
+		    $location.path = function (path, reload) {
+		        if (reload === false) {
+		            var lastRoute = $route.current;
+		            var un = $rootScope.$on('$locationChangeSuccess', function () {
+		                $route.current = lastRoute;
+		                un();
+		            });
+		        }
+		        return original.apply($location, [path]);
+		    };
 			var history = [];
 			var value = $cookieStore.get('value');
 			if (value === false) {

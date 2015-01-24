@@ -8,11 +8,11 @@
                 <h4 class="media-heading">{{user.profile.name}} {{user.profile.surname}}</h4>
                 <br>
                 <ul class="nav nav-tabs">
-                    <li ng-class="{active: template==='partials/profile/_details.html'}"><a href="" ng-click="template = 'partials/profile/_details.html'"><i class="fa fa-user"></i> Profile</a>
+                    <li ng-class="{active: template==='partials/profile/_details.html'}"><a href="" ng-click="switchTo()"><i class="fa fa-user"></i> Profile</a>
                     </li>
-                    <li ng-class="{active: template==='partials/profile/organizations/show.html'}"><a href="" ng-click="template = 'partials/profile/organizations/show.html'"><i class="fa fa-users"></i> Organizations</a>
+                    <li ng-class="{active: template==='partials/profile/organizations/show.html'}"><a href="" ng-click="switchTo('organizations')"><i class="fa fa-users"></i> Organizations</a>
                     </li>
-                    <li ng-class="{active: template==='partials/profile/services/show.html'}"><a href="" ng-click="template = 'partials/profile/services/show.html'"><i class="fa fa-cog"></i> Services</a>
+                    <li ng-class="{active: template==='partials/profile/services/show.html'}"><a href="" ng-click="switchTo('services')"><i class="fa fa-cog"></i> Services</a>
                     </li>
                     
                     <li ng-show="user.role==='ROLE_ADMIN'" ng-class="{active: template==='partials/profile/admin/categories/show.html'}"><a href="" ng-click="template = 'partials/profile/admin/categories/show.html'"><i class="fa fa-cog"></i> Categories</a>

@@ -52,7 +52,9 @@ public class Method {
 	@Column(name="testbox_properties")
 	@Lob
 	private TestBoxProperties testboxProperties;
-	
+	@Column(name="execution_properties")
+	@Lob
+	private ExecutionProperties executionProperties;
 	/**
 	 * New instance of {@link Method}.
 	 */
@@ -165,13 +167,25 @@ public class Method {
 	}
 
 	/**
-	 * Set {@link TestBoxProperties} instance.
-	 * 
-	 * @param testboxProperties 
-	 * 			: a {@link TestBoxProperties} instance
+	 * @return the executionProperties
 	 */
-	public void setTestboxProprieties(TestBoxProperties testboxProperties) {
+	public ExecutionProperties getExecutionProperties() {
+		return executionProperties;
+	}
+
+	/**
+	 * @param executionProperties the executionProperties to set
+	 */
+	public void setExecutionProperties(ExecutionProperties executionProperties) {
+		this.executionProperties = executionProperties;
+	}
+
+	/**
+	 * @param testboxProperties the testboxProperties to set
+	 */
+	public void setTestboxProperties(TestBoxProperties testboxProperties) {
 		this.testboxProperties = testboxProperties;
 	}
 
+	
 }

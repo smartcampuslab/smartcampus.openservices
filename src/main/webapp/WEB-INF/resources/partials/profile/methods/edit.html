@@ -1,22 +1,156 @@
 <div class="row animated fadeIn">
     <div ng-hide="!errorMsg" class="alert alert-danger">{{errorMsg}}</div>
-    <div class="col-md-6 col-md-offset-3">
-        <h2>{{title}} Method</h2>
+    <div class="col-md-7 col-md-offset-2">
         <form name="form" novalidate role="form" ng-submit="submit()">
-            <div class="form-group" show-validation>
-                <label for="methodname">Method Name</label>
-                <input type="text" class="form-control" id="methodname" placeholder="Method Name" ng-model="method.name" required>
+            <h2>{{title}} Method</h2>
+            
+            <div class="panel panel-default">
+<!--               <div class="panel-heading">Method Info</div>  -->
+              <div class="panel-body">
+		            <div class="form-group" show-validation>
+		                <label for="methodname">Method Name</label>
+		                <input type="text" class="form-control" id="methodname" placeholder="Method Name" ng-model="method.name" required>
+		            </div>
+		            <div class="form-group">
+		                <label for="methoddesc">Description</label>
+		                <input type="text" class="form-control" id="methoddesc" placeholder="Description" ng-model="method.synopsis" required>
+		            </div>
+		            <div class="form-group">
+		                <label for="documentation">Documentation</label>
+		                <input type="text" class="form-control" id="documentation" placeholder="http://yourdocs.com/doc" ng-model="method.documentation">
+		            </div>
+	            </div>
             </div>
-            <div class="form-group">
-                <label for="methoddesc">Description</label>
-                <input type="text" class="form-control" id="methoddesc" placeholder="Description" ng-model="method.synopsis" required>
-            </div>
-            <div class="form-group" show-validation>
-                <label for="documentation">Documentation</label>
-                <input type="text" class="form-control" id="documentation" placeholder="http://yourdocs.com/doc" ng-model="method.documentation">
-            </div>
-            <button type="submit" ng-disabled="form.$invalid" class="btn btn-info">Save</button>
+            <div class="panel panel-default">
+              <div class="panel-heading">Execution Info</div> 
+              <div class="panel-body">
+                <div class="form-group" show-validation>
+                    <label for="requestmethod">Request method</label>
+                    <select id="requestmethod" class="form-control" ng-model="method.executionProperties.httpMethod" required>
+                        <option>GET</option>
+                        <option>POST</option>
+                        <option>PUT</option>
+                        <option>DELETE</option>
+                        <option>HEAD</option>
+                    </select>
+                </div>
+		            <label for="header">Add accepted header values (comma-separated)</label>
+		            <div class="row">
+		                <div class="col-lg-5">
+		                    <input type="text" class="form-control" id="header" placeholder="header" ng-model="nheader.name">
+		                </div>
+		                <div class="col-lg-5">
+		                    <input type="text" class="form-control" id="header" placeholder="value" ng-model="nheader.value">
+		                </div>
+		                <div class="col-lg-2">
+		                    <button type="button" class="btn btn-info btn-block" ng-click="addHeader()">Add</button>
+		                </div>
+		            </div>
+		            <hr/>
+		            <div ng-repeat="(n,v) in method.executionProperties.headers" class="row">
+		                <div class="col-lg-5">{{n}}</div>
+		                <div class="col-lg-5">{{v}}</div>
+		                <div class="col-lg-2">
+		                    <button type="button" class="pull-right btn btn-danger btn-xs" ng-click="deleteHeader(n)"><i class="fa fa-trash-o"></i>
+		                    </button>
+		                </div>
+		            </div>
+              </div>
+            </div>              
+            <div class="panel panel-default">
+              <div class="panel-heading">Testing Info</div> 
+              <div class="panel-body">
+		            <div class="checkbox">
+		                <label>
+		                    <input type="checkbox" ng-model="method.testboxProperties.testable">Testing enabled
+		                </label>
+		            </div>
+						    <div class="row">
+					        <div class="col-lg-12">
+					            <h4>Examples</h4>
+					            <div ng-repeat="test in method.testboxProperties.tests" class="panel panel-default">
+					                <div class="panel-body">
+					                    {{test.name}}
+					                    <button type="button" class="pull-right btn btn-default btn-sm" ng-click="deleteTest($index)"><i class="fa fa-trash-o"></i>
+					                    </button>
+					                    <button type="button" ng-click="editTest($index)" class="pull-right btn btn-default btn-sm orgbtn" data-toggle="modal" data-target="#testModal"><i class="fa fa-edit"></i></button>
+					                </div>
+					            </div>
+					         </div>
+					      </div>
+					      <div class="row">
+					        <div class="col-lg-2 col-lg-offset-10">
+                      <button type="button" class="btn btn-info btn-block" ng-click="editTest(-1)" data-toggle="modal" data-target="#testModal">Add</button>
+					        </div>
+					      </div>
+              </div>
+            </div>  
+            <button type="submit" ng-disabled="!methodValid()" class="btn btn-info">Save</button>
             <button ng-click="back()" class="pull-right btn btn-default">Go back</button>
         </form>
     </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="testModal" tabindex="-1" role="dialog" aria-labelledby="testModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div ng-hide="!testErrorMsg" class="alert alert-danger">{{testErrorMsg}}</div>
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="testModalLabel">Example</h4>
+            </div>
+            <div class="modal-body">
+	            <div class="form-group" show-validation>
+	                <label for="testname">Test Name</label>
+	                <input type="text" class="form-control" id="testname" placeholder="Test Name" ng-model="test.name" required>
+	            </div>
+	            <div class="form-group" show-validation>
+	                <label for="testdesc">Description</label>
+	                <input type="text" class="form-control" id="testdesc" placeholder="Description" ng-model="test.description" required>
+	            </div>
+	            <div class="form-group" show-validation>
+	                <label for="path">Request path</label>
+	                <input type="text" class="form-control" id="path" placeholder="/user/info" ng-model="test.requestPath" required>
+	            </div>
+	            <label for="header">Add header</label>
+	            <div class="row">
+	                <div class="col-lg-5">
+	                    <input type="text" class="form-control" id="header" placeholder="header" ng-model="ntestheader.name">
+	                </div>
+	                <div class="col-lg-5">
+	                    <input type="text" class="form-control" id="header" placeholder="value" ng-model="ntestheader.value">
+	                </div>
+	                <div class="col-lg-2">
+	                    <button type="button" class="btn btn-info btn-block" ng-click="addTestHeader()">Add</button>
+	                </div>
+	            </div>
+	            <hr/>
+	            <div ng-repeat="(testn,testv) in test.headers" class="row">
+	                <div class="col-lg-5">{{testn}}</div>
+	                <div class="col-lg-5">{{testv}}</div>
+	                <div class="col-lg-2">
+	                    <button type="button" class="pull-right btn btn-danger btn-xs" ng-click="deleteTestHeader(testn)"><i class="fa fa-trash-o"></i>
+	                    </button>
+	                </div>
+	            </div>
+	            <br/>
+	            <div class="form-group" ng-if="testHasBody()">
+	                <label for="body">Request Body</label>
+	                <textarea class="form-control" id="body" placeholder="" ng-model="test.requestBody" rows="2" />
+	            </div>
+	            <div class="form-group">
+	                <label for="response">Response</label>
+	                <input type="text" class="form-control" id="response" placeholder="" ng-model="test.response">
+	            </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-click="cancel()" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" ng-click="addTest()" ng-disabled="!testValid()" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

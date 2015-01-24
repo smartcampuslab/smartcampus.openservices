@@ -17,6 +17,7 @@
 package eu.trentorise.smartcampus.openservices.controllers.exec;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -95,10 +96,10 @@ public class TestBoxController {
 			}
 			// prepare test data
 			TestBoxParams params = new TestBoxParams();
-			params.requestMethod = testInfo.getRequestMethod();
-			params.requestUrl = testInfo.isRequestPathEditable() ? req.getRequestUrl() : testInfo.getRequestPath();
-			params.requestBody = testInfo.isRequestBodyEditable() ? req.getRequestBody() : testInfo.getRequestBody();
-			params.requestHeaders = testInfo.getHeaders();
+			params.requestMethod = m.getExecutionProperties().getHttpMethod();
+			params.requestUrl = m.getTestboxProperties().isTestable() ? req.getRequestUrl() : testInfo.getRequestPath();
+			params.requestBody = m.getTestboxProperties().isTestable() ? req.getRequestBody() : testInfo.getRequestBody();
+			params.requestHeaders = mergeHeaders(m.getExecutionProperties().getHeaders(), testInfo.getHeaders(), req.getHeaders());
 			params.credentials = req.getCredentials();
 			
 			// read method auth properties or inherit the service ones
@@ -122,5 +123,17 @@ public class TestBoxController {
 			}
 			return tr;
 		}
+	}
+
+	/**
+	 * 
+	 * @param required
+	 * @param fromTest
+	 * @param custom
+	 * @return
+	 */
+	private Map<String, String> mergeHeaders(Map<String, List<String>> required, Map<String, String> fromTest, Map<String, String> custom) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

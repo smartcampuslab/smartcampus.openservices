@@ -24,10 +24,7 @@ import java.util.Map;
  * name,
  * description,
  * request path,
- * request path editable,
  * request body,
- * request body editable,
- * request method,
  * headers,
  * response.
  * 
@@ -42,10 +39,7 @@ public class TestInfo implements Serializable {
 	private String name;
 	private String description;
 	private String requestPath;
-	private boolean requestPathEditable;
 	private String requestBody;
-	private boolean requestBodyEditable;
-	private String requestMethod;
 	private Map<String,String> headers;
 	private String response;
 	
@@ -107,25 +101,6 @@ public class TestInfo implements Serializable {
 	}
 	
 	/**
-	 * Check if request path is editable
-	 * 
-	 * @return boolean, true if request path is editable otherwise false.
-	 */
-	public boolean isRequestPathEditable() {
-		return requestPathEditable;
-	}
-	
-	/**
-	 * Set request path editable.
-	 * 
-	 * @param requestPathEditable 
-	 * 			: boolean
-	 */
-	public void setRequestPathEditable(boolean requestPathEditable) {
-		this.requestPathEditable = requestPathEditable;
-	}
-	
-	/**
 	 * Get request body.
 	 * 
 	 * @return String request body
@@ -143,44 +118,7 @@ public class TestInfo implements Serializable {
 	public void setRequestBody(String requestBody) {
 		this.requestBody = requestBody;
 	}
-	
-	/**
-	 * Check if request body is editable.
-	 * 
-	 * @return boolean true if a request body is editable, otherwise false.
-	 */
-	public boolean isRequestBodyEditable() {
-		return requestBodyEditable;
-	}
-	
-	/**
-	 * Set request body editable.
-	 * 
-	 * @param requestBodyEditable 
-	 * 			: boolean
-	 */
-	public void setRequestBodyEditable(boolean requestBodyEditable) {
-		this.requestBodyEditable = requestBodyEditable;
-	}
-	
-	/**
-	 * Get request method.
-	 * 
-	 * @return String request method 
-	 */
-	public String getRequestMethod() {
-		return requestMethod;
-	}
-	
-	/**
-	 * Set request method.
-	 * 
-	 * @param requestMethod : String
-	 */
-	public void setRequestMethod(String requestMethod) {
-		this.requestMethod = requestMethod;
-	}
-	
+		
 	/**
 	 * Get headers.
 	 * 
@@ -225,10 +163,8 @@ public class TestInfo implements Serializable {
 	@Override
 	public String toString() {
 		return "TestInfo [name=" + name + ", description=" + description
-				+ ", requestPath=" + requestPath + ", requestPathEditable="
-				+ requestPathEditable + ", requestBody=" + requestBody
-				+ ", requestBodyEditable=" + requestBodyEditable
-				+ ", requestMethod=" + requestMethod + ", headers=" + headers
+				+ ", requestPath=" + requestPath + ", requestBody=" + requestBody
+				+ ", headers=" + headers
 				+ ", response=" + response + "]";
 	}
 	
