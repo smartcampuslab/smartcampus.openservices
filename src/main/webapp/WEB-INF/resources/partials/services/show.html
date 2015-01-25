@@ -20,24 +20,14 @@
                             <b>Tags:</b>
                             <span ng-repeat="tag in service.tags" class="label label-success">{{tag}}</span>
                         </li>
-                        <li>
-                            <b>Description:</b>
-                            <span>{{service.description}}</span>
-                        </li>
                     </ul>
                     <tabset>
                     	<tab heading="Info">
                     		<div ng-include="'partials/services/_about.html'"></div>
                     	</tab>
-                        <tab heading="Access Info">
-                            <div ng-include="'partials/services/_ac.html'"></div>
-                        </tab>
-                        <tab heading="Implementation">
-                            <div ng-include="'partials/services/_implementation.html'"></div>
-                        </tab>
-                        <tab heading="Methods">
-                            <div ng-include="'partials/services/_tests.html'"></div>
-                        </tab>
+                      <tab heading="Methods">
+                        <div ng-include="'partials/services/_tests.html'"></div>
+                      </tab>
                     </tabset>
                 </div>
             </div>

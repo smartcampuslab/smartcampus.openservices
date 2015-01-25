@@ -32,8 +32,13 @@
                 <li>version:
                     <strong>{{service.version}}</strong>
                 </li>
-                <li>expiration:
+                <li ng-if="service.expiration > 0">expiration:
                     <strong>{{service.expiration}}</strong>
+                </li>
+                <li>source code:
+                    <a ng-href="{{service.implementation.sourceCode}}">
+                        <strong>{{service.implementation.sourceCode}}</strong>
+                    </a>
                 </li>
             </ul>
         </div>
@@ -41,14 +46,8 @@
             <h4>Access information</h4>
             <hr>
             <ul>
-                <li>access policies:
-                    <strong>{{service.accessInformation.accessPolicies}}</strong>
-                </li>
-                <li>testing endpoint:
-                    <strong>{{service.accessInformation.productionEndpoint}}</strong>
-                </li>
-                <li>production endpoint:
-                    <strong>{{service.accessInformation.productionEndpoint}}</strong>
+                <li>endpoint:
+                    <strong>{{service.accessInformation.endpoint}}</strong>
                 </li>
                 <li>formats:
                     <strong>{{service.accessInformation.formats}}</strong>
@@ -58,23 +57,6 @@
                 </li>
                 <li>authentication:
                     <strong>{{service.accessInformation.authentication.accessProtocol}}</strong>
-                </li>
-            </ul>
-        </div>
-        <div class="col-md-4">
-            <h4>Implementation</h4>
-            <hr>
-            <ul>
-                <li>execution environment:
-                    <strong>{{service.implementation.executionEnvironment}}</strong>
-                </li>
-                <li>hosting:
-                    <strong>{{service.implementation.hosting}}</strong>
-                </li>
-                <li>source:
-                    <a ng-href="{{service.implementation.sourceCode}}">
-                        <strong>{{service.implementation.sourceCode}}</strong>
-                    </a>
                 </li>
             </ul>
         </div>

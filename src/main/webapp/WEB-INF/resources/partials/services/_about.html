@@ -13,10 +13,35 @@
                 <td>Version</td>
                 <td>{{service.version}}</td>
             </tr>
+            <tr>
+                <td>Source</td>
+                <td>
+                    <a ng-href="{{service.implementation.sourceCode}}">
+                        <span>{{service.implementation.sourceCode}}</span>
+                    </a>
+                </td>
+            </tr>
             <tr ng-show="service.expiration!==0">
                 <td>Expiration</td>
                 <td>{{service.expiration| date:'yyyy-MM-dd'}}</td>
             </tr>
+            <tr>
+                <td>Endpoint</td>
+                <td>{{service.accessInformation.endpoint}}</td>
+            </tr>
+            <tr>
+                <td>Formats</td>
+                <td>{{service.accessInformation.formats}}</td>
+            </tr>
+            <tr>
+                <td>Protocols</td>
+                <td>{{service.accessInformation.protocols}}</td>
+            </tr>
+            <tr>
+                <td>Authentication</td>
+                <td>{{service.accessInformation.authentication.accessProtocol}}</td>
+            </tr>
         </tbody>
     </table>
+    <span>{{service.description}}</span>
 </div>

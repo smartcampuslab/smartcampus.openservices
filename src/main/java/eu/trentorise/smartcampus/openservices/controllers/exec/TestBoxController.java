@@ -16,6 +16,7 @@
 
 package eu.trentorise.smartcampus.openservices.controllers.exec;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -78,28 +79,36 @@ public class TestBoxController {
 			// find method to test
 			Method m = manager.getMethodById(method);
 			if (m == null) throw new TestBoxException("method not found: "+ method);
-			// find the specific test data
-			List<TestInfo> tests = m.getTestboxProperties().getTests();
-			TestInfo testInfo = null;
-			for (TestInfo ti : tests) {
-				if (ti.getName().equals(req.getName())) {
-					testInfo = ti;
-					break;
-				}
-			}
-			if (testInfo == null) throw new TestBoxException("no test found: "+req.getName());
-			// if the test response is already defined, simply return it
-			if (testInfo.getResponse() != null && ! testInfo.getResponse().isEmpty()) {
-				TestResponse result = new TestResponse();
-				result.setData(testInfo.getResponse());
-				return result;
-			}
+
 			// prepare test data
 			TestBoxParams params = new TestBoxParams();
 			params.requestMethod = m.getExecutionProperties().getHttpMethod();
-			params.requestUrl = m.getTestboxProperties().isTestable() ? req.getRequestUrl() : testInfo.getRequestPath();
-			params.requestBody = m.getTestboxProperties().isTestable() ? req.getRequestBody() : testInfo.getRequestBody();
-			params.requestHeaders = mergeHeaders(m.getExecutionProperties().getHeaders(), testInfo.getHeaders(), req.getHeaders());
+			if (m.getTestboxProperties().isTestable()) {
+				params.requestUrl = req.getRequestUrl();
+				params.requestBody =req.getRequestBody();
+				params.requestHeaders = mergeHeaders(m.getExecutionProperties().getHeaders(), req.getHeaders());
+			} else {
+				// find the specific test data
+				List<TestInfo> tests = m.getTestboxProperties().getTests();
+				TestInfo testInfo = null;
+				for (TestInfo ti : tests) {
+					if (ti.getName().equals(req.getName())) {
+						testInfo = ti;
+						break;
+					}
+				}
+				if (testInfo == null) throw new TestBoxException("no test found: "+req.getName());
+				// if the test response is already defined, simply return it
+				if (testInfo.getResponse() != null && ! testInfo.getResponse().isEmpty()) {
+					TestResponse result = new TestResponse();
+					result.setData(testInfo.getResponse());
+					return result;
+				}
+				params.requestUrl = testInfo.getRequestPath();
+				params.requestBody = testInfo.getRequestBody();
+				params.requestHeaders = mergeHeaders(m.getExecutionProperties().getHeaders(), testInfo.getHeaders());
+			}
+			
 			params.credentials = req.getCredentials();
 			
 			// read method auth properties or inherit the service ones
@@ -132,8 +141,19 @@ public class TestBoxController {
 	 * @param custom
 	 * @return
 	 */
-	private Map<String, String> mergeHeaders(Map<String, List<String>> required, Map<String, String> fromTest, Map<String, String> custom) {
-		// TODO Auto-generated method stub
-		return null;
+	private Map<String, String> mergeHeaders(Map<String, List<String>> required, Map<String, String> custom) {
+		Map<String,String> map = new HashMap<String, String>();
+		if (required != null) {
+			for (String key : required.keySet()) {
+				List<String> vals = required.get(key);
+				if (vals != null && ! vals.isEmpty()) {
+					map.put(key, vals.get(0));
+				}
+			}
+		}
+		if (custom != null) {
+			map.putAll(custom);
+		}
+		return map;
 	}
 }

@@ -16,7 +16,6 @@
 package eu.trentorise.smartcampus.openservices.entities;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Blob object for Implementation Info in table Service:
@@ -31,9 +30,6 @@ import java.util.List;
 public class ImplementationInfo implements Serializable{
 	private static final long serialVersionUID = 1L;
 
-	private String executionEnvironment;
-	private List<Integer> serviceDependencies;
-	private String hosting;
 	private String sourceCode;
 	
 	/**
@@ -41,25 +37,6 @@ public class ImplementationInfo implements Serializable{
 	 */
 	public ImplementationInfo(){
 		
-	}
-
-	/**
-	 * Get executive environment.
-	 * 
-	 * @return String executive environment
-	 */
-	public String getExecutionEnvironment() {
-		return executionEnvironment;
-	}
-
-	/**
-	 * Set executive environment.
-	 * 
-	 * @param executionEnvironment
-	 * 			: String
-	 */
-	public void setExecutionEnvironment(String executionEnvironment) {
-		this.executionEnvironment = executionEnvironment;
 	}
 
 	/**
@@ -81,41 +58,4 @@ public class ImplementationInfo implements Serializable{
 		this.sourceCode = sourceCode;
 	}
 
-	/**
-	 * Get list of service dependencies.
-	 * 
-	 * @return List<Integer> service dependencies
-	 */
-	public List<Integer> getServiceDependencies() {
-		return serviceDependencies;
-	}
-
-	/**
-	 * Set service dependencies.
-	 * 
-	 * @param serviceDependencies
-	 * 			: list of integer
-	 */
-	public void setServiceDependencies(List<Integer> serviceDependencies) {
-		this.serviceDependencies = serviceDependencies;
-	}
-
-	/**
-	 * Get hosting.
-	 * 
-	 * @return String hosting
-	 */
-	public String getHosting() {
-		return hosting;
-	}
-
-	/**
-	 * Set hosting.
-	 * 
-	 * @param hosting
-	 * 			: String
-	 */
-	public void setHosting(String hosting) {
-		this.hosting = hosting;
-	}
 }

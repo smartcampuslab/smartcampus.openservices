@@ -1136,8 +1136,23 @@ app.controller('organizationServicesCtrl', ['$scope', '$http', '$routeParams', '
 app.controller('serviceCtrl', ['$scope', '$rootScope', '$routeParams', 'Catalog', 'Category', '$http', '$location', 'RemoteApi',
     function ($scope, $rootScope, $routeParams, Catalog, Category, $http, $location, RemoteApi) {
         $scope.remoteapi;
-        $scope.request = {};
+        $scope.methodMap = {};
 
+        $scope.toggle = function(id) {
+        	var m = $scope.methodMap[id];
+        	$('#body'+id).collapse('toggle');
+        	if (!!m && !m._request) {
+        		m._request = {
+        			requestPath : m.testboxProperties.requestPathTemplate,
+        			requestNody : m.testboxProperties.requestBodyTemplate        			
+        		};
+        	}
+        };
+        $scope.hasBody = function(method) {
+        	return !!method && (method.executionProperties.httpMethod == 'POST' ||
+        		   method.executionProperties.httpMethod == 'PUT');
+        }
+        
         Catalog.getServiceById({
             id: $routeParams.id
         }, function (data) {
@@ -1164,6 +1179,7 @@ app.controller('serviceCtrl', ['$scope', '$rootScope', '$routeParams', 'Catalog'
                     if ($scope.methods[i].testboxProperties) {
                         $scope.methods[i].testboxProperties.authentication = $scope.service.accessInformation.authentication;
                     }
+                    $scope.methodMap[$scope.methods[i].id] = $scope.methods[i]; 
                 }
             });
             Catalog.getListServiceHistory({
@@ -1186,55 +1202,39 @@ app.controller('serviceCtrl', ['$scope', '$rootScope', '$routeParams', 'Catalog'
             return JSON.stringify(obj, undefined, 2);
         };
 
-        $scope.checkBeforeSend = function () {
-            //remoteapi.ready ? true : false
-            if ($scope.request.method && $scope.request.sample && $scope.request.sample.requestPath && $scope.request.sample.requestMethod) {
-                return true;
-            } else {
-                return false;
-            }
-        };
-
-        $scope.$watch('request', function (val) {
-            if (val.sample) {
-                $scope.req = val.sample.requestMethod + ' ' + val.sample.requestPath + ' HTTP/1.1\n';
-                for (var key in val.sample.headers) {
-                    $scope.req += toTitleCase(key) + ': ' + val.sample.headers[key] + '\n';
-                }
-                if(val.sample.requestBody){
-                	$scope.req += '\n' + val.sample.requestBody;
-                }
-            }
-        }, true);
-
-        $scope.send = function () {
-            $scope.remoteapi = new RemoteApi($scope.service.accessInformation.authentication.accessProtocol);
-            $scope.remoteapi.authorize($scope.request.method.id).then(function (result) {
+        $scope.send = function (id) {
+        	$scope.currentMethod = $scope.methodMap[id];
+            $scope.remoteapi = new RemoteApi($scope.currentMethod.testboxProperties.authentication.accessProtocol);
+            $scope.remoteapi.authorize($scope.currentMethod.id).then(function (result) {
                 var req = {
-                    name: $scope.request.sample.name,
-                    requestUrl: $scope.request.sample.requestPath,
-                    requestBody: $scope.request.sample.requestBody,
+                    name: $scope.currentMethod._request.name,
+                    requestUrl: $scope.service.accessInformation.endpoint + $scope.currentMethod._request.requestPath,
+                    requestBody: $scope.currentMethod._request.requestBody,
                     credentials: result
                 };
                 $http({
                     method: 'POST',
-                    url: 'api/testbox/test/' + $scope.request.method.id,
+                    url: 'api/testbox/test/' + $scope.currentMethod.id,
                     data: req,
                     withCredentials: true
                 }).success(function (data, status, headers) {
-                    $scope.response = 'HTTP/1.1 ' + status + '\n';
+                	$scope.currentMethod._response = 'HTTP/1.1 ' + status + '\n';
                     for (var key in headers()) {
-                        $scope.response += toTitleCase(key) + ': ' + headers()[key] + '\n';
+                    	$scope.currentMethod._response += toTitleCase(key) + ': ' + headers()[key] + '\n';
                     }
-                    $scope.response += '\n' + $scope.formatJson(data.data);
+                    $scope.currentMethod._response += '\n' + $scope.formatJson(data.data);
                 }).error(function (data, status, headers) {
-                    $scope.response = 'HTTP/1.1 ' + status + '\n';
+                	$scope.currentMethod._response = 'HTTP/1.1 ' + status + '\n';
                     if (data) {
-                        $scope.response += data.data;
+                    	$scope.currentMethod._response += data.data;
                     }
                 });
 
-                $scope.request.headers = result;
+                $scope.currentMethod._call = req.requestUrl;
+                if (!!req.requestBody) {
+                	$scope.currentMethod._call += '\n' + $scope.formatJson(req.requestBody);
+                }
+                $scope.currentMethod._request.headers = result;
             });
         };
 

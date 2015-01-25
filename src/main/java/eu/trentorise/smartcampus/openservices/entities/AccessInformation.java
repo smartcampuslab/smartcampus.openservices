@@ -28,10 +28,9 @@ import java.io.Serializable;
  *
  */
 public class AccessInformation implements Serializable{
-	
-	private String accessPolicies;
-	private String testingEndpoint;
-	private String productionEndpoint;
+	private static final long serialVersionUID = 7904135423804072347L;
+
+	private String endpoint;
 	private String protocols;
 	private String formats;
 	private Authentication authentication;
@@ -45,60 +44,17 @@ public class AccessInformation implements Serializable{
 	}
 
 	/**
-	 * Get access policies.
-	 * 
-	 * @return String access policies
+	 * @return the endpoint
 	 */
-	public String getAccessPolicies() {
-		return accessPolicies;
+	public String getEndpoint() {
+		return endpoint;
 	}
 
 	/**
-	 * Set access policies.
-	 * 
-	 * @param accessPolicies 
-	 * 			: String
+	 * @param endpoint the endpoint to set
 	 */
-	public void setAccessPolicies(String accessPolicies) {
-		this.accessPolicies = accessPolicies;
-	}
-
-	/**
-	 * Get testing endpoint.
-	 * 
-	 * @return String testing endpoint
-	 */
-	public String getTestingEndpoint() {
-		return testingEndpoint;
-	}
-
-	/**
-	 * Set testing endpoint.
-	 * 
-	 * @param testingEndpoint 
-	 * 			: String 
-	 */
-	public void setTestingEndpoint(String testingEndpoint) {
-		this.testingEndpoint = testingEndpoint;
-	}
-
-	/**
-	 * Get production endpoint.
-	 * 
-	 * @return String production endpoint
-	 */
-	public String getProductionEndpoint() {
-		return productionEndpoint;
-	}
-
-	/**
-	 * Set production endpoint.
-	 * 
-	 * @param productionEndpoint 
-	 * 			: String 
-	 */
-	public void setProductionEndpoint(String productionEndpoint) {
-		this.productionEndpoint = productionEndpoint;
+	public void setEndpoint(String endpoint) {
+		this.endpoint = endpoint;
 	}
 
 	/**

@@ -1,48 +1,38 @@
-<div class="row">
-    <div class="col-md-6">
-        <div class="input-group">
-            <span class="input-group-addon">Method</span>
-            <select ng-options="method as method.name for method in methods" ng-model="request.method" class="form-control" />
-            <span class="input-group-btn">
-                <a ng-href="{{request.method.documentation}}" ng-disabled="!request.method" type="button" class="btn btn-default">Doc</a>
-            </span>
-        </div>
-        <div ng-if="request.method != null">
-            <br>
-            <h5>Method name: {{request.method.name}}</h5>
-            <h5>Method description: {{request.method.synopsis}}</h5>
-        </div>
+<div class="panel-group" id="accordion" role="tablist">
+  <div class="panel panel-default" ng-repeat="method in methods">
+    <div class="panel-heading" role="tab" id="heading{{method.id}}">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" ng-click="toggle(method.id)" data-parent="#accordion" aria-expanded="false" aria-controls="body{{method.id}}">
+          {{method.name}}
+        </a>
+      </h4>
     </div>
-    <div class="col-md-6">
-        <div class="input-group">
-            <span class="input-group-addon">Test</span>
-            <select ng-disabled="!request.hasOwnProperty('method')" ng-options="sample as sample.name for sample in request.method.testboxProperties.tests" ng-model="request.sample" class="form-control" />
-            <span class="input-group-btn">
-                <button ng-disabled="!checkBeforeSend()" ng-click="send()" type="button" class="btn btn-success">Send</button>
-            </span>
-        </div>
-        <!-- /input-group -->
-        <div ng-if="request.sample != null">
-            <h5>Test name: {{request.sample.name}}</h5>
-            <h5>Test description: {{request.sample.description}}</h5>
-        </div>
-        <div ng-if="request.sample.requestPathEditable">
-            <div class="form-group">
-                <label for="path">Request path</label>
-                <input type="text" class="form-control" id="path" ng-model="request.sample.requestPath" />
-            </div>
-        </div>
-        <div ng-if="request.sample.requestBodyEditable">
-            <div class="form-group">
-                <label for="body">Request body</label>
-                <textarea class="form-control" id="body" ng-model="request.sample.requestBody" rows="2" />
-            </div>
-        </div>
-    </div>
-</div>
+    <div id="body{{method.id}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{method.id}}">
+      <div class="panel-body">
+         {{method.synopsis}}
+         <div ng-if="method.documentation">
+         <a target="_blank" href="{{method.documentation}}">See more</a>
+         </div>
 
-<div class="row">
-    <br>
-    <div hljs source="req" class="col-md-6"></div>
-    <div hljs source="response" class="col-md-6"></div>
+         <div>
+            <hr/>           
+            <button ng-click="send(method.id)" class="btn btn-success">Try it out!</button>
+		        <div>
+		            <div class="form-group">
+		                <label for="path">Request path</label>
+		                <input type="text" class="form-control" id="path" ng-model="method._request.requestPath" ng-disabled="!method.testboxProperties.testable"/>
+		            </div>
+		        </div>
+		        <div ng-if="hasBody(method)">
+		            <div class="form-group">
+		                <label for="body">Request body</label>
+		                <textarea class="form-control" id="body" ng-model="method._request.requestBody" rows="2"  ng-disabled="!method.testboxProperties.testable"/>
+		            </div>
+		        </div>
+	         <div ng-if="!!method._response" hljs source="method._call" class="col-md-12"></div>
+           <div ng-if="!!method._response" hljs source="method._response" class="col-md-12"></div>
+         </div>
+      </div>
+    </div>
+  </div>
 </div>
