@@ -30,6 +30,11 @@ public class ExecutionProperties implements Serializable{
 
 	private String httpMethod;
 	private Map<String,List<String>> headers;
+	
+	private String requestPathTemplate;
+	private String requestBodyTemplate;
+	
+
 	/**
 	 * @return the httpMethod
 	 */
@@ -54,4 +59,32 @@ public class ExecutionProperties implements Serializable{
 	public void setHeaders(Map<String, List<String>> headers) {
 		this.headers = headers;
 	}
+	/**
+	 * @return the requestPathTemplate
+	 */
+	public String getRequestPathTemplate() {
+		return requestPathTemplate;
+	}
+
+	/**
+	 * @param requestPathTemplate the requestPathTemplate to set
+	 */
+	public void setRequestPathTemplate(String requestPathTemplate) {
+		this.requestPathTemplate = requestPathTemplate;
+	}
+
+	/**
+	 * @return the requestBodyTemplate
+	 */
+	public String getRequestBodyTemplate() {
+		return requestBodyTemplate;
+	}
+
+	/**
+	 * @param requestBodyTemplate the requestBodyTemplate to set
+	 */
+	public void setRequestBodyTemplate(String requestBodyTemplate) {
+		this.requestBodyTemplate = requestBodyTemplate;
+	}
+	
 }

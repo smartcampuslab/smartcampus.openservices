@@ -32,9 +32,6 @@ public class TestBoxProperties implements Serializable{
 
 	private boolean testable;
 	
-	private String requestPathTemplate;
-	private String requestBodyTemplate;
-	
 	private Authentication authenticationDescriptor;
 	private List<TestInfo> tests;//request string, input, output
 	
@@ -96,32 +93,4 @@ public class TestBoxProperties implements Serializable{
 		this.testable = testable;
 	}
 
-	/**
-	 * @return the requestPathTemplate
-	 */
-	public String getRequestPathTemplate() {
-		return requestPathTemplate;
-	}
-
-	/**
-	 * @param requestPathTemplate the requestPathTemplate to set
-	 */
-	public void setRequestPathTemplate(String requestPathTemplate) {
-		this.requestPathTemplate = requestPathTemplate;
-	}
-
-	/**
-	 * @return the requestBodyTemplate
-	 */
-	public String getRequestBodyTemplate() {
-		return requestBodyTemplate;
-	}
-
-	/**
-	 * @param requestBodyTemplate the requestBodyTemplate to set
-	 */
-	public void setRequestBodyTemplate(String requestBodyTemplate) {
-		this.requestBodyTemplate = requestBodyTemplate;
-	}
-	
 }

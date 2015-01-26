@@ -1153,21 +1153,28 @@ app.controller('serviceCtrl', ['$scope', '$rootScope', '$routeParams', 'Catalog'
         	$('#body'+id).collapse('toggle');
         	if (!!m && !m._request) {
         		m._request = {
-        			requestPath : m.testboxProperties.requestPathTemplate,
-        			requestNody : m.testboxProperties.requestBodyTemplate        			
+        			requestPath : m.executionProperties.requestPathTemplate,
+        			requestNody : m.executionProperties.requestBodyTemplate        			
         		};
         	}
         };
+        $scope.checkBeforeSend = function(id) {
+        	var m = $scope.methodMap[id];
+        	return !m.testboxProperties.testable && m._request.name == null;
+        };
+        
         $scope.reset = function(id) {
         	var m = $scope.methodMap[id];
     		m._request = {
-        			requestPath : m.testboxProperties.requestPathTemplate,
-        			requestNody : m.testboxProperties.requestBodyTemplate        			
+        			requestPath : m.executionProperties.requestPathTemplate,
+        			requestNody : m.executionProperties.requestBodyTemplate        			
         		};
     		m._response = null;
     		m._call = null;
         };
 
+        
+        
         $scope.useTest = function(id, test) {
         	var m = $scope.methodMap[id];
         	m._request.name = test.name;

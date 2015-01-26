@@ -17,7 +17,7 @@
          <div>
             <hr/>           
             <div>
-              <button ng-click="send(method.id)" class="btn btn-success">Try it out</button>
+              <button ng-disabled="checkBeforeSend(method.id)" ng-click="send(method.id)" class="btn btn-success">Try it out</button>
               <a ng-click="reset(method.id)">Reset</a>
               <div class="dropdown pull-right" ng-if="!!method.testboxProperties.tests">
 							  <button class="btn btn-default dropdown-toggle" type="button" id="examples" data-toggle="dropdown" aria-expanded="true">
