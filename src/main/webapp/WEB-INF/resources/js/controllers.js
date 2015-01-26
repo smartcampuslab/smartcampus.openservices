@@ -323,10 +323,11 @@ app.controller('profileCtrl', ['$scope','$rootScope','$routeParams', '$http', '$
     }
 ]);
 
-app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service', 'Org', 'Category',
-    function ($scope, $http, $location, Service, Org, Category) {
+app.controller('newServiceCtrl', ['$scope','$rootScope', '$http', '$location', 'Service', 'Org', 'Category',
+    function ($scope, $rootScope,$http, $location, Service, Org, Category) {
         $scope.protocols = ['OAuth2', 'OpenID', 'Public'];
         $scope.formats = ['json', 'xml', 'yaml', 'txt'];
+        $rootScope.locTitles = ['profile','services'];
         $scope.accessInformation = {
             authentication: {
                 accessProtocol: null,
@@ -369,10 +370,13 @@ app.controller('newServiceCtrl', ['$scope', '$http', '$location', 'Service', 'Or
     }
 ]);
 
-app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Service', 'Org', 'Category',
-    function ($scope, $routeParams, $location, Service, Org, Category) {
+app.controller('editServiceCtrl', ['$scope','$rootScope', '$routeParams', '$location', 'Service', 'Org', 'Category',
+    function ($scope,$rootScope, $routeParams, $location, Service, Org, Category) {
         $scope.protocols = ['OAuth2', 'OpenID', 'Public'];
         $scope.formats = ['json', 'xml', 'yaml', 'txt'];
+        
+        
+        
         $scope.accessInformation = {
             authentication: {
                 accessProtocol: null,
@@ -392,12 +396,14 @@ app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Servi
             id: $routeParams.id
         }, function (data) {
             $scope.service = data.data;
+            $rootScope.locTitles = ['profile','services', $scope.service.name];
             if ($scope.service.accessInformation !== null) {
                 $scope.accessInformation = $scope.service.accessInformation;
             }
             if ($scope.service.expiration && $scope.service.expiration > 0) {
                 $scope.service.expiration = new Date($scope.service.expiration).toISOString().slice(0, 10);
             }
+           
         });
         Org.get({}, function (data) {
             $scope.orgs = data.data;
@@ -424,13 +430,14 @@ app.controller('editServiceCtrl', ['$scope', '$routeParams', '$location', 'Servi
     }
 ]);
 
-app.controller('viewServiceCtrl', ['$scope', '$routeParams', '$location', 'Service', 'Org', 'Category',
-    function ($scope, $routeParams, $location, Service, Org, Category) {
+app.controller('viewServiceCtrl', ['$scope','$rootScope', '$routeParams', '$location', 'Service', 'Org', 'Category',
+    function ($scope, $rootScope, $routeParams, $location, Service, Org, Category) {
 
         Service.getDescription({
             id: $routeParams.id
         }, function (data) {
             $scope.service = data.data;
+            $rootScope.locTitles = ['profile','services',$scope.service.name];
             if ($scope.service.expiration && $scope.service.expiration > 0) {
                 $scope.service.expiration = new Date($scope.service.expiration).toISOString().slice(0, 10);
             }
