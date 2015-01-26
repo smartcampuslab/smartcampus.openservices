@@ -1158,6 +1158,24 @@ app.controller('serviceCtrl', ['$scope', '$rootScope', '$routeParams', 'Catalog'
         		};
         	}
         };
+        $scope.reset = function(id) {
+        	var m = $scope.methodMap[id];
+    		m._request = {
+        			requestPath : m.testboxProperties.requestPathTemplate,
+        			requestNody : m.testboxProperties.requestBodyTemplate        			
+        		};
+    		m._response = null;
+    		m._call = null;
+        };
+
+        $scope.useTest = function(id, test) {
+        	var m = $scope.methodMap[id];
+        	m._request.name = test.name;
+        	m._request.requestPath = test.requestPath;
+        	m._request.requestBody = test.requestBody;
+        	m._request.description = test.description;
+        };
+
         $scope.hasBody = function(method) {
         	return !!method && (method.executionProperties.httpMethod == 'POST' ||
         		   method.executionProperties.httpMethod == 'PUT');
@@ -1218,7 +1236,7 @@ app.controller('serviceCtrl', ['$scope', '$rootScope', '$routeParams', 'Catalog'
             $scope.remoteapi.authorize($scope.currentMethod.id).then(function (result) {
                 var req = {
                     name: $scope.currentMethod._request.name,
-                    requestUrl: $scope.service.accessInformation.endpoint + $scope.currentMethod._request.requestPath,
+                    requestUrl: encodeURI($scope.service.accessInformation.endpoint + $scope.currentMethod._request.requestPath),
                     requestBody: $scope.currentMethod._request.requestBody,
                     credentials: result
                 };
