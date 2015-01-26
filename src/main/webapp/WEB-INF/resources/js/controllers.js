@@ -222,9 +222,10 @@ app.controller('enableOrgCtrl', ['$scope', '$routeParams', 'Org', '$location',
     }
 ]);
 
-app.controller('profileCtrl', ['$scope', '$routeParams', '$http', '$location', 'User', 'Service', 'Org', 'Category',
-    function ($scope, $routeParams, $http, $location, User, Service, Org, Category) {
+app.controller('profileCtrl', ['$scope','$rootScope','$routeParams', '$http', '$location', 'User', 'Service', 'Org', 'Category',
+    function ($scope, $rootScope, $routeParams, $http, $location, User, Service, Org, Category) {
         $scope.errorMsg = null;
+        $rootScope.locTitles = ['profile'];
         
         $scope.switchTo = function(view) {
             if (view == 'services') {
