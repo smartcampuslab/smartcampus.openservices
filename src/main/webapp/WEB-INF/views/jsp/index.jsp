@@ -65,12 +65,14 @@
   <div class="container-fluid" id="bread">
   <!-- ng-hide="location === '/'" -->
     <ol ng-controller="breadCtrl" ng-hide="loc[0] === ''" class="animated fadeIn breadcrumb">
-    
-      <li ng-repeat="bread in locTitles">
-        
-        <a ng-if="$index == 0" ng-href="{{bread}}">{{bread}}</a>
-        <span ng-if="$index > 0">{{bread}}</span>
+    <li ng-repeat="location in loc">
+        <a ng-href="{{loc.slice(0,$index+1).join('/')}}">{{locTitles[$index] ? locTitles[$index] : location}}</a>
       </li>
+<!--       <li ng-repeat="bread in locTitles"> -->
+        
+<!--         <a ng-if="$index == 0" ng-href="{{bread}}">{{bread}}</a> -->
+<!--         <span ng-if="$index > 0">{{bread}}</span> -->
+<!--       </li> -->
     </ol>
   </div>
   <div class="container">
