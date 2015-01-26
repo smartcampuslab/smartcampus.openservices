@@ -63,9 +63,12 @@
                                         <li ng-repeat="service in services" class="animated fadeIn service-row">
                                             <span class="badge pull-right">Version: {{service.version}}</span>
                                             <h3>
-                                                <a ng-href="services/{{service.id}}">{{service.name}}</a>
+                                                <a ng-show="{{service.state === 'DEPRECATE'}}" class="deprecation" ng-href="services/{{service.id}}">{{service.name}}</a>
+                                                <a ng-show="{{service.state !== 'DEPRECATE'}}" ng-href="services/{{service.id}}">{{service.name}}</a>
                                             </h3>
+                                            <span ng-show="{{service.state === 'DEPRECATE'}}" class="deprecation">DEPRECATED</span>
                                             <p>{{service.description}}</p>
+                                            
                                             <div>
                                                 <div ng-show="service.tags" class="tags">
                                                     <!-- <span class="glyphicon glyphicon-tags"></span> -->

@@ -358,3 +358,11 @@ pre {
     margin: 20px 0;
     padding: 8px 0;
 }
+
+span.deprecation {
+	color: red;
+}
+
+a.deprecation {
+	text-decoration: line-through;
+}

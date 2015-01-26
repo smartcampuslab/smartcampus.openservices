@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-8 col-md-offset-2">
         <div class="row">
-            <h1>{{service.name}}</h1>
+            <h1>{{service.name}}</h1> <span ng-show="service.state === 'DEPRECATE'" class="deprecation">DEPRECATED</span>
             <!-- <p>{{service.description}}</p> -->
         </div>
         <div class="row">
