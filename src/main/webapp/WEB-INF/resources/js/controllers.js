@@ -935,7 +935,7 @@ app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routePar
         $scope.currentPage = 1;
         $scope.lastOfPage = 0;
 
-        $rootScope.locTitles = $rootScope.searchQuery ? ['search'] : ['services'];
+        $rootScope.locTitles = $rootScope.searchQuery ? ['search'] : ['organizations'];
 
         if ( !! $routeParams.tag) {
             $scope.query = $routeParams.tag;
