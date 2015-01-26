@@ -568,10 +568,11 @@ app.controller('methodCtrl', ['$scope', '$http', '$location', '$routeParams', 'S
 }]);
 
 
-app.controller('newOrgCtrl', ['$scope', '$http', '$location', 'Org', 'Category',
-    function ($scope, $http, $location, Org, Category) {
+app.controller('newOrgCtrl', ['$scope','$rootScope', '$http', '$location', 'Org', 'Category',
+    function ($scope,$rootScope, $http, $location, Org, Category) {
         $scope.title = 'New';
 
+        $rootScope.locTitles = ['profile','organizations'];
         Category.list({}, function (data) {
             $scope.categories = data.data;
         });
@@ -588,8 +589,8 @@ app.controller('newOrgCtrl', ['$scope', '$http', '$location', 'Org', 'Category',
     }
 ]);
 
-app.controller('editOrgCtrl', ['$scope', '$http', '$location', '$routeParams', 'Org', 'Category',
-    function ($scope, $http, $location, $routeParams, Org, Category) {
+app.controller('editOrgCtrl', ['$scope', '$rootScope', '$http', '$location', '$routeParams', 'Org', 'Category',
+    function ($scope, $rootScope, $http, $location, $routeParams, Org, Category) {
         $scope.title = 'Edit';
         $scope.onFile = function (file) {
             $scope.file = file;
@@ -598,6 +599,7 @@ app.controller('editOrgCtrl', ['$scope', '$http', '$location', '$routeParams', '
             id: $routeParams.id
         }, function (org) {
             $scope.org = org.data;
+            $rootScope.locTitles = ['profile','organizations', $scope.org.name];
         });
         Category.list({}, function (data) {
             $scope.categories = data.data;
@@ -1152,7 +1154,7 @@ app.controller('serviceCtrl', ['$scope', '$rootScope', '$routeParams', 'Catalog'
         $scope.hasBody = function(method) {
         	return !!method && (method.executionProperties.httpMethod == 'POST' ||
         		   method.executionProperties.httpMethod == 'PUT');
-        }
+        };
         
         Catalog.getServiceById({
             id: $routeParams.id
@@ -1242,8 +1244,15 @@ app.controller('serviceCtrl', ['$scope', '$rootScope', '$routeParams', 'Catalog'
     }
 ]);
 
-app.controller('showOrgMembersCtrl', ['$scope', 'Org', '$routeParams',
-    function ($scope, Org, $routeParams) {
+app.controller('showOrgMembersCtrl', ['$scope','$rootScope', 'Org', 'Catalog', '$routeParams',
+    function ($scope, $rootScope,Org, Catalog, $routeParams) {
+	Catalog.getOrgById({
+        id: $routeParams.id
+    }, function (data) {
+        $scope.org = data.data;
+        $rootScope.locTitles = ['profile', 'organizations', $scope.org.name, 'members'];
+    });
+	
         Org.getMembers({
             id: $routeParams.id
         }, function (data) {
