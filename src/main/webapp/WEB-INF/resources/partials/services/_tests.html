@@ -1,8 +1,8 @@
-<div class="panel-group" id="accordion" role="tablist">
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
   <div class="panel panel-default" ng-repeat="method in methods">
     <div class="panel-heading" role="tab" id="heading{{method.id}}">
       <h4 class="panel-title">
-        <a data-toggle="collapse" ng-click="toggle(method.id)" data-parent="#accordion" aria-expanded="false" aria-controls="body{{method.id}}">
+        <a class="collapsed" data-toggle="collapse" ng-click="toggle(method.id)" data-parent="#accordion" aria-expanded="false" aria-controls="body{{method.id}}">
           {{method.name}}
         </a>
       </h4>
@@ -16,8 +16,25 @@
 
          <div>
             <hr/>           
-            <button ng-click="send(method.id)" class="btn btn-success">Try it out!</button>
+            <div>
+              <button ng-click="send(method.id)" class="btn btn-success">Try it out</button>
+              <a ng-click="reset(method.id)">Reset</a>
+              <div class="dropdown pull-right" ng-if="!!method.testboxProperties.tests">
+							  <button class="btn btn-default dropdown-toggle" type="button" id="examples" data-toggle="dropdown" aria-expanded="true">
+							    Examples
+							    <span class="caret"></span>
+							  </button>
+							  <ul class="dropdown-menu" role="menu" aria-labelledby="examples">
+							    <li ng-repeat="example in method.testboxProperties.tests" role="presentation"><a role="menuitem" tabindex="-1" ng-click="useTest(method.id,example)">{{example.name}}</a></li>
+							  </ul>
+							</div>
+            </div>
+            <div class="col=md-12" ng-if="!!methodMap[method.id]._request.description">
+              <br/>
+              <strong>Example</strong>: {{methodMap[method.id]._request.description}}
+            </div>
 		        <div>
+                <br/>
 		            <div class="form-group">
 		                <label for="path">Request path</label>
 		                <input type="text" class="form-control" id="path" ng-model="method._request.requestPath" ng-disabled="!method.testboxProperties.testable"/>
