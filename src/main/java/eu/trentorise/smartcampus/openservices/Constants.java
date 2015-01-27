@@ -17,39 +17,54 @@
 package eu.trentorise.smartcampus.openservices;
 
 /**
- * Enumeration class for service state.
- * A service can be:
- * a published service, user wants everyone to see his/her service;
- * a deprecated service, a new version of the same service is created;
- * an unpublished service, user creates a new service but he/she does not want to share it.
+ * Enumeration class for service state. A service can be: a published service,
+ * user wants everyone to see his/her service; a deprecated service, a new
+ * version of the same service is created; an unpublished service, user creates
+ * a new service but he/she does not want to share it.
  * 
  * @author raman
- *
+ * 
  */
 public class Constants {
 
 	/**
-	 * Enum object with three possible service state: PUBLISH, UNPUBLISH and DEPRECATE
+	 * Enum object with three possible service state: PUBLISH, UNPUBLISH and
+	 * DEPRECATE
 	 */
-	public enum SERVICE_STATE {PUBLISH, UNPUBLISH, DEPRECATE};
+	public enum SERVICE_STATE {
+		PUBLISH, UNPUBLISH, DEPRECATE
+	};
+
 	/**
 	 * Roles enum
 	 */
-	public enum ROLES {ROLE_ORGOWNER, ROLE_NORMAL, ROLE_SERVICEOWNER};
+	public enum ROLES {
+		ROLE_ADMIN, ROLE_ORGOWNER, ROLE_NORMAL, ROLE_SERVICEOWNER
+	};
+
 	/**
 	 * Possible values for ORDER BY in hsql query
 	 */
-	public enum ORDER {id, name, namedesc, date, tag, counter};
+	public enum ORDER {
+		id, name, namedesc, date, tag, counter
+	};
+
 	/**
 	 * Enum object for news
 	 */
-	public enum OPERATION {ADD, MODIFY, DELETE};
+	public enum OPERATION {
+		ADD, MODIFY, DELETE
+	};
+
 	/**
 	 * 
 	 * ASC or DESC order
-	 *
+	 * 
 	 */
-	public enum ASCDESC {ASC, DESC};
+	public enum ASCDESC {
+		ASC, DESC
+	};
+
 	/**
 	 * OAuth request parameter
 	 */

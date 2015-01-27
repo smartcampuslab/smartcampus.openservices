@@ -18,14 +18,19 @@ package eu.trentorise.smartcampus.openservices.managers;
 import java.net.ConnectException;
 import java.util.UUID;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.EntityNotFoundException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import eu.trentorise.smartcampus.openservices.Constants;
 import eu.trentorise.smartcampus.openservices.Constants.ROLES;
 import eu.trentorise.smartcampus.openservices.dao.TemporaryLinkDao;
 import eu.trentorise.smartcampus.openservices.dao.UserDao;
@@ -34,22 +39,26 @@ import eu.trentorise.smartcampus.openservices.entities.User;
 import eu.trentorise.smartcampus.openservices.support.ApplicationMailer;
 
 /**
- * Manager that retrieves, adds, modifies and deletes user data
- * calling dao classes.
+ * Manager that retrieves, adds, modifies and deletes user data calling dao
+ * classes.
  * 
  * @author Giulia Canobbio
- *
+ * 
  */
 @Component
 @Transactional
 public class UserManager {
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(UserManager.class);
 	/**
 	 * Instance of {@link UserDao} to retrieve data of user.
 	 */
 	@Autowired
 	private UserDao userDao;
 	/**
-	 * Instance of {@link TemporaryLinkManager} to retrieve data of temporary link.
+	 * Instance of {@link TemporaryLinkManager} to retrieve data of temporary
+	 * link.
 	 */
 	@Autowired
 	private TemporaryLinkDao tlDao;
@@ -58,262 +67,290 @@ public class UserManager {
 	 */
 	@Autowired
 	private ApplicationMailer mailer;
-	
+
+	@Value("${admin.username}")
+	private String adminUsername;
+
+	@Value("${admin.password}")
+	private String adminPwd;
+
+	@Value("${admin.email}")
+	private String adminEmail;
+
 	/**
 	 * Get user data by id.
 	 * 
-	 * @param id 
-	 * 			: int id of user 
+	 * @param id
+	 *            : int id of user
 	 * @return a {@link User} instance
 	 */
-	public User getUserById( int id){
-		try{ 
+	public User getUserById(int id) {
+		try {
 			return userDao.getUserById(id);
-		}catch(DataAccessException d){
+		} catch (DataAccessException d) {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Get user by username.
 	 * 
-	 * @param username 
-	 * 			: String username of user
+	 * @param username
+	 *            : String username of user
 	 * @return a {@link User} instance
 	 */
-	public User getUserByUsername(String username){
-		try{
+	public User getUserByUsername(String username) {
+		try {
 			return userDao.getUserByUsername(username);
-		}catch(DataAccessException d){
+		} catch (DataAccessException d) {
 			return null;
 		}
 	}
-	
+
+	@PostConstruct
+	@SuppressWarnings("unused")
+	private void initAdminAccount() {
+		if (userDao.getUserByUsername(adminUsername) == null) {
+			logger.info("Admin account not found...init with default account");
+			User admin = new User();
+			admin.setEmail(adminEmail);
+			admin.setUsername(adminUsername);
+			admin.setPassword(adminPwd);
+			admin.setEnabled(1);
+			admin.setRole(Constants.ROLES.ROLE_ADMIN.toString());
+			userDao.addUser(admin);
+			logger.info("Default admin account created!");
+		} else {
+			logger.info("Admin account already present");
+		}
+	}
+
 	/**
-	 * Add a new user in database.
-	 * Retrieves new user.
-	 * Throw SecurityException if email address is already used.
+	 * Add a new user in database. Retrieves new user. Throw SecurityException
+	 * if email address is already used.
 	 * 
-	 * @param user 
-	 * 			: {@link User} instance
+	 * @param user
+	 *            : {@link User} instance
 	 * @return a {@link User} instance
 	 */
 	public User createUser(User user, String host, String from, String object,
-			String message) throws ConnectException{
-		if(!userDao.isEmailAlreadyUse(user.getEmail())){
+			String message) throws ConnectException {
+		if (!userDao.isEmailAlreadyUse(user.getEmail())) {
 			user.setEnabled(0);
 			user.setRole(ROLES.ROLE_NORMAL.toString());
-			try{
+			try {
 				userDao.addUser(user);
-				//key + send via email
+				// key + send via email
 				String s = addKeyVerifyEmail(user.getUsername());
-				if(s!=null){
+				if (s != null) {
 					// return link
-					String link = host+"enable/"+ s;
-					mailer.sendMail(from,user.getEmail(),object+""+user.getUsername(),
-						message+" "+link);
+					String link = host + "enable/" + s;
+					mailer.sendMail(from, user.getEmail(),
+							object + "" + user.getUsername(), message + " "
+									+ link);
 				}
 				return userDao.getUserByUsername(user.getUsername());
-			}catch(DataAccessException d){
+			} catch (DataAccessException d) {
 				return null;
 			}
-		}else{
+		} else {
 			throw new SecurityException();
 		}
 	}
-	
+
 	/**
-	 * Add a new user in database.
-	 * He/she has logged in with a social provider
-	 * Retrieves new user.
-	 * Throw SecurityException if email address is already used.
+	 * Add a new user in database. He/she has logged in with a social provider
+	 * Retrieves new user. Throw SecurityException if email address is already
+	 * used.
 	 * 
-	 * @param user 
-	 * 			: {@link User} instance
+	 * @param user
+	 *            : {@link User} instance
 	 * @return a {@link User} instance
 	 */
-	public User createSocialUser(User user){
-		if(!userDao.isEmailAlreadyUse(user.getEmail())){
-			try{
+	public User createSocialUser(User user) {
+		if (!userDao.isEmailAlreadyUse(user.getEmail())) {
+			try {
 				userDao.addUser(user);
 				return userDao.getUserByUsername(user.getUsername());
-			}catch(DataAccessException d){
+			} catch (DataAccessException d) {
 				return null;
 			}
-		}else{
+		} else {
 			throw new SecurityException();
 		}
 	}
-	
+
 	/**
-	 * Modify user data.
-	 * User can modify only profile data and email.
+	 * Modify user data. User can modify only profile data and email.
 	 * 
-	 * @param username 
-	 * 			: String username of user
-	 * @param user 
-	 * 			: {@link User} instance
+	 * @param username
+	 *            : String username of user
+	 * @param user
+	 *            : {@link User} instance
 	 * @return a {@link User} instance
 	 */
-	public User modifyUserData(String username, User user){
-		try{
+	public User modifyUserData(String username, User user) {
+		try {
 			User sessionU = userDao.getUserByUsername(username);
 			userDao.modifyUser(sessionU.getId(), user);
 			User userN = userDao.getUserById(sessionU.getId());
 			return userN;
-		}catch(DataAccessException d){
+		} catch (DataAccessException d) {
 			return null;
 		}
-		
+
 	}
-	
-	
+
 	/**
-	 * Enable user.
-	 * This can be done by verifying email.
+	 * Enable user. This can be done by verifying email.
 	 * 
-	 * @param username 
-	 * 			: String username of user
+	 * @param username
+	 *            : String username of user
 	 * @return a {@link User} instance of enabled user
 	 */
-	public User enableUser(String username){
-		try{
+	public User enableUser(String username) {
+		try {
 			User user = userDao.getUserByUsername(username);
 			userDao.enableUser(user.getId());
 			User userN = userDao.getUserById(user.getId());
 			return userN;
-		}catch(DataAccessException d){
+		} catch (DataAccessException d) {
 			return null;
 		}
 	}
-	
+
 	/**
-	 * Disable a user.
-	 * Only admin user can disable a user.
+	 * Disable a user. Only admin user can disable a user.
 	 * 
-	 * @param username 
-	 * 			: String username of user that admin wants to disable.
+	 * @param username
+	 *            : String username of user that admin wants to disable.
 	 * @return a {@link User} instance of disabled user
 	 */
-	public User disabledUser(String username){
-		try{
+	public User disabledUser(String username) {
+		try {
 			User user = userDao.getUserByUsername(username);
 			userDao.disableUser(user.getId());
-		
+
 			User userN = userDao.getUserById(user.getId());
 			return userN;
-		}catch(DataAccessException d){
+		} catch (DataAccessException d) {
 			return null;
 		}
 	}
-	
+
 	/**
-	 * Save in temporary link table, key and email address of user.
-	 * After doing registration, link + key value to enable his/her account is sent by email.
+	 * Save in temporary link table, key and email address of user. After doing
+	 * registration, link + key value to enable his/her account is sent by
+	 * email.
 	 * 
-	 * @param username 
-	 * 			: String username of user that we want to verify email address
-	 * @return String value, it is key value if it is ok, else it is null. In case user is enable then 
-	 * a security exception is threw.
+	 * @param username
+	 *            : String username of user that we want to verify email address
+	 * @return String value, it is key value if it is ok, else it is null. In
+	 *         case user is enable then a security exception is threw.
 	 */
-	public String addKeyVerifyEmail(String username){
+	public String addKeyVerifyEmail(String username) {
 		String key;
-		try{
+		try {
 			User user = userDao.getUserByUsername(username);
-			//check if user is enable or not
-			if(user.getEnabled()==0){
+			// check if user is enable or not
+			if (user.getEnabled() == 0) {
 				// Generate a key
 				key = UUID.randomUUID().toString();
-				//save in temporary link table
+				// save in temporary link table
 				TemporaryLink tl = new TemporaryLink();
 				tl.setId_org(0);
 				tl.setKey(key);
 				tl.setEmail(user.getEmail());
-				tlDao.save(tl);				
+				tlDao.save(tl);
 				return key;
-				
-			}else{
+
+			} else {
 				throw new SecurityException();
 			}
-			
-		}catch(DataAccessException d){
+
+		} catch (DataAccessException d) {
 			return null;
 		}
 	}
-	
+
 	/**
-	 * Enable user account by checking user email and key.
-	 * After finding key in database, this object is deleted.
+	 * Enable user account by checking user email and key. After finding key in
+	 * database, this object is deleted.
 	 * 
-	 * @param key : 
-	 * 			String key sent by email for verifying email address
-	 * @return {@link User} instance of enabled account otherwise if key does not exist then EntityNotFoundException
+	 * @param key
+	 *            : String key sent by email for verifying email address
+	 * @return {@link User} instance of enabled account otherwise if key does
+	 *         not exist then EntityNotFoundException
 	 */
-	public User enableUserAfterVerification(/*String username,*/ String key){
-		try{
-		//User user = userDao.getUserByUsername(username);
-		TemporaryLink tl = tlDao.getTLByKey(key);
-		if(tl!=null /*&& user.getEmail().equalsIgnoreCase(tl.getEmail()) */ 
-				&& tl.getId_org()==0 && tl.getRole()==null){
-			User user = userDao.getUserByEmail(tl.getEmail());
-			tlDao.delete(key);
-			return enableUser(/*username*/user.getUsername());
-		}else{
-			throw new EntityNotFoundException();
-		}
-		}catch(DataAccessException d){
+	public User enableUserAfterVerification(/* String username, */String key) {
+		try {
+			// User user = userDao.getUserByUsername(username);
+			TemporaryLink tl = tlDao.getTLByKey(key);
+			if (tl != null /*
+							 * &&
+							 * user.getEmail().equalsIgnoreCase(tl.getEmail())
+							 */
+					&& tl.getId_org() == 0 && tl.getRole() == null) {
+				User user = userDao.getUserByEmail(tl.getEmail());
+				tlDao.delete(key);
+				return enableUser(/* username */user.getUsername());
+			} else {
+				throw new EntityNotFoundException();
+			}
+		} catch (DataAccessException d) {
 			return null;
 		}
 	}
-	
+
 	/**
-	 * Modify user password.
-	 * This function retrieves user data and check if password is the same.
-	 * If it is correct then user password is modify with new one, otherwise an exception is thrown.
+	 * Modify user password. This function retrieves user data and check if
+	 * password is the same. If it is correct then user password is modify with
+	 * new one, otherwise an exception is thrown.
 	 * 
-	 * @param username 
-	 * 			: String
-	 * @param oldPassw 
-	 * 			: String, old password
- 	 * @param newPassw 
- 	 * 			: String, new password
-	 * @return a boolean value: true if there is no error, false otherwise. Throw a SecurityException if 
-	 * user's old password is wrong
+	 * @param username
+	 *            : String
+	 * @param oldPassw
+	 *            : String, old password
+	 * @param newPassw
+	 *            : String, new password
+	 * @return a boolean value: true if there is no error, false otherwise.
+	 *         Throw a SecurityException if user's old password is wrong
 	 */
-	public boolean modifyUserPassword(String username, String oldPassw, String newPassw){
-		try{
+	public boolean modifyUserPassword(String username, String oldPassw,
+			String newPassw) {
+		try {
 			// get user data
 			User user = userDao.getUserByUsername(username);
 			// check if email are equals
 			// bcrypt old passw
 			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-			if (oldPassw!=null && passwordEncoder.matches(oldPassw, user.getPassword())) {
+			if (oldPassw != null
+					&& passwordEncoder.matches(oldPassw, user.getPassword())) {
 				// commit
 				userDao.modifyPassword(username, newPassw);
 				return true;
 			} else {
 				throw new SecurityException();
 			}
-		}
-		catch(DataAccessException d){
+		} catch (DataAccessException d) {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Reset user password, and change it with a random string.
 	 * 
-	 * @param email 
-	 * 			: String
+	 * @param email
+	 *            : String
 	 * @return temporary password : String
 	 */
-	public String resetPassword(String email){
-		try{
+	public String resetPassword(String email) {
+		try {
 			User user = userDao.getUserByEmail(email);
 			String tPassw = UUID.randomUUID().toString();
 			userDao.modifyPassword(user.getUsername(), tPassw);
 			return tPassw;
-		}catch(DataAccessException d){
+		} catch (DataAccessException d) {
 			return null;
 		}
 	}
