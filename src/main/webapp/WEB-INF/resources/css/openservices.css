@@ -366,3 +366,8 @@ span.deprecation {
 a.deprecation {
 	text-decoration: line-through;
 }
+
+a.label {
+	color: #FFF;
+	font-size: 100%;
+}
