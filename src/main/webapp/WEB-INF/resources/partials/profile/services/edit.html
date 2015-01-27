@@ -58,13 +58,19 @@
                         <label for="tendpoint">Endpoint</label>
                         <input type="text" class="form-control" id="tendpoint" placeholder="http://tendpoint.com/api" ng-model="service.accessInformation.endpoint">
                     </div>
+                    <label for="formats">Formats</label>
                     <div class="form-group">
-                        <label for="formats">Formats</label>
-                        <select ng-options="format for format in formats" id="formats" class="form-control" ng-model="service.accessInformation.formats" ></select>
+												<label ng-repeat="(val,enabled) in serviceFormats" class="checkbox-inline">
+												  <input type="checkbox" ng-model="serviceFormats[val]">{{val}}
+												</label>
                     </div>
                     <div class="form-group">
                         <label for="protocols">Protocols</label>
-                        <input type="text" class="form-control" id="protocols" placeholder="rest, soap" ng-model="service.accessInformation.protocols">
+                    <div class="form-group">
+                        <label ng-repeat="(val,enabled) in serviceProtocols" class="checkbox-inline">
+                          <input type="checkbox" ng-model="serviceProtocols[val]">{{val}}
+                        </label>
+                    </div>
                     </div>
                 </div>
             </div>

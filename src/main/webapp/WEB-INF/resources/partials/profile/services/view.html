@@ -46,10 +46,10 @@
                     <strong>{{service.accessInformation.endpoint}}</strong>
                 </li>
                 <li>formats:
-                    <strong>{{service.accessInformation.formats}}</strong>
+                    <strong>{{service.accessInformation.formats.replace(',', ', ')}}</strong>
                 </li>
                 <li>protocols:
-                    <strong>{{service.accessInformation.protocols}}</strong>
+                    <strong>{{service.accessInformation.protocols.replace(',', ', ')}}</strong>
                 </li>
                 <li>authentication:
                     <strong>{{service.accessInformation.authentication.accessProtocol}}</strong>

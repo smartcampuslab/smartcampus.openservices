@@ -326,7 +326,10 @@ app.controller('profileCtrl', ['$scope','$rootScope','$routeParams', '$http', '$
 app.controller('newServiceCtrl', ['$scope','$rootScope', '$http', '$location', 'Service', 'Org', 'Category',
     function ($scope, $rootScope,$http, $location, Service, Org, Category) {
         $scope.protocols = ['OAuth2', 'OpenID', 'Public'];
-        $scope.formats = ['json', 'xml', 'yaml', 'txt'];
+
+        $scope.serviceFormats = {'JSON':false, 'XML':false, 'text': false};
+        $scope.serviceProtocols = {'REST':false, 'SOAP':false};
+        
         $rootScope.locTitles = ['profile','services'];
         $scope.accessInformation = {
             authentication: {
@@ -348,10 +351,16 @@ app.controller('newServiceCtrl', ['$scope','$rootScope', '$http', '$location', '
         });
 
         $scope.submit = function () {
+        	var arr = [];
+        	for (var key in $scope.serviceFormats) if ($scope.serviceFormats[key]) arr.push(key);
+        	$scope.service.accessInformation.formats = arr.join();
+        	arr = [];
+        	for (var key in $scope.serviceProtocols) if ($scope.serviceProtocols[key]) arr.push(key);
+        	$scope.service.accessInformation.protocols = arr.join();
             if ($scope.service.expiration) {
                 $scope.service.expiration = new Date($scope.service.expiration).getTime();
             } else {
-                $scope.service.expiration = null;
+                $scope.service.expiration = '';
             }
             if (typeof $scope.service.tags == 'string') {
                 $scope.service.tags = $scope.service.tags.split(',');
@@ -373,10 +382,9 @@ app.controller('newServiceCtrl', ['$scope','$rootScope', '$http', '$location', '
 app.controller('editServiceCtrl', ['$scope','$rootScope', '$routeParams', '$location', 'Service', 'Org', 'Category',
     function ($scope,$rootScope, $routeParams, $location, Service, Org, Category) {
         $scope.protocols = ['OAuth2', 'OpenID', 'Public'];
-        $scope.formats = ['json', 'xml', 'yaml', 'txt'];
-        
-        
-        
+        $scope.serviceFormats = {'JSON':false, 'XML':false, 'text': false};
+        $scope.serviceProtocols = {'REST':false, 'SOAP':false};
+
         $scope.accessInformation = {
             authentication: {
                 accessProtocol: null,
@@ -402,8 +410,14 @@ app.controller('editServiceCtrl', ['$scope','$rootScope', '$routeParams', '$loca
             }
             if ($scope.service.expiration && $scope.service.expiration > 0) {
                 $scope.service.expiration = new Date($scope.service.expiration).toISOString().slice(0, 10);
+            } else {
+            	$scope.service.expiration = '';
             }
-           
+            var arr = $scope.accessInformation.formats.split(',');
+            angular.forEach(arr, function(value, key){if (value in $scope.serviceFormats) $scope.serviceFormats[value] = true});
+
+            arr = $scope.accessInformation.protocols.split(',');
+            angular.forEach(arr, function(value, key){if (value in $scope.serviceProtocols) $scope.serviceProtocols[value] = true});
         });
         Org.get({}, function (data) {
             $scope.orgs = data.data;
@@ -414,6 +428,13 @@ app.controller('editServiceCtrl', ['$scope','$rootScope', '$routeParams', '$loca
         };
 
         $scope.submit = function () {
+        	var arr = [];
+        	for (var key in $scope.serviceFormats) if ($scope.serviceFormats[key]) arr.push(key);
+        	$scope.service.accessInformation.formats = arr.join();
+        	arr = [];
+        	for (var key in $scope.serviceProtocols) if ($scope.serviceProtocols[key]) arr.push(key);
+        	$scope.service.accessInformation.protocols = arr.join();
+        	
             if ($scope.service.expiration) {
                 $scope.service.expiration = new Date($scope.service.expiration).getTime();
             }
@@ -1160,7 +1181,7 @@ app.controller('serviceCtrl', ['$scope', '$rootScope', '$routeParams', 'Catalog'
         };
         $scope.checkBeforeSend = function(id) {
         	var m = $scope.methodMap[id];
-        	return !m.testboxProperties.testable && m._request.name == null;
+        	return !m.testboxProperties.testable && (m._request == null || m._request.name == null);
         };
         
         $scope.reset = function(id) {
