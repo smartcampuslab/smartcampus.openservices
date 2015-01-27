@@ -838,8 +838,9 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
 
         $scope.updateCounters = function (totalServicesCount) {
             $scope.totalServices = totalServicesCount;
-            var lop = $scope.firstOfPage + $scope.resultsPerPage + 1;
+            var lop = $scope.firstOfPage + $scope.resultsPerPage;
             $scope.lastOfPage = lop > $scope.totalServices ? $scope.totalServices : lop;
+            $scope.totalPages = Math.ceil($scope.totalServices/$scope.resultsPerPage); 
         };
 
         $scope.isServiceActive = function (service) {
@@ -876,7 +877,7 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
         
         $scope.totalServices = 0;
         $scope.firstOfPage = 0;
-        $scope.resultsPerPage = 10;
+        $scope.resultsPerPage = 5;
         $scope.pagePerPagination = 5;
         $scope.currentPage = 1;
         $scope.lastOfPage = 0;
@@ -961,7 +962,7 @@ app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routePar
 
         $scope.totalServices = 0;
         $scope.firstOfPage = 0;
-        $scope.resultsPerPage = 10;
+        $scope.resultsPerPage = 5;
         $scope.pagePerPagination = 5;
         $scope.currentPage = 1;
         $scope.lastOfPage = 0;
@@ -1044,9 +1045,10 @@ app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routePar
         };
 
         $scope.updateCounters = function (totalServicesCount) {
-            $scope.totalServices = totalServicesCount;
-            var lop = $scope.firstOfPage + $scope.resultsPerPage + 1;
+        	$scope.totalServices = totalServicesCount;
+            var lop = $scope.firstOfPage + $scope.resultsPerPage;
             $scope.lastOfPage = lop > $scope.totalServices ? $scope.totalServices : lop;
+            $scope.totalPages = Math.ceil($scope.totalServices/$scope.resultsPerPage); 
         };
 
         $rootScope.searchQuery = null;

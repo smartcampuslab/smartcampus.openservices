@@ -83,7 +83,7 @@
                         </div>
                         <div class="row row-pagination">
                             <h6 class="pull-left">
-                                Showing {{firstOfPage + 1}}-{{lastOfPage}} of {{totalServices}} in {{(!! totalPages) ? totalPages : '1'}} page{{totalPages > 1 ? 's' : ''}}
+                                Showing {{firstOfPage + 1}}<span ng-show="firstOfPage + 1 != lastOfPage">-{{lastOfPage}}</span> of {{totalServices}} in {{(!! totalPages) ? totalPages : '1'}} page{{totalPages > 1 ? 's' : ''}}
                             </h6>
                             <pagination ng-if="totalPages > 1" total-items="totalServices" page="currentPage" items-per-page="resultsPerPage" max-size="pagePerPagination" class="pagination-sm pull-right" boundary-links="true" rotate="true" on-select-page="goToPage(page)" num-pages="totalPages" first-text="&laquo;" previous-text="&lsaquo;" next-text="&rsaquo;" last-text="&raquo;">
                             </pagination>
