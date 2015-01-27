@@ -79,7 +79,7 @@
 					            <div ng-repeat="test in method.testboxProperties.tests" class="panel panel-default">
 					                <div class="panel-body">
 					                    {{test.name}}
-					                    <button type="button" class="pull-right btn btn-default btn-sm" ng-click="deleteTest($index)"><i class="fa fa-trash-o"></i>
+					                    <button type="button" class="pull-right btn btn-default btn-sm" ng-confirm-click="deleteTest($index)" ng-confirm-message="Confirm delete?" ng-confirm-condition="true"><i class="fa fa-trash-o"></i>
 					                    </button>
 					                    <button type="button" ng-click="editTest($index)" class="pull-right btn btn-default btn-sm orgbtn" data-toggle="modal" data-target="#testModal"><i class="fa fa-edit"></i></button>
 					                </div>

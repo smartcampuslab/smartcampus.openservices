@@ -71,7 +71,7 @@
                 <div ng-repeat="method in methods" class="panel panel-default">
                     <div class="panel-body">
                         {{method.name}}
-                        <button type="button" class="pull-right btn btn-default btn-sm" ng-click="deleteMethod($index)"><i class="fa fa-trash-o"></i>
+                        <button type="button" class="pull-right btn btn-default btn-sm" ng-confirm-click="deleteMethod($index)"  ng-confirm-message="Confirm delete?" ng-confirm-condition="true"><i class="fa fa-trash-o"></i>
                         </button>
                         <a href="profile/services/{{service.id}}/methods/{{method.id}}/view" class="pull-right btn btn-default btn-sm orgbtn"><i class="fa fa-edit"></i></a>
                     </div>

@@ -11,7 +11,7 @@
                     </button>
                     <button ng-show="service.state=='PUBLISH'" type="button" data-toggle="tooltip" title="Deprecate service" class="pull-right btn btn-default btn-sm orgbtn" ng-click="deprecateService($index)"><i class="fa fa-level-down"></i>
                     </button>
-                    <button type="button" data-toggle="tooltip" title="Delete service" class="pull-right btn btn-default btn-sm orgbtn" ng-click="deleteService($index)"><i class="fa fa-trash-o"></i>
+                    <button type="button" data-toggle="tooltip" title="Delete service" class="pull-right btn btn-default btn-sm orgbtn" ng-confirm-click="deleteService($index)" ng-confirm-message="Confirm delete?" ng-confirm-condition="true"><i class="fa fa-trash-o"></i>
                     </button>
                     <a href="profile/services/{{service.id}}" data-toggle="tooltip" title="Edit service" class="pull-right btn btn-default btn-sm orgbtn"><i class="fa fa-edit"></i></a>
                 </div>
