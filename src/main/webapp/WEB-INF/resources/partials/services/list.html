@@ -73,7 +73,7 @@
                                                 <div ng-show="service.tags" class="tags">
                                                     <!-- <span class="glyphicon glyphicon-tags"></span> -->
                                                     <i class="fa fa-tags"></i>
-                                                    <span ng-repeat="tag in service.tags" class="label label-success">{{tag}}</span>
+                                                    <span ng-repeat="tag in service.tags" class="label label-success"><a class="label" href="search/{{tag}}">{{tag}}</a></span>
                                                 </div>
                                             </div>
                                         </li>
