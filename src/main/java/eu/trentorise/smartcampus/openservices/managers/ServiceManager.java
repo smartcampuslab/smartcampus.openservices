@@ -16,7 +16,11 @@
 
 package eu.trentorise.smartcampus.openservices.managers;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
 
 import javax.persistence.EntityExistsException;
 
@@ -25,20 +29,33 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import eu.trentorise.smartcampus.openservices.Constants;
 import eu.trentorise.smartcampus.openservices.Constants.OPERATION;
 import eu.trentorise.smartcampus.openservices.Constants.ORDER;
 import eu.trentorise.smartcampus.openservices.Constants.ROLES;
 import eu.trentorise.smartcampus.openservices.Constants.SERVICE_STATE;
-import eu.trentorise.smartcampus.openservices.dao.*;
-import eu.trentorise.smartcampus.openservices.entities.*;
+import eu.trentorise.smartcampus.openservices.dao.MethodDao;
+import eu.trentorise.smartcampus.openservices.dao.OrganizationDao;
+import eu.trentorise.smartcampus.openservices.dao.ServiceDao;
+import eu.trentorise.smartcampus.openservices.dao.ServiceHistoryDao;
+import eu.trentorise.smartcampus.openservices.dao.TagDao;
+import eu.trentorise.smartcampus.openservices.dao.UserDao;
+import eu.trentorise.smartcampus.openservices.dao.UserRoleDao;
+import eu.trentorise.smartcampus.openservices.entities.Method;
+import eu.trentorise.smartcampus.openservices.entities.Service;
+import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
+import eu.trentorise.smartcampus.openservices.entities.TestBoxProperties;
+import eu.trentorise.smartcampus.openservices.entities.TestInfo;
+import eu.trentorise.smartcampus.openservices.entities.User;
+import eu.trentorise.smartcampus.openservices.entities.UserRole;
 
 /**
- * Manager that retrieves, adds, modifies and deletes Service data from database.
- * These operations are allowed only for logged user, who has role in organization of 
- * wanted service.
+ * Manager that retrieves, adds, modifies and deletes Service data from
+ * database. These operations are allowed only for logged user, who has role in
+ * organization of wanted service.
  * 
  * @author raman
- *
+ * 
  */
 @Component
 @Transactional
@@ -49,22 +66,26 @@ public class ServiceManager {
 	@Autowired
 	private UserDao userDao;
 	/**
-	 * Instance of {@link UserRoleDao} to retrieve role of user data using Dao classes.
+	 * Instance of {@link UserRoleDao} to retrieve role of user data using Dao
+	 * classes.
 	 */
 	@Autowired
 	private UserRoleDao urDao;
 	/**
-	 * Instance of {@link OrganizationDao} to retrieve organization data using Dao classes.
+	 * Instance of {@link OrganizationDao} to retrieve organization data using
+	 * Dao classes.
 	 */
 	@Autowired
 	private OrganizationDao orgDao;
 	/**
-	 * Instance of {@link ServiceDao} to retrieve service data using Dao classes.
+	 * Instance of {@link ServiceDao} to retrieve service data using Dao
+	 * classes.
 	 */
 	@Autowired
 	private ServiceDao serviceDao;
 	/**
-	 * Instance of {@link ServiceHistoryDao} to retrieve service history data using Dao classes.
+	 * Instance of {@link ServiceHistoryDao} to retrieve service history data
+	 * using Dao classes.
 	 */
 	@Autowired
 	private ServiceHistoryDao shDao;
@@ -82,35 +103,37 @@ public class ServiceManager {
 	/**
 	 * Add a new service in database.
 	 * 
-	 * @param username 
-	 * 			: String username of logged in user
-	 * @param service 
-	 * 			: {@link Service} instance
-	 * @return boolean value: true if it is ok, false otherwise throw SecurityException 
-	 * if user has not a role in service organization
+	 * @param username
+	 *            : String username of logged in user
+	 * @param service
+	 *            : {@link Service} instance
+	 * @return boolean value: true if it is ok, false otherwise throw
+	 *         SecurityException if user has not a role in service organization
 	 */
 	@Transactional
 	public boolean createService(String username, Service service) {
 		try {
-			//check service name
+			// check service name
 			Service sCheck = serviceDao.useService(service.getName());
-			if(sCheck!=null){
+			if (sCheck != null) {
 				throw new EntityExistsException();
 			}
-			
+
 			User user = userDao.getUserByUsername(username);
-			UserRole ur = urDao.getRoleOfUser(user.getId(), service.getOrganizationId());
-			if (ur == null) throw new SecurityException();
+			UserRole ur = urDao.getRoleOfUser(user.getId(),
+					service.getOrganizationId());
+			if (ur == null)
+				throw new SecurityException();
 			service.setCreatorId(user.getId());
 			service.setState(SERVICE_STATE.UNPUBLISH.toString());
 			serviceDao.createService(service);
-			// create history
-			ServiceHistory sh = new ServiceHistory();
-			sh.setOperation(OPERATION.ADD.toString());
-			sh.setId_service(service.getId());
-			sh.setDate(new Date());
-			sh.setServiceName(service.getName());
-			shDao.addServiceHistory(sh);
+			// create history -> only if service is publish
+			// ServiceHistory sh = new ServiceHistory();
+			// sh.setOperation(OPERATION.ADD.toString());
+			// sh.setId_service(service.getId());
+			// sh.setDate(new Date());
+			// sh.setServiceName(service.getName());
+			// shDao.addServiceHistory(sh);
 			// check if service is created
 			if (serviceDao.useService(service.getName()) != null) {
 				return true;
@@ -122,13 +145,13 @@ public class ServiceManager {
 	}
 
 	/**
-	 * Update an existing service from database.
-	 * Throw SecurityException if user has not a role in service organization.
+	 * Update an existing service from database. Throw SecurityException if user
+	 * has not a role in service organization.
 	 * 
-	 * @param username 
-	 * 			: String username of logged in user
-	 * @param service 
-	 * 			: {@link Service} instance
+	 * @param username
+	 *            : String username of logged in user
+	 * @param service
+	 *            : {@link Service} instance
 	 * @return boolean value: true if it is ok, false otherwise
 	 * 
 	 */
@@ -143,16 +166,16 @@ public class ServiceManager {
 				throw new SecurityException();
 
 			Service s = serviceDao.getServiceById(service.getId());
-			
-			//check service name
+
+			// check service name
 			Service sCheck = serviceDao.useService(service.getName());
-			if(sCheck!=null && sCheck.getId()!=s.getId()){
+			if (sCheck != null && sCheck.getId() != s.getId()) {
 				throw new EntityExistsException();
 			}
-			
+
 			s.setName(service.getName());
 			s.setDescription(service.getDescription());
-			//delete tag data before update
+			// delete tag data before update
 			tagDao.deleteTag(s.getTags());
 			s.setTags(service.getTags());
 			s.setCategory(service.getCategory());
@@ -165,30 +188,32 @@ public class ServiceManager {
 			serviceDao.modifyService(s);
 
 			// Add a new ServiceHistory
-			ServiceHistory sh = new ServiceHistory();
-			sh.setOperation(OPERATION.MODIFY.toString());
-			sh.setId_service(s.getId());
-			sh.setDate(new Date());
-			sh.setServiceName(service.getName());
-			shDao.addServiceHistory(sh);
+			if (s.getState().equals(Constants.SERVICE_STATE.PUBLISH.toString())) {
+				ServiceHistory sh = new ServiceHistory();
+				sh.setOperation(OPERATION.MODIFY.toString());
+				sh.setId_service(s.getId());
+				sh.setDate(new Date());
+				sh.setServiceName(service.getName());
+				shDao.addServiceHistory(sh);
+			}
 			return true;
 		} catch (DataAccessException d) {
 			return false;
 		}
-		
+
 	}
 
 	/**
-	 * Change service state.
-	 * Possible values are: publish, unpublish and deprecate.
-	 * Throw SecurityException if user has not a role in service organization.
+	 * Change service state. Possible values are: publish, unpublish and
+	 * deprecate. Throw SecurityException if user has not a role in service
+	 * organization.
 	 * 
-	 * @param username 
-	 * 			: String username of logged in user
-	 * @param serviceId 
-	 * 			: int service id
-	 * @param state 
-	 * 			: String state that service will have
+	 * @param username
+	 *            : String username of logged in user
+	 * @param serviceId
+	 *            : int service id
+	 * @param state
+	 *            : String state that service will have
 	 * @return boolean value: true if it is ok, false otherwise
 	 */
 	@Transactional
@@ -212,7 +237,7 @@ public class ServiceManager {
 			sh.setDate(new Date());
 			sh.setServiceName(service.getName());
 			shDao.addServiceHistory(sh);
-			
+
 			return true;
 		} catch (DataAccessException d) {
 			return false;
@@ -220,13 +245,13 @@ public class ServiceManager {
 	}
 
 	/**
-	 * Delete an existing service from database.
-	 * Throw SecurityException if user has not a role in service organization.
+	 * Delete an existing service from database. Throw SecurityException if user
+	 * has not a role in service organization.
 	 * 
-	 * @param username 
-	 * 			: String username of logged in user
-	 * @param id 
-	 * 			: int service id that user wants to delete
+	 * @param username
+	 *            : String username of logged in user
+	 * @param id
+	 *            : int service id that user wants to delete
 	 * @return boolean value: true if it is ok, false otherwise
 	 */
 	public boolean deleteService(String username, int id) {
@@ -239,17 +264,20 @@ public class ServiceManager {
 				throw new SecurityException();
 			serviceDao.deleteService(service);
 			// add service history
-			ServiceHistory sh = new ServiceHistory();
-			sh.setOperation(OPERATION.DELETE.toString());
-			sh.setId_service(service.getId());
-			sh.setDate(new Date());
-			sh.setServiceName(service.getName());
-			shDao.addServiceHistory(sh);
+			if (service.getState().equals(
+					Constants.SERVICE_STATE.PUBLISH.toString())) {
+				ServiceHistory sh = new ServiceHistory();
+				sh.setOperation(OPERATION.DELETE.toString());
+				sh.setId_service(service.getId());
+				sh.setDate(new Date());
+				sh.setServiceName(service.getName());
+				shDao.addServiceHistory(sh);
+			}
 			return true;
 		} catch (DataAccessException d) {
 			return false;
 		}
-		
+
 	}
 
 	/**
@@ -259,9 +287,9 @@ public class ServiceManager {
 	 */
 	@Transactional
 	public List<Service> getServices() {
-		try{
+		try {
 			return serviceDao.showService();
-		}catch(DataAccessException d){
+		} catch (DataAccessException d) {
 			return null;
 		}
 	}
@@ -269,25 +297,27 @@ public class ServiceManager {
 	/**
 	 * Retrieve all user services, even unpublished services.
 	 * 
-	 * @param username 
-	 * 			: String username of logged in user
-	 * @return all the {@link Service} instances the user can see/modify (i.e., all
-	 * the services of the organizations the user is member of)
+	 * @param username
+	 *            : String username of logged in user
+	 * @return all the {@link Service} instances the user can see/modify (i.e.,
+	 *         all the services of the organizations the user is member of)
 	 */
 	@Transactional
 	public List<Service> getUserServices(String username) {
-		try{
-			//services of organization in which I am a member
+		try {
+			// services of organization in which I am a member
 			List<Service> result = new ArrayList<Service>();
 			User u = userDao.getUserByUsername(username);
-			List<UserRole> roles = urDao.getUserRoleByIdRole(u.getId(), ROLES.ROLE_ORGOWNER.toString());
-			for(UserRole r:roles){
-				List<Service> sl = serviceDao.getServiceByIdOrg(r.getId_org(), 0, 0, ORDER.name.toString());
+			List<UserRole> roles = urDao.getUserRoleByIdRole(u.getId(),
+					ROLES.ROLE_ORGOWNER.toString());
+			for (UserRole r : roles) {
+				List<Service> sl = serviceDao.getServiceByIdOrg(r.getId_org(),
+						0, 0, ORDER.name.toString());
 				result.addAll(sl);
 			}
-			//my service
-			//result.addAll(serviceDao.showMyService(username));
-			
+			// my service
+			// result.addAll(serviceDao.showMyService(username));
+
 			Collections.sort(result, new Comparator<Service>() {
 
 				@Override
@@ -295,9 +325,9 @@ public class ServiceManager {
 					return o1.getName().compareTo(o2.getName());
 				}
 			});
-			
+
 			return result;
-		}catch(DataAccessException d){
+		} catch (DataAccessException d) {
 			return null;
 		}
 	}
@@ -305,15 +335,15 @@ public class ServiceManager {
 	/**
 	 * Retrieve service data searching by service id.
 	 * 
-	 * @param service_id 
-	 * 			: int service id
+	 * @param service_id
+	 *            : int service id
 	 * @return {@link Service} instance with the specified ID
 	 */
 	@Transactional
 	public Service getServiceById(int service_id) {
-		try{
+		try {
 			return serviceDao.getServiceById(service_id);
-		}catch(DataAccessException d){
+		} catch (DataAccessException d) {
 			return null;
 		}
 	}
@@ -321,15 +351,15 @@ public class ServiceManager {
 	/**
 	 * Get list of methods by service id.
 	 * 
-	 * @param service_id 
-	 * 			: int service id
+	 * @param service_id
+	 *            : int service id
 	 * @return all the {@link Method} instances of the specified service
 	 */
 	@Transactional
 	public List<Method> getServiceMethodsByServiceId(int service_id) {
-		try{
+		try {
 			return methodDao.getMethodByServiceId(service_id);
-		}catch(DataAccessException d){
+		} catch (DataAccessException d) {
 			return null;
 		}
 	}
@@ -337,40 +367,41 @@ public class ServiceManager {
 	/**
 	 * Get history of a service by service id.
 	 * 
-	 * @param service_id 
-	 * 			: int service id
+	 * @param service_id
+	 *            : int service id
 	 * @return {@link ServiceHistory} instances of the specified service
 	 */
 	@Transactional
 	public List<ServiceHistory> getServiceHistoryByServiceId(int service_id) {
-		try{
+		try {
 			return shDao.getServiceHistoryByServiceId(service_id);
-		}catch(DataAccessException d){
+		} catch (DataAccessException d) {
 			return null;
 		}
 	}
 
 	/**
-	 * Add a new service method in database.
-	 * Only user has role in organization which service belongs can add a new service.
-	 * Throw SecurityException if user has not a role in service organization.
+	 * Add a new service method in database. Only user has role in organization
+	 * which service belongs can add a new service. Throw SecurityException if
+	 * user has not a role in service organization.
 	 * 
-	 * @param username 
-	 * 			: String username of logged in user
-	 * @param method 
-	 * 			: a new {@link Method} instance
+	 * @param username
+	 *            : String username of logged in user
+	 * @param method
+	 *            : a new {@link Method} instance
 	 * @return boolean value: true if it is ok, false otherwise
 	 */
 	@Transactional
 	public boolean addMethod(String username, Method method) {
 		boolean result = false;
 		try {
-			//check method name
-			Method m = methodDao.getMethodByName(method.getName(),method.getServiceId());
-			if(m!=null && m.getServiceId()==method.getServiceId()){
+			// check method name
+			Method m = methodDao.getMethodByName(method.getName(),
+					method.getServiceId());
+			if (m != null && m.getServiceId() == method.getServiceId()) {
 				throw new EntityExistsException();
 			}
-			//save
+			// save
 			User user = userDao.getUserByUsername(username);
 			Service s = getServiceById(method.getServiceId());
 			UserRole ur = urDao.getRoleOfUser(user.getId(),
@@ -378,20 +409,23 @@ public class ServiceManager {
 			if (ur == null)
 				throw new SecurityException();
 			methodDao.addMethod(method);
-			//check if method is add
-			Method addedM = methodDao.getMethodByName(method.getName(), method.getServiceId());
-			if(addedM!=null){
+			// check if method is add
+			Method addedM = methodDao.getMethodByName(method.getName(),
+					method.getServiceId());
+			if (addedM != null) {
 				result = true;
 			}
-			//Add history
-			ServiceHistory sh = new ServiceHistory();
-			sh.setOperation(OPERATION.ADD.toString());
-			sh.setId_service(method.getServiceId());
-			sh.setId_serviceMethod(addedM.getId());
-			sh.setDate(new Date());
-			sh.setServiceName(s.getName());
-			sh.setMethodName(method.getName());
-			shDao.addServiceHistory(sh);
+			// Add history
+			if (s.getState().equals(Constants.SERVICE_STATE.PUBLISH.toString())) {
+				ServiceHistory sh = new ServiceHistory();
+				sh.setOperation(OPERATION.ADD.toString());
+				sh.setId_service(method.getServiceId());
+				sh.setId_serviceMethod(addedM.getId());
+				sh.setDate(new Date());
+				sh.setServiceName(s.getName());
+				sh.setMethodName(method.getName());
+				shDao.addServiceHistory(sh);
+			}
 			return result;
 		} catch (DataAccessException d) {
 			return false;
@@ -399,14 +433,14 @@ public class ServiceManager {
 	}
 
 	/**
-	 * Modify an existing service method from database.
-	 * Only user being part of organization can modify a service.
-	 * Throw SecurityException if user has not a role in service organization.
+	 * Modify an existing service method from database. Only user being part of
+	 * organization can modify a service. Throw SecurityException if user has
+	 * not a role in service organization.
 	 * 
-	 * @param username 
-	 * 			: String username of logged in user
-	 * @param method 
-	 * 			: a modified {@link Method} instance
+	 * @param username
+	 *            : String username of logged in user
+	 * @param method
+	 *            : a modified {@link Method} instance
 	 * @return boolean value: true if it is ok, false otherwise
 	 */
 	@Transactional
@@ -420,41 +454,45 @@ public class ServiceManager {
 				throw new SecurityException();
 
 			Method m = methodDao.getMethodById(method.getId());
-			
-			//check method name
-			Method checkM = methodDao.getMethodByName(method.getName(),method.getServiceId());
-			if(checkM!=null && checkM.getId()!=m.getId() && checkM.getServiceId()==m.getServiceId()){
+
+			// check method name
+			Method checkM = methodDao.getMethodByName(method.getName(),
+					method.getServiceId());
+			if (checkM != null && checkM.getId() != m.getId()
+					&& checkM.getServiceId() == m.getServiceId()) {
 				throw new EntityExistsException();
 			}
-			//modify
+			// modify
 			m.setName(method.getName());
 			m.setSynopsis(method.getSynopsis());
 			m.setDocumentation(method.getDocumentation());
 			m.setTestboxProperties(method.getTestboxProperties());
 			m.setExecutionProperties(method.getExecutionProperties());
 			methodDao.modifyMethod(m);
-			//Add history
-			ServiceHistory sh = new ServiceHistory();
-			sh.setOperation(OPERATION.MODIFY.toString());
-			sh.setId_service(method.getServiceId());
-			sh.setDate(new Date());
-			sh.setServiceName(s.getName());
-			sh.setMethodName(m.getName());
-			shDao.addServiceHistory(sh);
+			// Add history
+			if (s.getState().equals(Constants.SERVICE_STATE.PUBLISH.toString())) {
+				ServiceHistory sh = new ServiceHistory();
+				sh.setOperation(OPERATION.MODIFY.toString());
+				sh.setId_service(method.getServiceId());
+				sh.setDate(new Date());
+				sh.setServiceName(s.getName());
+				sh.setMethodName(m.getName());
+				shDao.addServiceHistory(sh);
+			}
 			return true;
 		} catch (DataAccessException d) {
 			return false;
 		}
 	}
-	
+
 	/**
-	 * Delete a service method from database.
-	 * Throw SecurityException if user has not a role in service organization.
+	 * Delete a service method from database. Throw SecurityException if user
+	 * has not a role in service organization.
 	 * 
-	 * @param username 
-	 * 			: String username of logged user
-	 * @param methodId 
-	 * 			: int id of method that user wants to delete
+	 * @param username
+	 *            : String username of logged user
+	 * @param methodId
+	 *            : int id of method that user wants to delete
 	 * @return boolean value: true if it is ok, false otherwise
 	 */
 	@Transactional
@@ -469,15 +507,17 @@ public class ServiceManager {
 			if (ur == null)
 				throw new SecurityException();
 			methodDao.deleteMethod(m);
-			//Add history
-			ServiceHistory sh = new ServiceHistory();
-			sh.setOperation("Delete");
-			sh.setId_service(m.getServiceId());
-			sh.setId_serviceMethod(m.getId());
-			sh.setDate(new Date());
-			sh.setServiceName(s.getName());
-			sh.setMethodName(m.getName());
-			shDao.addServiceHistory(sh);
+			// Add history
+			if (s.getState().equals(Constants.SERVICE_STATE.PUBLISH.toString())) {
+				ServiceHistory sh = new ServiceHistory();
+				sh.setOperation("Delete");
+				sh.setId_service(m.getServiceId());
+				sh.setId_serviceMethod(m.getId());
+				sh.setDate(new Date());
+				sh.setServiceName(s.getName());
+				sh.setMethodName(m.getName());
+				shDao.addServiceHistory(sh);
+			}
 			return true;
 		} catch (DataAccessException d) {
 			return false;
@@ -488,28 +528,28 @@ public class ServiceManager {
 	 * Retrieve service method searching by method id.
 	 * 
 	 * @param method
-	 * 			: id of service method
+	 *            : id of service method
 	 * @return {@link Method} instance
 	 */
 	@Transactional
 	public Method getMethodById(int method) {
-		try{
+		try {
 			return methodDao.getMethodById(method);
-		}catch(DataAccessException d){
+		} catch (DataAccessException d) {
 			return null;
 		}
 	}
 
 	/**
-	 * Add a test to an existing service method from database.
-	 * Throw SecurityException if user has not a role in service organization.
+	 * Add a test to an existing service method from database. Throw
+	 * SecurityException if user has not a role in service organization.
 	 * 
-	 * @param username 
-	 * 			: String username of user
-	 * @param id 
-	 * 			: int method id
-	 * @param testinfo 
-	 * 			: {@link TestInfo} instance
+	 * @param username
+	 *            : String username of user
+	 * @param id
+	 *            : int method id
+	 * @param testinfo
+	 *            : {@link TestInfo} instance
 	 * @return boolean value: true if it is ok, false otherwise
 	 */
 	public boolean addTest(String username, int id, TestInfo testinfo) {
@@ -531,9 +571,9 @@ public class ServiceManager {
 				tests = new ArrayList<TestInfo>();
 				props.setTests(tests);
 			}
-			//check name
-			for(TestInfo t:tests){
-				if(t.getName().equalsIgnoreCase(testinfo.getName())){
+			// check name
+			for (TestInfo t : tests) {
+				if (t.getName().equalsIgnoreCase(testinfo.getName())) {
 					throw new EntityExistsException();
 				}
 			}
@@ -546,20 +586,21 @@ public class ServiceManager {
 	}
 
 	/**
-	 * Modify an existing test for a service method from database.
-	 * Throw SecurityException if user has not a role in service organization.
+	 * Modify an existing test for a service method from database. Throw
+	 * SecurityException if user has not a role in service organization.
 	 * 
-	 * @param username 
-	 * 			: String username
-	 * @param id 
-	 * 			: method id
-	 * @param pos 
-	 * 			: position of existing test in array (index)
-	 * @param testinfo 
-	 * 			: {@link TestInfo} instance
+	 * @param username
+	 *            : String username
+	 * @param id
+	 *            : method id
+	 * @param pos
+	 *            : position of existing test in array (index)
+	 * @param testinfo
+	 *            : {@link TestInfo} instance
 	 * @return boolean value: true if it is ok, false otherwise
 	 */
-	public boolean modifyTest(String username, int id, int pos, TestInfo testinfo) {
+	public boolean modifyTest(String username, int id, int pos,
+			TestInfo testinfo) {
 		try {
 			User user = userDao.getUserByUsername(username);
 			Method m = methodDao.getMethodById(id);
@@ -570,9 +611,11 @@ public class ServiceManager {
 				throw new SecurityException();
 			TestBoxProperties props = m.getTestboxProperties();
 			List<TestInfo> tests = props.getTests();
-			//check name of test
-			for(int i=0;i<tests.size();i++){
-				if(i!=pos && tests.get(i).getName().equalsIgnoreCase(testinfo.getName())){
+			// check name of test
+			for (int i = 0; i < tests.size(); i++) {
+				if (i != pos
+						&& tests.get(i).getName()
+								.equalsIgnoreCase(testinfo.getName())) {
 					throw new EntityExistsException();
 				}
 			}
@@ -585,15 +628,15 @@ public class ServiceManager {
 	}
 
 	/**
-	 * Delete an existing test for a service method from database.
-	 * Throw SecurityException if user has not a role in service organization.
+	 * Delete an existing test for a service method from database. Throw
+	 * SecurityException if user has not a role in service organization.
 	 * 
-	 * @param username 
-	 * 			: String username of logged user
-	 * @param id 
-	 * 			: method id
-	 * @param pos 
-	 * 			: position of existing test in array (index)
+	 * @param username
+	 *            : String username of logged user
+	 * @param id
+	 *            : method id
+	 * @param pos
+	 *            : position of existing test in array (index)
 	 * @return boolean value: true if it is ok, false otherwise
 	 */
 	public boolean deleteTest(String username, int id, int pos) {
