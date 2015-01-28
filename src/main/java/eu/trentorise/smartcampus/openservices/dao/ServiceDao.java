@@ -47,23 +47,25 @@ public interface ServiceDao {
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
-	public List<Service> showPublishedService(int firstResult, int maxResult, ORDER param_order) throws DataAccessException;
+	public List<Service> showPublishedService(int firstResult, int maxResult,
+			ORDER param_order) throws DataAccessException;
 
 	/**
 	 * Show all service of a given user.
 	 * 
 	 * @param username
-	 * 				: String
+	 *            : String
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
-	public List<Service> showMyService(String username) throws DataAccessException;
+	public List<Service> showMyService(String username)
+			throws DataAccessException;
 
 	/**
 	 * User can interact and use a chosen service.
 	 * 
 	 * @param service_name
-	 * 				: String
+	 *            : String
 	 * @return a {@link Service} instance
 	 * @throws DataAccessException
 	 */
@@ -101,17 +103,18 @@ public interface ServiceDao {
 	 * Get organization of service.
 	 * 
 	 * @param service_id
-	 * 				: int
+	 *            : int
 	 * @return a {@link Organization} instance
 	 * @throws DataAccessException
 	 */
-	public Organization getOrganizationofService(int service_id) throws DataAccessException;
+	public Organization getOrganizationofService(int service_id)
+			throws DataAccessException;
 
 	/**
 	 * Get owner of service.
 	 * 
 	 * @param service_id
-	 * 				: int
+	 *            : int
 	 * @return a {@link User} instance
 	 * @throws DataAccessException
 	 */
@@ -121,7 +124,7 @@ public interface ServiceDao {
 	 * Get service by id.
 	 * 
 	 * @param service_id
-	 * 				: int
+	 *            : int
 	 * @return a {@link Service} instance
 	 * @throws DataAccessException
 	 */
@@ -131,102 +134,107 @@ public interface ServiceDao {
 	 * Get service by owner id.
 	 * 
 	 * @param id_owner
-	 * 				: int
+	 *            : int
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
-	public List<Service> getServiceByIdOwner(int id_owner) throws DataAccessException;
+	public List<Service> getServiceByIdOwner(int id_owner)
+			throws DataAccessException;
 
 	/**
 	 * Get service by organization id.
 	 * 
 	 * @param id_org
-	 * 			: int, organization id
+	 *            : int, organization id
 	 * @param firstResult
-	 * 			: int, start index
+	 *            : int, start index
 	 * @param maxResult
-	 * 			: int, number of services in list
+	 *            : int, number of services in list
 	 * @param param_order
-	 * 			: String, parameter order
+	 *            : String, parameter order
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
-	public List<Service> getServiceByIdOrg(int id_org, int firstResult, int maxResult, String param_order)
+	public List<Service> getServiceByIdOrg(int id_org, int firstResult,
+			int maxResult, String param_order) throws DataAccessException;
+
+	public List<Service> searchServiceByIdOrg(int id_org, int firstResult,
+			int maxResult, List<Integer> categoryIds, String param_order)
 			throws DataAccessException;
 
 	/**
 	 * Find services having in name the token in input.
 	 * 
-	 * @param token 
-	 * 			: String
-	 * @param firstResult 
-	 * 			: int, start index
-	 * @param maxResult 
-	 * 			: int, number of element in list
-	 * @param param_order 
-	 * 			: String, parameter order for list
+	 * @param token
+	 *            : String
+	 * @param firstResult
+	 *            : int, start index
+	 * @param maxResult
+	 *            : int, number of element in list
+	 * @param param_order
+	 *            : String, parameter order for list
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
-	public List<Service> searchService(String token, int firstResult, int maxResult, ORDER param_order)
-			throws DataAccessException;
+	public List<Service> searchService(String token, int firstResult,
+			int maxResult, ORDER param_order) throws DataAccessException;
 
 	/**
 	 * Browse services having input category and tags.
 	 * 
-	 * @param category 
-	 * 			: Integer, category id
-	 * @param firstResult 
-	 * 			: int, start index
-	 * @param maxResult 
-	 * 			: int, number of element in list
-	 * @param param_order 
-	 * 			: String, parameter order for list
+	 * @param category
+	 *            : Integer, category id
+	 * @param firstResult
+	 *            : int, start index
+	 * @param maxResult
+	 *            : int, number of element in list
+	 * @param param_order
+	 *            : String, parameter order for list
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
-	public List<Service> browseService(Integer category, int firstResult, int maxResult, ORDER param_order)
-			throws DataAccessException;
+	public List<Service> browseService(Integer category, int firstResult,
+			int maxResult, ORDER param_order) throws DataAccessException;
 
 	/**
 	 * Browse services having input categories and tags.
 	 * 
-	 * @param categories 
-	 * 			: integer list of category id
-	 * @param firstResult 
-	 * 			: int, start index
-	 * @param maxResult 
-	 * 			: int, number of element in list
-	 * @param param_order 
-	 * 			: String, parameter order for list
+	 * @param categories
+	 *            : integer list of category id
+	 * @param firstResult
+	 *            : int, start index
+	 * @param maxResult
+	 *            : int, number of element in list
+	 * @param param_order
+	 *            : String, parameter order for list
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
-	public List<Service> browseService(int[] categories, int firstResult, int maxResult, ORDER param_order)
-			throws DataAccessException;
+	public List<Service> browseService(int[] categories, int firstResult,
+			int maxResult, ORDER param_order) throws DataAccessException;
 
 	/**
 	 * Retrieve service searching by tag.
 	 * 
-	 * @param tag 
-	 * 			: String
-	 * @param firstResult 
-	 * 			: int, start index
-	 * @param maxResult 
-	 * 			: int, number of element in list
-	 * @param param_order 
-	 * 			: String, parameter oder for list
+	 * @param tag
+	 *            : String
+	 * @param firstResult
+	 *            : int, start index
+	 * @param maxResult
+	 *            : int, number of element in list
+	 * @param param_order
+	 *            : String, parameter oder for list
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
-	public List<Service> getServiceByTag(String tag, int firstResult, int maxResult, ORDER param_order)
-			throws DataAccessException;
+	public List<Service> getServiceByTag(String tag, int firstResult,
+			int maxResult, ORDER param_order) throws DataAccessException;
 
 	/**
 	 * Finds category by id.
 	 * 
 	 * @param id
-	 * 			: int
+	 *            : int
 	 * @return list {@link Service} instances in a specific category
 	 * @throws DataAccessException
 	 */
@@ -239,7 +247,8 @@ public interface ServiceDao {
 	 *         category;
 	 * @throws DataAccessException
 	 */
-	public Map<Integer, Integer> findCategoryServices() throws DataAccessException;
+	public Map<Integer, Integer> findCategoryServices()
+			throws DataAccessException;
 
 	/**
 	 * Counts services saved in db.
@@ -252,27 +261,31 @@ public interface ServiceDao {
 	/**
 	 * 
 	 * @param token
-	 * 			: String
+	 *            : String
 	 * @return number of services retrieved by simple search
 	 * @throws DataAccessException
 	 */
-	public Long countServiceSimpleSearch(String token) throws DataAccessException;
+	public Long countServiceSimpleSearch(String token)
+			throws DataAccessException;
 
 	/**
 	 * Count services retrieve from a search by organization id.
 	 * 
 	 * @param id_org
-	 * 			: int, organization id
+	 *            : int, organization id
+	 * @param categoryIds
+	 *            : List of categoryIds, for all values set to null
 	 * @return number of services retrieved by searching by organization id
 	 * @throws DataAccessException
 	 */
-	public Long countServiceByOrgSearch(int id_org) throws DataAccessException;
+	public Long countServiceByOrgSearch(int id_org, List<Integer> categoryIds)
+			throws DataAccessException;
 
 	/**
 	 * Count services retrieve from a search by tag.
 	 * 
 	 * @param tags
-	 * 			: String
+	 *            : String
 	 * @return number of services retrieved by searching by tags
 	 * @throws DataAccessException
 	 */
@@ -281,23 +294,25 @@ public interface ServiceDao {
 	/**
 	 * Count services retrieve from a search by category id.
 	 * 
-	 * @param category 
-	 * 			: int, category id
+	 * @param category
+	 *            : int, category id
 	 * @return number of services retrieved by searching by category
 	 * @throws DataAccessException
 	 */
-	public Long countServiceCategorySearch(int category) throws DataAccessException;
+	public Long countServiceCategorySearch(int category)
+			throws DataAccessException;
 
 	/**
 	 * Find tag and its services.
 	 * 
 	 * @param group
-	 * 			: String
+	 *            : String
 	 * @param order
-	 * 			: String
+	 *            : String
 	 * @return Map<String, Integer>: tag name, number of services for each tag;
 	 * @throws DataAccessException
 	 */
-	public Map<String, Integer> findTagServices(String group, String order) throws DataAccessException;
+	public Map<String, Integer> findTagServices(String group, String order)
+			throws DataAccessException;
 
 }

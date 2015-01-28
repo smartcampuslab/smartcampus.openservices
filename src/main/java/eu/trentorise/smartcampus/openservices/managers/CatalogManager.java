@@ -354,21 +354,21 @@ public class CatalogManager {
 	 * @return all {@link Service} instances
 	 */
 	public List<Service> catalogServiceBrowseByOrg(int org, int firstResult,
-			int maxResult, String param_order) {
+			int maxResult, List<Integer> categoryIds, String param_order) {
 		List<Service> s = new ArrayList<Service>();
 		try {
 			if (param_order.equalsIgnoreCase(ORDER.id.toString())) {
-				s = serviceDao.getServiceByIdOrg(org, firstResult, maxResult,
-						ORDER.id.toString());
+				s = serviceDao.searchServiceByIdOrg(org, firstResult,
+						maxResult, categoryIds, ORDER.id.toString());
 			} else if (param_order.equalsIgnoreCase(ORDER.name.toString())) {
-				s = serviceDao.getServiceByIdOrg(org, firstResult, maxResult,
-						ORDER.name.toString());
+				s = serviceDao.searchServiceByIdOrg(org, firstResult,
+						maxResult, categoryIds, ORDER.name.toString());
 			} else if (param_order.equalsIgnoreCase(ORDER.namedesc.toString())) {
-				s = serviceDao.getServiceByIdOrg(org, firstResult, maxResult,
-						ORDER.namedesc.toString());
+				s = serviceDao.searchServiceByIdOrg(org, firstResult,
+						maxResult, categoryIds, ORDER.namedesc.toString());
 			} else if (param_order.equalsIgnoreCase(ORDER.date.toString())) {
-				s = serviceDao.getServiceByIdOrg(org, firstResult, maxResult,
-						ORDER.date.toString());
+				s = serviceDao.searchServiceByIdOrg(org, firstResult,
+						maxResult, categoryIds, ORDER.date.toString());
 			}
 
 			if (s != null) {
@@ -607,10 +607,12 @@ public class CatalogManager {
 	 * 
 	 * @param id_org
 	 *            : organization id
+	 * @param categoryIds
+	 *            : list of category ids, put null to retrieve all values
 	 * @return number of services retrieved by organization search
 	 */
-	public Long countServiceByOrgSearch(int id_org) {
-		return serviceDao.countServiceByOrgSearch(id_org);
+	public Long countServiceByOrgSearch(int id_org, List<Integer> categoryIds) {
+		return serviceDao.countServiceByOrgSearch(id_org, categoryIds);
 	}
 
 	/**

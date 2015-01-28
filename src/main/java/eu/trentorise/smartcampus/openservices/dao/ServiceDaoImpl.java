@@ -244,6 +244,35 @@ public class ServiceDaoImpl implements ServiceDao {
 	}
 
 	/**
+	 * This method finds a service by its organization id but unpublished TEMP
+	 * METHOD -> strong refactor needed
+	 */
+	@Transactional
+	@Override
+	public List<Service> searchServiceByIdOrg(int id_org, int firstResult,
+			int maxResult, List<Integer> categoryIds, String param_order)
+			throws DataAccessException {
+		String query = "FROM Service WHERE organizationId=:idOrg AND state != 'UNPUBLISH'";
+		if (categoryIds != null) {
+			query += " AND category IN :cats";
+		}
+
+		query += " ORDER BY "
+				+ (ORDER.namedesc.toString().equals(param_order) ? "name DESC"
+						: ORDER.name.toString());
+
+		Query q = getEntityManager().createQuery(query).setParameter("idOrg",
+				id_org);
+		if (categoryIds != null) {
+			q.setParameter("cats", categoryIds);
+		}
+
+		List<Service> s = q.setFirstResult(firstResult)
+				.setMaxResults(maxResult).getResultList();
+		return s;
+	}
+
+	/**
 	 * This method retrieves all services but unpublished one Search by a token
 	 * in name.
 	 */
@@ -413,12 +442,19 @@ public class ServiceDaoImpl implements ServiceDao {
 	 */
 	@Transactional
 	@Override
-	public Long countServiceByOrgSearch(int id_org) throws DataAccessException {
-		return (Long) getEntityManager()
-				.createQuery(
-						"SELECT COUNT(s) FROM Service S WHERE S.organizationId=:id_org "
-								+ "AND s.state!='UNPUBLISH'")
-				.setParameter("id_org", id_org).getSingleResult();
+	public Long countServiceByOrgSearch(int id_org, List<Integer> categoryIds)
+			throws DataAccessException {
+		String query = "SELECT COUNT(s) FROM Service S WHERE S.organizationId=:id_org AND s.state!='UNPUBLISH'";
+		if (categoryIds != null) {
+			query += " AND s.category IN :cats";
+		}
+
+		Query q = getEntityManager().createQuery(query).setParameter("id_org",
+				id_org);
+		if (categoryIds != null) {
+			q.setParameter("cats", categoryIds);
+		}
+		return (Long) q.getSingleResult();
 	}
 
 	/**
