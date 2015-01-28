@@ -55,7 +55,8 @@ import eu.trentorise.smartcampus.openservices.support.TagCounter;
 @RequestMapping(value = "/api/catalog")
 public class CatalogController {
 
-	private static final Logger logger = LoggerFactory.getLogger(CatalogController.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(CatalogController.class);
 
 	/**
 	 * Instance of {@link CatalogManager} to retrieve data using Dao classes.
@@ -66,11 +67,12 @@ public class CatalogController {
 	/**
 	 * Retrieve services count
 	 * 
-	 * @param response 
-	 * 			: {@link HttpServletResponse} which is needed for status of
-	 * 			response (OK, BAD REQUEST or NOT FOUND)
+	 * @param response
+	 *            : {@link HttpServletResponse} which is needed for status of
+	 *            response (OK, BAD REQUEST or NOT FOUND)
 	 * @return {@link ResponseObject} with services data, status (OK, BAD
-	 *  		REQUEST or NOT FOUND) and error message (if status is BAD REQUEST or NOT FOUND).
+	 *         REQUEST or NOT FOUND) and error message (if status is BAD REQUEST
+	 *         or NOT FOUND).
 	 */
 	@RequestMapping(value = "/servicecount", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
@@ -119,18 +121,21 @@ public class CatalogController {
 	 */
 	@RequestMapping(value = "/service", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public ResponseObject catalogServices(@RequestParam(value = "q", required = false) String token,
+	public ResponseObject catalogServices(
+			@RequestParam(value = "q", required = false) String token,
 			@RequestParam(value = "first", required = false, defaultValue = "0") Integer firstResult,
 			@RequestParam(value = "last", required = false, defaultValue = "0") Integer maxResult,
 			@RequestParam(value = "order", required = false, defaultValue = "name") String param_order,
-			@RequestParam(required = false) String tag, HttpServletResponse response) {
+			@RequestParam(required = false) String tag,
+			HttpServletResponse response) {
 		logger.info("-- Service Catalog --");
 		ResponseObject responseObject = new ResponseObject();
 		List<Service> services = new ArrayList<Service>();
 		try {
 			if (token == null && tag == null) {
 				logger.info("-- List of service --");
-				services = Service.fromServiceEntities(catalogManager.catalogServices(firstResult, maxResult, param_order));
+				services = Service.fromServiceEntities(catalogManager
+						.catalogServices(firstResult, maxResult, param_order));
 				if (services == null || services.size() == 0) {
 					responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 					responseObject.setError("No service available");
@@ -138,38 +143,46 @@ public class CatalogController {
 				} else {
 					responseObject.setData(services);
 					responseObject.setStatus(HttpServletResponse.SC_OK);
-					responseObject.setTotalNumber(catalogManager.countService());
+					responseObject
+							.setTotalNumber(catalogManager.countService());
 				}
 			} else if (token != null && tag == null) {
 				logger.info("-- Simple Search --");
-				services = Service.fromServiceEntities(catalogManager.catalogServiceSimpleSearch(token, firstResult, maxResult,
-						param_order));
+				services = Service.fromServiceEntities(catalogManager
+						.catalogServiceSimpleSearch(token, firstResult,
+								maxResult, param_order));
 				if (services == null || services.size() == 0) {
 					responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-					responseObject.setError("No published service for this search by name");
+					responseObject
+							.setError("No published service for this search by name");
 					response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 				} else {
 					responseObject.setData(services);
 					responseObject.setStatus(HttpServletResponse.SC_OK);
-					responseObject.setTotalNumber(catalogManager.countServiceSimpleSearch(token));
+					responseObject.setTotalNumber(catalogManager
+							.countServiceSimpleSearch(token));
 				}
 			} else if (token == null && tag != null) {
 				logger.info("-- Simple Search by tags: {} --", tag);
-				List<Service> s = Service.fromServiceEntities(catalogManager.catalogServiceBrowseByTags(tag, firstResult,
-						maxResult, param_order));
+				List<Service> s = Service.fromServiceEntities(catalogManager
+						.catalogServiceBrowseByTags(tag, firstResult,
+								maxResult, param_order));
 				if (s == null || s.size() == 0) {
 					responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-					responseObject.setError("No service for this search by tags");
+					responseObject
+							.setError("No service for this search by tags");
 					response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 				} else {
 					responseObject.setData(s);
 					responseObject.setStatus(HttpServletResponse.SC_OK);
-					responseObject.setTotalNumber(catalogManager.countServiceByTagsSearch(tag));
+					responseObject.setTotalNumber(catalogManager
+							.countServiceByTagsSearch(tag));
 				}
 			}
 		} catch (SecurityException s) {
 			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			responseObject.setError("Order value is wrong. It can be only id or name");
+			responseObject
+					.setError("Order value is wrong. It can be only id or name");
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return responseObject;
@@ -179,19 +192,21 @@ public class CatalogController {
 	 * Retrieve data of a specific service, which must be published or
 	 * deprecated. Search is done by service id.
 	 * 
-	 * @param serviceId 
-	 * 				: int id of published or deprecated service.
-	 * @param response 
-	 * 				: {@link HttpServletResponse} which is needed for status of
-	 * 				  response (OK or NOT FOUND)
+	 * @param serviceId
+	 *            : int id of published or deprecated service.
+	 * @param response
+	 *            : {@link HttpServletResponse} which is needed for status of
+	 *            response (OK or NOT FOUND)
 	 * @return {@link ResponseObject} with services data, status (OK or NOT
-	 * 			FOUND) and error message (if status is NOT FOUND).
+	 *         FOUND) and error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/service/{serviceId}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public ResponseObject catalogServiceById(@PathVariable int serviceId, HttpServletResponse response) {
+	public ResponseObject catalogServiceById(@PathVariable int serviceId,
+			HttpServletResponse response) {
 		logger.info("-- Service Catalog Service By Id--");
-		Service service = Service.fromServiceEntity(catalogManager.catalogServiceById(serviceId));
+		Service service = Service.fromServiceEntity(catalogManager
+				.catalogServiceById(serviceId));
 		ResponseObject responseObject = new ResponseObject();
 		if (service == null) {
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -212,13 +227,14 @@ public class CatalogController {
 	 *            : int id of published or deprecated service.
 	 * @param response
 	 *            : {@link HttpServletResponse} which is needed for status of
-	 *              response (OK or NOT FOUND)
+	 *            response (OK or NOT FOUND)
 	 * @return {@link ResponseObject} with services method data, status (OK or
 	 *         NOT FOUND) and error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/service/{serviceId}/methods", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public ResponseObject catalogServiceMethods(@PathVariable int serviceId, HttpServletResponse response) {
+	public ResponseObject catalogServiceMethods(@PathVariable int serviceId,
+			HttpServletResponse response) {
 		logger.info("-- Service Catalog Show Methods --");
 		List<Method> methods = catalogManager.catalogServiceMethods(serviceId);
 		ResponseObject responseObject = new ResponseObject();
@@ -240,19 +256,22 @@ public class CatalogController {
 	 *            : int id of published or deprecated service.
 	 * @param response
 	 *            : {@link HttpServletResponse} which is needed for status of
-	 *              response (OK or NOT FOUND)
+	 *            response (OK or NOT FOUND)
 	 * @return {@link ResponseObject} with services history data, status (OK or
 	 *         NOT FOUND) and error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/service/{serviceId}/history", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public ResponseObject catalogServiceHistory(@PathVariable int serviceId, HttpServletResponse response) {
+	public ResponseObject catalogServiceHistory(@PathVariable int serviceId,
+			HttpServletResponse response) {
 		logger.info("-- Service Catalog Show Methods --");
-		List<ServiceHistory> history = catalogManager.catalogServiceHistory(serviceId);
+		List<ServiceHistory> history = catalogManager
+				.catalogServiceHistory(serviceId);
 		ResponseObject responseObject = new ResponseObject();
 		if (history == null || history.size() == 0) {
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			responseObject.setError("No service history for this published service");
+			responseObject
+					.setError("No service history for this published service");
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		} else {
 			responseObject.setData(history);
@@ -262,34 +281,35 @@ public class CatalogController {
 	}
 
 	/**
-	 * /**
-	 * Browse service in catalog by category. Every category has its own id and
-	 * search is done by category id.
-	 *
+	 * /** Browse service in catalog by category. Every category has its own id
+	 * and search is done by category id.
+	 * 
 	 * @param categoryId
 	 *            : int category id
 	 * @param firstResult
-	 * 			  : start index
+	 *            : start index
 	 * @param maxResult
-	 * 			  : number of elements
+	 *            : number of elements
 	 * @param param_order
-	 * 			  : order parameter for resulted list
+	 *            : order parameter for resulted list
 	 * @param response
 	 *            : {@link HttpServletResponse} which is needed for status of
-	 *              response (OK or NOT FOUND)
+	 *            response (OK or NOT FOUND)
 	 * @return {@link ResponseObject} with list of service data, status (OK or
 	 *         NOT FOUND) and error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/service/category/{categoryId}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public ResponseObject catalogServiceByCategory(@PathVariable int categoryId,
+	public ResponseObject catalogServiceByCategory(
+			@PathVariable int categoryId,
 			@RequestParam(value = "first", required = false, defaultValue = "0") Integer firstResult,
 			@RequestParam(value = "last", required = false, defaultValue = "0") Integer maxResult,
 			@RequestParam(value = "order", required = false, defaultValue = "name") String param_order,
 			HttpServletResponse response) {
 		logger.info("-- Service Catalog browse (category) --");
-		List<Service> services = Service.fromServiceEntities(catalogManager.catalogServiceBrowseByCategory(categoryId,
-				firstResult, maxResult, param_order));
+		List<Service> services = Service.fromServiceEntities(catalogManager
+				.catalogServiceBrowseByCategory(categoryId, firstResult,
+						maxResult, param_order));
 		ResponseObject responseObject = new ResponseObject();
 		if (services == null || services.size() == 0) {
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -298,7 +318,8 @@ public class CatalogController {
 		} else {
 			responseObject.setData(services);
 			responseObject.setStatus(HttpServletResponse.SC_OK);
-			responseObject.setTotalNumber(catalogManager.countServiceByCategorySearch(categoryId));
+			responseObject.setTotalNumber(catalogManager
+					.countServiceByCategorySearch(categoryId));
 		}
 		return responseObject;
 	}
@@ -307,16 +328,16 @@ public class CatalogController {
 	 * Browse service in catalog by multiple categories.
 	 * 
 	 * @param firstResult
-	 * 			  : start index
+	 *            : start index
 	 * @param maxResult
-	 * 			  : number of elements
+	 *            : number of elements
 	 * @param param_order
-	 * 			  : order parameter for resulted list
+	 *            : order parameter for resulted list
 	 * @param categoriesIds
-	 * 			  : string of category id list
+	 *            : string of category id list
 	 * @param response
 	 *            : {@link HttpServletResponse} which is needed for status of
-	 *              response (OK or NOT FOUND)
+	 *            response (OK or NOT FOUND)
 	 * @return {@link ResponseObject} with list of service data, status (OK or
 	 *         NOT FOUND) and error message (if status is NOT FOUND).
 	 */
@@ -334,25 +355,29 @@ public class CatalogController {
 		int[] categoriesIdsArray = new int[categoriesIdsStringArray.length];
 		for (int i = 0; i < categoriesIdsStringArray.length; i++) {
 			try {
-				categoriesIdsArray[i] = Integer.parseInt(categoriesIdsStringArray[i]);
+				categoriesIdsArray[i] = Integer
+						.parseInt(categoriesIdsStringArray[i]);
 			} catch (NumberFormatException nfe) {
 				continue;
 			}
 		}
 
-		List<Service> services = Service.fromServiceEntities(catalogManager.catalogServiceBrowseByCategories(
-				categoriesIdsArray, firstResult, maxResult, param_order));
+		List<Service> services = Service.fromServiceEntities(catalogManager
+				.catalogServiceBrowseByCategories(categoriesIdsArray,
+						firstResult, maxResult, param_order));
 		ResponseObject responseObject = new ResponseObject();
 		if (services == null || services.size() == 0) {
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			responseObject.setError("No published service for these categories");
+			responseObject
+					.setError("No published service for these categories");
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		} else {
 			responseObject.setData(services);
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 			Long count = 0L;
 			for (int i = 0; i < categoriesIdsArray.length; i++) {
-				count += catalogManager.countServiceByCategorySearch(categoriesIdsArray[i]);
+				count += catalogManager
+						.countServiceByCategorySearch(categoriesIdsArray[i]);
 			}
 			responseObject.setTotalNumber(count);
 		}
@@ -366,30 +391,32 @@ public class CatalogController {
 	 * @param org
 	 *            : int organization id
 	 * @param firstResult
-	 * 			  : start index
+	 *            : start index
 	 * @param maxResult
-	 * 			  : number of elements
+	 *            : number of elements
 	 * @param param_order
-	 * 			  : order parameter for resulted list
+	 *            : order parameter for resulted list
 	 * @param response
 	 *            : {@link HttpServletResponse} which is needed for status of
-	 *              response (OK or NOT FOUND)
+	 *            response (OK or NOT FOUND)
 	 * @return {@link ResponseObject} with list of service data, status (OK or
 	 *         NOT FOUND) and error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/service/org/{org}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public ResponseObject catalogServiceByOrg(@PathVariable int org,
+	public ResponseObject catalogServiceByOrg(
+			@PathVariable int org,
 			@RequestParam(value = "first", required = false, defaultValue = "0") Integer firstResult,
 			@RequestParam(value = "last", required = false, defaultValue = "0") Integer maxResult,
 			@RequestParam(value = "order", required = false, defaultValue = "name") String param_order,
 			HttpServletResponse response) {
-		logger.info("-- Service Catalog browse (org) --");
+		logger.info("Service Catalog browse by orgs");
 
 		ResponseObject responseObject = new ResponseObject();
 		try {
-			List<Service> services = Service.fromServiceEntities(catalogManager.catalogServiceBrowseByOrg(org, firstResult,
-					maxResult, param_order));
+			List<Service> services = Service.fromServiceEntities(catalogManager
+					.catalogServiceBrowseByOrg(org, firstResult, maxResult,
+							param_order));
 			if (services == null || services.size() == 0) {
 				responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 				responseObject.setError("No service for this organization");
@@ -397,11 +424,13 @@ public class CatalogController {
 			} else {
 				responseObject.setData(services);
 				responseObject.setStatus(HttpServletResponse.SC_OK);
-				responseObject.setTotalNumber(catalogManager.countServiceByOrgSearch(org));
+				responseObject.setTotalNumber(catalogManager
+						.countServiceByOrgSearch(org));
 			}
 		} catch (SecurityException s) {
 			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			responseObject.setError("Order value is wrong. It can be only id or name");
+			responseObject
+					.setError("Order value is wrong. It can be only id or name");
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return responseObject;
@@ -414,21 +443,22 @@ public class CatalogController {
 	 * @param token
 	 *            : String
 	 * @param firstResult
-	 * 			  : start index
+	 *            : start index
 	 * @param maxResult
-	 * 			  : number of elements
+	 *            : number of elements
 	 * @param param_order
-	 * 			  : order parameter for resulted list
+	 *            : order parameter for resulted list
 	 * @param response
 	 *            : {@link HttpServletResponse} which is needed for status of
-	 *               response (OK, BAD REQUEST or NOT FOUND)
+	 *            response (OK, BAD REQUEST or NOT FOUND)
 	 * @return {@link ResponseObject} with organizations data, status (OK, BAD
 	 *         REQUEST or NOT FOUND) and error message (if status is BAD REQUEST
 	 *         or NOT FOUND).
 	 */
 	@RequestMapping(value = "/org", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public ResponseObject catalogOrgs(@RequestParam(value = "q", required = false) String token,
+	public ResponseObject catalogOrgs(
+			@RequestParam(value = "q", required = false) String token,
 			@RequestParam(value = "first", required = false, defaultValue = "0") Integer firstResult,
 			@RequestParam(value = "last", required = false, defaultValue = "0") Integer maxResult,
 			@RequestParam(value = "order", required = false, defaultValue = "name") String param_order,
@@ -440,7 +470,8 @@ public class CatalogController {
 		try {
 			if (token == null) {
 				logger.info("-- All organization --");
-				orgs = catalogManager.catalogOrg(firstResult, maxResult, param_order);
+				orgs = catalogManager.catalogOrg(firstResult, maxResult,
+						param_order);
 				if (orgs == null || orgs.size() == 0) {
 					responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 					responseObject.setError("No organization available");
@@ -452,10 +483,12 @@ public class CatalogController {
 				}
 			} else if (token != null) {
 				logger.info("-- Simple Organization Search: {} --", token);
-				orgs = catalogManager.catalogOrgSimpleSearch(token, firstResult, maxResult, param_order);
+				orgs = catalogManager.catalogOrgSimpleSearch(token,
+						firstResult, maxResult, param_order);
 				if (orgs == null || orgs.size() == 0) {
 					responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-					responseObject.setError("No organization for this search by name");
+					responseObject
+							.setError("No organization for this search by name");
 					response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 				} else {
 					responseObject.setData(orgs);
@@ -465,7 +498,8 @@ public class CatalogController {
 			}
 		} catch (SecurityException s) {
 			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			responseObject.setError("Order value is wrong. It can be only id or name");
+			responseObject
+					.setError("Order value is wrong. It can be only id or name");
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return responseObject;
@@ -475,16 +509,17 @@ public class CatalogController {
 	 * Retrieve data of a specific organization. Search by its id.
 	 * 
 	 * @param id
-	 *          : int organization id
+	 *            : int organization id
 	 * @param response
-	 *          : {@link HttpServletResponse} which is needed for status of
+	 *            : {@link HttpServletResponse} which is needed for status of
 	 *            response (OK or NOT FOUND)
 	 * @return {@link ResponseObject} with organization data, status (OK or NOT
 	 *         FOUND) and error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/org/{id}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public ResponseObject catalogOrgById(@PathVariable int id, HttpServletResponse response) {
+	public ResponseObject catalogOrgById(@PathVariable int id,
+			HttpServletResponse response) {
 		logger.info("-- Organization Catalog data --");
 		Organization org = catalogManager.catalogOrgById(id);
 		ResponseObject responseObject = new ResponseObject();
@@ -506,20 +541,21 @@ public class CatalogController {
 	 * @param categoryId
 	 *            : int path variable category id
 	 * @param firstResult
-	 * 			  : start index
+	 *            : start index
 	 * @param maxResult
-	 * 			  : number of elements
+	 *            : number of elements
 	 * @param param_order
-	 * 			  : order parameter for resulted list
+	 *            : order parameter for resulted list
 	 * @param response
 	 *            : {@link HttpServletResponse} which is needed for status of
-	 *              response (OK, BAD REQUEST or NOT FOUND)
+	 *            response (OK, BAD REQUEST or NOT FOUND)
 	 * @return {@link ResponseObject} with list of organization data, status (OK
 	 *         or NOT FOUND) and error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/org/category/{categoryId}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public ResponseObject catalogOrgByCategory(@PathVariable int categoryId,
+	public ResponseObject catalogOrgByCategory(
+			@PathVariable int categoryId,
 			@RequestParam(value = "first", required = false, defaultValue = "0") Integer firstResult,
 			@RequestParam(value = "last", required = false, defaultValue = "0") Integer maxResult,
 			@RequestParam(value = "order", required = false, defaultValue = "name") String param_order,
@@ -529,10 +565,12 @@ public class CatalogController {
 		ResponseObject responseObject = new ResponseObject();
 		try {
 			List<Organization> orgs = catalogManager
-					.catalogOrgBrowseByCategory(categoryId, firstResult, maxResult, param_order);
+					.catalogOrgBrowseByCategory(categoryId, firstResult,
+							maxResult, param_order);
 			if (orgs == null || orgs.size() == 0) {
 				responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-				responseObject.setError("No organization for this search by category");
+				responseObject
+						.setError("No organization for this search by category");
 				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			} else {
 				responseObject.setData(orgs);
@@ -541,7 +579,8 @@ public class CatalogController {
 			}
 		} catch (SecurityException s) {
 			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			responseObject.setError("Order value is wrong. It can be only id or name");
+			responseObject
+					.setError("Order value is wrong. It can be only id or name");
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return responseObject;
@@ -550,19 +589,20 @@ public class CatalogController {
 	/**
 	 * Browse organization by categories.
 	 * 
-	 * @param firstResult 
-	 * 				: start index
+	 * @param firstResult
+	 *            : start index
 	 * @param maxResult
-	 * 				: number of element in list
+	 *            : number of element in list
 	 * @param param_order
-	 * 				: parameter for ordering list
+	 *            : parameter for ordering list
 	 * @param categoriesIds
-	 * 				: id of categories
+	 *            : id of categories
 	 * @param response
-	 * 				: instance of {@link HttpServletResponse} that is needed for status
-	 * 				  of response (OK, BAD REQUEST or NOT FOUND)
-	 * @return {@link ResponseObject} with list of organization in the category, status (OK, BAD REQUEST
-	 *         or NOT FOUND) and error message (if status is BAD REQUEST or NOT FOUND).
+	 *            : instance of {@link HttpServletResponse} that is needed for
+	 *            status of response (OK, BAD REQUEST or NOT FOUND)
+	 * @return {@link ResponseObject} with list of organization in the category,
+	 *         status (OK, BAD REQUEST or NOT FOUND) and error message (if
+	 *         status is BAD REQUEST or NOT FOUND).
 	 */
 	@RequestMapping(value = "/org/category", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
@@ -578,7 +618,8 @@ public class CatalogController {
 		int[] categoriesIdsArray = new int[categoriesIdsStringArray.length];
 		for (int i = 0; i < categoriesIdsStringArray.length; i++) {
 			try {
-				categoriesIdsArray[i] = Integer.parseInt(categoriesIdsStringArray[i]);
+				categoriesIdsArray[i] = Integer
+						.parseInt(categoriesIdsStringArray[i]);
 			} catch (NumberFormatException nfe) {
 				continue;
 			}
@@ -586,11 +627,13 @@ public class CatalogController {
 
 		ResponseObject responseObject = new ResponseObject();
 		try {
-			List<Organization> orgs = catalogManager.catalogOrgBrowseByCategories(categoriesIdsArray, firstResult, maxResult,
-					param_order);
+			List<Organization> orgs = catalogManager
+					.catalogOrgBrowseByCategories(categoriesIdsArray,
+							firstResult, maxResult, param_order);
 			if (orgs == null || orgs.size() == 0) {
 				responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-				responseObject.setError("No organization for this search by categories");
+				responseObject
+						.setError("No organization for this search by categories");
 				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			} else {
 				responseObject.setData(orgs);
@@ -599,7 +642,8 @@ public class CatalogController {
 			}
 		} catch (SecurityException s) {
 			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			responseObject.setError("Order value is wrong. It can be only id or name");
+			responseObject
+					.setError("Order value is wrong. It can be only id or name");
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return responseObject;
@@ -636,9 +680,9 @@ public class CatalogController {
 	 * Retrieve news.
 	 * 
 	 * @param n
-	 * 			: int, number of news that are retrieved
+	 *            : int, number of news that are retrieved
 	 * @param response
-	 *          : {@link HttpServletResponse} which is needed for status of
+	 *            : {@link HttpServletResponse} which is needed for status of
 	 *            response (OK or NOT FOUND)
 	 * @return {@link ResponseObject} with list of service history (news),
 	 *         status (OK or NOT FOUND) and error message (if status is NOT
@@ -646,7 +690,8 @@ public class CatalogController {
 	 */
 	@RequestMapping(value = "/news", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseObject catalogNews(@RequestParam int n, HttpServletResponse response) {
+	public ResponseObject catalogNews(@RequestParam int n,
+			HttpServletResponse response) {
 		logger.info("-- Category Catalog browse --");
 		List<News> news = catalogManager.getNews(n);
 		ResponseObject responseObject = new ResponseObject();
@@ -666,11 +711,12 @@ public class CatalogController {
 	 * Retrieve tag counter.
 	 * 
 	 * @param group
-	 * 			: String, its values are tag or counter. This parameter orders list of tagged services
+	 *            : String, its values are tag or counter. This parameter orders
+	 *            list of tagged services
 	 * @param order
-	 * 			: String, its values are ASC or DESC.
+	 *            : String, its values are ASC or DESC.
 	 * @param response
-	 * 			: {@link HttpServletResponse} which is needed for status of
+	 *            : {@link HttpServletResponse} which is needed for status of
 	 *            response (OK, BAD REQUEST or NOT FOUND)
 	 * @return {@link ResponseObject} with list of tag counter, status (OK, BAD
 	 *         REQUEST or NOT FOUND) and error message (if status is NOT FOUND
@@ -678,19 +724,25 @@ public class CatalogController {
 	 */
 	@RequestMapping(value = "/tagcloud", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseObject catalogTag(@RequestParam(value = "group", required = false, defaultValue = "tag") String group,
-			@RequestParam(value = "order", required = false, defaultValue = "ASC") String order, HttpServletResponse response) {
-		logger.info("-- Tag counter -- Param group: {} -- Param order: {}", group, order);
+	public ResponseObject catalogTag(
+			@RequestParam(value = "group", required = false, defaultValue = "tag") String group,
+			@RequestParam(value = "order", required = false, defaultValue = "ASC") String order,
+			HttpServletResponse response) {
+		logger.info("-- Tag counter -- Param group: {} -- Param order: {}",
+				group, order);
 		ResponseObject responseObject = new ResponseObject();
-		if ((group.equalsIgnoreCase(Constants.ORDER.tag.toString()) || group.equalsIgnoreCase(Constants.ORDER.counter
-				.toString()))
-				&& (order.equalsIgnoreCase(Constants.ASCDESC.ASC.toString()) || order.equalsIgnoreCase(Constants.ASCDESC.DESC
-						.toString()))) {
+		if ((group.equalsIgnoreCase(Constants.ORDER.tag.toString()) || group
+				.equalsIgnoreCase(Constants.ORDER.counter.toString()))
+				&& (order.equalsIgnoreCase(Constants.ASCDESC.ASC.toString()) || order
+						.equalsIgnoreCase(Constants.ASCDESC.DESC.toString()))) {
 			try {
-				List<TagCounter> tglist = catalogManager.getTagsServicesCounter(group, order);
+				List<TagCounter> tglist = catalogManager
+						.getTagsServicesCounter(group, order);
 				if (tglist == null || tglist.size() == 0) {
-					responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-					responseObject.setError("There is a problem in connecting with database");
+					responseObject
+							.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					responseObject
+							.setError("There is a problem in connecting with database");
 					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				} else {
 					responseObject.setData(tglist);
@@ -703,8 +755,9 @@ public class CatalogController {
 			}
 		} else {
 			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			responseObject.setError("Wrong input parameters: group value can be tag or counter;"
-					+ " order value can be ASC or DESC.");
+			responseObject
+					.setError("Wrong input parameters: group value can be tag or counter;"
+							+ " order value can be ASC or DESC.");
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 		return responseObject;

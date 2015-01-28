@@ -84,23 +84,28 @@ public class CatalogManager {
 	 * Get list of published and deprecated services.
 	 * 
 	 * @param firstResult
-	 * 			: int, start index
+	 *            : int, start index
 	 * @param maxResult
-	 * 			: int, number of element in list
+	 *            : int, number of element in list
 	 * @param param_order
-	 * 			: String, parameter order
+	 *            : String, parameter order
 	 * @return all {@link Service} instances
 	 */
-	public List<Service> catalogServices(int firstResult, int maxResult, String param_order) {
+	public List<Service> catalogServices(int firstResult, int maxResult,
+			String param_order) {
 		try {
 			if (param_order.equalsIgnoreCase(ORDER.id.toString())) {
-				return cleanAuthenticationData(serviceDao.showPublishedService(firstResult, maxResult, ORDER.id));
+				return cleanAuthenticationData(serviceDao.showPublishedService(
+						firstResult, maxResult, ORDER.id));
 			} else if (param_order.equalsIgnoreCase(ORDER.name.toString())) {
-				return cleanAuthenticationData(serviceDao.showPublishedService(firstResult, maxResult, ORDER.name));
+				return cleanAuthenticationData(serviceDao.showPublishedService(
+						firstResult, maxResult, ORDER.name));
 			} else if (param_order.equalsIgnoreCase(ORDER.namedesc.toString())) {
-				return cleanAuthenticationData(serviceDao.showPublishedService(firstResult, maxResult, ORDER.namedesc));
+				return cleanAuthenticationData(serviceDao.showPublishedService(
+						firstResult, maxResult, ORDER.namedesc));
 			} else if (param_order.equalsIgnoreCase(ORDER.date.toString())) {
-				return cleanAuthenticationData(serviceDao.showPublishedService(firstResult, maxResult, ORDER.date));
+				return cleanAuthenticationData(serviceDao.showPublishedService(
+						firstResult, maxResult, ORDER.date));
 			}
 			throw new SecurityException();
 		} catch (DataAccessException d) {
@@ -112,7 +117,7 @@ public class CatalogManager {
 	 * Returns a list of services after cleaning authentication data.
 	 * 
 	 * @param services
-	 * 			: list of {@link Service}
+	 *            : list of {@link Service}
 	 * @return a list of {@link Service}
 	 */
 	private List<Service> cleanAuthenticationData(List<Service> services) {
@@ -128,7 +133,7 @@ public class CatalogManager {
 	 * Get a Service data and clean authentication.
 	 * 
 	 * @param s
-	 * 			: instance of {@link Service}
+	 *            : instance of {@link Service}
 	 * @return instance of {@link Service}
 	 */
 	private Service cleanAuthenticationData(Service s) {
@@ -147,7 +152,7 @@ public class CatalogManager {
 	 * Returns a list of methods after cleaning authentication data.
 	 * 
 	 * @param methods
-	 * 			: list of {@link Method}
+	 *            : list of {@link Method}
 	 * @return a list of {@link Method}
 	 */
 	private List<Method> cleanMethodAuthenticationData(List<Method> methods) {
@@ -163,14 +168,15 @@ public class CatalogManager {
 	 * Get a method data and clean authentication.
 	 * 
 	 * @param m
-	 * 			: instance of {@link Method}
+	 *            : instance of {@link Method}
 	 * @return instance of {@link Method}
 	 */
 	private Method cleanMethodAuthenticationData(Method m) {
 		if (m == null)
 			return null;
 		if (m.getTestboxProperties() != null) {
-			Authentication a = m.getTestboxProperties().getAuthenticationDescriptor();
+			Authentication a = m.getTestboxProperties()
+					.getAuthenticationDescriptor();
 			if (a != null) {
 				a.setAccessAttributes(null);
 			}
@@ -189,7 +195,9 @@ public class CatalogManager {
 		Service s = new Service();
 		try {
 			s = serviceDao.getServiceById(service_id);
-			if (s != null && s.getState().equalsIgnoreCase(SERVICE_STATE.UNPUBLISH.toString())) {
+			if (s != null
+					&& s.getState().equalsIgnoreCase(
+							SERVICE_STATE.UNPUBLISH.toString())) {
 				s = null;
 			}
 		} catch (DataAccessException d) {
@@ -207,7 +215,8 @@ public class CatalogManager {
 	 */
 	public List<Method> catalogServiceMethods(int service_id) {
 		try {
-			return cleanMethodAuthenticationData(methodDao.getMethodByServiceId(service_id));
+			return cleanMethodAuthenticationData(methodDao
+					.getMethodByServiceId(service_id));
 		} catch (DataAccessException e) {
 			return null;
 		}
@@ -232,25 +241,30 @@ public class CatalogManager {
 	 * Get list of all services. Their name contains token.
 	 * 
 	 * @param token
-	 * 			: String token compared with service name
+	 *            : String token compared with service name
 	 * @param firstResult
-	 * 			: int, start index
+	 *            : int, start index
 	 * @param maxResult
-	 * 			: int, number of element in list of services
+	 *            : int, number of element in list of services
 	 * @param param_order
-	 * 			: String, parameter order
+	 *            : String, parameter order
 	 * @return all {@link Service} instances
 	 */
-	public List<Service> catalogServiceSimpleSearch(String token, int firstResult, int maxResult, String param_order) {
+	public List<Service> catalogServiceSimpleSearch(String token,
+			int firstResult, int maxResult, String param_order) {
 		try {
 			if (param_order.equalsIgnoreCase(ORDER.id.toString())) {
-				return serviceDao.searchService(token, firstResult, maxResult, ORDER.id);
+				return serviceDao.searchService(token, firstResult, maxResult,
+						ORDER.id);
 			} else if (param_order.equalsIgnoreCase(ORDER.name.toString())) {
-				return serviceDao.searchService(token, firstResult, maxResult, ORDER.name);
+				return serviceDao.searchService(token, firstResult, maxResult,
+						ORDER.name);
 			} else if (param_order.equalsIgnoreCase(ORDER.namedesc.toString())) {
-				return serviceDao.searchService(token, firstResult, maxResult, ORDER.namedesc);
+				return serviceDao.searchService(token, firstResult, maxResult,
+						ORDER.namedesc);
 			} else if (param_order.equalsIgnoreCase(ORDER.date.toString())) {
-				return serviceDao.searchService(token, firstResult, maxResult, ORDER.date);
+				return serviceDao.searchService(token, firstResult, maxResult,
+						ORDER.date);
 			}
 			throw new SecurityException();
 		} catch (DataAccessException d) {
@@ -262,25 +276,30 @@ public class CatalogManager {
 	 * Get list of all services, searching by category.
 	 * 
 	 * @param category
-	 *          : int, category id
+	 *            : int, category id
 	 * @param firstResult
-	 * 			: int, start index
+	 *            : int, start index
 	 * @param maxResult
-	 * 			: int, number of element in list of services
+	 *            : int, number of element in list of services
 	 * @param param_order
-	 * 			: String, parameter order
+	 *            : String, parameter order
 	 * @return all {@link Service} instances
 	 */
-	public List<Service> catalogServiceBrowseByCategory(int category, int firstResult, int maxResult, String param_order) {
+	public List<Service> catalogServiceBrowseByCategory(int category,
+			int firstResult, int maxResult, String param_order) {
 		try {
 			if (param_order.equalsIgnoreCase(ORDER.id.toString())) {
-				return serviceDao.browseService(category, firstResult, maxResult, ORDER.id);
+				return serviceDao.browseService(category, firstResult,
+						maxResult, ORDER.id);
 			} else if (param_order.equalsIgnoreCase(ORDER.namedesc.toString())) {
-				return serviceDao.browseService(category, firstResult, maxResult, ORDER.namedesc);
+				return serviceDao.browseService(category, firstResult,
+						maxResult, ORDER.namedesc);
 			} else if (param_order.equalsIgnoreCase(ORDER.date.toString())) {
-				return serviceDao.browseService(category, firstResult, maxResult, ORDER.date);
+				return serviceDao.browseService(category, firstResult,
+						maxResult, ORDER.date);
 			} else {
-				return serviceDao.browseService(category, firstResult, maxResult, ORDER.name);
+				return serviceDao.browseService(category, firstResult,
+						maxResult, ORDER.name);
 			}
 		} catch (DataAccessException d) {
 			return null;
@@ -291,25 +310,30 @@ public class CatalogManager {
 	 * Get list of all services, searching by categories.
 	 * 
 	 * @param categories
-	 *          : int[] categories ids
+	 *            : int[] categories ids
 	 * @param firstResult
-	 * 			: int, start index
+	 *            : int, start index
 	 * @param maxResult
-	 * 			: int, number of element in list of services
+	 *            : int, number of element in list of services
 	 * @param param_order
-	 * 			: String, parameter order
+	 *            : String, parameter order
 	 * @return all {@link Service} instances
 	 */
-	public List<Service> catalogServiceBrowseByCategories(int[] categories, int firstResult, int maxResult, String param_order) {
+	public List<Service> catalogServiceBrowseByCategories(int[] categories,
+			int firstResult, int maxResult, String param_order) {
 		try {
 			if (param_order.equalsIgnoreCase(ORDER.id.toString())) {
-				return serviceDao.browseService(categories, firstResult, maxResult, ORDER.id);
+				return serviceDao.browseService(categories, firstResult,
+						maxResult, ORDER.id);
 			} else if (param_order.equalsIgnoreCase(ORDER.namedesc.toString())) {
-				return serviceDao.browseService(categories, firstResult, maxResult, ORDER.namedesc);
+				return serviceDao.browseService(categories, firstResult,
+						maxResult, ORDER.namedesc);
 			} else if (param_order.equalsIgnoreCase(ORDER.date.toString())) {
-				return serviceDao.browseService(categories, firstResult, maxResult, ORDER.date);
+				return serviceDao.browseService(categories, firstResult,
+						maxResult, ORDER.date);
 			} else {
-				return serviceDao.browseService(categories, firstResult, maxResult, ORDER.name);
+				return serviceDao.browseService(categories, firstResult,
+						maxResult, ORDER.name);
 			}
 		} catch (DataAccessException d) {
 			return null;
@@ -320,28 +344,39 @@ public class CatalogManager {
 	 * Retrieve all service of a specific organization.
 	 * 
 	 * @param org
-	 *          : id of organization
+	 *            : id of organization
 	 * @param firstResult
-	 * 			: int, start index
+	 *            : int, start index
 	 * @param maxResult
-	 * 			: int, number of element in list of services
+	 *            : int, number of element in list of services
 	 * @param param_order
-	 * 			: String, parameter order
+	 *            : String, parameter order
 	 * @return all {@link Service} instances
 	 */
-	public List<Service> catalogServiceBrowseByOrg(int org, int firstResult, int maxResult, String param_order) {
+	public List<Service> catalogServiceBrowseByOrg(int org, int firstResult,
+			int maxResult, String param_order) {
 		List<Service> s = new ArrayList<Service>();
 		try {
 			if (param_order.equalsIgnoreCase(ORDER.id.toString())) {
-				s = serviceDao.getServiceByIdOrg(org, firstResult, maxResult, ORDER.id.toString());
+				s = serviceDao.getServiceByIdOrg(org, firstResult, maxResult,
+						ORDER.id.toString());
 			} else if (param_order.equalsIgnoreCase(ORDER.name.toString())) {
-				s = serviceDao.getServiceByIdOrg(org, firstResult, maxResult, ORDER.name.toString());
-			} else
-				throw new SecurityException();
+				s = serviceDao.getServiceByIdOrg(org, firstResult, maxResult,
+						ORDER.name.toString());
+			} else if (param_order.equalsIgnoreCase(ORDER.namedesc.toString())) {
+				s = serviceDao.getServiceByIdOrg(org, firstResult, maxResult,
+						ORDER.namedesc.toString());
+			} else if (param_order.equalsIgnoreCase(ORDER.date.toString())) {
+				s = serviceDao.getServiceByIdOrg(org, firstResult, maxResult,
+						ORDER.date.toString());
+			}
+
 			if (s != null) {
-				for (Iterator<Service> iterator = s.iterator(); iterator.hasNext();) {
+				for (Iterator<Service> iterator = s.iterator(); iterator
+						.hasNext();) {
 					Service service = iterator.next();
-					if (SERVICE_STATE.UNPUBLISH.toString().equals(service.getState()))
+					if (SERVICE_STATE.UNPUBLISH.toString().equals(
+							service.getState()))
 						iterator.remove();
 				}
 			}
@@ -354,24 +389,28 @@ public class CatalogManager {
 	/**
 	 * Get list of all services, searching by tags.
 	 * 
-	 * @param tag 
-	 * 			: String tag for searching in service tags
+	 * @param tag
+	 *            : String tag for searching in service tags
 	 * @param firstResult
-	 * 			: int, start index
+	 *            : int, start index
 	 * @param maxResult
-	 * 			: int, number of element in list of services
+	 *            : int, number of element in list of services
 	 * @param param_order
-	 * 			: String, parameter order
+	 *            : String, parameter order
 	 * @return all {@link Service} instances
 	 */
-	public List<Service> catalogServiceBrowseByTags(String tag, int firstResult, int maxResult, String param_order) {
+	public List<Service> catalogServiceBrowseByTags(String tag,
+			int firstResult, int maxResult, String param_order) {
 		try {
 			if (param_order.equalsIgnoreCase(ORDER.id.toString())) {
-				return serviceDao.getServiceByTag(tag, firstResult, maxResult, ORDER.id);
+				return serviceDao.getServiceByTag(tag, firstResult, maxResult,
+						ORDER.id);
 			} else if (param_order.equalsIgnoreCase(ORDER.name.toString())) {
-				return serviceDao.getServiceByTag(tag, firstResult, maxResult, ORDER.name);
+				return serviceDao.getServiceByTag(tag, firstResult, maxResult,
+						ORDER.name);
 			} else if (param_order.equalsIgnoreCase(ORDER.namedesc.toString())) {
-				return serviceDao.getServiceByTag(tag, firstResult, maxResult, ORDER.namedesc);
+				return serviceDao.getServiceByTag(tag, firstResult, maxResult,
+						ORDER.namedesc);
 			}
 			throw new SecurityException();
 		} catch (DataAccessException d) {
@@ -383,21 +422,25 @@ public class CatalogManager {
 	 * Get list of organizations.
 	 * 
 	 * @param firstResult
-	 * 			: int, start index
+	 *            : int, start index
 	 * @param maxResult
-	 * 			: int, number of element in list of services
+	 *            : int, number of element in list of services
 	 * @param param_order
-	 * 			: String, parameter order
+	 *            : String, parameter order
 	 * @return all {@link Organization} instances
 	 */
-	public List<Organization> catalogOrg(int firstResult, int maxResult, String param_order) {
+	public List<Organization> catalogOrg(int firstResult, int maxResult,
+			String param_order) {
 		try {
 			if (param_order.equalsIgnoreCase(ORDER.id.toString())) {
-				return orgDao.showOrganizations(firstResult, maxResult, ORDER.id);
+				return orgDao.showOrganizations(firstResult, maxResult,
+						ORDER.id);
 			} else if (param_order.equalsIgnoreCase(ORDER.namedesc.toString())) {
-				return orgDao.showOrganizations(firstResult, maxResult, ORDER.namedesc);
+				return orgDao.showOrganizations(firstResult, maxResult,
+						ORDER.namedesc);
 			} else if (param_order.equalsIgnoreCase(ORDER.name.toString())) {
-				return orgDao.showOrganizations(firstResult, maxResult, ORDER.name);
+				return orgDao.showOrganizations(firstResult, maxResult,
+						ORDER.name);
 			}
 			throw new SecurityException();
 		} catch (DataAccessException d) {
@@ -409,21 +452,24 @@ public class CatalogManager {
 	 * Simple search for organization. Their names contains token.
 	 * 
 	 * @param token
-	 * 			: String token for comparing it with organization name
+	 *            : String token for comparing it with organization name
 	 * @param firstResult
-	 * 			: int, start index
+	 *            : int, start index
 	 * @param maxResult
-	 * 			: int, number of element in list of services
+	 *            : int, number of element in list of services
 	 * @param param_order
-	 * 			: String, parameter order
+	 *            : String, parameter order
 	 * @return all {@link Organization} instances
 	 */
-	public List<Organization> catalogOrgSimpleSearch(String token, int firstResult, int maxResult, String param_order) {
+	public List<Organization> catalogOrgSimpleSearch(String token,
+			int firstResult, int maxResult, String param_order) {
 		try {
 			if (param_order.equalsIgnoreCase(ORDER.id.toString())) {
-				return orgDao.searchOrganization(token, firstResult, maxResult, ORDER.id.toString());
+				return orgDao.searchOrganization(token, firstResult, maxResult,
+						ORDER.id.toString());
 			} else if (param_order.equalsIgnoreCase(ORDER.name.toString())) {
-				return orgDao.searchOrganization(token, firstResult, maxResult, ORDER.name.toString());
+				return orgDao.searchOrganization(token, firstResult, maxResult,
+						ORDER.name.toString());
 			}
 			throw new SecurityException();
 		} catch (DataAccessException d) {
@@ -435,23 +481,27 @@ public class CatalogManager {
 	 * Get list of organization searching by category.
 	 * 
 	 * @param category
-	 * 			: int category id
+	 *            : int category id
 	 * @param firstResult
-	 * 			: int, start index
+	 *            : int, start index
 	 * @param maxResult
-	 * 			: int, number of element in list of services
+	 *            : int, number of element in list of services
 	 * @param param_order
-	 * 			: String, parameter order
+	 *            : String, parameter order
 	 * @return all {@link Organization} instances
 	 */
-	public List<Organization> catalogOrgBrowseByCategory(int category, int firstResult, int maxResult, String param_order) {
+	public List<Organization> catalogOrgBrowseByCategory(int category,
+			int firstResult, int maxResult, String param_order) {
 		try {
 			if (param_order.equalsIgnoreCase(ORDER.id.toString())) {
-				return orgDao.browseOrganization(category, null, firstResult, maxResult, ORDER.id);
+				return orgDao.browseOrganization(category, null, firstResult,
+						maxResult, ORDER.id);
 			} else if (param_order.equalsIgnoreCase(ORDER.namedesc.toString())) {
-				return orgDao.browseOrganization(category, null, firstResult, maxResult, ORDER.namedesc);
+				return orgDao.browseOrganization(category, null, firstResult,
+						maxResult, ORDER.namedesc);
 			} else if (param_order.equalsIgnoreCase(ORDER.name.toString())) {
-				return orgDao.browseOrganization(category, null, firstResult, maxResult, ORDER.name);
+				return orgDao.browseOrganization(category, null, firstResult,
+						maxResult, ORDER.name);
 			}
 			throw new SecurityException();
 		} catch (DataAccessException d) {
@@ -463,23 +513,27 @@ public class CatalogManager {
 	 * Get list of organization searching by categories.
 	 * 
 	 * @param categories
-	 * 			: int[] categories ids
+	 *            : int[] categories ids
 	 * @param firstResult
-	 * 			: int, start index
+	 *            : int, start index
 	 * @param maxResult
-	 * 			: int, number of element in list of services
+	 *            : int, number of element in list of services
 	 * @param param_order
-	 * 			: String, parameter order
+	 *            : String, parameter order
 	 * @return all {@link Organization} instances
 	 */
-	public List<Organization> catalogOrgBrowseByCategories(int[] categories, int firstResult, int maxResult, String param_order) {
+	public List<Organization> catalogOrgBrowseByCategories(int[] categories,
+			int firstResult, int maxResult, String param_order) {
 		try {
 			if (param_order.equalsIgnoreCase(ORDER.id.toString())) {
-				return orgDao.browseOrganization(categories, null, firstResult, maxResult, ORDER.id);
+				return orgDao.browseOrganization(categories, null, firstResult,
+						maxResult, ORDER.id);
 			} else if (param_order.equalsIgnoreCase(ORDER.namedesc.toString())) {
-				return orgDao.browseOrganization(categories, null, firstResult, maxResult, ORDER.namedesc);
+				return orgDao.browseOrganization(categories, null, firstResult,
+						maxResult, ORDER.namedesc);
 			} else if (param_order.equalsIgnoreCase(ORDER.name.toString())) {
-				return orgDao.browseOrganization(categories, null, firstResult, maxResult, ORDER.name);
+				return orgDao.browseOrganization(categories, null, firstResult,
+						maxResult, ORDER.name);
 			}
 			throw new SecurityException();
 		} catch (DataAccessException d) {
@@ -491,7 +545,7 @@ public class CatalogManager {
 	 * Retrieve organization data searching by its id.
 	 * 
 	 * @param id
-	 * 			: int organization id
+	 *            : int organization id
 	 * @return {@link Organization} instance
 	 */
 	public Organization catalogOrgById(int id) {
@@ -513,7 +567,8 @@ public class CatalogManager {
 			List<Category> list = categoryManager.getCategories();
 			res.setCategories(list);
 			if (res.getCategories() != null) {
-				Map<Integer, Integer> counts = serviceDao.findCategoryServices();
+				Map<Integer, Integer> counts = serviceDao
+						.findCategoryServices();
 				res.setServices(new ArrayList<Integer>());
 				for (Category c : res.getCategories()) {
 					Integer count = counts.get(c.getId());
@@ -593,7 +648,7 @@ public class CatalogManager {
 	 * Retrieve news from database.
 	 * 
 	 * @param n
-	 * 			: int, number of news in resulted list
+	 *            : int, number of news in resulted list
 	 * @return list of {@link ServiceHistory} instances
 	 */
 	public List<News> getNews(int n) {
@@ -601,7 +656,8 @@ public class CatalogManager {
 			List<News> news = new ArrayList<News>();
 			List<ServiceHistory> shlist = shDao.getNews(n);
 			for (ServiceHistory sh : shlist) {
-				News s = new News(sh.getServiceName(), sh.getMethodName(), sh.getOperation(), sh.getDate(), sh.getId_service(),
+				News s = new News(sh.getServiceName(), sh.getMethodName(),
+						sh.getOperation(), sh.getDate(), sh.getId_service(),
 						sh.getId_serviceMethod());
 				news.add(s);
 			}
@@ -615,17 +671,19 @@ public class CatalogManager {
 	 * Retrieve counter of tags.
 	 * 
 	 * @param order
-	 * 			: String, value tag or counter
+	 *            : String, value tag or counter
 	 * @param group
-	 * 			: String, value ASC or DESC
+	 *            : String, value ASC or DESC
 	 * @return a list of {@link TagCounter} instances
 	 */
 	public List<TagCounter> getTagsServicesCounter(String group, String order) {
 		List<TagCounter> list = new ArrayList<TagCounter>();
 		try {
-			Map<String, Integer> tags = serviceDao.findTagServices(group, order);
+			Map<String, Integer> tags = serviceDao
+					.findTagServices(group, order);
 			if (!tags.isEmpty()) {
-				Iterator<Map.Entry<String, Integer>> iter = tags.entrySet().iterator();
+				Iterator<Map.Entry<String, Integer>> iter = tags.entrySet()
+						.iterator();
 				while (iter.hasNext()) {
 					String key = iter.next().getKey();
 					TagCounter tc = new TagCounter();
