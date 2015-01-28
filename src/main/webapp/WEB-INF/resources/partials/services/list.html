@@ -67,7 +67,7 @@
                                                 <a ng-show="{{service.state !== 'DEPRECATE'}}" ng-href="services/{{service.id}}">{{service.name}}</a>
                                             </h3>
                                             <span ng-show="{{service.state === 'DEPRECATE'}}" class="deprecation">DEPRECATED</span>
-                                            <p>{{service.description}}</p>
+                                            <p class="markdown" marked="service.description"></p>
                                             
                                             <div>
                                                 <div ng-show="service.tags" class="tags">

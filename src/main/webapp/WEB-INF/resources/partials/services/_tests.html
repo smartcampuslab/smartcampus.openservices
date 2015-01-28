@@ -9,7 +9,7 @@
     </div>
     <div id="body{{method.id}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{method.id}}">
       <div class="panel-body">
-         {{method.synopsis}}
+        <p class="markdown" marked="method.synopsis"></p>
          <div ng-if="method.documentation">
          <a target="_blank" href="{{method.documentation}}">See more</a>
          </div>

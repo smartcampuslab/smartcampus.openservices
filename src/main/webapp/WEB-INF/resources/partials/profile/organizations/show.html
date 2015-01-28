@@ -6,7 +6,7 @@
             <div class="panel panel-default" ng-repeat="org in orgs">
                 <div class="panel-body">
                     <strong>{{org.name}}</strong>
-                    <em>{{org.description}}</em>
+                    <p class="markdown" marked="org.description"></p>
                     <button type="button" data-toggle="tooltip" title="Delete organization" class="pull-right btn btn-default btn-sm" ng-confirm-click="deleteOrg($index)" ng-confirm-message="Confirm delete?" ng-confirm-condition="true"><i class="fa fa-trash-o"></i>
                     </button>
                     <a ng-href="profile/organizations/{{org.id}}/members" type="button" data-toggle="tooltip" title="Members" class="pull-right btn btn-default btn-sm orgbtn"><i class="fa fa-user"></i></a>

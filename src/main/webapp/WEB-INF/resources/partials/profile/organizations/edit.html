@@ -9,7 +9,20 @@
             </div>
             <div class="form-group" show-validation>
                 <label for="orgdesc">Description</label>
-                <input type="text" class="form-control" id="orgdesc" placeholder="Description" ng-model="org.description" required>
+                 <tabset>
+                   <tab heading="Write">
+                   		<div class="form-group">
+	           			    <textarea class="markdown" class="form-control" id="orgdesc" wrap="hard" placeholder="Description" ng-model="org.description" ng-trim="false" required></textarea>
+	            		</div>	
+                   </tab>
+                   <tab heading="Preview">
+        	         	  <div class="form-group">
+	        	       		 <div class="markdown" marked="org.description"> </div>
+	        	       		 <input id="orgdesc-phantom" type="hidden" ng-model="org.description"/>
+    						
+			            </div>
+                   </tab>
+                 </tabset>
             </div>
             <div class="form-group">
                 <label for="activityarea">Activity Area</label>

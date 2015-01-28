@@ -13,7 +13,20 @@
 		            </div>
 		            <div class="form-group">
 		                <label for="methoddesc">Description</label>
-		                <input type="text" class="form-control" id="methoddesc" placeholder="Description" ng-model="method.synopsis" required>
+		                <tabset>
+                		   <tab heading="Write">
+                   				<div class="form-group">
+	           				    	<textarea class="markdown" class="form-control" id="orgdesc" wrap="hard" placeholder="Description" ng-model="method.synopsis" ng-trim="false" required></textarea>
+	            				</div>	
+                   			</tab>
+		                   <tab heading="Preview">
+		        	         	  <div class="form-group">
+			        	       		 <div class="markdown" marked="method.synopsis"> </div>
+			        	       		 <input id="orgdesc-phantom" type="hidden" ng-model="method.synopsis"/>
+		    						
+					            </div>
+		                   </tab>
+                 		</tabset>
 		            </div>
 		            <div class="form-group">
 		                <label for="documentation">Documentation</label>

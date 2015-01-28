@@ -94,6 +94,10 @@
   <script src="js/vendor/angular-cookies.min.js"></script>
   <script src="js/vendor/angular-highlight.min.js"></script>
   <script src="js/vendor/ui-bootstrap-tpls-0.10.0.min.js"></script>
+  
+  <script src="js/vendor/marked.min.js"></script>
+  <script src="js/vendor/angular-marked.js"></script>
+
   <script src="js/routingConfig.js"></script>
   <script src="js/app.js"></script>
   <script src="js/controllers.js"></script>
