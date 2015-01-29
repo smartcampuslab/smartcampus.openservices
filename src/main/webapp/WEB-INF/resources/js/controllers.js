@@ -740,29 +740,25 @@ app.controller('categoryCtrl', ['$scope', '$rootScope', '$http', '$location', 'C
 app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams','$filter', 'Catalog', 'Category',
     function ($scope, $rootScope, $http, $routeParams, $filter, Catalog, Category) {
       
-        $scope.selectCategory = function (catId) {
-            if ( !! catId) {
-                // Category checkbox
-                var index = $scope.categoriesFilter.indexOf(catId);
-                if (index !== -1) {
-                    $scope.categoriesFilter.splice(index, 1);
-                } else {
-                    $scope.categoriesFilter.push(catId);
-                }
-            } else {
-                // 'All' checkbox
-                if ($scope.categoriesFilter.length < $scope.categories.length) {
-                    $scope.categoriesFilter = [];
-                    for (var i = 0; i < $scope.categories.length; i++) {
-                        $scope.categoriesFilter.push($scope.categories[i].id);
-                    }
-                } else {
-                    $scope.categoriesFilter = [];
-                }
-            }
-
-            $scope.update(true);
-        };
+	$scope.selectCategory = function (catId) {
+    	
+    	if( catId == -1) { // All
+    		 var index = $scope.categoriesFilter.indexOf(catId);
+             if (index === -1) {
+            	 $scope.categoriesFilter = [-1];
+             } else{
+            	 $scope.categoriesFilter.splice(index, 1);
+             } 
+    	} else {
+    		 var index = $scope.categoriesFilter.indexOf(catId);
+             if (index === -1) {
+                 $scope.categoriesFilter.push(catId);
+             } else{
+            	 $scope.categoriesFilter.splice(index, 1);
+             } 
+    	}
+        $scope.update(true);
+    };
 
         $scope.setOrderBy = function (order) {
             $scope.orderBySelected = order;
@@ -821,12 +817,13 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
                 $scope.currentPage = 1;
             }
 
-            if ($scope.categoriesFilter.length == $scope.categories.length) {
-                $scope.getServicesAll();
-            } else if ($scope.categoriesFilter.length < $scope.categories.length && $scope.categoriesFilter.length > 0) {
-                $scope.getServiceByCategories();
+            
+            if ($scope.categoriesFilter.length == 0) {
+            	$scope.services = [];
+            } else if ($scope.categoriesFilter.indexOf(-1) !== -1) {
+            	$scope.getServicesAll();
             } else {
-                $scope.services = [];
+            	$scope.getServiceByCategories();
             }
         };
 
@@ -873,7 +870,7 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
         $scope.orderBySelected = $scope.orderByOptions[0];
 
         $scope.categories = [];
-        $scope.categoriesFilter = [];
+        $scope.categoriesFilter = [-1];
         
         $scope.totalServices = 0;
         $scope.firstOfPage = 0;
@@ -897,9 +894,6 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
      // Start!
         Category.list({}, function (data) {
             $scope.categories = data.data;
-            for (var i = 0; i < $scope.categories.length; i++) {
-                $scope.categoriesFilter.push($scope.categories[i].id);
-            }
             $scope.update();
         });   
         
@@ -929,29 +923,25 @@ app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routePar
         $scope.orderBySelected = $scope.orderByOptions[0];
 
         $scope.categories = [];
-        $scope.categoriesFilter = [];
+        $scope.categoriesFilter = [-1];
 
         $scope.selectCategory = function (catId) {
-            if ( !! catId) {
-                // Category checkbox
-                var index = $scope.categoriesFilter.indexOf(catId);
-                if (index !== -1) {
-                    $scope.categoriesFilter.splice(index, 1);
-                } else {
-                    $scope.categoriesFilter.push(catId);
-                }
-            } else {
-                // 'All' checkbox
-                if ($scope.categoriesFilter.length < $scope.categories.length) {
-                    $scope.categoriesFilter = [];
-                    for (var i = 0; i < $scope.categories.length; i++) {
-                        $scope.categoriesFilter.push($scope.categories[i].id);
-                    }
-                } else {
-                    $scope.categoriesFilter = [];
-                }
-            }
-
+        	
+        	if( catId == -1) { // All
+        		 var index = $scope.categoriesFilter.indexOf(catId);
+                 if (index === -1) {
+                	 $scope.categoriesFilter = [-1];
+                 } else{
+                	 $scope.categoriesFilter.splice(index, 1);
+                 } 
+        	} else {
+        		 var index = $scope.categoriesFilter.indexOf(catId);
+                 if (index === -1) {
+                     $scope.categoriesFilter.push(catId);
+                 } else{
+                	 $scope.categoriesFilter.splice(index, 1);
+                 } 
+        	}
             $scope.update(true);
         };
 
@@ -971,7 +961,6 @@ app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routePar
 
         if ( !! $routeParams.tag) {
             $scope.query = $routeParams.tag;
-            //$scope.tag = true;
         }
 
         if ( !! $scope.categoryActive) {
@@ -1029,13 +1018,13 @@ app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routePar
                 $scope.currentPage = 1;
             }
 
-            if ($scope.categoriesFilter.length == $scope.categories.length) {
+            if($scope.categoriesFilter.length == 0) {
+            	$scope.orgs = [];
+            }else if ($scope.categoriesFilter.indexOf(-1) !== -1) {
                 $scope.getOrgsAll();
-            } else if ($scope.categoriesFilter.length < $scope.categories.length && $scope.categoriesFilter.length > 0) {
-                $scope.getOrgsByCategories();
             } else {
-                $scope.orgs = [];
-            }
+                $scope.getOrgsByCategories();
+            } 
         };
 
         $scope.goToPage = function (p) {
@@ -1090,9 +1079,6 @@ app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routePar
         // Start!
         Category.list({}, function (data) {
             $scope.categories = data.data;
-            for (var i = 0; i < $scope.categories.length; i++) {
-                $scope.categoriesFilter.push($scope.categories[i].id);
-            }
             $scope.update();
         });
 

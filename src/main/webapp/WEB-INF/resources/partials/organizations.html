@@ -25,7 +25,7 @@
         <div class="form-group">
           <div class="checkbox">
             <label>
-              <input type="checkbox" ng-click="selectCategory()" ng-checked="categoriesFilter.length == categories.length">All
+              <input type="checkbox" ng-click="selectCategory(-1)" ng-checked="categoriesFilter.indexOf(-1) !== -1">All
             </label>
           </div>
           <hr/>
