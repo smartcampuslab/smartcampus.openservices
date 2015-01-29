@@ -159,8 +159,8 @@ public interface ServiceDao {
 			int maxResult, String param_order) throws DataAccessException;
 
 	public List<Service> searchServiceByIdOrg(int id_org, int firstResult,
-			int maxResult, List<Integer> categoryIds, String param_order)
-			throws DataAccessException;
+			int maxResult, List<Integer> categoryIds, String token,
+			String param_order) throws DataAccessException;
 
 	/**
 	 * Find services having in name the token in input.
@@ -275,11 +275,13 @@ public interface ServiceDao {
 	 *            : int, organization id
 	 * @param categoryIds
 	 *            : List of categoryIds, for all values set to null
+	 * @param token
+	 *            : filter by service name, set null to unable
 	 * @return number of services retrieved by searching by organization id
 	 * @throws DataAccessException
 	 */
-	public Long countServiceByOrgSearch(int id_org, List<Integer> categoryIds)
-			throws DataAccessException;
+	public Long countServiceByOrgSearch(int id_org, List<Integer> categoryIds,
+			String token) throws DataAccessException;
 
 	/**
 	 * Count services retrieve from a search by tag.

@@ -354,21 +354,23 @@ public class CatalogManager {
 	 * @return all {@link Service} instances
 	 */
 	public List<Service> catalogServiceBrowseByOrg(int org, int firstResult,
-			int maxResult, List<Integer> categoryIds, String param_order) {
+			int maxResult, List<Integer> categoryIds, String token,
+			String param_order) {
 		List<Service> s = new ArrayList<Service>();
 		try {
 			if (param_order.equalsIgnoreCase(ORDER.id.toString())) {
 				s = serviceDao.searchServiceByIdOrg(org, firstResult,
-						maxResult, categoryIds, ORDER.id.toString());
+						maxResult, categoryIds, token, ORDER.id.toString());
 			} else if (param_order.equalsIgnoreCase(ORDER.name.toString())) {
 				s = serviceDao.searchServiceByIdOrg(org, firstResult,
-						maxResult, categoryIds, ORDER.name.toString());
+						maxResult, categoryIds, token, ORDER.name.toString());
 			} else if (param_order.equalsIgnoreCase(ORDER.namedesc.toString())) {
 				s = serviceDao.searchServiceByIdOrg(org, firstResult,
-						maxResult, categoryIds, ORDER.namedesc.toString());
+						maxResult, categoryIds, token,
+						ORDER.namedesc.toString());
 			} else if (param_order.equalsIgnoreCase(ORDER.date.toString())) {
 				s = serviceDao.searchServiceByIdOrg(org, firstResult,
-						maxResult, categoryIds, ORDER.date.toString());
+						maxResult, categoryIds, token, ORDER.date.toString());
 			}
 
 			if (s != null) {
@@ -609,10 +611,13 @@ public class CatalogManager {
 	 *            : organization id
 	 * @param categoryIds
 	 *            : list of category ids, put null to retrieve all values
+	 * @param token
+	 *            : filter by service name, set null to unable
 	 * @return number of services retrieved by organization search
 	 */
-	public Long countServiceByOrgSearch(int id_org, List<Integer> categoryIds) {
-		return serviceDao.countServiceByOrgSearch(id_org, categoryIds);
+	public Long countServiceByOrgSearch(int id_org, List<Integer> categoryIds,
+			String token) {
+		return serviceDao.countServiceByOrgSearch(id_org, categoryIds, token);
 	}
 
 	/**

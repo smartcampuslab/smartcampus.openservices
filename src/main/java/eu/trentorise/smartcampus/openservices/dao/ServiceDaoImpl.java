@@ -250,11 +250,15 @@ public class ServiceDaoImpl implements ServiceDao {
 	@Transactional
 	@Override
 	public List<Service> searchServiceByIdOrg(int id_org, int firstResult,
-			int maxResult, List<Integer> categoryIds, String param_order)
-			throws DataAccessException {
+			int maxResult, List<Integer> categoryIds, String token,
+			String param_order) throws DataAccessException {
 		String query = "FROM Service WHERE organizationId=:idOrg AND state != 'UNPUBLISH'";
 		if (categoryIds != null) {
 			query += " AND category IN :cats";
+		}
+
+		if (token != null) {
+			query += " AND name LIKE :name";
 		}
 
 		query += " ORDER BY "
@@ -265,6 +269,10 @@ public class ServiceDaoImpl implements ServiceDao {
 				id_org);
 		if (categoryIds != null) {
 			q.setParameter("cats", categoryIds);
+		}
+
+		if (token != null) {
+			q.setParameter("name", "%" + token + "%");
 		}
 
 		List<Service> s = q.setFirstResult(firstResult)
@@ -442,17 +450,24 @@ public class ServiceDaoImpl implements ServiceDao {
 	 */
 	@Transactional
 	@Override
-	public Long countServiceByOrgSearch(int id_org, List<Integer> categoryIds)
-			throws DataAccessException {
+	public Long countServiceByOrgSearch(int id_org, List<Integer> categoryIds,
+			String token) throws DataAccessException {
 		String query = "SELECT COUNT(s) FROM Service S WHERE S.organizationId=:id_org AND s.state!='UNPUBLISH'";
 		if (categoryIds != null) {
 			query += " AND s.category IN :cats";
+		}
+		if (token != null) {
+			query += " AND s.name LIKE :name";
 		}
 
 		Query q = getEntityManager().createQuery(query).setParameter("id_org",
 				id_org);
 		if (categoryIds != null) {
 			q.setParameter("cats", categoryIds);
+		}
+
+		if (token != null) {
+			q.setParameter("name", "%" + token + "%");
 		}
 		return (Long) q.getSingleResult();
 	}

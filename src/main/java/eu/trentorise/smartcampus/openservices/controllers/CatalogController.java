@@ -406,6 +406,7 @@ public class CatalogController {
 	@ResponseBody
 	public ResponseObject catalogServiceByOrg(
 			@PathVariable int org,
+			@RequestParam(value = "q", required = false) String token,
 			@RequestParam(value = "first", required = false, defaultValue = "0") Integer firstResult,
 			@RequestParam(value = "last", required = false, defaultValue = "0") Integer maxResult,
 			@RequestParam(value = "order", required = false, defaultValue = "name") String param_order,
@@ -418,7 +419,7 @@ public class CatalogController {
 		try {
 			List<Service> services = Service.fromServiceEntities(catalogManager
 					.catalogServiceBrowseByOrg(org, firstResult, maxResult,
-							cats, param_order));
+							cats, token, param_order));
 			if (services == null || services.size() == 0) {
 				responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 				responseObject.setError("No service for this organization");
@@ -427,7 +428,7 @@ public class CatalogController {
 				responseObject.setData(services);
 				responseObject.setStatus(HttpServletResponse.SC_OK);
 				responseObject.setTotalNumber(catalogManager
-						.countServiceByOrgSearch(org, cats));
+						.countServiceByOrgSearch(org, cats, token));
 			}
 		} catch (SecurityException s) {
 			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
