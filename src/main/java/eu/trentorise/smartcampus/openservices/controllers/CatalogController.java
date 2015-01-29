@@ -160,7 +160,7 @@ public class CatalogController {
 					responseObject.setData(services);
 					responseObject.setStatus(HttpServletResponse.SC_OK);
 					responseObject.setTotalNumber(catalogManager
-							.countServiceSimpleSearch(token));
+							.countServiceSimpleSearch(token, null));
 				}
 			} else if (token == null && tag != null) {
 				logger.info("-- Simple Search by tags: {} --", tag);
@@ -347,24 +347,14 @@ public class CatalogController {
 			@RequestParam(value = "first", required = false, defaultValue = "0") Integer firstResult,
 			@RequestParam(value = "last", required = false, defaultValue = "0") Integer maxResult,
 			@RequestParam(value = "order", required = false, defaultValue = "name") String param_order,
-			@RequestParam(value = "categories", required = false, defaultValue = "") String categoriesIds,
+			@RequestParam(value = "categories", required = false) List<Integer> categoryIds,
+			@RequestParam(value = "q", required = false) String token,
 			HttpServletResponse response) {
-		logger.info("-- Service Catalog browse (categories) --");
-
-		String[] categoriesIdsStringArray = categoriesIds.split(",");
-		int[] categoriesIdsArray = new int[categoriesIdsStringArray.length];
-		for (int i = 0; i < categoriesIdsStringArray.length; i++) {
-			try {
-				categoriesIdsArray[i] = Integer
-						.parseInt(categoriesIdsStringArray[i]);
-			} catch (NumberFormatException nfe) {
-				continue;
-			}
-		}
+		logger.debug("Service Catalog browse (categories)");
 
 		List<Service> services = Service.fromServiceEntities(catalogManager
-				.catalogServiceBrowseByCategories(categoriesIdsArray,
-						firstResult, maxResult, param_order));
+				.catalogServiceBrowseByCategories(categoryIds, firstResult,
+						maxResult, token, param_order));
 		ResponseObject responseObject = new ResponseObject();
 		if (services == null || services.size() == 0) {
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -374,11 +364,8 @@ public class CatalogController {
 		} else {
 			responseObject.setData(services);
 			responseObject.setStatus(HttpServletResponse.SC_OK);
-			Long count = 0L;
-			for (int i = 0; i < categoriesIdsArray.length; i++) {
-				count += catalogManager
-						.countServiceByCategorySearch(categoriesIdsArray[i]);
-			}
+			Long count = catalogManager.countServiceSimpleSearch(token,
+					categoryIds);
 			responseObject.setTotalNumber(count);
 		}
 		return responseObject;

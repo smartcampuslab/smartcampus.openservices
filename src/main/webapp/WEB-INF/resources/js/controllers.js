@@ -770,26 +770,14 @@ app.controller('servicesCtrl', ['$scope', '$rootScope', '$http', '$routeParams',
 
             console.log("Search categories with values: " + ids);
 
-            var cats = '';
-            for (var i = 0; i < ids.length; i++) {
-                if (i > 0) {
-                    cats += ',';
-                }
-                cats += ids[i];
-            }
-
             Catalog.browseServiceCats({
-                categories: cats,
+                categories: ids.indexOf(-1) !== -1 ? null :ids,
                 first: $scope.firstOfPage,
                 last: $scope.resultsPerPage,
                 order: $scope.orderBySelected.value,
+                q: $scope.query
             }, function (services) {
-            	$scope.services.splice(0,$scope.services.length);
-            	services.data.forEach(function(s){
-            		if(!$scope.query || s.name.indexOf($scope.query) >= 0) {
-            			$scope.services.push(s);
-            		}
-            	});
+            	$scope.services = services.data;
                 $scope.updateCounters(services.totalNumber);
             }, function (res) {
                 $scope.services = [];

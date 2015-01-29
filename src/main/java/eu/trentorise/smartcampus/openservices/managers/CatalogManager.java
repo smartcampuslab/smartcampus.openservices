@@ -310,29 +310,32 @@ public class CatalogManager {
 	 * Get list of all services, searching by categories.
 	 * 
 	 * @param categories
-	 *            : int[] categories ids
+	 *            : list categories ids
 	 * @param firstResult
 	 *            : int, start index
 	 * @param maxResult
 	 *            : int, number of element in list of services
+	 * @param token
+	 *            : filter by name, set null to unable
 	 * @param param_order
 	 *            : String, parameter order
 	 * @return all {@link Service} instances
 	 */
-	public List<Service> catalogServiceBrowseByCategories(int[] categories,
-			int firstResult, int maxResult, String param_order) {
+	public List<Service> catalogServiceBrowseByCategories(
+			List<Integer> categories, int firstResult, int maxResult,
+			String token, String param_order) {
 		try {
 			if (param_order.equalsIgnoreCase(ORDER.id.toString())) {
-				return serviceDao.browseService(categories, firstResult,
+				return serviceDao.browseService(token, categories, firstResult,
 						maxResult, ORDER.id);
 			} else if (param_order.equalsIgnoreCase(ORDER.namedesc.toString())) {
-				return serviceDao.browseService(categories, firstResult,
+				return serviceDao.browseService(token, categories, firstResult,
 						maxResult, ORDER.namedesc);
 			} else if (param_order.equalsIgnoreCase(ORDER.date.toString())) {
-				return serviceDao.browseService(categories, firstResult,
+				return serviceDao.browseService(token, categories, firstResult,
 						maxResult, ORDER.date);
 			} else {
-				return serviceDao.browseService(categories, firstResult,
+				return serviceDao.browseService(token, categories, firstResult,
 						maxResult, ORDER.name);
 			}
 		} catch (DataAccessException d) {
@@ -598,11 +601,13 @@ public class CatalogManager {
 	 * Count services resulted from simple search.
 	 * 
 	 * @param token
-	 *            : String
+	 *            : String, set null to unable
+	 * @param categoryIds
+	 *            : category ids to filter, set null to unable
 	 * @return number of services retrieved by simple search
 	 */
-	public Long countServiceSimpleSearch(String token) {
-		return serviceDao.countServiceSimpleSearch(token);
+	public Long countServiceSimpleSearch(String token, List<Integer> categoryIds) {
+		return serviceDao.countServiceSimpleSearch(token, categoryIds);
 	}
 
 	/**

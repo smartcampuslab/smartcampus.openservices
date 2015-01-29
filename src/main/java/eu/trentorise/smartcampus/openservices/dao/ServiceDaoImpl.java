@@ -340,27 +340,48 @@ public class ServiceDaoImpl implements ServiceDao {
 	 */
 	@Transactional
 	@Override
-	public List<Service> browseService(int[] categories, int firstResult,
-			int maxResult, ORDER param_order) throws DataAccessException {
-		String categoriesQuery = "(";
-		for (int i = 0; i < categories.length; i++) {
-			categoriesQuery += (i > 0 ? ", " : "") + categories[i]
-					+ (i + 1 == categories.length ? ")" : "");
-		}
+	public List<Service> browseService(String token, List<Integer> categories,
+			int firstResult, int maxResult, ORDER param_order)
+			throws DataAccessException {
 
-		String queryString = "SELECT S FROM Service S WHERE S.category in "
-				+ categoriesQuery
-				+ " AND S.state!='UNPUBLISH' ORDER BY S."
-				+ (ORDER.namedesc.equals(param_order) ? "name DESC"
-						: ORDER.name.toString());
+		String queryString = "SELECT S FROM Service S WHERE S.state!='UNPUBLISH'";
 
 		if (ORDER.date.equals(param_order)) {
 			queryString = "SELECT S FROM Service S, ServiceHistory SH WHERE SH.id_serviceMethod=0 AND SH.operation='ADD' AND S.id=SH.id_service"
-					+ " AND S.state!='UNPUBLISH' AND S.category in "
-					+ categoriesQuery + " ORDER BY SH.date DESC";
+					+ " AND S.state!='UNPUBLISH' ORDER BY SH.date DESC";
+
+		}
+
+		if (token != null) {
+			queryString += " AND S.name LIKE :name";
+		}
+
+		if (categories != null) {
+			queryString += " AND S.category IN :cats";
+		}
+
+		queryString += " ORDER BY";
+		switch (param_order) {
+		case namedesc:
+			queryString += " S.name DESC";
+			break;
+		case date:
+			queryString += " SH.date DESC";
+			break;
+		case name:
+		default:
+			queryString += " S.name";
+			break;
 		}
 
 		Query q = getEntityManager().createQuery(queryString);
+		if (token != null) {
+			q.setParameter("name", "%" + token + "%");
+		}
+		if (categories != null) {
+			q.setParameter("cats", categories);
+		}
+
 		List<Service> s = q.setFirstResult(firstResult)
 				.setMaxResults(maxResult).getResultList();
 		return s;
@@ -432,17 +453,28 @@ public class ServiceDaoImpl implements ServiceDao {
 	}
 
 	/**
-	 * This method counts services resulted from simple search by name.
+	 * This method counts services resulted from simple search by name and cats.
 	 */
 	@Transactional
 	@Override
-	public Long countServiceSimpleSearch(String token)
+	public Long countServiceSimpleSearch(String token, List<Integer> categoryIds)
 			throws DataAccessException {
-		return (Long) getEntityManager()
-				.createQuery(
-						"SELECT COUNT(s) FROM Service s WHERE s.name LIKE :token "
-								+ "AND s.state!='UNPUBLISH'")
-				.setParameter("token", "%" + token + "%").getSingleResult();
+
+		String query = "SELECT COUNT(s) FROM Service s WHERE  s.state!='UNPUBLISH'";
+		if (token != null) {
+			query += " AND s.name LIKE :name";
+		}
+		if (categoryIds != null) {
+			query += " AND s.category IN :cats";
+		}
+		Query q = getEntityManager().createQuery(query);
+		if (token != null) {
+			q.setParameter("name", "%" + token + "%");
+		}
+		if (categoryIds != null) {
+			q.setParameter("cats", categoryIds);
+		}
+		return (Long) q.getSingleResult();
 	}
 
 	/**

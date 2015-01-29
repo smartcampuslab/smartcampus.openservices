@@ -210,8 +210,9 @@ public interface ServiceDao {
 	 * @return list of {@link Service} instances
 	 * @throws DataAccessException
 	 */
-	public List<Service> browseService(int[] categories, int firstResult,
-			int maxResult, ORDER param_order) throws DataAccessException;
+	public List<Service> browseService(String token, List<Integer> categories,
+			int firstResult, int maxResult, ORDER param_order)
+			throws DataAccessException;
 
 	/**
 	 * Retrieve service searching by tag.
@@ -265,7 +266,7 @@ public interface ServiceDao {
 	 * @return number of services retrieved by simple search
 	 * @throws DataAccessException
 	 */
-	public Long countServiceSimpleSearch(String token)
+	public Long countServiceSimpleSearch(String token, List<Integer> categoryIds)
 			throws DataAccessException;
 
 	/**
