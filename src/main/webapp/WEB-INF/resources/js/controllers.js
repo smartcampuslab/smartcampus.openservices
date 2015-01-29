@@ -966,8 +966,24 @@ app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routePar
         if ( !! $scope.categoryActive) {
             $scope.categoryActive = undefined;
         }
+        
+        $scope.getOrgsAll = function () {
+            Catalog.listOrgs({
+                first: $scope.firstOfPage,
+                last: $scope.resultsPerPage,
+                order: $scope.orderBySelected.value,
+                q: $scope.query,
+                cats: $scope.categoriesFilter.indexOf(-1) !== -1 ? null : $scope.categoriesFilter  
+            }, function (data) {
+                $scope.orgs = data.data;
+                $scope.fillOrgsCategoryName($scope.orgs);
+                $scope.updateCounters(data.totalNumber);
+            }, function (res) {
+                $scope.orgs = [];
+            });
+        };
 
-        $scope.getOrgsByCategories = function () {
+      /*  $scope.getOrgsByCategories = function () {
         	var ids = $scope.categoriesFilter;
             var cats = '';
             for (var i = 0; i < ids.length; i++) {
@@ -977,6 +993,7 @@ app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routePar
                 cats += ids[i];
             }
 
+        	$scope.getOrgsAll();
             Catalog.browseOrgCats({
                 categories: cats,
                 first: $scope.firstOfPage,
@@ -995,22 +1012,9 @@ app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routePar
             }, function (res) {
                 $scope.orgs = [];
             });
-        };
+        };*/
 
-        $scope.getOrgsAll = function () {
-            Catalog.listOrgs({
-                first: $scope.firstOfPage,
-                last: $scope.resultsPerPage,
-                order: $scope.orderBySelected.value,
-                q: $rootScope.searchQuery
-            }, function (data) {
-                $scope.orgs = data.data;
-                $scope.fillOrgsCategoryName($scope.orgs);
-                $scope.updateCounters(data.totalNumber);
-            }, function (res) {
-                $scope.orgs = [];
-            });
-        };
+       
 
         $scope.update = function (resetPages) {
             if (resetPages == true) {
@@ -1020,10 +1024,8 @@ app.controller('organizationsCtrl', ['$scope', '$rootScope', '$http', '$routePar
 
             if($scope.categoriesFilter.length == 0) {
             	$scope.orgs = [];
-            }else if ($scope.categoriesFilter.indexOf(-1) !== -1) {
+            }else  {
                 $scope.getOrgsAll();
-            } else {
-                $scope.getOrgsByCategories();
             } 
         };
 
