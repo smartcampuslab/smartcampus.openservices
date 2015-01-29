@@ -431,18 +431,19 @@ public class CatalogManager {
 	 *            : String, parameter order
 	 * @return all {@link Organization} instances
 	 */
-	public List<Organization> catalogOrg(int firstResult, int maxResult,
+	public List<Organization> catalogOrg(String token,
+			List<Integer> categoryIds, int firstResult, int maxResult,
 			String param_order) {
 		try {
 			if (param_order.equalsIgnoreCase(ORDER.id.toString())) {
-				return orgDao.showOrganizations(firstResult, maxResult,
-						ORDER.id);
+				return orgDao.showOrganizations(token, categoryIds,
+						firstResult, maxResult, ORDER.id);
 			} else if (param_order.equalsIgnoreCase(ORDER.namedesc.toString())) {
-				return orgDao.showOrganizations(firstResult, maxResult,
-						ORDER.namedesc);
+				return orgDao.showOrganizations(token, categoryIds,
+						firstResult, maxResult, ORDER.namedesc);
 			} else if (param_order.equalsIgnoreCase(ORDER.name.toString())) {
-				return orgDao.showOrganizations(firstResult, maxResult,
-						ORDER.name);
+				return orgDao.showOrganizations(token, categoryIds,
+						firstResult, maxResult, ORDER.name);
 			}
 			throw new SecurityException();
 		} catch (DataAccessException d) {
@@ -647,8 +648,8 @@ public class CatalogManager {
 	 * 
 	 * @return number of organizations saved in database
 	 */
-	public Long countOrg() {
-		return orgDao.countOrganization();
+	public Long countOrg(String token, List<Integer> categoryIds) {
+		return orgDao.countOrganization(token, categoryIds);
 	}
 
 	/**

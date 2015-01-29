@@ -16,7 +16,9 @@
 
 package eu.trentorise.smartcampus.openservices.managers;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
@@ -43,11 +45,11 @@ import eu.trentorise.smartcampus.openservices.entities.UserRole;
 import eu.trentorise.smartcampus.openservices.support.Members;
 
 /**
- * Manager that retrieves, adds, modifies and deletes organization data.
- * These operations are allowed only for logged user, who has role in organization.
+ * Manager that retrieves, adds, modifies and deletes organization data. These
+ * operations are allowed only for logged user, who has role in organization.
  * 
  * @author raman
- *
+ * 
  */
 @Component
 @Transactional
@@ -58,54 +60,61 @@ public class OrganizationManager {
 	@Autowired
 	private UserDao userDao;
 	/**
-	 * Instance of {@link UserRoleDao} to retrieve role of user data using Dao classes.
+	 * Instance of {@link UserRoleDao} to retrieve role of user data using Dao
+	 * classes.
 	 */
 	@Autowired
 	private UserRoleDao urDao;
 	/**
-	 * Instance of {@link OrganizationDao} to retrieve organization data using Dao classes.
+	 * Instance of {@link OrganizationDao} to retrieve organization data using
+	 * Dao classes.
 	 */
 	@Autowired
 	private OrganizationDao orgDao;
 	/**
-	 * Instance of {@link ServiceDao} to retrieve service data using Dao classes.
+	 * Instance of {@link ServiceDao} to retrieve service data using Dao
+	 * classes.
 	 */
 	@Autowired
 	private ServiceDao serviceDao;
 	/**
-	 * Instance of {@link TemporaryLinkDao} to retrieve temporary data using Dao classes.
+	 * Instance of {@link TemporaryLinkDao} to retrieve temporary data using Dao
+	 * classes.
 	 */
 	@Autowired
 	private TemporaryLinkDao tlDao;
 	/**
-	 * Instance of {@link ServiceHistoryDao} to retrieve service history data using Dao classes.
+	 * Instance of {@link ServiceHistoryDao} to retrieve service history data
+	 * using Dao classes.
 	 */
 	@Autowired
 	private ServiceHistoryDao shDao;
 
-
 	/**
-	 * Delete an existing organization from database if published services do not exist.
-	 * Throws SecurityException when user has not correct role
+	 * Delete an existing organization from database if published services do
+	 * not exist. Throws SecurityException when user has not correct role
 	 * 
-	 * @param username 
-	 * 			: String username of logged in user
-	 * @param orgId 
-	 * 			: int organizatin id
+	 * @param username
+	 *            : String username of logged in user
+	 * @param orgId
+	 *            : int organizatin id
 	 * @return boolean: true if it is ok, else false
 	 */
 	@Transactional
-	public boolean deleteOrganization(String username, int orgId){
+	public boolean deleteOrganization(String username, int orgId) {
 		try {
 			User user = userDao.getUserByUsername(username);
 			// check user role
 			UserRole ur = urDao.getRoleOfUser(user.getId(), orgId);
-			if (ur != null && ur.getRole().equalsIgnoreCase(ROLES.ROLE_ORGOWNER.toString())) {
-				//check that published services do not exist
-				List<Service> slist = serviceDao.getServiceByIdOrg(orgId, 0, 0, "id");
-				if(slist!=null){
+			if (ur != null
+					&& ur.getRole().equalsIgnoreCase(
+							ROLES.ROLE_ORGOWNER.toString())) {
+				// check that published services do not exist
+				List<Service> slist = serviceDao.getServiceByIdOrg(orgId, 0, 0,
+						"id");
+				if (slist != null) {
 					for (Service s : slist) {
-						if(s.getState().equalsIgnoreCase("PUBLISH")){
+						if (s.getState().equalsIgnoreCase("PUBLISH")) {
 							throw new EntityExistsException();
 						}
 					}
@@ -116,22 +125,24 @@ public class OrganizationManager {
 					urDao.deleteUserRole(urElem);
 				}
 				// delete services
-				//List<Service> serviceList = serviceDao.getServiceByIdOrg(orgId,0,0,"name");
-				if(slist!=null){
+				// List<Service> serviceList =
+				// serviceDao.getServiceByIdOrg(orgId,0,0,"name");
+				if (slist != null) {
 					for (Service s : slist) {
 						serviceDao.deleteService(s);
 					}
 				}
 				// delete history
-				List<ServiceHistory> shList = shDao.getServiceHistoryByOrgId(orgId);
-				if(shList!=null){
-					for(ServiceHistory sh: shList){
+				List<ServiceHistory> shList = shDao
+						.getServiceHistoryByOrgId(orgId);
+				if (shList != null) {
+					for (ServiceHistory sh : shList) {
 						shDao.deleteServiceHistory(sh);
 					}
 				}
 				// delete org
 				orgDao.deleteOrganization(orgId);
-				
+
 			} else {
 				throw new SecurityException();
 			}
@@ -144,15 +155,15 @@ public class OrganizationManager {
 		}
 		return false;
 	}
-	
+
 	/**
-	 * Add a new organization in database.
-	 * Add organization owner role to this user.
+	 * Add a new organization in database. Add organization owner role to this
+	 * user.
 	 * 
-	 * @param username 
-	 * 			: String username of user
-	 * @param org 
-	 * 			: Organization data
+	 * @param username
+	 *            : String username of user
+	 * @param org
+	 *            : Organization data
 	 * @return boolean: true if it is ok, else false
 	 */
 	@Transactional
@@ -175,17 +186,17 @@ public class OrganizationManager {
 			return false;
 		}
 		return false;
-		
+
 	}
 
 	/**
-	 * Update an existing organization data from database.
-	 * Throws SecurityException when user has not correct role.
+	 * Update an existing organization data from database. Throws
+	 * SecurityException when user has not correct role.
 	 * 
-	 * @param username 
-	 * 			: String username of user
-	 * @param org 
-	 * 			: Organization data
+	 * @param username
+	 *            : String username of user
+	 * @param org
+	 *            : Organization data
 	 * @return boolean: true if it is ok, else false
 	 */
 	@Transactional
@@ -193,14 +204,16 @@ public class OrganizationManager {
 		try {
 			User user = userDao.getUserByUsername(username);
 			Organization o = orgDao.getOrganizationById(org.getId());
-			//check organization name
+			// check organization name
 			Organization orgCheck = orgDao.getOrganizationByName(org.getName());
-			if(orgCheck!=null && orgCheck.getId()!=o.getId()){
+			if (orgCheck != null && orgCheck.getId() != o.getId()) {
 				throw new EntityExistsException();
 			}
 			// check user role
 			UserRole ur = urDao.getRoleOfUser(user.getId(), org.getId());
-			if (ur != null && ur.getRole().equalsIgnoreCase(ROLES.ROLE_ORGOWNER.toString())) {
+			if (ur != null
+					&& ur.getRole().equalsIgnoreCase(
+							ROLES.ROLE_ORGOWNER.toString())) {
 				// TODO which values can be modified by user?
 				o.setDescription(org.getDescription());
 				o.setActivityArea(org.getActivityArea());
@@ -220,8 +233,8 @@ public class OrganizationManager {
 	/**
 	 * Retrieves organizations in which user is owner.
 	 * 
-	 * @param username 
-	 * 			: String username of user
+	 * @param username
+	 *            : String username of user
 	 * @return list of organizations, where the user is org owner or data owner
 	 */
 	public List<Organization> getUserOrganizations(String username) {
@@ -234,31 +247,35 @@ public class OrganizationManager {
 		}
 		return orgs;
 	}
-	
+
 	/**
-	 * Invite a user to become part of an organization.
-	 * User who send invitation must have role organization owner for this organization.
-	 * The invitation create a temporary link object with a key.
-	 * Throws SecurityException when user has not correct role.
+	 * Invite a user to become part of an organization. User who send invitation
+	 * must have role organization owner for this organization. The invitation
+	 * create a temporary link object with a key. Throws SecurityException when
+	 * user has not correct role.
 	 * 
-	 * @param username 
-	 * 			: String, user who invites new organization owner
-	 * @param org_id 
-	 * 			: int organization id
-	 * @param role 
-	 * 			: String, role for new organization owner
-	 * @param email 
-	 * 			: String, email of new organization owner
+	 * @param username
+	 *            : String, user who invites new organization owner
+	 * @param org_id
+	 *            : int organization id
+	 * @param role
+	 *            : String, role for new organization owner
+	 * @param email
+	 *            : String, email of new organization owner
 	 * @return String key
 	 */
-	public String createInvitation(String username, int org_id, String role, String email){
+	public String createInvitation(String username, int org_id, String role,
+			String email) {
 		try {
 			User user = userDao.getUserByUsername(username);
-			System.out.println("User data: "+user.getUsername()+", "+user.getPassword());
+			System.out.println("User data: " + user.getUsername() + ", "
+					+ user.getPassword());
 			// check user role
 			Organization org = orgDao.getOrganizationById(org_id);
 			UserRole ur = urDao.getRoleOfUser(user.getId(), org.getId());
-			if (ur != null && ur.getRole().equalsIgnoreCase(ROLES.ROLE_ORGOWNER.toString())) {
+			if (ur != null
+					&& ur.getRole().equalsIgnoreCase(
+							ROLES.ROLE_ORGOWNER.toString())) {
 
 				// Generate a key
 				String s = UUID.randomUUID().toString();
@@ -272,8 +289,9 @@ public class OrganizationManager {
 				tlDao.save(entity);
 
 				User prova = userDao.getUserByUsername(username);
-				System.out.println("After tl save, username: "+prova.getUsername()+", "+prova.getPassword());
-				
+				System.out.println("After tl save, username: "
+						+ prova.getUsername() + ", " + prova.getPassword());
+
 				return s;
 			}
 			throw new SecurityException();
@@ -285,14 +303,14 @@ public class OrganizationManager {
 	/**
 	 * Get organization by id.
 	 * 
-	 * @param org_id 
-	 * 			: int organization id
+	 * @param org_id
+	 *            : int organization id
 	 * @return {@link Organization} instance
 	 */
 	public Organization getOrganizationById(int org_id) {
-		try{
+		try {
 			return orgDao.getOrganizationById(org_id);
-		}catch(DataAccessException d){
+		} catch (DataAccessException d) {
 			return null;
 		}
 	}
@@ -301,22 +319,25 @@ public class OrganizationManager {
 	 * Retrieves list of organization.
 	 * 
 	 * @param firstResult
-	 * 			: int, start index
+	 *            : int, start index
 	 * @param maxResult
-	 * 			: int, number of element in resulted list
+	 *            : int, number of element in resulted list
 	 * @param param_order
-	 * 			: String, parameter order
+	 *            : String, parameter order
 	 * @return all {@link Organization} instances
 	 */
-	public List<Organization> getOrganizations(int firstResult, int maxResult, String param_order) {
-		try{
-			if(param_order.equalsIgnoreCase(ORDER.id.toString())){
-				return orgDao.showOrganizations(firstResult, maxResult, ORDER.id);
-			}else if(param_order.equalsIgnoreCase(ORDER.name.toString())){
-				return orgDao.showOrganizations(firstResult, maxResult, ORDER.name);
+	public List<Organization> getOrganizations(int firstResult, int maxResult,
+			String param_order) {
+		try {
+			if (param_order.equalsIgnoreCase(ORDER.id.toString())) {
+				return orgDao.showOrganizations(null, null, firstResult,
+						maxResult, ORDER.id);
+			} else if (param_order.equalsIgnoreCase(ORDER.name.toString())) {
+				return orgDao.showOrganizations(null, null, firstResult,
+						maxResult, ORDER.name);
 			}
 			throw new SecurityException();
-		}catch(DataAccessException d){
+		} catch (DataAccessException d) {
 			return null;
 		}
 	}
@@ -324,32 +345,33 @@ public class OrganizationManager {
 	/**
 	 * Get service history by organization id.
 	 * 
-	 * @param org_id 
-	 * 			: String organization id
+	 * @param org_id
+	 *            : String organization id
 	 * @return list of {@link ServiceHistory} instances for the organization
 	 */
 	public List<ServiceHistory> getHistory(int org_id) {
-		try{
+		try {
 			return shDao.getServiceHistoryByOrgId(org_id);
-		} catch(DataAccessException d){
+		} catch (DataAccessException d) {
 			return null;
 		}
 	}
 
 	/**
-	 * New organization owner user must use its username and key to connect with organization.
-	 * If it is ok, then a new user role is created and user become an organization owner.
-	 * Throws SecurityException when user has not correct role
-	 * and EntityNotFoundException when temporary link object does not exist.
+	 * New organization owner user must use its username and key to connect with
+	 * organization. If it is ok, then a new user role is created and user
+	 * become an organization owner. Throws SecurityException when user has not
+	 * correct role and EntityNotFoundException when temporary link object does
+	 * not exist.
 	 * 
-	 * @param username 
-	 * 			: String username of logged in user
-	 * @param key 
-	 * 			: String private key of invitation
+	 * @param username
+	 *            : String username of logged in user
+	 * @param key
+	 *            : String private key of invitation
 	 * @return boolean: true if it is ok, else false
 	 * 
 	 */
-	public boolean addOwner(String username, String key){
+	public boolean addOwner(String username, String key) {
 		try {
 			User user = userDao.getUserByUsername(username);
 			// Check in table TemporaryLink if this key is saved and if user is
@@ -372,20 +394,20 @@ public class OrganizationManager {
 		} catch (DataAccessException d) {
 			return false;
 		}
-		
+
 	}
-	
+
 	/**
-	 * Remove an organization owner from organization.
-	 * Throws SecurityException when user has not correct role
-	 * and UnsupportedOperationException when users try to delete themselves.
+	 * Remove an organization owner from organization. Throws SecurityException
+	 * when user has not correct role and UnsupportedOperationException when
+	 * users try to delete themselves.
 	 * 
-	 * @param username 
-	 * 			: String username of logged in user
-	 * @param org_id 
-	 * 			: int organization id
-	 * @param user_id 
-	 * 			: int user id of user we want to delete
+	 * @param username
+	 *            : String username of logged in user
+	 * @param org_id
+	 *            : int organization id
+	 * @param user_id
+	 *            : int user id of user we want to delete
 	 * @return boolean: true if it is ok, else false
 	 */
 	public boolean deleteOrgUser(String username, int org_id, int user_id) {
@@ -393,11 +415,12 @@ public class OrganizationManager {
 			// Check user role
 			User user = userDao.getUserByUsername(username);
 			UserRole userRole = urDao.getRoleOfUser(user.getId(), org_id);
-			if (userRole.getRole().equalsIgnoreCase(ROLES.ROLE_ORGOWNER.toString())) {
-				//no auto-delete
-				if(user.getId()!=user_id){
+			if (userRole.getRole().equalsIgnoreCase(
+					ROLES.ROLE_ORGOWNER.toString())) {
+				// no auto-delete
+				if (user.getId() != user_id) {
 					urDao.deleteUserRole(urDao.getRoleOfUser(user_id, org_id));
-				}else{
+				} else {
 					throw new UnsupportedOperationException();
 				}
 				return true;
@@ -408,35 +431,34 @@ public class OrganizationManager {
 			return false;
 		}
 	}
-	
+
 	/**
-	 * Retrieve members of an organization.
-	 * Search by organization id.
+	 * Retrieve members of an organization. Search by organization id.
 	 * 
 	 * @param org_id
-	 * 			: int, organization id
+	 *            : int, organization id
 	 * @return instances of {@link User}
 	 */
-	public List<Members> organizationMembers(int org_id){
+	public List<Members> organizationMembers(int org_id) {
 		List<Members> members = new ArrayList<Members>();
-		try{
+		try {
 			List<UserRole> urlist = urDao.getUserRoleByIdOrg(org_id);
 			User u;
 			for (int i = 0; i < urlist.size(); i++) {
 				u = userDao.getUserById(urlist.get(i).getId_user());
-				
-				System.out.println("Members "+i+" is: "+u.getUsername());
+
+				System.out.println("Members " + i + " is: " + u.getUsername());
 				Members m = new Members();
 				m.setId(u.getId());
 				m.setUsername(u.getUsername());
 				m.setEmail(u.getEmail());
-				members.add(i,m);
-				
+				members.add(i, m);
+
 			}
-		}catch(DataAccessException d){
+		} catch (DataAccessException d) {
 			return null;
 		}
-		
+
 		return members;
 	}
 

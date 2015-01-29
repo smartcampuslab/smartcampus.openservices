@@ -465,40 +465,26 @@ public class CatalogController {
 			@RequestParam(value = "first", required = false, defaultValue = "0") Integer firstResult,
 			@RequestParam(value = "last", required = false, defaultValue = "0") Integer maxResult,
 			@RequestParam(value = "order", required = false, defaultValue = "name") String param_order,
+			@RequestParam(value = "cats", required = false) List<Integer> categoryIds,
 			HttpServletResponse response) {
-		logger.info("-- Organization Catalog --");
+		logger.debug("Read organizations");
 
 		ResponseObject responseObject = new ResponseObject();
 		List<Organization> orgs = new ArrayList<Organization>();
 		try {
-			if (token == null) {
-				logger.info("-- All organization --");
-				orgs = catalogManager.catalogOrg(firstResult, maxResult,
-						param_order);
-				if (orgs == null || orgs.size() == 0) {
-					responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-					responseObject.setError("No organization available");
-					response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-				} else {
-					responseObject.setData(orgs);
-					responseObject.setStatus(HttpServletResponse.SC_OK);
-					responseObject.setTotalNumber(catalogManager.countOrg());
-				}
-			} else if (token != null) {
-				logger.info("-- Simple Organization Search: {} --", token);
-				orgs = catalogManager.catalogOrgSimpleSearch(token,
-						firstResult, maxResult, param_order);
-				if (orgs == null || orgs.size() == 0) {
-					responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
-					responseObject
-							.setError("No organization for this search by name");
-					response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-				} else {
-					responseObject.setData(orgs);
-					responseObject.setStatus(HttpServletResponse.SC_OK);
-					responseObject.setTotalNumber(catalogManager.countOrg());
-				}
+			orgs = catalogManager.catalogOrg(token, categoryIds, firstResult,
+					maxResult, param_order);
+			if (orgs == null || orgs.size() == 0) {
+				responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				responseObject.setError("No organization available");
+				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			} else {
+				responseObject.setData(orgs);
+				responseObject.setStatus(HttpServletResponse.SC_OK);
+				responseObject.setTotalNumber(catalogManager.countOrg(token,
+						categoryIds));
 			}
+
 		} catch (SecurityException s) {
 			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			responseObject
@@ -578,7 +564,8 @@ public class CatalogController {
 			} else {
 				responseObject.setData(orgs);
 				responseObject.setStatus(HttpServletResponse.SC_OK);
-				responseObject.setTotalNumber(catalogManager.countOrg());
+				responseObject.setTotalNumber(catalogManager.countOrg(null,
+						null));
 			}
 		} catch (SecurityException s) {
 			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -613,16 +600,18 @@ public class CatalogController {
 			@RequestParam(value = "first", required = false, defaultValue = "0") Integer firstResult,
 			@RequestParam(value = "last", required = false, defaultValue = "0") Integer maxResult,
 			@RequestParam(value = "order", required = false, defaultValue = "name") String param_order,
-			@RequestParam(value = "categories", required = false, defaultValue = "") String categoriesIds,
+			@RequestParam(value = "categories", required = false, defaultValue = "0") String categoriesIds,
 			HttpServletResponse response) {
-		logger.info("-- Organization Catalog browse --");
+		logger.debug("Organization Catalog browse");
 
 		String[] categoriesIdsStringArray = categoriesIds.split(",");
 		int[] categoriesIdsArray = new int[categoriesIdsStringArray.length];
+		List<Integer> listCats = new ArrayList<Integer>();
 		for (int i = 0; i < categoriesIdsStringArray.length; i++) {
 			try {
 				categoriesIdsArray[i] = Integer
 						.parseInt(categoriesIdsStringArray[i]);
+				listCats.add(Integer.parseInt(categoriesIdsStringArray[i]));
 			} catch (NumberFormatException nfe) {
 				continue;
 			}
@@ -641,7 +630,8 @@ public class CatalogController {
 			} else {
 				responseObject.setData(orgs);
 				responseObject.setStatus(HttpServletResponse.SC_OK);
-				responseObject.setTotalNumber(catalogManager.countOrg());
+				responseObject.setTotalNumber(catalogManager.countOrg(null,
+						listCats));
 			}
 		} catch (SecurityException s) {
 			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
