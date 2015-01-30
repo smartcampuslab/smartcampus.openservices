@@ -67,9 +67,9 @@
                             Authentication
                         </button>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" show-validation>
                         <label for="tendpoint">Endpoint</label>
-                        <input type="text" class="form-control" id="tendpoint" placeholder="http://tendpoint.com/api" ng-model="service.accessInformation.endpoint">
+                        <input type="text" class="form-control" id="tendpoint" placeholder="http://tendpoint.com/api" ng-model="service.accessInformation.endpoint" required>
                     </div>
                     <label for="formats">Formats</label>
                     <div class="form-group">
