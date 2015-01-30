@@ -342,6 +342,9 @@ app.controller('newServiceCtrl', ['$scope','$rootScope', '$http', '$location', '
                 }
             }
         };
+        // set default value
+        $scope.accessInformation.authentication.accessProtocol = 'Public';
+
         Category.list({}, function (data) {
             $scope.categories = data.data;
         });
@@ -357,6 +360,10 @@ app.controller('newServiceCtrl', ['$scope','$rootScope', '$http', '$location', '
         	arr = [];
         	for (var key in $scope.serviceProtocols) if ($scope.serviceProtocols[key]) arr.push(key);
         	$scope.service.accessInformation.protocols = arr.join();
+        	if(!$scope.service.accessInformation.authentication) {
+        		  $scope.service.accessInformation.authentication = {};
+        		  $scope.service.accessInformation.authentication.accessProtocol = 'Public';
+        	}
             if ($scope.service.expiration) {
                 $scope.service.expiration = new Date($scope.service.expiration).getTime();
             } else {
