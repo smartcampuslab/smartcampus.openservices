@@ -35,58 +35,72 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import eu.trentorise.smartcampus.openservices.controllers.exec.TestBoxAuthHandler.TestBoxParams;
 import eu.trentorise.smartcampus.openservices.entities.Authentication;
 import eu.trentorise.smartcampus.openservices.entities.Method;
+import eu.trentorise.smartcampus.openservices.entities.Service;
 import eu.trentorise.smartcampus.openservices.entities.TestInfo;
 import eu.trentorise.smartcampus.openservices.managers.ServiceManager;
 
 /**
  * @author raman
- *
+ * 
  */
 @Controller
-@RequestMapping(value="/api/testbox")
+@RequestMapping(value = "/api/testbox")
 public class TestBoxController {
 
 	@Autowired
 	private ServiceManager manager;
 	@Autowired
 	private TestBoxAuthHandlerFactory handlerFactory;
-	
-	
-	@RequestMapping(method=RequestMethod.GET, value="/authorize/{method}")
-	public void authorize(@PathVariable int method, HttpServletRequest req, HttpServletResponse res) throws TestBoxException {
+
+	@RequestMapping(method = RequestMethod.GET, value = "/authorize/{method}")
+	public void authorize(@PathVariable int method, HttpServletRequest req,
+			HttpServletResponse res) throws TestBoxException {
 		// find method to test
 		Method m = manager.getMethodById(method);
-		if (m == null) throw new TestBoxException("method not found: "+ method);
+		if (m == null)
+			throw new TestBoxException("method not found: " + method);
 		// read method auth properties or inherit the service ones
-		Authentication  a = m.getTestboxProperties().getAuthenticationDescriptor();
-		if (a == null) a = manager.getServiceById(m.getServiceId()).getAccessInformation().getAuthentication();
-		if (a == null) throw new TestBoxException("authentication not defined: "+ method);
+		Authentication a = m.getTestboxProperties()
+				.getAuthenticationDescriptor();
+		if (a == null)
+			a = manager.getServiceById(m.getServiceId()).getAccessInformation()
+					.getAuthentication();
+		if (a == null)
+			throw new TestBoxException("authentication not defined: " + method);
 		// find the auth handler for the specific protocol
-		TestBoxAuthHandler handler = handlerFactory.getHandler(a.getAccessProtocol());
-		if (handler == null) throw new TestBoxException("no handler for authentication: "+a.getAccessProtocol());
+		TestBoxAuthHandler handler = handlerFactory.getHandler(a
+				.getAccessProtocol());
+		if (handler == null)
+			throw new TestBoxException("no handler for authentication: "
+					+ a.getAccessProtocol());
 		handler.authorize(req, res, a.getAccessAttributes());
 	}
-	
-	@RequestMapping(method=RequestMethod.GET, value="/authorized")
-	public String authorized(HttpServletRequest req, HttpServletResponse res) throws TestBoxException {
+
+	@RequestMapping(method = RequestMethod.GET, value = "/authorized")
+	public String authorized(HttpServletRequest req, HttpServletResponse res)
+			throws TestBoxException {
 		return "success";
 	}
-	
-	@RequestMapping(method=RequestMethod.POST, value="/test/{method}")
+
+	@RequestMapping(method = RequestMethod.POST, value = "/test/{method}")
 	@ResponseBody
-	public TestResponse doTest(@PathVariable int method, @RequestBody TestRequest req, HttpServletRequest request, HttpServletResponse res) {
+	public TestResponse doTest(@PathVariable int method,
+			@RequestBody TestRequest req, HttpServletRequest request,
+			HttpServletResponse res) {
 		try {
 			// find method to test
 			Method m = manager.getMethodById(method);
-			if (m == null) throw new TestBoxException("method not found: "+ method);
+			if (m == null)
+				throw new TestBoxException("method not found: " + method);
 
 			// prepare test data
 			TestBoxParams params = new TestBoxParams();
 			params.requestMethod = m.getExecutionProperties().getHttpMethod();
 			if (m.getTestboxProperties().isTestable()) {
 				params.requestUrl = req.getRequestUrl();
-				params.requestBody =req.getRequestBody();
-				params.requestHeaders = mergeHeaders(m.getExecutionProperties().getHeaders(), req.getHeaders());
+				params.requestBody = req.getRequestBody();
+				params.requestHeaders = mergeHeaders(m.getExecutionProperties()
+						.getHeaders(), req.getHeaders());
 			} else {
 				// find the specific test data
 				List<TestInfo> tests = m.getTestboxProperties().getTests();
@@ -97,29 +111,54 @@ public class TestBoxController {
 						break;
 					}
 				}
-				if (testInfo == null) throw new TestBoxException("no test found: "+req.getName());
+				if (testInfo == null)
+					throw new TestBoxException("no test found: "
+							+ req.getName());
 				// if the test response is already defined, simply return it
-				if (testInfo.getResponse() != null && ! testInfo.getResponse().isEmpty()) {
+				if (testInfo.getResponse() != null
+						&& !testInfo.getResponse().isEmpty()) {
 					TestResponse result = new TestResponse();
 					result.setData(testInfo.getResponse());
 					return result;
 				}
-				params.requestUrl = testInfo.getRequestPath();
+				Service s = manager.getServiceById(m.getServiceId());
+
+				params.requestUrl = s.getAccessInformation().getEndpoint();
+				if (params.requestUrl.endsWith("/")
+						&& testInfo.getRequestPath().startsWith("/")) {
+					params.requestUrl += testInfo.getRequestPath().substring(1);
+				} else if (!params.requestUrl.endsWith("/")
+						&& !testInfo.getRequestPath().startsWith("/")) {
+					params.requestUrl += "/" + testInfo.getRequestPath();
+				} else {
+					params.requestUrl += testInfo.getRequestPath();
+				}
+
 				params.requestBody = testInfo.getRequestBody();
-				params.requestHeaders = mergeHeaders(m.getExecutionProperties().getHeaders(), testInfo.getHeaders());
+				params.requestHeaders = mergeHeaders(m.getExecutionProperties()
+						.getHeaders(), testInfo.getHeaders());
 			}
-			
+
 			params.credentials = req.getCredentials();
-			
+
 			// read method auth properties or inherit the service ones
-			Authentication  a = m.getTestboxProperties().getAuthenticationDescriptor();
-			if (a == null) a = manager.getServiceById(m.getServiceId()).getAccessInformation().getAuthentication();
-			if (a == null) throw new TestBoxException("authentication not defined: "+ method);
+			Authentication a = m.getTestboxProperties()
+					.getAuthenticationDescriptor();
+			if (a == null)
+				a = manager.getServiceById(m.getServiceId())
+						.getAccessInformation().getAuthentication();
+			if (a == null)
+				throw new TestBoxException("authentication not defined: "
+						+ method);
 			// find the auth handler for the specific protocol
-			TestBoxAuthHandler handler = handlerFactory.getHandler(a.getAccessProtocol());
-			if (handler == null) throw new TestBoxException("no handler for authentication: "+a.getAccessProtocol());
-			
-			return handler.performTest(request, params, a.getAccessAttributes());
+			TestBoxAuthHandler handler = handlerFactory.getHandler(a
+					.getAccessProtocol());
+			if (handler == null)
+				throw new TestBoxException("no handler for authentication: "
+						+ a.getAccessProtocol());
+
+			return handler
+					.performTest(request, params, a.getAccessAttributes());
 		} catch (TestBoxException te) {
 			TestResponse tr = new TestResponse();
 			if (te.status > 0) {
@@ -141,12 +180,13 @@ public class TestBoxController {
 	 * @param custom
 	 * @return
 	 */
-	private Map<String, String> mergeHeaders(Map<String, List<String>> required, Map<String, String> custom) {
-		Map<String,String> map = new HashMap<String, String>();
+	private Map<String, String> mergeHeaders(
+			Map<String, List<String>> required, Map<String, String> custom) {
+		Map<String, String> map = new HashMap<String, String>();
 		if (required != null) {
 			for (String key : required.keySet()) {
 				List<String> vals = required.get(key);
-				if (vals != null && ! vals.isEmpty()) {
+				if (vals != null && !vals.isEmpty()) {
 					map.put(key, vals.get(0));
 				}
 			}

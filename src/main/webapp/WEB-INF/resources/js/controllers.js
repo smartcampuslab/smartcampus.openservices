@@ -1328,17 +1328,31 @@ app.controller('serviceCtrl', ['$scope', '$rootScope', '$routeParams', 'Catalog'
 
         $scope.formatJson = function (j) {
             if (!j) return '';
-            var obj = JSON.parse(j);
-            return JSON.stringify(obj, undefined, 2);
+            try{ 
+	            var obj = JSON.parse(j);
+	            return JSON.stringify(obj, undefined, 2);
+            }catch (err) {
+            	return j;
+            }
         };
 
         $scope.send = function (id) {
         	$scope.currentMethod = $scope.methodMap[id];
             $scope.remoteapi = new RemoteApi($scope.currentMethod.testboxProperties.authentication.accessProtocol);
             $scope.remoteapi.authorize($scope.currentMethod.id).then(function (result) {
+            	var ctx = $scope.service.accessInformation.endpoint;
+            	var r = $scope.currentMethod._request.requestPath;
+            	if(ctx[ctx.length-1] === '/') {
+            		ctx = ctx.slice(0,-1);
+            	}
+            	
+            	if(r[0] === '/') {
+            		r = r.slice(1);
+            	}
+            	
                 var req = {
                     name: $scope.currentMethod._request.name,
-                    requestUrl: encodeURI($scope.service.accessInformation.endpoint + $scope.currentMethod._request.requestPath),
+                    requestUrl: encodeURI(ctx + '/'+ r),
                     requestBody: $scope.currentMethod._request.requestBody,
                     credentials: result
                 };
