@@ -12,14 +12,14 @@
           </div>
         </div>
         <div class="col-md-8 col-md-offset-1">
-            <ul>
-                <li>activity area: {{org.activityArea}}</li>
-                <li>category: {{category.name}} </li>
-                <li>email: {{org.contacts.email}} </li>
-                <li>phone: {{org.contacts.phone}} </li>
-                <li>fax: {{org.contacts.fax}} </li>
-                <li>web: <a target="_blank" ng-href="{{org.contacts.web}}">{{org.contacts.web}}</a></li>
-            </ul>
+            
+                <div ng-show="org.activityArea">activity area: {{org.activityArea}}</div>
+                <div ng-show="category.name">category: {{category.name}} </div>
+                <div ng-show="org.contacts.email">email: {{org.contacts.email}} </div>
+                <div ng-show="org.contacts.phone">phone: {{org.contacts.phone}} </div>
+                <div ng-show="org.contacts.fax">fax: {{org.contacts.fax}} </div>
+                <div ng-show="org.contacts.web">web: <a target="_blank" ng-href="{{org.contacts.web}}">{{org.contacts.web}}</a></div>
+            
         </div>
     </div>
 	
