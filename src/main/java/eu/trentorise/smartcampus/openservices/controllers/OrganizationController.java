@@ -56,7 +56,8 @@ import eu.trentorise.smartcampus.openservices.support.UserInvitation;
 @RequestMapping(value = "/api/org")
 public class OrganizationController {
 
-	private static final Logger logger = LoggerFactory.getLogger(OrganizationController.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(OrganizationController.class);
 
 	/**
 	 * Instance of {@link OrganizationManager} to retrieve data using Dao
@@ -94,8 +95,9 @@ public class OrganizationController {
 	 */
 	@RequestMapping(value = "/{org_id}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public ResponseObject orgById(@PathVariable int org_id, HttpServletResponse response) {
-		logger.info("-- Retrieved organization -- ");
+	public ResponseObject orgById(@PathVariable int org_id,
+			HttpServletResponse response) {
+		logger.debug("Retrieved organization");
 		Organization org = organizationManager.getOrganizationById(org_id);
 		ResponseObject responseObject = new ResponseObject();
 		if (org == null) {
@@ -124,8 +126,10 @@ public class OrganizationController {
 	@ResponseBody
 	public ResponseObject orgUser(HttpServletResponse response) {
 		logger.info("-- View my organization --");
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		List<Organization> orgs = organizationManager.getUserOrganizations(username);
+		String username = SecurityContextHolder.getContext()
+				.getAuthentication().getName();
+		List<Organization> orgs = organizationManager
+				.getUserOrganizations(username);
 		ResponseObject responseObject = new ResponseObject();
 		if (orgs == null || orgs.size() == 0) {
 			responseObject.setError("You have zero organization.");
@@ -153,12 +157,14 @@ public class OrganizationController {
 	 */
 	@RequestMapping(value = "/activity/history/{org_id}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public ResponseObject getOrgActivityHistory(@PathVariable int org_id, HttpServletResponse response) {
+	public ResponseObject getOrgActivityHistory(@PathVariable int org_id,
+			HttpServletResponse response) {
 		logger.info("-- View organization activity history --");
 		List<ServiceHistory> history = organizationManager.getHistory(org_id);
 		ResponseObject responseObject = new ResponseObject();
 		if (history == null || history.size() == 0) {
-			responseObject.setError("There is no history for this organization");
+			responseObject
+					.setError("There is no history for this organization");
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		} else {
@@ -183,16 +189,19 @@ public class OrganizationController {
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseBody
-	public ResponseObject createOrganization(@RequestBody Organization org, HttpServletResponse response) {
+	public ResponseObject createOrganization(@RequestBody Organization org,
+			HttpServletResponse response) {
 		logger.info("-- Create organization --");
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		String username = SecurityContextHolder.getContext()
+				.getAuthentication().getName();
 		boolean result = organizationManager.createOrganization(username, org);
 		ResponseObject responseObject = new ResponseObject();
 		if (result) {
 			responseObject.setStatus(HttpServletResponse.SC_CREATED);
 			response.setStatus(HttpServletResponse.SC_CREATED);
 		} else {
-			responseObject.setError("This organization name is already in use, change it");
+			responseObject
+					.setError("This organization name is already in use, change it");
 			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			// response.setHeader("Error",
@@ -219,13 +228,16 @@ public class OrganizationController {
 	 */
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
 	@ResponseBody
-	public ResponseObject deleteOrganization(@PathVariable int id, HttpServletResponse response) {
+	public ResponseObject deleteOrganization(@PathVariable int id,
+			HttpServletResponse response) {
 		logger.info("-- Delete organization --");
 		// get user data
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		String username = SecurityContextHolder.getContext()
+				.getAuthentication().getName();
 		ResponseObject responseObject = new ResponseObject();
 		try {
-			boolean result = organizationManager.deleteOrganization(username, id);
+			boolean result = organizationManager.deleteOrganization(username,
+					id);
 			if (result) {
 				responseObject.setStatus(HttpServletResponse.SC_OK);
 				response.setStatus(HttpServletResponse.SC_OK);
@@ -239,7 +251,8 @@ public class OrganizationController {
 			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		} catch (EntityExistsException e) {
-			responseObject.setError("You cannot delete this organization, published services exist");
+			responseObject
+					.setError("You cannot delete this organization, published services exist");
 			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
@@ -263,18 +276,22 @@ public class OrganizationController {
 	 */
 	@RequestMapping(value = "/modify", method = RequestMethod.PUT, consumes = "application/json")
 	@ResponseBody
-	public ResponseObject modifyOrganization(@RequestBody Organization org, HttpServletResponse response) {
-		logger.info("-- Modify organization --");
+	public ResponseObject modifyOrganization(@RequestBody Organization org,
+			HttpServletResponse response) {
+		logger.debug("Modify organization");
 		// get user data
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		String username = SecurityContextHolder.getContext()
+				.getAuthentication().getName();
 		ResponseObject responseObject = new ResponseObject();
 		try {
-			boolean result = organizationManager.updateOrganization(username, org);
+			boolean result = organizationManager.updateOrganization(username,
+					org);
 			if (result) {
 				responseObject.setStatus(HttpServletResponse.SC_OK);
 				response.setStatus(HttpServletResponse.SC_OK);
 			} else {
-				responseObject.setError("Error in  modifying organization data");
+				responseObject
+						.setError("Error in  modifying organization data");
 				responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			}
@@ -283,7 +300,8 @@ public class OrganizationController {
 			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		} catch (EntityExistsException e) {
-			responseObject.setError("Organization with this name already exists. Change it.");
+			responseObject
+					.setError("Organization with this name already exists. Change it.");
 			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
@@ -297,18 +315,19 @@ public class OrganizationController {
 	 * Add organization owner to an organization. User who send invitation must
 	 * be an organization owner.
 	 * 
-	 * @param data 
-	 * 			: instance of {@link UserInvitation}
-	 * @param req 
-	 * 			: instance of {@link HttpServletRequest} which returns status of response
+	 * @param data
+	 *            : instance of {@link UserInvitation}
+	 * @param req
+	 *            : instance of {@link HttpServletRequest} which returns status
+	 *            of response
 	 * @return {@link ResponseObject} with status (OK or UNAUTHORIZED) and error
 	 *         message (if status is UNAUTHORIZED).
 	 */
 	@RequestMapping(value = "/manage/owner", method = RequestMethod.POST)
 	// , consumes="application/json")
 	@ResponseBody
-	public ResponseObject orgManageOwnerData(@RequestBody UserInvitation data, HttpServletRequest req,
-			HttpServletResponse response) {
+	public ResponseObject orgManageOwnerData(@RequestBody UserInvitation data,
+			HttpServletRequest req, HttpServletResponse response) {
 		logger.info("-- Manage Organization Owner --");
 		String email = data.getEmail();
 		int org_id = data.getOrg_id();
@@ -318,28 +337,40 @@ public class OrganizationController {
 
 		if (org_id != 0 && (!email.equalsIgnoreCase("") || email != null)) {
 			// Get username
-			String username = SecurityContextHolder.getContext().getAuthentication().getName();
+			String username = SecurityContextHolder.getContext()
+					.getAuthentication().getName();
 			// validate email
 			EmailValidator ev = new EmailValidator();
 			if (ev.validate(email)) {
 				try {
-					String s = organizationManager.createInvitation(username, org_id, ROLES.ROLE_ORGOWNER.toString(), email);
+					String s = organizationManager.createInvitation(username,
+							org_id, ROLES.ROLE_ORGOWNER.toString(), email);
 					// return link
 					String host = Utils.getAppURL(req); // env.getProperty("host");
 					String link = host + "org/enable/" + s;// api/org/manage/owner/add/
 					// send it via email to user
-					mailer.sendMail(env.getProperty("email.username"), email, env.getProperty("org.message.object") + " "
-							+ organizationManager.getOrganizationById(org_id).getName(),
-							username + " " + env.getProperty("org.message.body") + " " + link);
+					mailer.sendMail(
+							env.getProperty("email.username"),
+							email,
+							env.getProperty("org.message.object")
+									+ " "
+									+ organizationManager.getOrganizationById(
+											org_id).getName(), username + " "
+									+ env.getProperty("org.message.body") + " "
+									+ link);
 					responseObject.setStatus(HttpServletResponse.SC_OK);
 				} catch (SecurityException s) {
-					responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-					responseObject.setError("User cannot invite other users to an organization");
+					responseObject
+							.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+					responseObject
+							.setError("User cannot invite other users to an organization");
 					response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 				} catch (org.springframework.mail.MailSendException m) {
 					m.printStackTrace();
-					responseObject.setError("User invitation is not allowed. Try again later.");
-					responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					responseObject
+							.setError("User invitation is not allowed. Try again later.");
+					responseObject
+							.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				}
 			} else {
@@ -350,7 +381,8 @@ public class OrganizationController {
 			}
 		} else {
 			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			responseObject.setError("Wrong input data: missing organization id or email");
+			responseObject
+					.setError("Wrong input data: missing organization id or email");
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 
@@ -375,9 +407,11 @@ public class OrganizationController {
 	 */
 	@RequestMapping(value = "/manage/owner/add/{key}", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseObject orgManageAddOwnerData(@PathVariable String key, HttpServletResponse response) {
+	public ResponseObject orgManageAddOwnerData(@PathVariable String key,
+			HttpServletResponse response) {
 		logger.info("-- Add organization members by key --");
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		String username = SecurityContextHolder.getContext()
+				.getAuthentication().getName();
 		ResponseObject responseObject = new ResponseObject();
 		try {
 			boolean result = organizationManager.addOwner(username, key);
@@ -385,7 +419,8 @@ public class OrganizationController {
 				responseObject.setStatus(HttpServletResponse.SC_OK);
 			} else {
 				responseObject.setError("Connection problem with database");
-				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				responseObject
+						.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 			}
 		} catch (EntityNotFoundException e) {
@@ -404,18 +439,19 @@ public class OrganizationController {
 	 * Delete owner from an organization. User who deletes other owners must be
 	 * organization owner.
 	 * 
-	 * @param data 
-	 * 			: instance of {@link UserInvitation}
+	 * @param data
+	 *            : instance of {@link UserInvitation}
 	 * @param response
-	 *            : {@link HttpServletResponse} which returns status of
-	 *            response OK, SERVICE UNAVAILABLE or UNAUTHORIZED
+	 *            : {@link HttpServletResponse} which returns status of response
+	 *            OK, SERVICE UNAVAILABLE or UNAUTHORIZED
 	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE, BAD
 	 *         REQUEST or UNAUTHORIZED) and error message (if status is SERVICE
 	 *         UNAVAILABLE, BAD REQUEST or UNAUTHORIZED).
 	 */
 	@RequestMapping(value = "/manage/owner/delete", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseBody
-	public ResponseObject orgManageDeleteOwnerData(@RequestBody UserInvitation data, HttpServletResponse response) {
+	public ResponseObject orgManageDeleteOwnerData(
+			@RequestBody UserInvitation data, HttpServletResponse response) {
 		logger.info("-- Delete organization members --");
 		int org_id = data.getOrg_id();
 		int user_id = data.getUser_id();
@@ -423,21 +459,25 @@ public class OrganizationController {
 		ResponseObject responseObject = new ResponseObject();
 
 		if (user_id != 0 && org_id != 0) {
-			String username = SecurityContextHolder.getContext().getAuthentication().getName();
+			String username = SecurityContextHolder.getContext()
+					.getAuthentication().getName();
 			// Delete connection between user and organization, where user has
 			// role ROLE_ORGOWNER
 			try {
-				boolean result = organizationManager.deleteOrgUser(username, org_id, user_id);
+				boolean result = organizationManager.deleteOrgUser(username,
+						org_id, user_id);
 				if (result) {
 					responseObject.setStatus(HttpServletResponse.SC_OK);
 					response.setStatus(HttpServletResponse.SC_OK);
 				} else {
 					responseObject.setError("Connection problem with database");
-					responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+					responseObject
+							.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 					response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 				}
 			} catch (SecurityException s) {
-				responseObject.setError("You are not allowed to delete another owner from this organization");
+				responseObject
+						.setError("You are not allowed to delete another owner from this organization");
 				responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			} catch (UnsupportedOperationException u) {
@@ -446,7 +486,8 @@ public class OrganizationController {
 				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			}
 		} else {
-			responseObject.setError("Wrong data input: Missing organization id or user id");
+			responseObject
+					.setError("Wrong data input: Missing organization id or user id");
 			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
@@ -459,23 +500,26 @@ public class OrganizationController {
 	 * @param organization_id
 	 *            : int
 	 * @param response
-	 *            : {@link HttpServletResponse} which returns status of
-	 *            response OK or SERVICE UNAVAILABLE
+	 *            : {@link HttpServletResponse} which returns status of response
+	 *            OK or SERVICE UNAVAILABLE
 	 * @return {@link ResponseObject} with status (OK or SERVICE UNAVAILABLE)
 	 *         and error message (if status is SERVICE UNAVAILABLE).
 	 */
 	@RequestMapping(value = "/members/{organization_id}", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseObject orgMembers(@PathVariable int organization_id, HttpServletResponse response) {
+	public ResponseObject orgMembers(@PathVariable int organization_id,
+			HttpServletResponse response) {
 		logger.info("-- Retrieve organization members --");
 		ResponseObject responseObject = new ResponseObject();
-		List<Members> members = organizationManager.organizationMembers(organization_id);
+		List<Members> members = organizationManager
+				.organizationMembers(organization_id);
 		if (members != null && !members.isEmpty()) {
 			responseObject.setData(members);
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 
 		} else {
-			responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+			responseObject
+					.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 			responseObject.setError("Connection problem");
 			response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 		}

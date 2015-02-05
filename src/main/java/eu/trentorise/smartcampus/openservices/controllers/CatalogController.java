@@ -496,7 +496,7 @@ public class CatalogController {
 	@ResponseBody
 	public ResponseObject catalogOrgById(@PathVariable int id,
 			HttpServletResponse response) {
-		logger.info("-- Organization Catalog data --");
+		logger.debug("Organization Catalog data");
 		Organization org = catalogManager.catalogOrgById(id);
 		ResponseObject responseObject = new ResponseObject();
 		if (org == null) {
