@@ -60,6 +60,11 @@
                 <div class="panel-body">
                   <ul class="list-unstyled" ng-if="orgs.length > 0">
                     <li ng-repeat="org in orgs" class="animated fadeIn service-row">
+                    <div class="row">
+                    <div class="col-md-3">
+                    	<img class="img-rounded img-responsive" ng-src="{{org.logo}}" alt="Generic placeholder image">
+                    </div>
+                    <div class="col-md-9">
                       <h3>
                         <a ng-href="organizations/{{org.id}}">{{org.name}}</a>
                       </h3>
@@ -67,6 +72,8 @@
                       <div ng-show="!! org.categoryName" class="tags">
                         <span class="label label-default">{{org.categoryName}}</span>
                       </div>
+                    </div>
+                    </div>
                     </li>
                   </ul>
                 </div>
@@ -81,12 +88,6 @@
             </div>
           </div>
         </div>
-        <!-- <ul class="pager">
-                <li ng-class="{disabled: start <= 0}"><a ng-click="prev()" href="">Previous</a>
-                </li>
-                <li ng-class="{disabled: end >= total}"><a ng-click="next()" href="">Next</a>
-                </li>
-                </ul> -->
         <div ng-if="!orgs || orgs.length == 0">
           <h4>No results.</h4>
         </div>
