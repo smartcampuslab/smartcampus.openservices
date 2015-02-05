@@ -167,25 +167,22 @@ public class OrganizationManager {
 	 * @return boolean: true if it is ok, else false
 	 */
 	@Transactional
-	public boolean createOrganization(String username, Organization org) {
+	public Organization createOrganization(String username, Organization org) {
 		try {
 			User user = userDao.getUserByUsername(username);
 			// check name of Organization
 			if (orgDao.getOrganizationByName(org.getName()) == null) {
 				org.setCreatorId(user.getId());
-				orgDao.createOrganization(org);
+				org = orgDao.createOrganization(org);
 				// add UserRole
 				urDao.createUserRole(org.getCreatorId(), org.getId(),
 						ROLES.ROLE_ORGOWNER.toString());
-				// check if this new organizatione exist
-				if (orgDao.getOrganizationByName(org.getName()) != null) {
-					return true;
-				}
+				return org;
 			}
 		} catch (DataAccessException d) {
-			return false;
+			return null;
 		}
-		return false;
+		return null;
 
 	}
 

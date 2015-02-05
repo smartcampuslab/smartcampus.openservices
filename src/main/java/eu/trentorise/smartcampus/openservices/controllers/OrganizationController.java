@@ -194,9 +194,11 @@ public class OrganizationController {
 		logger.debug("Create organization");
 		String username = SecurityContextHolder.getContext()
 				.getAuthentication().getName();
-		boolean result = organizationManager.createOrganization(username, org);
+		Organization result = organizationManager.createOrganization(username,
+				org);
 		ResponseObject responseObject = new ResponseObject();
-		if (result) {
+		if (result != null) {
+			responseObject.setData(result);
 			responseObject.setStatus(HttpServletResponse.SC_CREATED);
 			response.setStatus(HttpServletResponse.SC_CREATED);
 		} else {

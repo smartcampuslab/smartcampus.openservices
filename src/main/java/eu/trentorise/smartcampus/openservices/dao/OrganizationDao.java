@@ -78,9 +78,11 @@ public interface OrganizationDao {
 	 * 
 	 * @param org
 	 *            : a {@link Organization} instance
+	 * @return organization persisted
 	 * @throws DataAccessException
 	 */
-	public void createOrganization(Organization org) throws DataAccessException;
+	public Organization createOrganization(Organization org)
+			throws DataAccessException;
 
 	/**
 	 * Modify Organization.

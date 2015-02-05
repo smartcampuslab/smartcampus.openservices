@@ -132,8 +132,10 @@ public class OrganizationDaoImpl implements OrganizationDao {
 	 */
 	@Transactional
 	@Override
-	public void createOrganization(Organization org) throws DataAccessException {
+	public Organization createOrganization(Organization org)
+			throws DataAccessException {
 		getEntityManager().persist(org);
+		return org;
 	}
 
 	/**
