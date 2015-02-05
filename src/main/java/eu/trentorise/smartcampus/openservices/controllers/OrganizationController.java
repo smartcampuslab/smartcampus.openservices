@@ -191,7 +191,7 @@ public class OrganizationController {
 	@ResponseBody
 	public ResponseObject createOrganization(@RequestBody Organization org,
 			HttpServletResponse response) {
-		logger.info("-- Create organization --");
+		logger.debug("Create organization");
 		String username = SecurityContextHolder.getContext()
 				.getAuthentication().getName();
 		boolean result = organizationManager.createOrganization(username, org);
