@@ -52,7 +52,8 @@ import eu.trentorise.smartcampus.openservices.support.Password;
 @RequestMapping(value = "/api/user")
 public class UserController {
 
-	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(UserController.class);
 
 	/**
 	 * Instance of {@link UserManager} to retrieve data using Dao classes.
@@ -75,20 +76,21 @@ public class UserController {
 	 */
 
 	/**
-	 * It retrieves User data by user id. User id is a primary key. This operation
-	 * is for admin user.
+	 * It retrieves User data by user id. User id is a primary key. This
+	 * operation is for admin user.
 	 * 
 	 * @param id
-	 *          : int user id
+	 *            : int user id
 	 * @param response
-	 *          : {@link HttpServletResponse} which returns status of response
+	 *            : {@link HttpServletResponse} which returns status of response
 	 *            OK or NOT FOUND
 	 * @return {@link ResponseObject} with user data, status (OK or NOT FOUND)
 	 *         and error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public ResponseObject getUserById(@PathVariable int id, HttpServletResponse response) {
+	public ResponseObject getUserById(@PathVariable int id,
+			HttpServletResponse response) {
 		logger.info("-- User Data by Id --");
 		User user = User.fromUserEntity(userManager.getUserById(id));
 		ResponseObject responseObject = new ResponseObject();
@@ -104,24 +106,29 @@ public class UserController {
 	}
 
 	/**
-	 * It retrieves user data for logged user. This operation is for logged user.
+	 * It retrieves user data for logged user. This operation is for logged
+	 * user.
 	 * 
 	 * @param response
-	 *         : {@link HttpServletResponse} which returns status of response
+	 *            : {@link HttpServletResponse} which returns status of response
 	 *            OK or SERVICE UNAVAILABLE
 	 * @return {@link ResponseObject} with user data, status (OK or SERVICE
-	 *         UNAVAILABLE) and error message (if status is SERVICE UNAVAILABLE).
+	 *         UNAVAILABLE) and error message (if status is SERVICE
+	 *         UNAVAILABLE).
 	 */
 	@RequestMapping(value = "/my", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public ResponseObject getUserByUsername(HttpServletResponse response) {
 		logger.info("-- My User Data--");
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		User user = User.fromUserEntity(userManager.getUserByUsername(username));
+		String username = SecurityContextHolder.getContext()
+				.getAuthentication().getName();
+		User user = User
+				.fromUserEntity(userManager.getUserByUsername(username));
 		ResponseObject responseObject = new ResponseObject();
 		if (user == null) {
 			responseObject.setError("Connection Problem with database");
-			responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+			responseObject
+					.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 			response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 		} else {
 			responseObject.setData(user);
@@ -135,11 +142,12 @@ public class UserController {
 	 * username is already in use. Return saved user.
 	 * 
 	 * @param user
-	 *          : {@link eu.trentorise.smartcampus.openservices.entities.User} instance
-	 * @param req 
-	 * 			: {@link HttpServletRequest} for having application url
+	 *            : {@link eu.trentorise.smartcampus.openservices.entities.User}
+	 *            instance
+	 * @param req
+	 *            : {@link HttpServletRequest} for having application url
 	 * @param response
-	 *          : {@link HttpServletResponse} which returns status of response
+	 *            : {@link HttpServletResponse} which returns status of response
 	 *            CREATED, FORBIDDEN or SERVICE UNAVAILABLE
 	 * @return {@link ResponseObject} with new user data, status (OK, FORBIDDEN,
 	 *         BAD REQUEST or SERVICE UNAVAILABLE) and error message (if status
@@ -147,65 +155,87 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseBody
-	public ResponseObject createUser(@RequestBody eu.trentorise.smartcampus.openservices.entities.User user,
+	public ResponseObject createUser(
+			@RequestBody eu.trentorise.smartcampus.openservices.entities.User user,
 			HttpServletRequest req, HttpServletResponse response) {
-		logger.info("-- Add user data --");
-		// Check username
-		eu.trentorise.smartcampus.openservices.entities.User userDB = userManager.getUserByUsername(user.getUsername());
+		logger.debug("Create user");
+		boolean isRegEnabled = env.getProperty("registration.enable",
+				Boolean.class, true);
+		logger.info("User Registration settings: {}", isRegEnabled);
 		ResponseObject responseObject = new ResponseObject();
-		if (userDB != null) {
-			responseObject.setError("Username already use");
-			responseObject.setStatus(HttpServletResponse.SC_FORBIDDEN);
-			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-		} else {
-			// Check email
-			EmailValidator ev = new EmailValidator();
-			if (!ev.validate(user.getEmail())) {
-				responseObject.setError("This is not a valid email address");
+		if (isRegEnabled) {
+			// Check username
+			eu.trentorise.smartcampus.openservices.entities.User userDB = userManager
+					.getUserByUsername(user.getUsername());
+			if (userDB != null) {
+				responseObject.setError("Username already use");
 				responseObject.setStatus(HttpServletResponse.SC_FORBIDDEN);
 				response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 			} else {
-				String host = Utils.getAppURL(req);
-				try {
-					eu.trentorise.smartcampus.openservices.entities.User newUser = userManager.createUser(user, host,
-							env.getProperty("email.username"), env.getProperty("user.message.object"),
-							env.getProperty("user.message.body"));
-					if (newUser != null) {
-						responseObject.setStatus(HttpServletResponse.SC_OK);
-					} else {
-						responseObject.setError("Connection problem with database or duplicate email");
-						responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
-						response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				// Check email
+				EmailValidator ev = new EmailValidator();
+				if (!ev.validate(user.getEmail())) {
+					responseObject
+							.setError("This is not a valid email address");
+					responseObject.setStatus(HttpServletResponse.SC_FORBIDDEN);
+					response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+				} else {
+					String host = Utils.getAppURL(req);
+					try {
+						eu.trentorise.smartcampus.openservices.entities.User newUser = userManager
+								.createUser(user, host,
+										env.getProperty("email.username"),
+										env.getProperty("user.message.object"),
+										env.getProperty("user.message.body"));
+						if (newUser != null) {
+							responseObject.setStatus(HttpServletResponse.SC_OK);
+						} else {
+							responseObject
+									.setError("Connection problem with database or duplicate email");
+							responseObject
+									.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+							response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+						}
+					} catch (SecurityException s) {
+						responseObject.setError("Duplicate email");
+						responseObject
+								.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+						response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					} catch (ConnectException c) {
+						responseObject
+								.setError("Registration is not allowed. Try again later.");
+						responseObject
+								.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+						response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					} catch (org.springframework.mail.MailSendException m) {
+						logger.error("mail exception in user registration", m);
+						responseObject
+								.setError("Registration is not allowed. Try again later.");
+						responseObject
+								.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+						response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 					}
-				} catch (SecurityException s) {
-					responseObject.setError("Duplicate email");
-					responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-				} catch (ConnectException c) {
-					responseObject.setError("Registration is not allowed. Try again later.");
-					responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-				} catch (org.springframework.mail.MailSendException m) {
-					m.printStackTrace();
-					responseObject.setError("Registration is not allowed. Try again later.");
-					responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				}
 			}
+		} else {
+			responseObject.setError("User registration is disabled");
+			responseObject.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 		}
 		return responseObject;
+
 	}
 
 	/**
-	 * It verifies user email, sending an email with a link to a rest service which
-	 * enable user's account.
+	 * It verifies user email, sending an email with a link to a rest service
+	 * which enable user's account.
 	 * 
 	 * @param user
-	 *          : {@link User} instance that wants to enable account.
-	 * @param req 
-	 * 			: {@link HttpServletRequest} for having application url
+	 *            : {@link User} instance that wants to enable account.
+	 * @param req
+	 *            : {@link HttpServletRequest} for having application url
 	 * @param response
-	 *          : {@link HttpServletResponse} which returns status of response
+	 *            : {@link HttpServletResponse} which returns status of response
 	 *            SERVICE UNAVAILABLE or UNAUTHORIZED
 	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE or
 	 *         UNAUTHORIZED) and error message (if status is SERIVCE UNAVAILABLE
@@ -213,7 +243,8 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/add/verify", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseBody
-	public ResponseObject verifyEmail(@RequestBody User user, HttpServletRequest req, HttpServletResponse response) {
+	public ResponseObject verifyEmail(@RequestBody User user,
+			HttpServletRequest req, HttpServletResponse response) {
 		logger.info("-- User verify email --");
 		ResponseObject responseObject = new ResponseObject();
 		try {
@@ -223,12 +254,16 @@ public class UserController {
 				String host = Utils.getAppURL(req);
 				String link = host + "enable/" + s;
 				// send it via email to user
-				mailer.sendMail(env.getProperty("email.username"), user.getEmail(), env.getProperty("user.message.object")
-						+ " " + user.getUsername(), env.getProperty("user.message.body") + " " + link);
+				mailer.sendMail(env.getProperty("email.username"),
+						user.getEmail(), env.getProperty("user.message.object")
+								+ " " + user.getUsername(),
+						env.getProperty("user.message.body") + " " + link);
 				responseObject.setStatus(HttpServletResponse.SC_OK);
 			} else {
-				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
-				responseObject.setError("Service is not available, therefore verification is failed.");
+				responseObject
+						.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				responseObject
+						.setError("Service is not available, therefore verification is failed.");
 				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 			}
 		} catch (SecurityException s) {
@@ -236,7 +271,8 @@ public class UserController {
 			responseObject.setError("Your account is already enabled.");
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		} catch (org.springframework.mail.MailSendException m) {
-			responseObject.setError("Email verification is not allowed. Try again later.");
+			responseObject
+					.setError("Email verification is not allowed. Try again later.");
 			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
@@ -248,9 +284,9 @@ public class UserController {
 	 * It enables user account verifying username and key.
 	 * 
 	 * @param key
-	 *         : String key sent by email to user
+	 *            : String key sent by email to user
 	 * @param response
-	 *          : {@link HttpServletResponse} which returns status of response
+	 *            : {@link HttpServletResponse} which returns status of response
 	 *            SERVICE UNAVAILABLE or NOT FOUND
 	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE or
 	 *         NOT FOUND) and error message (if status is SERIVCE UNAVAILABLE or
@@ -258,17 +294,20 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/add/enable/{key}", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseObject enableUser(@PathVariable String key, HttpServletResponse response) {
+	public ResponseObject enableUser(@PathVariable String key,
+			HttpServletResponse response) {
 		logger.info("-- User enable --");
 		ResponseObject responseObject = new ResponseObject();
 		try {
-			User enabledUser = User.fromUserEntity(userManager.enableUserAfterVerification(key));
+			User enabledUser = User.fromUserEntity(userManager
+					.enableUserAfterVerification(key));
 			if (enabledUser != null) {
 				// enabledUser.setPassword(null);
 				responseObject.setData(enabledUser);
 				responseObject.setStatus(HttpServletResponse.SC_OK);
 			} else {
-				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				responseObject
+						.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 				responseObject.setError("Connection problem with database.");
 				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 			}
@@ -281,13 +320,14 @@ public class UserController {
 	}
 
 	/**
-	 * It modifies user account and update data in db. This operation is only for
-	 * logged user.
+	 * It modifies user account and update data in db. This operation is only
+	 * for logged user.
 	 * 
 	 * @param user
-	 *          : {@link eu.trentorise.smartcampus.openservices.entities.User} instance
+	 *            : {@link eu.trentorise.smartcampus.openservices.entities.User}
+	 *            instance
 	 * @param response
-	 *          : {@link HttpServletResponse} which returns status of response
+	 *            : {@link HttpServletResponse} which returns status of response
 	 *            OK or SERVICE UNAVAILABLE
 	 * @return {@link ResponseObject} with modified user data, status (OK or
 	 *         SERVICE UNAVAILABLE) and error message (if status is SERVICE
@@ -295,18 +335,22 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/modify", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseBody
-	public ResponseObject modifyUserData(@RequestBody eu.trentorise.smartcampus.openservices.entities.User user,
+	public ResponseObject modifyUserData(
+			@RequestBody eu.trentorise.smartcampus.openservices.entities.User user,
 			HttpServletResponse response) {
 		logger.info("-- User modify --");
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		User modifiedUser = User.fromUserEntity(userManager.modifyUserData(username, user));
+		String username = SecurityContextHolder.getContext()
+				.getAuthentication().getName();
+		User modifiedUser = User.fromUserEntity(userManager.modifyUserData(
+				username, user));
 		ResponseObject responseObject = new ResponseObject();
 		if (modifiedUser != null) {
 			responseObject.setData(modifiedUser);
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 		} else {
 			responseObject.setError("Connection problem with database");
-			responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+			responseObject
+					.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 			response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 		}
 		return responseObject;
@@ -318,9 +362,9 @@ public class UserController {
 	 * retrieve disabled user. This operation is only for admin user.
 	 * 
 	 * @param username
-	 *          : String username of user that admin wants to disable
+	 *            : String username of user that admin wants to disable
 	 * @param response
-	 *          : {@link HttpServletResponse} which returns status of response
+	 *            : {@link HttpServletResponse} which returns status of response
 	 *            OK or SERVICE UNAVAILABLE
 	 * @return {@link ResponseObject} with disabled user data, status (OK or
 	 *         SERVICE UNAVAILABLE) and error message (if status is SERVICE
@@ -328,7 +372,8 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/disable/{username}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public ResponseObject disabledUser(@PathVariable String username, HttpServletResponse response) {
+	public ResponseObject disabledUser(@PathVariable String username,
+			HttpServletResponse response) {
 		logger.info("-- User disable --");
 		User user = User.fromUserEntity(userManager.disabledUser(username));
 		ResponseObject responseObject = new ResponseObject();
@@ -337,7 +382,8 @@ public class UserController {
 			responseObject.setStatus(HttpServletResponse.SC_OK);
 		} else {
 			responseObject.setError("Connection problem with database");
-			responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+			responseObject
+					.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 			response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 		}
 		return responseObject;
@@ -346,10 +392,10 @@ public class UserController {
 	/**
 	 * It modifies a user's password.
 	 * 
-	 * @param passw 
-	 * 			: instance of {@link Password}
+	 * @param passw
+	 *            : instance of {@link Password}
 	 * @param response
-	 *          : {@link HttpServletResponse} which returns status of response
+	 *            : {@link HttpServletResponse} which returns status of response
 	 *            OK, SERVICE UNAVAILABLE or NOT FOUND
 	 * @return {@link ResponseObject} with status (OK, SERVICE UNAVAILABLE or
 	 *         NOT FOUND) and error message (if status is SERVICE UNAVAILABLE or
@@ -357,19 +403,23 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/passw/modify", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
-	public ResponseObject modifyUserPassword(@RequestBody Password passw, HttpServletResponse response) {
+	public ResponseObject modifyUserPassword(@RequestBody Password passw,
+			HttpServletResponse response) {
 		logger.info("-- Modify User password --");
 		logger.info("-- OldP-- " + passw.getOldP());
 		logger.info("-- NewP-- " + passw.getNewP());
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		String username = SecurityContextHolder.getContext()
+				.getAuthentication().getName();
 		ResponseObject responseObject = new ResponseObject();
 		try {
-			boolean result = userManager.modifyUserPassword(username, passw.getOldP(), passw.getNewP());
+			boolean result = userManager.modifyUserPassword(username,
+					passw.getOldP(), passw.getNewP());
 			if (result) {
 				responseObject.setStatus(HttpServletResponse.SC_OK);
 			} else {
 				responseObject.setError("Connection problem with database");
-				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				responseObject
+						.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 			}
 		} catch (SecurityException s) {
@@ -381,21 +431,23 @@ public class UserController {
 	}
 
 	/**
-	 * It resets a user's password when password is forgotten. This function reset
-	 * password in db with a new random value and send it via email to user.
+	 * It resets a user's password when password is forgotten. This function
+	 * reset password in db with a new random value and send it via email to
+	 * user.
 	 * 
 	 * @param email
-	 *          : String user's email
+	 *            : String user's email
 	 * @param response
-	 *          : a {@link HttpServletResponse} which returns status of response
-	 *            OK, FORBIDDEN, SERVICE UNAVAILABLE or NOT FOUND
+	 *            : a {@link HttpServletResponse} which returns status of
+	 *            response OK, FORBIDDEN, SERVICE UNAVAILABLE or NOT FOUND
 	 * @return {@link ResponseObject} with status (OK, FORBIDDEN, SERVICE
 	 *         UNAVAILABLE or NOT FOUND) and error message (if status is
 	 *         FORBIDDEN, SERVICE UNAVAILABLE or NOT FOUND).
 	 */
 	@RequestMapping(value = "/passw/reset", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
-	public ResponseObject resetUserPassword(@RequestBody String email, HttpServletResponse response) {
+	public ResponseObject resetUserPassword(@RequestBody String email,
+			HttpServletResponse response) {
 		logger.info("-- Reset User password --");
 		ResponseObject responseObject = new ResponseObject();
 		// Check email
@@ -409,12 +461,14 @@ public class UserController {
 				String tPassw = userManager.resetPassword(email);
 				if (tPassw != null) {
 					// Send email
-					mailer.sendMail(env.getProperty("email.username"), email, env.getProperty("user.passw.object") + " ",
+					mailer.sendMail(env.getProperty("email.username"), email,
+							env.getProperty("user.passw.object") + " ",
 							env.getProperty("user.passw.body") + " " + tPassw);
 					responseObject.setStatus(HttpServletResponse.SC_OK);
 				} else {
 					responseObject.setError("Connection problem with database");
-					responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+					responseObject
+							.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 					response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 				}
 			} catch (SecurityException s) {
