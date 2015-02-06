@@ -7,7 +7,7 @@
                 <div class="panel-body">
                     <strong>{{category.name}}</strong>
                     <em>{{category.description}}</em>
-                    <button type="button" data-toggle="tooltip" title="Delete category" class="pull-right btn btn-default btn-sm orgbtn" ng-click="deleteCategory($index)"><i class="fa fa-trash-o"></i>
+                    <button type="button" data-toggle="tooltip" title="Delete category" class="pull-right btn btn-default btn-sm orgbtn" ng-confirm-click="deleteCategory($index)" ng-confirm-message="Confirm delete?" ng-confirm-condition="true"><i class="fa fa-trash-o"></i>
                     </button>
                     <a href="profile/category/{{category.id}}" data-toggle="tooltip" title="Edit category" class="pull-right btn btn-default btn-sm orgbtn"><i class="fa fa-edit"></i></a>
                     </div>
