@@ -23,48 +23,44 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 
 /**
- * Organization Entity for organization table:
- * id: primary key, not null, auto increment int(11);
- * name: not null, unique index varchar(45);
- * description: varchar(255);
- * activity area: varchar(45);
- * category: int(11);
- * contacts: MediumBlob;
- * creator id: int(11);
- * logo: varchar(255).
+ * Organization Entity for organization table: id: primary key, not null, auto
+ * increment int(11); name: not null, unique index varchar(45); description:
+ * varchar(255); activity area: varchar(45); category: int(11); contacts:
+ * MediumBlob; creator id: int(11); logo: varchar(255).
  * 
  * @author Giulia Canobbio
- *
+ * 
  */
 @Entity
-@Table(name="Organization")
-public class Organization{
-	
+@Table(name = "Organization")
+public class Organization {
+
 	@Id
 	@GeneratedValue
 	private int id;
-	@Column(name="name", unique=true, nullable=false)
+	@Column(name = "name", unique = true, nullable = false)
 	private String name;
-	@Column(name="description")
+	@Column(name = "description")
+	@Lob
 	private String description;
-	@Column(name="activityArea")
+	@Column(name = "activityArea")
 	private String activityArea;
-	@Column(name="category")
+	@Column(name = "category")
 	private int category;
-	@Column(name="contacts")
+	@Column(name = "contacts")
 	@Lob
 	private Contact contacts;
-	@Column(name="creator_id")
+	@Column(name = "creator_id")
 	private int creatorId;
 
-	@Column(name="logo")
+	@Column(name = "logo")
 	private String logo;
-	
+
 	/**
 	 * New {@link Organization} instance.
 	 */
-	public Organization(){
-		
+	public Organization() {
+
 	}
 
 	/**
@@ -79,8 +75,8 @@ public class Organization{
 	/**
 	 * Set id.
 	 * 
-	 * @param id 
-	 * 			: int
+	 * @param id
+	 *            : int
 	 */
 	public void setId(int id) {
 		this.id = id;
@@ -98,8 +94,8 @@ public class Organization{
 	/**
 	 * Set name.
 	 * 
-	 * @param name 
-	 * 			: String
+	 * @param name
+	 *            : String
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -118,7 +114,7 @@ public class Organization{
 	 * Set activity area.
 	 * 
 	 * @param activityArea
-	 * 			: String
+	 *            : String
 	 */
 	public void setActivityArea(String activityArea) {
 		this.activityArea = activityArea;
@@ -137,7 +133,7 @@ public class Organization{
 	 * Set category.
 	 * 
 	 * @param category
-	 * 			: int
+	 *            : int
 	 */
 	public void setCategory(int category) {
 		this.category = category;
@@ -155,8 +151,8 @@ public class Organization{
 	/**
 	 * Set {@link Contact} instance.
 	 * 
-	 * @param contacts 
-	 * 			: {@link Contact}
+	 * @param contacts
+	 *            : {@link Contact}
 	 */
 	public void setContacts(Contact contacts) {
 		this.contacts = contacts;
@@ -175,7 +171,7 @@ public class Organization{
 	 * Set description.
 	 * 
 	 * @param description
-	 * 				: String, the description to set
+	 *            : String, the description to set
 	 */
 	public void setDescription(String description) {
 		this.description = description;
@@ -194,7 +190,7 @@ public class Organization{
 	 * Set creator id.
 	 * 
 	 * @param creatorId
-	 * 			: int, the creatorId to set
+	 *            : int, the creatorId to set
 	 */
 	public void setCreatorId(int creatorId) {
 		this.creatorId = creatorId;
@@ -213,7 +209,7 @@ public class Organization{
 	 * Set logo.
 	 * 
 	 * @param logo
-	 * 			: String, the logo to set
+	 *            : String, the logo to set
 	 */
 	public void setLogo(String logo) {
 		this.logo = logo;

@@ -29,20 +29,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
- * Service Entity for service table: 
- * id: primary key not null, auto increment int(11); 
- * name: not null, unique index varchar(45);
- * description: varchar(45);
- * category: int(11);
- * license: text;
- * version: not null, varchar(45);
- * access information: mediumblob;
- * documentation: varchar(45);
- * expiration: bigint(20);
- * state: not null, varchar(10);
- * creator id: not null, int(11);
- * implementation: longblob;
- * organization id: not null, int(11).
+ * Service Entity for service table: id: primary key not null, auto increment
+ * int(11); name: not null, unique index varchar(45); description: varchar(45);
+ * category: int(11); license: text; version: not null, varchar(45); access
+ * information: mediumblob; documentation: varchar(45); expiration: bigint(20);
+ * state: not null, varchar(10); creator id: not null, int(11); implementation:
+ * longblob; organization id: not null, int(11).
  * 
  * @author Giulia Canobbio
  * 
@@ -60,7 +52,9 @@ public class Service {
 	private int creatorId;
 	@Column(name = "organization_id")
 	private int organizationId;
+
 	@Column(name = "description")
+	@Lob
 	private String description;
 	/*
 	 * @Column(name="tags") private String tags;
@@ -85,9 +79,10 @@ public class Service {
 	@Lob
 	private ImplementationInfo implementation;
 
-	@OneToMany(cascade = { CascadeType.PERSIST,
-			CascadeType.REMOVE, CascadeType.MERGE }, fetch = FetchType.EAGER)//cascade = CascadeType.ALL
-	@JoinColumn(name = "id_service", nullable=false)
+	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE,
+			CascadeType.MERGE }, fetch = FetchType.EAGER)
+	// cascade = CascadeType.ALL
+	@JoinColumn(name = "id_service", nullable = false)
 	private List<Tag> tags;
 
 	/**
@@ -269,8 +264,8 @@ public class Service {
 	}
 
 	/**
-	 * Get state of service.
-	 * Possible values are: publish, unpublish or deprecate.
+	 * Get state of service. Possible values are: publish, unpublish or
+	 * deprecate.
 	 * 
 	 * @return String state
 	 */
@@ -279,8 +274,8 @@ public class Service {
 	}
 
 	/**
-	 * Set state of service.
-	 * Possible values are: publish, unpublish or deprecate.
+	 * Set state of service. Possible values are: publish, unpublish or
+	 * deprecate.
 	 * 
 	 * @param state
 	 *            : String
@@ -364,4 +359,5 @@ public class Service {
 	public void setTags(List<Tag> tags) {
 		this.tags = tags;
 	}
+
 }

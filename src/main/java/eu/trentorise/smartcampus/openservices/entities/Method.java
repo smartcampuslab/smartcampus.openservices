@@ -23,43 +23,41 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 
 /**
- * Method Entity for Method table:
- * id: primary key, not null, auto increment int(11);
- * name: not null, unique index varchar(45);
- * synopsis: varchar(45);
- * documentation: varchar(45);
- * service id: int(11);
- * properties: longBlob.
+ * Method Entity for Method table: id: primary key, not null, auto increment
+ * int(11); name: not null, unique index varchar(45); synopsis: varchar(45);
+ * documentation: varchar(45); service id: int(11); properties: longBlob.
  * 
  * @author Giulia Canobbio
- *
+ * 
  */
 @Entity
-@Table(name="Method")
+@Table(name = "Method")
 public class Method {
-	
+
 	@Id
 	@GeneratedValue
 	private int id;
-	@Column(name="name")
+	@Column(name = "name")
 	private String name;
-	@Column(name="synopsis")
+	@Column(name = "synopsis")
+	@Lob
 	private String synopsis;
-	@Column(name="documentation")
+	@Column(name = "documentation")
 	private String documentation;
-	@Column(name="service_id")
+	@Column(name = "service_id")
 	private int serviceId;
-	@Column(name="testbox_properties")
+	@Column(name = "testbox_properties")
 	@Lob
 	private TestBoxProperties testboxProperties;
-	@Column(name="execution_properties")
+	@Column(name = "execution_properties")
 	@Lob
 	private ExecutionProperties executionProperties;
+
 	/**
 	 * New instance of {@link Method}.
 	 */
-	public Method(){
-		
+	public Method() {
+
 	}
 
 	/**
@@ -75,7 +73,7 @@ public class Method {
 	 * Set id.
 	 * 
 	 * @param id
-	 * 			: int
+	 *            : int
 	 */
 	public void setId(int id) {
 		this.id = id;
@@ -94,7 +92,7 @@ public class Method {
 	 * Set name.
 	 * 
 	 * @param name
-	 * 			: String
+	 *            : String
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -113,7 +111,7 @@ public class Method {
 	 * Set synopsis.
 	 * 
 	 * @param synopsis
-	 * 			: String
+	 *            : String
 	 */
 	public void setSynopsis(String synopsis) {
 		this.synopsis = synopsis;
@@ -132,7 +130,7 @@ public class Method {
 	 * Set documentation.
 	 * 
 	 * @param documentation
-	 * 			: String
+	 *            : String
 	 */
 	public void setDocumentation(String documentation) {
 		this.documentation = documentation;
@@ -151,7 +149,7 @@ public class Method {
 	 * Set service id.
 	 * 
 	 * @param serviceId
-	 * 			: int
+	 *            : int
 	 */
 	public void setServiceId(int serviceId) {
 		this.serviceId = serviceId;
@@ -174,18 +172,19 @@ public class Method {
 	}
 
 	/**
-	 * @param executionProperties the executionProperties to set
+	 * @param executionProperties
+	 *            the executionProperties to set
 	 */
 	public void setExecutionProperties(ExecutionProperties executionProperties) {
 		this.executionProperties = executionProperties;
 	}
 
 	/**
-	 * @param testboxProperties the testboxProperties to set
+	 * @param testboxProperties
+	 *            the testboxProperties to set
 	 */
 	public void setTestboxProperties(TestBoxProperties testboxProperties) {
 		this.testboxProperties = testboxProperties;
 	}
 
-	
 }
