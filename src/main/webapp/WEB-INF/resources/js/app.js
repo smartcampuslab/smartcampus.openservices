@@ -31,7 +31,7 @@ app
 											$location.path('signin');
 											return $q.reject(response);
 										} else {
-											console.log("Error 401 NOT found");
+											console.log("HTTP Error: " + response.status);
 											return $q.reject(response);
 										}
 									}
