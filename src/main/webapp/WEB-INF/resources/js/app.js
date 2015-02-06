@@ -203,9 +203,30 @@ app
 												access : access.ROLE_NORMAL
 											})
 									.when(
+											'/profile/services/:id/methods/:method',
+											{
+												controller : 'methodCtrl',
+												templateUrl : 'partials/profile/methods/edit.html',
+												access : access.ROLE_NORMAL
+											})
+									.when(
+											'/profile/services/:id/methods',
+											{
+												controller : 'viewServiceCtrl',
+												templateUrl : 'partials/profile/services/view.html',
+												access : access.ROLE_NORMAL
+											})
+									.when(
 											'/profile/organizations/new',
 											{
 												controller : 'newOrgCtrl',
+												templateUrl : 'partials/profile/organizations/edit.html',
+												access : access.ROLE_NORMAL
+											})
+									.when(
+											'/profile/organizations/:id',
+											{
+												controller : 'editOrgCtrl',
 												templateUrl : 'partials/profile/organizations/edit.html',
 												access : access.ROLE_NORMAL
 											})
