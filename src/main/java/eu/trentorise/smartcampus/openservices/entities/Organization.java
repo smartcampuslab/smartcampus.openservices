@@ -40,8 +40,7 @@ public class Organization {
 	private int id;
 	@Column(name = "name", unique = true, nullable = false)
 	private String name;
-	@Column(name = "description")
-	@Lob
+	@Column(name = "description", columnDefinition="LONGTEXT")
 	private String description;
 	@Column(name = "activityArea")
 	private String activityArea;

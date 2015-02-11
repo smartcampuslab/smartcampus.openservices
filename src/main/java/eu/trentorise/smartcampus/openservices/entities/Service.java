@@ -53,21 +53,20 @@ public class Service {
 	@Column(name = "organization_id")
 	private int organizationId;
 
-	@Column(name = "description")
-	@Lob
+	@Column(name = "description",columnDefinition="LONGTEXT")
 	private String description;
 	/*
 	 * @Column(name="tags") private String tags;
 	 */
 	@Column(name = "category")
 	private int category;
-	@Column(name = "license")
+	@Column(name = "license",columnDefinition="LONGTEXT")
 	private String license;
 	@Column(name = "version")
 	private String version;
 	@Column(name = "expiration")
 	private long expiration;
-	@Column(name = "documentation")
+	@Column(name = "documentation",columnDefinition="LONGTEXT")
 	private String documentation;
 	@Column(name = "state")
 	private String state;

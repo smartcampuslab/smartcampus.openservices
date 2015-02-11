@@ -39,10 +39,9 @@ public class Method {
 	private int id;
 	@Column(name = "name")
 	private String name;
-	@Column(name = "synopsis")
-	@Lob
+	@Column(name = "synopsis", columnDefinition="LONGTEXT")
 	private String synopsis;
-	@Column(name = "documentation")
+	@Column(name = "documentation", columnDefinition="LONGTEXT")
 	private String documentation;
 	@Column(name = "service_id")
 	private int serviceId;
