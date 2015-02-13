@@ -1501,7 +1501,7 @@ app
 								if (!!m && !m._request) {
 									m._request = {
 										requestPath : m.executionProperties.requestPathTemplate,
-										requestNody : m.executionProperties.requestBodyTemplate
+										requestBody : m.executionProperties.requestBodyTemplate
 									};
 								}
 							};
@@ -1515,7 +1515,7 @@ app
 								var m = $scope.methodMap[id];
 								m._request = {
 									requestPath : m.executionProperties.requestPathTemplate,
-									requestNody : m.executionProperties.requestBodyTemplate
+									requestBody : m.executionProperties.requestBodyTemplate
 								};
 								m._response = null;
 								m._call = null;

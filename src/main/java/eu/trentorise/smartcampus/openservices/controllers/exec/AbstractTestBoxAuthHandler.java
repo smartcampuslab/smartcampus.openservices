@@ -31,6 +31,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 
 /**
  * Abstract implementation of the {@link TestBoxAuthHandler} interface.
@@ -44,6 +45,8 @@ public abstract class AbstractTestBoxAuthHandler implements TestBoxAuthHandler {
     /** Default charset */
 	private static final String DEFAULT_CHARSET = "UTF-8";
 
+	private static final ObjectMapper mapper = new ObjectMapper();
+	
 	protected TestResponse execute(TestBoxParams params) throws TestBoxException {
 		TestResponse res = new TestResponse();
 		if ("GET".equalsIgnoreCase(params.requestMethod)) {
@@ -80,7 +83,9 @@ public abstract class AbstractTestBoxAuthHandler implements TestBoxAuthHandler {
 		}
 
 		try {
-			StringEntity input = new StringEntity(body, DEFAULT_CHARSET);
+			
+			Map map = mapper.readValue(body, Map.class);
+			StringEntity input = new StringEntity(mapper.writeValueAsString(map), DEFAULT_CHARSET);
 			post.setEntity(input);
 
 			resp = getHttpClient().execute(post);
@@ -88,10 +93,11 @@ public abstract class AbstractTestBoxAuthHandler implements TestBoxAuthHandler {
 			if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 				return response;
 			} else {
-				throw new TestBoxException(resp.getStatusLine().getStatusCode());
+				throw new TestBoxException(resp.getStatusLine().getStatusCode(), resp.getStatusLine().getReasonPhrase());
 			}
 
 		} catch (Exception e) {
+			if (e instanceof TestBoxException) throw (TestBoxException)e;
 			throw new TestBoxException(e.getMessage(), e);
 		}
 	}
@@ -112,11 +118,11 @@ public abstract class AbstractTestBoxAuthHandler implements TestBoxAuthHandler {
 			if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 				return response;
 			} else {
-				throw new TestBoxException(resp.getStatusLine().getStatusCode());
+				throw new TestBoxException(resp.getStatusLine().getStatusCode(), resp.getStatusLine().getReasonPhrase());
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			if (e instanceof TestBoxException) throw (TestBoxException)e;
 			throw new TestBoxException(e.getMessage(), e);
 		}
 	}
@@ -139,10 +145,11 @@ public abstract class AbstractTestBoxAuthHandler implements TestBoxAuthHandler {
 			if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 				return response;
 			} else {
-				throw new TestBoxException(resp.getStatusLine().getStatusCode());
+				throw new TestBoxException(resp.getStatusLine().getStatusCode(), resp.getStatusLine().getReasonPhrase());
 			}
 
 		} catch (Exception e) {
+			if (e instanceof TestBoxException) throw (TestBoxException)e;
 			throw new TestBoxException(e.getMessage(), e);
 		}
 	}
@@ -162,13 +169,13 @@ public abstract class AbstractTestBoxAuthHandler implements TestBoxAuthHandler {
 			if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 				return response;
 			} else {
-				throw new TestBoxException(resp.getStatusLine().getStatusCode());
+				throw new TestBoxException(resp.getStatusLine().getStatusCode(), resp.getStatusLine().getReasonPhrase());
 			}
 
 		} catch (Exception e) {
+			if (e instanceof TestBoxException) throw (TestBoxException)e;
 			throw new TestBoxException(e.getMessage(), e);
 		}
 	}
-
 
 }
