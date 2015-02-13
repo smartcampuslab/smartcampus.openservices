@@ -1527,6 +1527,7 @@ app
 								m._request.requestPath = test.requestPath;
 								m._request.requestBody = test.requestBody;
 								m._request.description = test.description;
+								m._request.headers = test.headers;
 							};
 
 							$scope.hasBody = function(method) {
@@ -1630,7 +1631,8 @@ app
 														requestUrl : encodeURI(ctx
 																+ '/' + r),
 														requestBody : $scope.currentMethod._request.requestBody,
-														credentials : result
+														credentials : result,
+														headers :  $scope.currentMethod._request.headers
 													};
 													$http(
 															{

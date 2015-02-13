@@ -99,8 +99,7 @@ public class TestBoxController {
 			if (m.getTestboxProperties().isTestable()) {
 				params.requestUrl = req.getRequestUrl();
 				params.requestBody = req.getRequestBody();
-				params.requestHeaders = mergeHeaders(m.getExecutionProperties()
-						.getHeaders(), req.getHeaders());
+				params.requestHeaders = mergeHeaders(m.getExecutionProperties().getHeaders(), req.getHeaders());
 			} else {
 				// find the specific test data
 				List<TestInfo> tests = m.getTestboxProperties().getTests();
