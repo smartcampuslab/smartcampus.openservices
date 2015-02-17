@@ -336,7 +336,7 @@ public class ServiceDaoImpl implements ServiceDao {
 
 	/**
 	 * This method browses all services but unpublished one by categories and
-	 * tags.
+	 * text in service name, description, tags, method names, and descriptions.
 	 */
 	@Transactional
 	@Override
@@ -344,23 +344,26 @@ public class ServiceDaoImpl implements ServiceDao {
 			int firstResult, int maxResult, ORDER param_order)
 			throws DataAccessException {
 
-		String queryString = "SELECT S FROM Service S WHERE S.state!='UNPUBLISH'";
+		String queryString = "SELECT DISTINCT S FROM Service S JOIN S.tags T";
+		String where = " WHERE S.state!='UNPUBLISH'";
 
 		if (ORDER.date.equals(param_order)) {
-			queryString = "SELECT S FROM Service S, ServiceHistory SH WHERE SH.id_serviceMethod=0 AND SH.operation='ADD' AND S.id=SH.id_service"
-					+ " AND S.state!='UNPUBLISH' ORDER BY SH.date DESC";
-
+			queryString += ", ServiceHistory SH";
+			where += " AND SH.id_serviceMethod=0 AND SH.operation='ADD' AND S.id=SH.id_service";
 		}
 
 		if (token != null) {
-			queryString += " AND S.name LIKE :name";
+			queryString += ", Method M";
+			where += " AND M.serviceId=S.id";
+			where += " AND (S.name LIKE :token OR S.description LIKE :token OR "
+						+  "T.name LIKE :token OR M.name LIKE :token OR M.synopsis LIKE :token)";
 		}
 
 		if (categories != null) {
-			queryString += " AND S.category IN :cats";
+			where += " AND S.category IN :cats";
 		}
 
-		queryString += " ORDER BY";
+		queryString += where + " ORDER BY";
 		switch (param_order) {
 		case namedesc:
 			queryString += " S.name DESC";
@@ -376,7 +379,7 @@ public class ServiceDaoImpl implements ServiceDao {
 
 		Query q = getEntityManager().createQuery(queryString);
 		if (token != null) {
-			q.setParameter("name", "%" + token + "%");
+			q.setParameter("token", "%" + token.toLowerCase() + "%");
 		}
 		if (categories != null) {
 			q.setParameter("cats", categories);
