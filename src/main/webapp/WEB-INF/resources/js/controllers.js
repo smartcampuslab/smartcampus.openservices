@@ -1049,9 +1049,9 @@ app
 							}, {
 								key : 'Z - A',
 								value : 'namedesc'
-							}, {
-								key : 'date',
-								value : 'date'
+//							}, {
+//								key : 'date',
+//								value : 'date'
 							} ];
 
 							// default: A - Z
@@ -1113,9 +1113,9 @@ app
 							}, {
 								key : 'Z - A',
 								value : 'namedesc'
-							}, {
-								key : 'date',
-								value : 'date'
+//							}, {
+//								key : 'date',
+//								value : 'date'
 							} ];
 
 							// default: A - Z
@@ -1427,9 +1427,9 @@ app
 							}, {
 								key : 'Z - A',
 								value : 'namedesc'
-							}, {
-								key : 'date',
-								value : 'date'
+//							}, {
+//								key : 'date',
+//								value : 'date'
 							} ];
 
 							// default: A - Z

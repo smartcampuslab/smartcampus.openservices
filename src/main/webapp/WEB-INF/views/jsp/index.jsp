@@ -25,59 +25,76 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="#">Open Services</a>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>Open Services</h1>
       </div>
-
-      <div ng-controller="navCtrl" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-		      <!-- <li ng-class="{active: loc[0] === 'whishlist'}">
-            <a href="#">Wishlist</a>
-          </li> -->
-          <!-- <li ng-class="{active: loc[0] === 'apps'}">
-            <a href="#">Apps</a>
-          </li> -->
-          <li ng-class="{active: loc[0] === 'services'}">
-            <a href="services">Services</a>
-          </li>
-          <!-- <li ng-class="{active: loc[0] === 'categories'}">
-            <a href="categories">Categories</a>
-          </li> -->
-          <li ng-class="{active: loc[0] === 'organizations'}"><a href="organizations">Organizations</a>
-          </li>
-        </ul>
-        <ul ng-include="navtemplate" class="nav navbar-nav navbar-right">
-
-        </ul>
-      </div>
+    </div>    
+  </div>
+  <nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+	    <div class="row">
+	      <div class="col-md-8 col-md-offset-2">
+		      <div class="navbar-header">
+		        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+		          <span class="sr-only">Toggle navigation</span>
+		          <span class="icon-bar"></span>
+		          <span class="icon-bar"></span>
+		          <span class="icon-bar"></span>
+		        </button>
+            </ul>
+		      </div>
+		
+		      <div ng-controller="navCtrl" id="bs-example-navbar-collapse-1">
+		        <ul class="nav navbar-nav">
+              <li ng-class="{active: loc[0] === ''}">
+                <a class="nav-left" href="#">Home</a>
+              </li>
+		          <li ng-class="{active: loc[0] === 'services'}">
+		            <a href="services">Services</a>
+		          </li>
+		          <!-- <li ng-class="{active: loc[0] === 'categories'}">
+		            <a href="categories">Categories</a>
+		          </li> -->
+		          <li ng-class="{active: loc[0] === 'organizations'}"><a href="organizations">Organizations</a>
+		          </li>
+		        </ul>
+		        <ul ng-include="navtemplate" class="nav navbar-nav navbar-right">
+		
+		        </ul>
+		      </div>
+		    </div>  
+		  </div>    
     </div>
     <!-- /.navbar-collapse -->
   </nav>
   <!-- ng-hide="loc[0] === ''" -->
-  <div class="container-fluid" id="bread">
-  <!-- ng-hide="location === '/'" -->
-    <ol ng-controller="breadCtrl" ng-hide="loc[0] === ''" class="animated fadeIn breadcrumb">
-    <li ng-repeat="location in loc">
-        <a ng-href="{{loc.slice(0,$index+1).join('/')}}">{{locTitles[$index] ? locTitles[$index] : location}}</a>
-      </li>
-    </ol>
+  <div class="container" id="bread" ng-hide="loc[0] === ''" >
+    <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+	    <ol ng-controller="breadCtrl" class="animated fadeIn breadcrumb">
+		    <li ng-repeat="location in loc">
+	        <a ng-href="{{loc.slice(0,$index+1).join('/')}}">{{locTitles[$index] ? locTitles[$index] : location}}</a>
+	      </li>
+      </ol>
+      </div>
+    </div>
+    </div>
   </div>
-  <div class="container">
-    <div class="view" ng-view></div>
+  <div class="container main-container">
+    <div class="col-md-12 view" ng-view></div>
   </div>
 
   <div id="footer">
     <div class="container">
-      <p class="text-muted credit">&copy; 2015 Smart Community Lab &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a>
-      </p>
+	    <div class="row">
+	      <div class="col-md-8 col-md-offset-2">
+		      <p class="credit">&copy; 2015 Smart Community Lab &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a>
+		      </p>
+	      </div>
+	    </div>    
     </div>
   </div>
   

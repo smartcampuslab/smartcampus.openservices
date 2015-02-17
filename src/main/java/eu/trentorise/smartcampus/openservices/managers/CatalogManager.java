@@ -103,9 +103,9 @@ public class CatalogManager {
 			} else if (param_order.equalsIgnoreCase(ORDER.namedesc.toString())) {
 				return cleanAuthenticationData(serviceDao.showPublishedService(
 						firstResult, maxResult, ORDER.namedesc));
-			} else if (param_order.equalsIgnoreCase(ORDER.date.toString())) {
-				return cleanAuthenticationData(serviceDao.showPublishedService(
-						firstResult, maxResult, ORDER.date));
+//			} else if (param_order.equalsIgnoreCase(ORDER.date.toString())) {
+//				return cleanAuthenticationData(serviceDao.showPublishedService(
+//						firstResult, maxResult, ORDER.date));
 			}
 			throw new SecurityException();
 		} catch (DataAccessException d) {
@@ -262,9 +262,9 @@ public class CatalogManager {
 			} else if (param_order.equalsIgnoreCase(ORDER.namedesc.toString())) {
 				return serviceDao.searchService(token, firstResult, maxResult,
 						ORDER.namedesc);
-			} else if (param_order.equalsIgnoreCase(ORDER.date.toString())) {
-				return serviceDao.searchService(token, firstResult, maxResult,
-						ORDER.date);
+//			} else if (param_order.equalsIgnoreCase(ORDER.date.toString())) {
+//				return serviceDao.searchService(token, firstResult, maxResult,
+//						ORDER.date);
 			}
 			throw new SecurityException();
 		} catch (DataAccessException d) {
@@ -294,9 +294,9 @@ public class CatalogManager {
 			} else if (param_order.equalsIgnoreCase(ORDER.namedesc.toString())) {
 				return serviceDao.browseService(category, firstResult,
 						maxResult, ORDER.namedesc);
-			} else if (param_order.equalsIgnoreCase(ORDER.date.toString())) {
-				return serviceDao.browseService(category, firstResult,
-						maxResult, ORDER.date);
+//			} else if (param_order.equalsIgnoreCase(ORDER.date.toString())) {
+//				return serviceDao.browseService(category, firstResult,
+//						maxResult, ORDER.date);
 			} else {
 				return serviceDao.browseService(category, firstResult,
 						maxResult, ORDER.name);
@@ -331,9 +331,9 @@ public class CatalogManager {
 			} else if (param_order.equalsIgnoreCase(ORDER.namedesc.toString())) {
 				return serviceDao.browseService(token, categories, firstResult,
 						maxResult, ORDER.namedesc);
-			} else if (param_order.equalsIgnoreCase(ORDER.date.toString())) {
-				return serviceDao.browseService(token, categories, firstResult,
-						maxResult, ORDER.date);
+//			} else if (param_order.equalsIgnoreCase(ORDER.date.toString())) {
+//				return serviceDao.browseService(token, categories, firstResult,
+//						maxResult, ORDER.date);
 			} else {
 				return serviceDao.browseService(token, categories, firstResult,
 						maxResult, ORDER.name);
@@ -371,9 +371,9 @@ public class CatalogManager {
 				s = serviceDao.searchServiceByIdOrg(org, firstResult,
 						maxResult, categoryIds, token,
 						ORDER.namedesc.toString());
-			} else if (param_order.equalsIgnoreCase(ORDER.date.toString())) {
-				s = serviceDao.searchServiceByIdOrg(org, firstResult,
-						maxResult, categoryIds, token, ORDER.date.toString());
+//			} else if (param_order.equalsIgnoreCase(ORDER.date.toString())) {
+//				s = serviceDao.searchServiceByIdOrg(org, firstResult,
+//						maxResult, categoryIds, token, ORDER.date.toString());
 			}
 
 			if (s != null) {

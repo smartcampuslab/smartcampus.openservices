@@ -2,7 +2,12 @@
   <div class="col-md-8 col-md-offset-2">
     <div class="row" id="search">
       <form role="form">
-        <div class="input-group">
+        <div>
+          <h3>Welcome to Open Services!</h3>
+          <p>A rich selection of intelligent services and functionalities
+             immediately available for the developers and applications</p>
+        </div>
+        <div class="input-group search-bar">
           <input type="text" class="form-control" ng-model="query">
           <span class="input-group-btn">
             <button class="btn btn-primary" type="submit" ng-click="search(query)">
@@ -64,15 +69,15 @@
       </div>
     </div>
   </div>
-  <div class="col-md-5">
+  <div class="col-md-4 col-md-offset-1">
     <div class="tagcloud">
       <h4>{{servicesTotal}} services available</h4>
       <ul class="list-unstyled">
-        <li ng-repeat="t in taglist">
-          <span class="barcontainer">
-            <span class="bar progress-bar" ng-style="getTagCloudBarWidth(t.counter, tagmax)"></span>
-          </span>
-          <a href="search/{{t.tag}}">{{t.tag}} ({{t.counter}})</a>
+        <li ng-repeat="t in taglist"  class="text-right">
+<!--           <span class="barcontainer"> -->
+<!--             <span class="bar progress-bar" ng-style="getTagCloudBarWidth(t.counter, tagmax)"></span> -->
+<!--           </span> -->
+          <a href="search/{{t.tag}}">{{t.tag}}</a> ({{t.counter}})
         </li>
       </ul>
     </div>

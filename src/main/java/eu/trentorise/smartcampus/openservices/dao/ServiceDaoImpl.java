@@ -96,11 +96,11 @@ public class ServiceDaoImpl implements ServiceDao {
 				+ (ORDER.namedesc.equals(param_order) ? "name DESC"
 						: ORDER.name.toString());
 
-		if (ORDER.date.equals(param_order)) {
-			queryString = "SELECT S FROM Service S, ServiceHistory SH WHERE S.state!='UNPUBLISH'"
-					+ " AND S.id=SH.id_service AND SH.id_serviceMethod=0 AND SH.operation='ADD'"
-					+ "ORDER BY SH.date DESC";
-		}
+//		if (ORDER.date.equals(param_order)) {
+//			queryString = "SELECT S FROM Service S LEFT OUTER JOIN S.history as SH WHERE S.state!='UNPUBLISH'"
+//					+ " AND (SH IS NULL OR (SH.id_serviceMethod=0 AND SH.operation='ADD'))"
+//					+ "ORDER BY SH.date DESC";
+//		}
 
 		Query q = getEntityManager().createQuery(queryString);
 		List<Service> s = q.setFirstResult(firstResult)
@@ -295,12 +295,12 @@ public class ServiceDaoImpl implements ServiceDao {
 				+ (ORDER.namedesc.equals(param_order) ? "name DESC"
 						: ORDER.name.toString());
 
-		if (ORDER.date.equals(param_order)) {
-			queryString = "SELECT S FROM Service S, ServiceHistory SH WHERE (S.name LIKE :token OR S.description LIKE :token)"
-					+ " AND S.id=SH.id_service AND S.state!='UNPUBLISH'"
-					+ " AND SH.id_serviceMethod=0 AND SH.operation='ADD'"
-					+ " ORDER BY SH.date DESC";
-		}
+//		if (ORDER.date.equals(param_order)) {
+//			queryString = "SELECT S FROM Service S, ServiceHistory SH WHERE (S.name LIKE :token OR S.description LIKE :token)"
+//					+ " AND S.id=SH.id_service AND S.state!='UNPUBLISH'"
+//					+ " AND SH.id_serviceMethod=0 AND SH.operation='ADD'"
+//					+ " ORDER BY SH.date DESC";
+//		}
 
 		Query q = getEntityManager().createQuery(queryString).setParameter(
 				"token", "%" + token + "%");
@@ -322,10 +322,10 @@ public class ServiceDaoImpl implements ServiceDao {
 				+ (ORDER.namedesc.equals(param_order) ? "name DESC"
 						: ORDER.name.toString());
 
-		if (ORDER.date.equals(param_order)) {
-			queryString = "SELECT S FROM Service S, ServiceHistory SH WHERE SH.id_serviceMethod=0 AND SH.operation='ADD' AND S.id=SH.id_service"
-					+ " AND S.state!='UNPUBLISH' AND S.category=:category ORDER BY SH.date DESC";
-		}
+//		if (ORDER.date.equals(param_order)) {
+//			queryString = "SELECT S FROM Service S, ServiceHistory SH WHERE SH.id_serviceMethod=0 AND SH.operation='ADD' AND S.id=SH.id_service"
+//					+ " AND S.state!='UNPUBLISH' AND S.category=:category ORDER BY SH.date DESC";
+//		}
 
 		Query q = getEntityManager().createQuery(queryString).setParameter(
 				"category", category);
@@ -347,10 +347,10 @@ public class ServiceDaoImpl implements ServiceDao {
 		String queryString = "SELECT DISTINCT S FROM Service S JOIN S.tags T";
 		String where = " WHERE S.state!='UNPUBLISH'";
 
-		if (ORDER.date.equals(param_order)) {
-			queryString += ", ServiceHistory SH";
-			where += " AND SH.id_serviceMethod=0 AND SH.operation='ADD' AND S.id=SH.id_service";
-		}
+//		if (ORDER.date.equals(param_order)) {
+//			queryString += ", ServiceHistory SH";
+//			where += " AND SH.id_serviceMethod=0 AND SH.operation='ADD' AND S.id=SH.id_service";
+//		}
 
 		if (token != null) {
 			queryString += ", Method M";
