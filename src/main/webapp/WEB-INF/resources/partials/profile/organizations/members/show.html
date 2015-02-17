@@ -9,21 +9,19 @@
     </div>
 </div>
 <div class="row" id="members">
-    <div class="col-md-2 col-sm-6 col-xs-6" ng-repeat="member in members">
-        
-        <table cellspacing="0">
-        
-        	<tr><a href="#">
-            	<img gravatar="{{member.email}}" size="120" />
-       		</a></tr>
-        	<tr><b>{{member.username}}</b></tr>
-        	<br>
-        	<tr>{{member.email}}</tr>
-        
-        	<br>
-        	<button ng-click="remove($index)" class="center-block btn btn-default btn-sm">Remove</button>
-        
-        </table>
-        
+    <div class="col-md-8 col-md-offset-2">
+      <div class="panel panel-default" ng-repeat="member in members">
+           <div class="panel-body">
+              <div class="row">
+                <div class="col-md-8">
+		               <strong>{{member.username}}</strong>
+		               <p>{{member.email}}</p>
+                </div>
+                <div class="col-md-4">
+                   <button type="button" data-toggle="tooltip" title="Delete member" class="pull-right btn btn-default btn-sm" ng-confirm-click="remove($index)" ng-confirm-message="Confirm delete?" ng-confirm-condition="true"><i class="fa fa-trash-o"></i></button>
+                </div>
+              </div>
+           </div>
+       </div>
     </div>
 </div>

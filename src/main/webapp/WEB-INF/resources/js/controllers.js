@@ -229,24 +229,27 @@ app
 							$scope.switchTo = function(view) {
 								if (view == 'services') {
 									$scope.template = 'partials/profile/services/show.html';
-									$location.path('/profile/services', false);
+									$location.path('/profile/services');
 								} else if (view == 'organizations') {
 									$scope.template = 'partials/profile/organizations/show.html';
-									$location.path('/profile/organizations',
-											false);
+									$location.path('/profile/organizations');
+								} else if (view == 'categories') {
+									$scope.template = 'partials/profile/admin/categories/show.html';
+									$location.path('/profile/categories');
 								} else {
 									$scope.template = 'partials/profile/_details.html';
-									$location.path('/profile', false);
+									$location.path('/profile');
 								}
 							}
-							$scope.switchTo($routeParams.view);
+							var path = $location.path();
+							if (!!$routeParams.view || path.indexOf('edit') < 0) $scope.switchTo($routeParams.view);
 
 							$scope.deleteOrg = function(i) {
 								Org.remove({
 									id : $scope.orgs[i].id
 								}, function() {
 									$scope.orgs.splice(i, 1);
-									$location.path('profile');
+									$location.path('profile/organizations');
 								}, function(res) {
 									$scope.errorMsg = res.data.error;
 								});
@@ -257,7 +260,7 @@ app
 									id : $scope.services[i].id
 								}, {}, function() {
 									$scope.services[i].state = 'DEPRECATE';
-									$location.path('profile');
+									$location.path('profile/services');
 								});
 							};
 							$scope.publishService = function(i) {
@@ -265,7 +268,7 @@ app
 									id : $scope.services[i].id
 								}, {}, function() {
 									$scope.services[i].state = 'PUBLISH';
-									$location.path('profile');
+									$location.path('profile/services');
 								});
 							};
 							$scope.unpublishService = function(i) {
@@ -273,7 +276,7 @@ app
 									id : $scope.services[i].id
 								}, {}, function() {
 									$scope.services[i].state = 'UNPUBLISH';
-									$location.path('profile');
+									$location.path('profile/services');
 								});
 							};
 							$scope.deleteService = function(i) {
@@ -281,7 +284,7 @@ app
 									id : $scope.services[i].id
 								}, function() {
 									$scope.services.splice(i, 1);
-									$location.path('profile');
+									$location.path('profile/services');
 								});
 							};
 
@@ -310,7 +313,7 @@ app
 									id : $scope.categories[i].id
 								}, function() {
 									$scope.categories.splice(i, 1);
-									$location.path('profile');
+									$location.path('profile/categories');
 								}, function(res) {
 									$scope.errorMsg = res.data.error;
 								});
@@ -397,7 +400,7 @@ app
 											.split(',');
 								}
 								Service.create($scope.service, function() {
-									$location.path('profile');
+									$location.path('profile/services');
 								}, function(res) {
 									$scope.errorMsg = res.data.error;
 								});
@@ -754,13 +757,13 @@ app.controller('newOrgCtrl', [
 									res.data.logo = 'upload/' + res.data.id + '/'
 											+ $scope.file.name;
 									Org.update(res.data, function() {
-										$location.path('profile');
+										$location.path('profile/organizations');
 									});
 								}).error(function(res) {
 							$scope.errorMsg = res.data.error;
 						});
 					}
-					$location.path('profile');
+					$location.path('profile/organizations');
 				}, function(res) {
 					$scope.errorMsg = res.data.error;
 				});
@@ -810,7 +813,7 @@ app.controller('editOrgCtrl', [
 								$scope.org.logo = 'upload/' + $scope.org.id
 										+ '/' + $scope.file.name;
 								Org.update($scope.org, function() {
-									$location.path('profile');
+									$location.path('profile/organizations');
 								});
 
 							}).error(function(res) {
@@ -819,7 +822,7 @@ app.controller('editOrgCtrl', [
 
 				} else {
 					Org.update($scope.org, function() {
-						$location.path('profile');
+						$location.path('profile/organizations');
 					}, function(res) {
 						$scope.errorMsg = res.data.error;
 					});
@@ -1339,6 +1342,12 @@ app
 						'Category',
 						function($scope, $rootScope, $http, $routeParams, Org,
 								Catalog, Category) {
+							Catalog.getOrgById({
+								id : $routeParams.id
+							}, function(data) {
+								$scope.org = data.data;
+								$rootScope.locTitles = [ 'organizations', $scope.org.name, 'services' ];
+							});
 
 							$scope.getServiceByCategories = function() {
 								var ids = $scope.categoriesFilter;
@@ -1733,7 +1742,7 @@ app.controller('editCategoryCtrl', [ '$scope', '$routeParams', '$location',
 			$scope.submit = function() {
 
 				Category.update($scope.category, function() {
-					$location.path('profile');
+					$location.path('profile/categories');
 				}, function(res) {
 					$scope.errorMsg = res.data.error;
 				});
@@ -1744,7 +1753,7 @@ app.controller('newCategoryCtrl', [ '$scope', '$location', 'Category',
 		function($scope, $location, Category) {
 			$scope.submit = function() {
 				Category.create($scope.category, function() {
-					$location.path('profile');
+					$location.path('profile/categories');
 				}, function(res) {
 					$scope.errorMsg = res.data.error;
 				});

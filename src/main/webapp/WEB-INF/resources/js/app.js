@@ -264,6 +264,7 @@ app
 						} ])
 		.run(function($rootScope, $location, Auth, $route, $routeParams, $cookieStore) {
 			var original = $location.path;
+			/*
 		    $location.path = function (path, reload) {
 		        if (reload === false) {
 		            var lastRoute = $route.current;
@@ -274,6 +275,7 @@ app
 		        }
 		        return original.apply($location, [path]);
 		    };
+		    */
 			var history = [];
 			var value = $cookieStore.get('value');
 			if (value === false) {
