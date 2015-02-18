@@ -1501,8 +1501,6 @@ app
 						'RemoteApi',
 						function($scope, $rootScope, $routeParams, Catalog,
 								Category, $http, $location, RemoteApi) {
-							$scope.remoteapi;
-							$scope.methodMap = {};
 
 							$scope.toggle = function(id) {
 								var m = $scope.methodMap[id];
@@ -1587,6 +1585,13 @@ app
 																		}
 																		$scope.methodMap[$scope.methods[i].id] = $scope.methods[i];
 																	}
+																	
+																	if($scope.methods.length == 1) {
+																		$scope.methodMap[$scope.methods[0].id]._request = {
+																				requestPath : $scope.methods[0].executionProperties.requestPathTemplate,
+																				requestBody : $scope.methods[0].executionProperties.requestBodyTemplate
+																			};
+																	} 
 																});
 												Catalog
 														.getListServiceHistory(
@@ -1596,6 +1601,8 @@ app
 																function(data) {
 																	$scope.histories = data.data;
 																});
+												
+												
 
 											});
 
@@ -1692,6 +1699,9 @@ app
 												});
 							};
 
+							$scope.remoteapi;
+							$scope.methodMap = {};
+							
 						} ]);
 
 app.controller('showOrgMembersCtrl', [
