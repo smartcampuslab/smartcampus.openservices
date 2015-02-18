@@ -1306,6 +1306,9 @@ app.controller('organizationCtrl', [
 		'Org',
 		function($scope, $rootScope, $http, $routeParams, Catalog, Category,
 				Org) {
+			
+			$scope.histCount = 5;
+			
 			Catalog.getOrgById({
 				id : $routeParams.id
 			}, function(data) {
