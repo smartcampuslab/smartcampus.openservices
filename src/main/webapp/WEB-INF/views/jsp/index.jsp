@@ -28,7 +28,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-8 col-md-offset-2">
-        <h1>Open Services</h1>
+        <h1><img src="img/logo.png"/></h1>
       </div>
     </div>    
   </div>
