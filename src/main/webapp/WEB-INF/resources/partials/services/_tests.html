@@ -17,18 +17,22 @@
 
          <div>
             <hr/>           
-            <div>
-              <button ng-disabled="checkBeforeSend(method.id)" ng-click="send(method.id)" class="btn btn-success">Try it out</button>
-              <a ng-click="reset(method.id)">Reset</a>
-              <div class="dropdown pull-right" ng-if="!!method.testboxProperties.tests">
-							  <button class="btn btn-default dropdown-toggle" type="button" id="examples" data-toggle="dropdown" aria-expanded="true">
-							    Examples
-							    <span class="caret"></span>
-							  </button>
-							  <ul class="dropdown-menu" role="menu" aria-labelledby="examples">
-							    <li ng-repeat="example in method.testboxProperties.tests" role="presentation"><a role="menuitem" tabindex="-1" ng-click="useTest(method.id,example)">{{example.name}}</a></li>
-							  </ul>
-							</div>
+            <div class="row">
+              <div class="col-md-2" ng-if="!!method.testboxProperties.tests">
+	              <div class="dropdown">
+	                <button class="btn btn-default dropdown-toggle" type="button" id="examples" data-toggle="dropdown" aria-expanded="true">
+	                  Examples
+	                  <span class="caret"></span>
+	                </button>
+	                <ul class="dropdown-menu" role="menu" aria-labelledby="examples">
+	                  <li ng-repeat="example in method.testboxProperties.tests" role="presentation"><a role="menuitem" tabindex="-1" ng-click="useTest(method.id,example)">{{example.name}}</a></li>
+	                </ul>
+	              </div>
+              </div>
+              <div class="col-md-4">
+	              <button ng-disabled="checkBeforeSend(method.id)" ng-click="send(method.id)" class="btn btn-success">Try it out</button>
+	              <a ng-click="reset(method.id)">Reset</a>
+              </div>
             </div>
             <div class="col=md-12" ng-if="!!methodMap[method.id]._request.description">
               <br/>
