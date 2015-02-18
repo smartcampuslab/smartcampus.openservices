@@ -265,6 +265,7 @@ div.markdown {
 	padding: 1em;
 	border: thin solid black;
 	border-radius: 5px;
+	overflow: auto;
 }
 
 p.markdown {
