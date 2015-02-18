@@ -69,17 +69,24 @@
       </div>
     </div>
   </div>
-  <div class="col-md-4 col-md-offset-1">
+  <div class="col-md-5">
     <div class="tagcloud">
-      <h4>{{servicesTotal}} services available</h4>
-      <ul class="list-unstyled">
-        <li ng-repeat="t in taglist"  class="text-right">
-<!--           <span class="barcontainer"> -->
-<!--             <span class="bar progress-bar" ng-style="getTagCloudBarWidth(t.counter, tagmax)"></span> -->
-<!--           </span> -->
-          <a href="search/{{t.tag}}">{{t.tag}}</a> ({{t.counter}})
-        </li>
-      </ul>
+      <h4 class="text-center">{{servicesTotal}} services available</h4>
+        <div class="tagcloudcontainer">
+          <div class="tagcloudbg">
+            <img src="img/cloud.png" width="100%" style="z-index:-999;"/>
+          </div>
+          <div class="tagclouddata">
+		        <ul class="list-unstyled">
+		          <li ng-repeat="t in taglist"  class="text-right">
+		  <!--           <span class="barcontainer"> -->
+		  <!--             <span class="bar progress-bar" ng-style="getTagCloudBarWidth(t.counter, tagmax)"></span> -->
+		  <!--           </span> -->
+		            <a href="search/{{t.tag}}">{{t.tag}}</a> ({{t.counter}})
+		          </li>
+        </ul>
+          </div>
+        </div>
     </div>
   </div>
 </div>

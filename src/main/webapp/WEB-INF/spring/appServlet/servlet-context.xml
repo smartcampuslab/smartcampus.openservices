@@ -24,7 +24,8 @@
 	<resources mapping="/data/**" location="/WEB-INF/resources/data/" order="-1"/>
 	<resources mapping="/fonts/**" location="/WEB-INF/resources/fonts/" order="-1"/>
 	<resources mapping="/js/**" location="/WEB-INF/resources/js/" order="-1"/>
-	<resources mapping="/partials/**" location="/WEB-INF/resources/partials/" order="-1"/>
+  <resources mapping="/img/**" location="/WEB-INF/resources/img/" order="-1"/>
+		<resources mapping="/partials/**" location="/WEB-INF/resources/partials/" order="-1"/>
 	<!-- Images uploaded by organization users -->
 	<resources mapping="/upload/**" location="file:${filedir}" order="-1" />
 	<default-servlet-handler/>
