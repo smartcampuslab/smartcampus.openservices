@@ -219,6 +219,10 @@ pre {
 .tagclouddata {
     z-index: 10;
 }
+.tagcloudbg {
+	opacity: 0.3;
+    filter: alpha(opacity=30);
+}
 
 .tagcloud h4 {
     margin-top: 0px;
