@@ -972,6 +972,13 @@ app
 												},
 												function(services) {
 													$scope.services = services.data;
+													$scope.services.forEach(function(s){
+														$scope.categories.forEach(function(c){
+															if(c.id == s.category){
+																s.catName = c.name;
+															}
+														});
+													});
 													$scope
 															.updateCounters(services.totalNumber);
 												}, function(res) {
@@ -991,6 +998,13 @@ app
 												},
 												function(services) {
 													$scope.services = services.data;
+													$scope.services.forEach(function(s){
+														$scope.categories.forEach(function(c){
+															if(c.id == s.category){
+																s.catName = c.name;
+															}
+														});
+													});
 													$scope
 															.updateCounters(services.totalNumber);
 												}, function(res) {
