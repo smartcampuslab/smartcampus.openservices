@@ -78,7 +78,7 @@
           </div>
           <div class="tagclouddata">
 		        <ul class="list-unstyled">
-		          <li ng-repeat="t in taglist"  class="text-right">
+		          <li ng-repeat="t in taglist | limitTo:15"  class="text-right">
 		  <!--           <span class="barcontainer"> -->
 		  <!--             <span class="bar progress-bar" ng-style="getTagCloudBarWidth(t.counter, tagmax)"></span> -->
 		  <!--           </span> -->
