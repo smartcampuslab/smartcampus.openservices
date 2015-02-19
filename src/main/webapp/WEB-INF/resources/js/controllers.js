@@ -1335,6 +1335,11 @@ app.controller('organizationCtrl', [
 				id : $routeParams.id
 			}, function(data) {
 				$scope.org = data.data;
+				
+				if($scope.org.contacts.web.length > 0 && !new RegExp('^(http|https)://').test($scope.org.contacts.web)) {
+					$scope.org.contacts.web = 'http://' + $scope.org.contacts.web;
+				}
+				
 				$rootScope.locTitles = [ 'organizations', $scope.org.name ];
 				if ($scope.org.category) {
 					Category.getById({
