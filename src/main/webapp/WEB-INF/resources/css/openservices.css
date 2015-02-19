@@ -156,10 +156,25 @@ pre {
     background-color: #ffffff;
     border: 0px;
 }
- .panel-updates h5 {
+.panel-history h3 {
     margin-top: 0;
-    font-style: italic;
 }
+.panel-history ul {
+    margin-bottom: 0;
+}
+.panel-history ul li {
+    padding-left: 0px;
+    padding-bottom: 10px;
+}
+
+.headerlink {
+	padding-top: 30px;
+	font-size: 20px; 
+	border-bottom: 1px solid #999;
+	margin-bottom: 20px;
+  padding-bottom: 15px;
+}
+
 .panel-updates ul {
     margin-bottom: 0;
 }
@@ -183,16 +198,10 @@ pre {
     border-color: rgba(0, 0, 0, .1);
 }
 
-/*
-.tagcloud ul {
-	background: url("../img/cloud.png") no-repeat center center fixed;
-	height: 300px;
-	background-size: cover;
-	-webkit-background-size: cover; 
-    -moz-background-size: cover;  
-    -o-background-size: cover;   
+.vcentered-items {
+	 display: flex;
+    align-items: center;
 }
-*/
 
 .tagcloudcontainer {
     width: 100%;
@@ -207,9 +216,12 @@ pre {
     top: 0;
     left: 0;
 }
-
 .tagclouddata {
     z-index: 10;
+}
+.tagcloudbg {
+	opacity: 0.3;
+    filter: alpha(opacity=30);
 }
 
 .tagcloud h4 {
@@ -302,5 +314,6 @@ div.markdown {
 }
 
 p.markdown {
-	margin: 1em;
+	margin-top: 1em;
+  margin-bottom: 1em;
 }
