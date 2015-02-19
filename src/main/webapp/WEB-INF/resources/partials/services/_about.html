@@ -1,6 +1,19 @@
 <div class="table-responsive">
     <table class="table table-striped table-condensed table-bordered">
         <tbody>
+          	<tr>
+               <td>Publisher</td>
+               <td><a href="{{'organizations/'+org.id}}">{{org.name}}</a></td>
+            </tr>
+            <tr ng-hide="service.ownerName === null || service.ownerName.length == 0">
+               <td>Owner</td>
+               <td ng-show="service.ownerUrl === null || service.ownerUrl.length == 0">{{service.ownerName}}</td>
+               <td ng-show="service.ownerUrl !== null && service.ownerUrl.length != 0"><a target="_blank" ng-href="{{service.ownerUrl}}">{{service.ownerName}}</a></td>
+            </tr>
+            <tr ng-show="service.ownerName === null || service.ownerName.length == 0">
+               <td>Owner</td>
+               <td><a href="{{'organizations/'+org.id}}">{{org.name}}</a></td>
+            </tr>
             <tr>
                 <td>Documentation</td>
                 <td><a ng-href="{{service.documentation}}">{{service.documentation}}</a></td>

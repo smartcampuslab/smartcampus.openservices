@@ -53,20 +53,25 @@ public class Service {
 	@Column(name = "organization_id")
 	private int organizationId;
 
-	@Column(name = "description",columnDefinition="LONGTEXT")
+	private String owner;
+
+	@Column(name = "owner_url")
+	private String ownerUrl;
+
+	@Column(name = "description", columnDefinition = "LONGTEXT")
 	private String description;
 	/*
 	 * @Column(name="tags") private String tags;
 	 */
 	@Column(name = "category")
 	private int category;
-	@Column(name = "license",columnDefinition="LONGTEXT")
+	@Column(name = "license", columnDefinition = "LONGTEXT")
 	private String license;
 	@Column(name = "version")
 	private String version;
 	@Column(name = "expiration")
 	private long expiration;
-	@Column(name = "documentation",columnDefinition="LONGTEXT")
+	@Column(name = "documentation", columnDefinition = "LONGTEXT")
 	private String documentation;
 	@Column(name = "state")
 	private String state;
@@ -357,6 +362,22 @@ public class Service {
 	 */
 	public void setTags(List<Tag> tags) {
 		this.tags = tags;
+	}
+
+	public String getOwner() {
+		return owner;
+	}
+
+	public void setOwner(String owner) {
+		this.owner = owner;
+	}
+
+	public String getOwnerUrl() {
+		return ownerUrl;
+	}
+
+	public void setOwnerUrl(String ownerUrl) {
+		this.ownerUrl = ownerUrl;
 	}
 
 }

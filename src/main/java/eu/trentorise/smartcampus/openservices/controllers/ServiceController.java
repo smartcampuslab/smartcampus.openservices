@@ -49,7 +49,8 @@ import eu.trentorise.smartcampus.openservices.model.Service;
 @RequestMapping(value = "/api/service")
 public class ServiceController {
 
-	private static final Logger logger = LoggerFactory.getLogger(ServiceController.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(ServiceController.class);
 
 	/**
 	 * Instance of {@link ServiceManager} to retrieve data using Dao classes.
@@ -72,8 +73,10 @@ public class ServiceController {
 	@ResponseBody
 	public ResponseObject myServices(HttpServletResponse response) {
 		logger.info("-- User: Access my data service --");
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		List<Service> services = Service.fromServiceEntities(serviceManager.getUserServices(username));
+		String username = SecurityContextHolder.getContext()
+				.getAuthentication().getName();
+		List<Service> services = Service.fromServiceEntities(serviceManager
+				.getUserServices(username));
 		ResponseObject responseObject = new ResponseObject();
 		if (services == null || services.size() == 0) {
 			responseObject.setError("You have zero service");
@@ -88,8 +91,8 @@ public class ServiceController {
 
 	// Service - View Service - view service description
 	/**
-	 * It retrieves data of a specific service. 
-	 * This search is done by service id.
+	 * It retrieves data of a specific service. This search is done by service
+	 * id.
 	 * 
 	 * @param service_id
 	 *            : int service id
@@ -101,9 +104,11 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/view/description/{service_id}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public ResponseObject viewServiceDescription(@PathVariable int service_id, HttpServletResponse response) {
+	public ResponseObject viewServiceDescription(@PathVariable int service_id,
+			HttpServletResponse response) {
 		logger.info("-- View service description --");
-		Service service = Service.fromServiceEntity(serviceManager.getServiceById(service_id));
+		Service service = Service.fromServiceEntity(serviceManager
+				.getServiceById(service_id));
 		ResponseObject responseObject = new ResponseObject();
 		if (service == null) {
 			responseObject.setError("There is no service with this id");
@@ -118,8 +123,8 @@ public class ServiceController {
 
 	// Service - View Service - view service method
 	/**
-	 * It retrieves all methods for a specific service. 
-	 * This search is done by service service id.
+	 * It retrieves all methods for a specific service. This search is done by
+	 * service service id.
 	 * 
 	 * @param service_id
 	 *            : int service id
@@ -131,9 +136,11 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/view/method/{service_id}", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public ResponseObject viewServiceMethod(@PathVariable int service_id, HttpServletResponse response) {
+	public ResponseObject viewServiceMethod(@PathVariable int service_id,
+			HttpServletResponse response) {
 		logger.info("-- View service method --");
-		List<Method> m = serviceManager.getServiceMethodsByServiceId(service_id);
+		List<Method> m = serviceManager
+				.getServiceMethodsByServiceId(service_id);
 		ResponseObject responseObject = new ResponseObject();
 		if (m == null || m.size() == 0) {
 			responseObject.setError("There is no method for this service");
@@ -148,8 +155,8 @@ public class ServiceController {
 
 	// Service - Manage Service - create Service
 	/**
-	 * It adds a new service to an organization. 
-	 * User must have role 'organization owner' or 'service owner' in this organization.
+	 * It adds a new service to an organization. User must have role
+	 * 'organization owner' or 'service owner' in this organization.
 	 * 
 	 * @param service
 	 *            : {@link Service} service object
@@ -162,33 +169,41 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseBody
-	public ResponseObject createService(@RequestBody Service service, HttpServletResponse response) {
-		logger.info("-- Create new service entry --");
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+	public ResponseObject createService(@RequestBody Service service,
+			HttpServletResponse response) {
+		logger.debug("Create new service entry");
+		String username = SecurityContextHolder.getContext()
+				.getAuthentication().getName();
 		// check structure for required field
 		ResponseObject responseObject = new ResponseObject();
-		if (service.getName() != null && service.getVersion() != null && service.getOrganizationId() != 0) {
+		if (service.getName() != null && service.getVersion() != null
+				&& service.getOrganizationId() != 0) {
 			try {
-				boolean result = serviceManager.createService(username, service.toServiceEntity());
+				boolean result = serviceManager.createService(username,
+						service.toServiceEntity());
 				if (result) {
 					responseObject.setStatus(HttpServletResponse.SC_CREATED);
 					response.setStatus(HttpServletResponse.SC_CREATED);
 				} else {
 					responseObject.setError("Service is not created");
-					responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					responseObject
+							.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				}
 			} catch (SecurityException s) {
-				responseObject.setError("You are not allowed to create a new service for this organization");
+				responseObject
+						.setError("You are not allowed to create a new service for this organization");
 				responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			} catch (EntityExistsException e) {
-				responseObject.setError("Another service with specified name already exists. Please change it.");
+				responseObject
+						.setError("Another service with specified name already exists. Please change it.");
 				responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			}
 		} else {
-			responseObject.setError("Name, version and organizaton id of service are required.");
+			responseObject
+					.setError("Name, version and organizaton id of service are required.");
 			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
@@ -197,10 +212,10 @@ public class ServiceController {
 
 	// Service - Manage Service - modify Service
 	/**
-	 * It modifies an existing service in database. User must have role 'organization
-	 * owner' for organization service and can modify the following service
-	 * fields: description, tags, category, documentation, access information,
-	 * expiration, implementation, license and version.
+	 * It modifies an existing service in database. User must have role
+	 * 'organization owner' for organization service and can modify the
+	 * following service fields: description, tags, category, documentation,
+	 * access information, expiration, implementation, license and version.
 	 * 
 	 * @param service
 	 *            : {@link Service} object
@@ -213,26 +228,32 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/modify", method = RequestMethod.PUT, consumes = "application/json")
 	@ResponseBody
-	public ResponseObject modService(@RequestBody Service service, HttpServletResponse response) {
-		logger.info("-- Modify service --");
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+	public ResponseObject modService(@RequestBody Service service,
+			HttpServletResponse response) {
+		logger.debug("Edit service");
+		String username = SecurityContextHolder.getContext()
+				.getAuthentication().getName();
 		ResponseObject responseObject = new ResponseObject();
 		try {
-			boolean result = serviceManager.updateService(username, service.toServiceEntity());
+			boolean result = serviceManager.updateService(username,
+					service.toServiceEntity());
 			if (result) {
 				responseObject.setStatus(HttpServletResponse.SC_OK);
 				response.setStatus(HttpServletResponse.SC_OK);
 			} else {
 				responseObject.setError("Connection problem with database");
-				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				responseObject
+						.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 			}
 		} catch (SecurityException s) {
-			responseObject.setError("User must be a member of this organizaiton");
+			responseObject
+					.setError("User must be a member of this organizaiton");
 			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		} catch (EntityExistsException e) {
-			responseObject.setError("Service with this name already exists. Change it.");
+			responseObject
+					.setError("Service with this name already exists. Change it.");
 			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
@@ -256,22 +277,27 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/publish/{id}", method = RequestMethod.PUT, consumes = "application/json")
 	@ResponseBody
-	public ResponseObject publishService(@PathVariable int id, HttpServletResponse response) {
+	public ResponseObject publishService(@PathVariable int id,
+			HttpServletResponse response) {
 		logger.info("-- Publish service --");
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		String username = SecurityContextHolder.getContext()
+				.getAuthentication().getName();
 		ResponseObject responseObject = new ResponseObject();
 		try {
-			boolean result = serviceManager.changeState(username, id, SERVICE_STATE.PUBLISH.toString());
+			boolean result = serviceManager.changeState(username, id,
+					SERVICE_STATE.PUBLISH.toString());
 			if (result) {
 				responseObject.setStatus(HttpServletResponse.SC_OK);
 				response.setStatus(HttpServletResponse.SC_OK);
 			} else {
 				responseObject.setError("Connection problem with database");
-				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				responseObject
+						.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 			}
 		} catch (SecurityException s) {
-			responseObject.setError("User must be part of this organization before changing this service");
+			responseObject
+					.setError("User must be part of this organization before changing this service");
 			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		}
@@ -295,22 +321,27 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/unpublish/{id}", method = RequestMethod.PUT, consumes = "application/json")
 	@ResponseBody
-	public ResponseObject unpublishService(@PathVariable int id, HttpServletResponse response) {
+	public ResponseObject unpublishService(@PathVariable int id,
+			HttpServletResponse response) {
 		logger.info("-- Unpublish service --");
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		String username = SecurityContextHolder.getContext()
+				.getAuthentication().getName();
 		ResponseObject responseObject = new ResponseObject();
 		try {
-			boolean result = serviceManager.changeState(username, id, SERVICE_STATE.UNPUBLISH.toString());
+			boolean result = serviceManager.changeState(username, id,
+					SERVICE_STATE.UNPUBLISH.toString());
 			if (result) {
 				responseObject.setStatus(HttpServletResponse.SC_OK);
 				response.setStatus(HttpServletResponse.SC_OK);
 			} else {
 				responseObject.setError("Connection problem with database");
-				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				responseObject
+						.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 			}
 		} catch (SecurityException s) {
-			responseObject.setError("User must be part of this organization before changing this service");
+			responseObject
+					.setError("User must be part of this organization before changing this service");
 			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		}
@@ -334,22 +365,27 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/deprecate/{id}", method = RequestMethod.PUT, consumes = "application/json")
 	@ResponseBody
-	public ResponseObject deprecateService(@PathVariable int id, HttpServletResponse response) {
+	public ResponseObject deprecateService(@PathVariable int id,
+			HttpServletResponse response) {
 		logger.info("-- Deprecate service --");
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		String username = SecurityContextHolder.getContext()
+				.getAuthentication().getName();
 		ResponseObject responseObject = new ResponseObject();
 		try {
-			boolean result = serviceManager.changeState(username, id, SERVICE_STATE.DEPRECATE.toString());
+			boolean result = serviceManager.changeState(username, id,
+					SERVICE_STATE.DEPRECATE.toString());
 			if (result) {
 				responseObject.setStatus(HttpServletResponse.SC_OK);
 				response.setStatus(HttpServletResponse.SC_OK);
 			} else {
 				responseObject.setError("Connection problem with database");
-				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				responseObject
+						.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 			}
 		} catch (SecurityException s) {
-			responseObject.setError("User must be part of this organization before changing this service");
+			responseObject
+					.setError("User must be part of this organization before changing this service");
 			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		}
@@ -359,8 +395,8 @@ public class ServiceController {
 	// Service - Manage Service - deprecate Service (create
 	// ServiceHistory.operation)
 	/**
-	 * It deletes an existing service. User must have role 'organization owner' for
-	 * service organization.
+	 * It deletes an existing service. User must have role 'organization owner'
+	 * for service organization.
 	 * 
 	 * @param id
 	 *            : int service id
@@ -373,9 +409,11 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
 	@ResponseBody
-	public ResponseObject deleteService(@PathVariable int id, HttpServletResponse response) {
+	public ResponseObject deleteService(@PathVariable int id,
+			HttpServletResponse response) {
 		logger.info("-- Delete service --");
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		String username = SecurityContextHolder.getContext()
+				.getAuthentication().getName();
 		ResponseObject responseObject = new ResponseObject();
 		try {
 			boolean result = serviceManager.deleteService(username, id);
@@ -384,11 +422,13 @@ public class ServiceController {
 				response.setStatus(HttpServletResponse.SC_OK);
 			} else {
 				responseObject.setError("Connection problem with database");
-				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				responseObject
+						.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 			}
 		} catch (SecurityException s) {
-			responseObject.setError("User must be part of this organization before deleting this service");
+			responseObject
+					.setError("User must be part of this organization before deleting this service");
 			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		}
@@ -398,8 +438,8 @@ public class ServiceController {
 	// Service - Manage Service method - create Method (create
 	// ServiceHistory.operation)
 	/**
-	 * It adds a new method to a service. User must have role 'organization owner'
-	 * for organization service.
+	 * It adds a new method to a service. User must have role 'organization
+	 * owner' for organization service.
 	 * 
 	 * @param method
 	 *            : {@link Method} instance
@@ -412,9 +452,11 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/method/add", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseBody
-	public ResponseObject createMethod(@RequestBody Method method, HttpServletResponse response) {
+	public ResponseObject createMethod(@RequestBody Method method,
+			HttpServletResponse response) {
 		logger.info("-- Create new service method --");
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		String username = SecurityContextHolder.getContext()
+				.getAuthentication().getName();
 		ResponseObject responseObject = new ResponseObject();
 		try {
 			boolean result = serviceManager.addMethod(username, method);
@@ -423,15 +465,18 @@ public class ServiceController {
 				response.setStatus(HttpServletResponse.SC_CREATED);
 			} else {
 				responseObject.setError("Connection problem with database");
-				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				responseObject
+						.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 			}
 		} catch (SecurityException s) {
-			responseObject.setError("User must be part of this organization before adding a method to this service");
+			responseObject
+					.setError("User must be part of this organization before adding a method to this service");
 			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		} catch (EntityExistsException e) {
-			responseObject.setError("Method with specified name already exists. Please change it.");
+			responseObject
+					.setError("Method with specified name already exists. Please change it.");
 			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
@@ -441,8 +486,8 @@ public class ServiceController {
 	// Service - Manage Service method - modify Method (create
 	// ServiceHistory.operation)
 	/**
-	 * It modifies a service method. User must have role 'organization owner' for
-	 * organization service and can modify only the following fields: name,
+	 * It modifies a service method. User must have role 'organization owner'
+	 * for organization service and can modify only the following fields: name,
 	 * synopsis, test, documentation.
 	 * 
 	 * @param method
@@ -456,9 +501,11 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/method/modify", method = RequestMethod.PUT, consumes = "application/json")
 	@ResponseBody
-	public ResponseObject modifyMethod(@RequestBody Method method, HttpServletResponse response) {
+	public ResponseObject modifyMethod(@RequestBody Method method,
+			HttpServletResponse response) {
 		logger.info("-- Modify a service method --");
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		String username = SecurityContextHolder.getContext()
+				.getAuthentication().getName();
 		ResponseObject responseObject = new ResponseObject();
 		try {
 			boolean result = serviceManager.updateMethod(username, method);
@@ -467,15 +514,18 @@ public class ServiceController {
 				response.setStatus(HttpServletResponse.SC_OK);
 			} else {
 				responseObject.setError("Connection problem with database");
-				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				responseObject
+						.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 			}
 		} catch (SecurityException s) {
-			responseObject.setError("User must be part of this organization before modifying a method to this service");
+			responseObject
+					.setError("User must be part of this organization before modifying a method to this service");
 			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		} catch (EntityExistsException e) {
-			responseObject.setError("Another method with specified name already exists. Please change it.");
+			responseObject
+					.setError("Another method with specified name already exists. Please change it.");
 			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
@@ -483,20 +533,21 @@ public class ServiceController {
 	}
 
 	/**
-	 * It retrieves method data of a specific method. 
-	 * Search is done by method id.
+	 * It retrieves method data of a specific method. Search is done by method
+	 * id.
 	 * 
 	 * @param method_id
 	 *            : int method id
 	 * @param response
 	 *            : {@link HttpServletResponse} which returns status of response
-	 *            	OK or NOT FOUND
+	 *            OK or NOT FOUND
 	 * @return {@link ResponseObject} with method data, status (OK or NOT FOUND)
 	 *         and error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/method/{method_id}", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody
-	ResponseObject getMethodData(@PathVariable int method_id, HttpServletResponse response) {
+	ResponseObject getMethodData(@PathVariable int method_id,
+			HttpServletResponse response) {
 		ResponseObject responseObject = new ResponseObject();
 		Method method = serviceManager.getMethodById(method_id);
 		if (method != null) {
@@ -513,8 +564,8 @@ public class ServiceController {
 	// Service - Manage Service method - delete method (create
 	// ServiceHistory.operation)
 	/**
-	 * It deletes a service method from a service. User must have role 'organization
-	 * owner' for organization service.
+	 * It deletes a service method from a service. User must have role
+	 * 'organization owner' for organization service.
 	 * 
 	 * @param id
 	 *            : int method id
@@ -527,9 +578,11 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/method/delete/{id}", method = RequestMethod.DELETE)
 	@ResponseBody
-	public ResponseObject deleteMethod(@PathVariable int id, HttpServletResponse response) {
+	public ResponseObject deleteMethod(@PathVariable int id,
+			HttpServletResponse response) {
 		logger.info("-- Delete a service method --");
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		String username = SecurityContextHolder.getContext()
+				.getAuthentication().getName();
 		ResponseObject responseObject = new ResponseObject();
 		try {
 			boolean result = serviceManager.deleteMethod(username, id);
@@ -538,11 +591,13 @@ public class ServiceController {
 				response.setStatus(HttpServletResponse.SC_OK);
 			} else {
 				responseObject.setError("Connection problem with database");
-				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				responseObject
+						.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 			}
 		} catch (SecurityException s) {
-			responseObject.setError("User must be part of this organization before deleting a method to this service");
+			responseObject
+					.setError("User must be part of this organization before deleting a method to this service");
 			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		}
@@ -550,8 +605,8 @@ public class ServiceController {
 	}
 
 	/**
-	 * It adds a test to a service method. User must have role 'organization owner'
-	 * for organization service.
+	 * It adds a test to a service method. User must have role 'organization
+	 * owner' for organization service.
 	 * 
 	 * @param testinfo
 	 *            : {@link TestInfo} instance
@@ -566,9 +621,11 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/method/{id}/test/add", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseBody
-	public ResponseObject createTest(@RequestBody TestInfo testinfo, @PathVariable int id, HttpServletResponse response) {
+	public ResponseObject createTest(@RequestBody TestInfo testinfo,
+			@PathVariable int id, HttpServletResponse response) {
 		logger.info("-- Create new method test --");
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		String username = SecurityContextHolder.getContext()
+				.getAuthentication().getName();
 		ResponseObject responseObject = new ResponseObject();
 		try {
 			boolean result = serviceManager.addTest(username, id, testinfo);
@@ -577,15 +634,18 @@ public class ServiceController {
 				response.setStatus(HttpServletResponse.SC_OK);
 			} else {
 				responseObject.setError("Connection problem with database");
-				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				responseObject
+						.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 			}
 		} catch (SecurityException s) {
-			responseObject.setError("User must be part of this organization before adding a test for this service method");
+			responseObject
+					.setError("User must be part of this organization before adding a test for this service method");
 			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		} catch (EntityExistsException e) {
-			responseObject.setError("Test with this name already exists. Change it.");
+			responseObject
+					.setError("Test with this name already exists. Change it.");
 			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
@@ -611,27 +671,33 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/method/{id}/test/{pos}", method = RequestMethod.PUT, consumes = "application/json")
 	@ResponseBody
-	public ResponseObject updateTest(@RequestBody TestInfo testinfo, @PathVariable int id, @PathVariable int pos,
+	public ResponseObject updateTest(@RequestBody TestInfo testinfo,
+			@PathVariable int id, @PathVariable int pos,
 			HttpServletResponse response) {
 		logger.info("-- Update method test --");
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		String username = SecurityContextHolder.getContext()
+				.getAuthentication().getName();
 		ResponseObject responseObject = new ResponseObject();
 		try {
-			boolean result = serviceManager.modifyTest(username, id, pos, testinfo);
+			boolean result = serviceManager.modifyTest(username, id, pos,
+					testinfo);
 			if (result) {
 				responseObject.setStatus(HttpServletResponse.SC_OK);
 				response.setStatus(HttpServletResponse.SC_OK);
 			} else {
 				responseObject.setError("Connection problem with database");
-				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				responseObject
+						.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 			}
 		} catch (SecurityException s) {
-			responseObject.setError("User must be part of this organization before modifying test for this method service");
+			responseObject
+					.setError("User must be part of this organization before modifying test for this method service");
 			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		} catch (EntityExistsException e) {
-			responseObject.setError("Test with this name already exists. Change it.");
+			responseObject
+					.setError("Test with this name already exists. Change it.");
 			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
@@ -639,8 +705,8 @@ public class ServiceController {
 	}
 
 	/**
-	 * It deletes a test from a service method. User must have role 'organization
-	 * owner' for organization service.
+	 * It deletes a test from a service method. User must have role
+	 * 'organization owner' for organization service.
 	 * 
 	 * @param id
 	 *            : int method id
@@ -655,9 +721,11 @@ public class ServiceController {
 	 */
 	@RequestMapping(value = "/method/{id}/test/{pos}", method = RequestMethod.DELETE)
 	@ResponseBody
-	public ResponseObject deleteTest(@PathVariable int id, @PathVariable int pos, HttpServletResponse response) {
+	public ResponseObject deleteTest(@PathVariable int id,
+			@PathVariable int pos, HttpServletResponse response) {
 		logger.info("-- Delete method test --");
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		String username = SecurityContextHolder.getContext()
+				.getAuthentication().getName();
 		ResponseObject responseObject = new ResponseObject();
 		try {
 			boolean result = serviceManager.deleteTest(username, id, pos);
@@ -666,11 +734,13 @@ public class ServiceController {
 				response.setStatus(HttpServletResponse.SC_OK);
 			} else {
 				responseObject.setError("Connection problem with database");
-				responseObject.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+				responseObject
+						.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 			}
 		} catch (SecurityException s) {
-			responseObject.setError("User must be part of this organization before deleting test for this method service");
+			responseObject
+					.setError("User must be part of this organization before deleting test for this method service");
 			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		}

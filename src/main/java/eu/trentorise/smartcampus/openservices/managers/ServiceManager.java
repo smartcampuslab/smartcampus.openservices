@@ -127,13 +127,7 @@ public class ServiceManager {
 			service.setCreatorId(user.getId());
 			service.setState(SERVICE_STATE.UNPUBLISH.toString());
 			serviceDao.createService(service);
-			// create history -> only if service is publish
-			// ServiceHistory sh = new ServiceHistory();
-			// sh.setOperation(OPERATION.ADD.toString());
-			// sh.setId_service(service.getId());
-			// sh.setDate(new Date());
-			// sh.setServiceName(service.getName());
-			// shDao.addServiceHistory(sh);
+
 			// check if service is created
 			if (serviceDao.useService(service.getName()) != null) {
 				return true;
@@ -185,6 +179,8 @@ public class ServiceManager {
 			s.setImplementation(service.getImplementation());
 			s.setLicense(service.getLicense());
 			s.setVersion(service.getVersion());
+			s.setOwner(service.getOwner());
+			s.setOwnerUrl(service.getOwnerUrl());
 			serviceDao.modifyService(s);
 
 			// Add a new ServiceHistory

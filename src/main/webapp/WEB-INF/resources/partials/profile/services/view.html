@@ -9,10 +9,14 @@
         <div class="col-md-8 col-md-offset-2">
             <h4>Info</h4>
             <ul>
-                <li>organization:
-                    <strong>
+                <li>publisher:
                         <strong>{{org.name}}</strong>
-                    </strong>
+                </li>
+                <li>owner:
+                	<strong>{{service.ownerName}}</strong>
+                </li>
+                <li>owner URL:
+                	<strong>{{service.ownerUrl}}</strong>
                 </li>
                 <li>tags:
                     <strong ng-repeat="tag in service.tags">{{tag}}</strong>

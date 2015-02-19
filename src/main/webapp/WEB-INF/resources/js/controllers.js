@@ -1574,6 +1574,12 @@ app
 											},
 											function(data) {
 												$scope.service = data.data;
+												
+												
+												if($scope.service.ownerUrl.length > 0 && !new RegExp('^(http|https)://').test($scope.service.ownerUrl)) {
+													$scope.service.ownerUrl = 'http://' + $scope.service.ownerUrl;
+												}
+												
 												$rootScope.locTitles = [
 														'services',
 														$scope.service.name ];

@@ -8,9 +8,22 @@
                 <input ng-disabled="service.id != null" type="text" class="form-control" id="servicename" placeholder="Service Name" ng-model="service.name" required>
             </div>
             <div class="form-group" show-validation>
-                <label for="authority">Organization</label>
+                <label for="authority">Publisher</label>
                 <select ng-disabled="service.id != null" ng-options="org.id as org.name for org in orgs" id="org" class="form-control" ng-model="service.organizationId" required>
                 </select>
+            </div>
+             <div class="panel panel-default">
+                <div class="panel-heading">Owner</div>
+                	<div class="panel-body">
+			            <div class="form-group">
+            			    <label for="owner">Name</label>
+                			<input type="text" class="form-control" id="owner" ng-model="service.ownerName"/>
+            			</div>
+            			<div class="form-group">
+            			    <label for="owner-url">URL</label>
+                			<input type="text" class="form-control" id="owner-url" ng-model="service.ownerUrl"/>
+            			</div>
+            		</div>
             </div>
             <div class="form-group" show-validation>
                 <label for="orgdesc">Description</label>
