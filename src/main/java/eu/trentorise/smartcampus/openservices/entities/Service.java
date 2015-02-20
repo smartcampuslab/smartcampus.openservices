@@ -65,6 +65,10 @@ public class Service {
 	 */
 	@Column(name = "category")
 	private int category;
+
+	@Column(name = "license_type")
+	private String licenseType;
+
 	@Column(name = "license", columnDefinition = "LONGTEXT")
 	private String license;
 	@Column(name = "version")
@@ -378,6 +382,14 @@ public class Service {
 
 	public void setOwnerUrl(String ownerUrl) {
 		this.ownerUrl = ownerUrl;
+	}
+
+	public String getLicenseType() {
+		return licenseType;
+	}
+
+	public void setLicenseType(String licenseType) {
+		this.licenseType = licenseType;
 	}
 
 }

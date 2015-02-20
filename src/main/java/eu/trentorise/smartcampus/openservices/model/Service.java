@@ -40,6 +40,7 @@ public class Service {
 	private String ownerUrl;
 	private String description;
 	private int category;
+	private String licenseType;
 	private String license;
 	private String version;
 	private long expiration;
@@ -75,6 +76,7 @@ public class Service {
 		setId(s.getId());
 		setImplementation(s.getImplementation());
 		setLicense(s.getLicense());
+		setLicenseType(s.getLicenseType());
 		setName(s.getName());
 		setOrganizationId(s.getOrganizationId());
 		setOwnerName(s.getOwner());
@@ -373,6 +375,7 @@ public class Service {
 		s.setId(id);
 		s.setImplementation(implementation);
 		s.setLicense(license);
+		s.setLicenseType(licenseType);
 		s.setName(name);
 		s.setOrganizationId(organizationId);
 		s.setOwner(ownerName);
@@ -444,5 +447,13 @@ public class Service {
 
 	public void setOwnerUrl(String ownerUrl) {
 		this.ownerUrl = ownerUrl;
+	}
+
+	public String getLicenseType() {
+		return licenseType;
+	}
+
+	public void setLicenseType(String licenseType) {
+		this.licenseType = licenseType;
 	}
 }

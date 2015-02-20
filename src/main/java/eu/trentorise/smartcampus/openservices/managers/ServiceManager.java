@@ -178,6 +178,7 @@ public class ServiceManager {
 			s.setExpiration(service.getExpiration());
 			s.setImplementation(service.getImplementation());
 			s.setLicense(service.getLicense());
+			s.setLicenseType(service.getLicenseType());
 			s.setVersion(service.getVersion());
 			s.setOwner(service.getOwner());
 			s.setOwnerUrl(service.getOwnerUrl());

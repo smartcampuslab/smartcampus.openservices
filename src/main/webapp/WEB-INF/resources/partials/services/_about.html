@@ -20,7 +20,18 @@
             </tr>
             <tr>
                 <td>License</td>
-                <td>{{service.license}}</td>
+                <td data-ng-show="service.licenseType === 'std'">
+                <a href="{{service.license}}" target="_blank"><img src="{{licenseIcon}}" /></a>
+                </td>
+                <td data-ng-show="service.licenseType === 'ext'">
+                <a href="{{service.license}}" target="_blank">{{service.license}}</a>
+                </td>
+                <td data-ng-show="service.licenseType === 'custom'">
+                <a href="javascript:void(0)" data-ng-click="showLicense = !showLicense"><span data-ng-show="!showLicense">View</span><span data-ng-show="showLicense">Hide</span></a>
+                <textarea disabled="disabled" class="markdown" data-ng-show="showLicense"> 
+                	{{service.license}}
+                </textarea>
+                </td>
             </tr>
             <tr>
                 <td>Version</td>

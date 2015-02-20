@@ -51,12 +51,30 @@
                 <select ng-options="cat.id as cat.name for cat in categories" id="category" class="form-control" ng-model="service.category">
                 </select>
             </div>
-            <div class="form-group">
-                <label for="license">License</label>
-                <input type="text" class="form-control" id="license" ng-model="service.license">
-            </div>
+            <label for="licenseType">License</label>
+			           <div class="form-group btn-group">
+			           <span data-ng-repeat="type in licenseTypes">
+			            <label class="btn btn-default">
+        				<input type="radio" id="licenseType" data-ng-model="service.licenseType" value="{{type.value}}">
+    					{{type.label}} </label>
+    					</span>
+           			 </div>
+           			 <div class="form-group" data-ng-show="service.licenseType === 'std'">
+                    	 <select data-ng-options="license.link as license.label for license in licenses" class="form-control" data-ng-model="licenseTemp.std">
+                    	 	<option label="" value=""></option>
+                    	 </select>
+                    	 
+    				</div>
+    				
+    				 <div class="form-group" data-ng-show="service.licenseType === 'ext'">
+			        <input type="text" class="form-control" data-ng-model="licenseTemp[service.licenseType]" placeholder="http://url.com/license.txt"/>
+                </div>
+                
+                 <div class="form-group" data-ng-show="service.licenseType === 'custom'">
+			         <textarea class="form-control markdown" placeholder="Insert the content of license" data-ng-model="licenseTemp.custom"></textarea>
+                </div>
             <div class="form-group" show-validation>
-                <label for="license">Version</label>
+                <label for="version">Version</label>
                 <input type="text" class="form-control" id="version" ng-model="service.version" required>
             </div>
             <div class="form-group">
@@ -156,8 +174,7 @@
                 <button type="button" ng-click="keep()" ng-disabled="form.$invalid && accessInformation.authentication.accessProtocol === 'OAuth2'" class="btn btn-primary" data-dismiss="modal">Save changes</button>
             </div>
         </div>
-        <!-- /.modal-content -->
-    </div>
+      </div>
     <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->

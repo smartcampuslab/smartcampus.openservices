@@ -394,3 +394,23 @@ services.factory('Bread', ['$location',
         return loc;
     }
 ]);
+
+
+services.service('Constants',function() {
+	this.licenseTypes = function() {
+		return [{'label':'None', 'value':'none'},
+		        {'label':'Standard license', 'value':'std'},
+				{'label':'External URL', 'value':'ext'},
+				{'label':'Custom license', 'value':'custom'}
+		        ];
+	};
+	
+	this.licenses = function() {
+		return [{'label':'CC-BY' , 'icon': 'http://i.creativecommons.org/l/by/3.0/88x31.png', 'link':'https://creativecommons.org/licenses/by/4.0/legalcode'},
+	                 {'label':'CC-BY-ND' , 'icon': 'http://i.creativecommons.org/l/by-nd/3.0/88x31.png', 'link':'https://creativecommons.org/licenses/by-nd/4.0/legalcode'},
+	                 {'label':'CC-BY-ND-SA' , 'icon': 'http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png', 'link':'https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode'},
+	                 {'label':'CC-BY-SA' , 'icon': 'http://i.creativecommons.org/l/by-sa/3.0/88x31.png', 'link':'https://creativecommons.org/licenses/by-sa/4.0/legalcode'},
+	                 {'label':'CC-BY-NC' , 'icon': 'http://i.creativecommons.org/l/by-nc/3.0/88x31.png', 'link':'https://creativecommons.org/licenses/by-nc/4.0/legalcode'},
+	                 {'label':'CC-BY-NC-ND' , 'icon': 'http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png', 'link':'https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode'}
+	                 ];};
+	});

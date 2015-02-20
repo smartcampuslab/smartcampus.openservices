@@ -334,8 +334,9 @@ app
 						'Service',
 						'Org',
 						'Category',
+						'Constants',
 						function($scope, $rootScope, $http, $location, Service,
-								Org, Category) {
+								Org, Category, Constants) {
 							$scope.protocols = [ 'OAuth2', 'OpenID', 'Public' ];
 
 							$scope.serviceFormats = {
@@ -348,6 +349,12 @@ app
 								'SOAP' : false
 							};
 
+							$scope.licenseTypes = Constants.licenseTypes();
+							
+							$scope.licenses = Constants.licenses();
+							
+							$scope.licenseTemp = {};
+							
 							$rootScope.locTitles = [ 'profile', 'services' ];
 							$scope.accessInformation = {
 								authentication : {
@@ -362,6 +369,8 @@ app
 							};
 							// set default value
 							$scope.accessInformation.authentication.accessProtocol = 'Public';
+							$scope.service = {};
+							$scope.service.licenseType = 'none';
 
 							Category.list({}, function(data) {
 								$scope.categories = data.data;
@@ -399,6 +408,10 @@ app
 									$scope.service.tags = $scope.service.tags
 											.split(',');
 								}
+								
+								var idx = $scope.service.licenseType;
+								$scope.service.license = $scope.licenseTemp[idx];
+								
 								Service.create($scope.service, function() {
 									$location.path('profile/services');
 								}, function(res) {
@@ -421,8 +434,9 @@ app
 						'Service',
 						'Org',
 						'Category',
+						'Constants',
 						function($scope, $rootScope, $routeParams, $location,
-								Service, Org, Category) {
+								Service, Org, Category, Constants) {
 							$scope.protocols = [ 'OAuth2', 'OpenID', 'Public' ];
 							$scope.serviceFormats = {
 								'JSON' : false,
@@ -434,6 +448,13 @@ app
 								'SOAP' : false
 							};
 
+							$scope.licenseTypes = Constants.licenseTypes();
+							
+							$scope.licenses = Constants.licenses();
+							
+							$scope.licenseTemp = {};
+							
+							
 							$scope.accessInformation = {
 								authentication : {
 									accessProtocol : null,
@@ -456,6 +477,10 @@ app
 											},
 											function(data) {
 												$scope.service = data.data;
+												$scope.licenseTemp[$scope.service.licenseType] = $scope.service.license;
+												if( $scope.service.licenseType === null) {
+													$scope.service.licenseType = 'none';
+												}
 												$rootScope.locTitles = [
 														'profile', 'services',
 														$scope.service.name ];
@@ -525,6 +550,9 @@ app
 									$scope.service.tags = $scope.service.tags
 											.split(',');
 
+								var idx = $scope.service.licenseType;
+								$scope.service.license = $scope.licenseTemp[idx];
+								
 								Service.update($scope.service, function() {
 									$location.path('profile/services/'
 											+ $routeParams.id);
@@ -545,6 +573,7 @@ app.controller('viewServiceCtrl', [
 		function($scope, $rootScope, $routeParams, $location, Service, Org,
 				Category) {
 
+			$scope.showLicense = false;
 			Service.getDescription({
 				id : $routeParams.id
 			},
@@ -1529,8 +1558,9 @@ app
 						'$http',
 						'$location',
 						'RemoteApi',
+						'Constants',
 						function($scope, $rootScope, $routeParams, Catalog,
-								Category, $http, $location, RemoteApi) {
+								Category, $http, $location, RemoteApi, Constants) {
 
 							$scope.toggle = function(id) {
 								var m = $scope.methodMap[id];
@@ -1572,6 +1602,8 @@ app
 										&& (method.executionProperties.httpMethod == 'POST' || method.executionProperties.httpMethod == 'PUT');
 							};
 
+							$scope.showLicense = false;
+							
 							Catalog
 									.getServiceById(
 											{
@@ -1581,9 +1613,25 @@ app
 												$scope.service = data.data;
 												
 												
-												if($scope.service.ownerUrl.length > 0 && !new RegExp('^(http|https)://').test($scope.service.ownerUrl)) {
+												if($scope.service.ownerUrl !== null && $scope.service.ownerUrl.length > 0 && !new RegExp('^(http|https)://').test($scope.service.ownerUrl)) {
 													$scope.service.ownerUrl = 'http://' + $scope.service.ownerUrl;
 												}
+												
+												if($scope.service.licenseType === 'std') {
+													var licenses = Constants.licenses();
+													licenses.forEach(function(l) {
+														if(l.link === $scope.service.license) {
+															$scope.licenseIcon = l.icon;
+														}
+													});
+												}
+												
+												if($scope.service.licenseType === 'ext') {
+													if($scope.service.license !== null && $scope.service.license.length > 0 && !new RegExp('^(http|https)://').test($scope.service.license)) {
+														$scope.service.license = 'http://' + $scope.service.license;
+													}
+												}
+												
 												
 												$rootScope.locTitles = [
 														'services',

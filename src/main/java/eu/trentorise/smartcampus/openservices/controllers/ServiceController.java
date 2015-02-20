@@ -106,7 +106,7 @@ public class ServiceController {
 	@ResponseBody
 	public ResponseObject viewServiceDescription(@PathVariable int service_id,
 			HttpServletResponse response) {
-		logger.info("-- View service description --");
+		logger.debug("View service description");
 		Service service = Service.fromServiceEntity(serviceManager
 				.getServiceById(service_id));
 		ResponseObject responseObject = new ResponseObject();

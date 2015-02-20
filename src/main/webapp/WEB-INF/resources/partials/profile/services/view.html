@@ -30,7 +30,15 @@
                     </a>
                 </li>
                 <li>license:
-                    <strong>{{service.license}}</strong>
+                	 <span data-ng-show="service.licenseType !== 'custom'">
+						<strong>{{service.license}}</strong>
+                	 </span>
+                     <span data-ng-show="service.licenseType === 'custom'">
+                		<a href="javascript:void(0)" data-ng-click="showLicense = !showLicense"><span data-ng-show="!showLicense">View</span><span data-ng-show="showLicense">Hide</span></a>
+                		<textarea disabled="disabled" class="markdown" data-ng-show="showLicense"> 
+                			{{service.license}}
+               			 </textarea>
+                	</span>
                 </li>
                 <li>version:
                     <strong>{{service.version}}</strong>
