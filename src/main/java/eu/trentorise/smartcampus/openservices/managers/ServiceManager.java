@@ -100,6 +100,9 @@ public class ServiceManager {
 	@Autowired
 	private TagDao tagDao;
 
+	@Autowired
+	private WADLGenerator wadlGenerator;
+
 	/**
 	 * Add a new service in database.
 	 * 
@@ -655,4 +658,7 @@ public class ServiceManager {
 		}
 	}
 
+	public String getWADL(int serviceId) {
+		return wadlGenerator.generateAsString(serviceId);
+	}
 }
