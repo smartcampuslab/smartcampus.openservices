@@ -99,12 +99,15 @@ public class WADLGenerator {
 				.getServiceMethodsByServiceId(serviceId);
 		Application app = new Application();
 		Resources resources = new Resources();
-		resources.setBase(s.getAccessInformation().getEndpoint());
+		String[] formats = new String[0];
+
+		if (s.getAccessInformation() != null) {
+			resources.setBase(s.getAccessInformation().getEndpoint());
+			if (s.getAccessInformation().getFormats() != null) {
+				formats = s.getAccessInformation().getFormats().split(",");
+			}
+		}
 		app.getResources().add(resources);
-
-		String[] formats = s.getAccessInformation().getFormats() != null ? s
-				.getAccessInformation().getFormats().split(",") : new String[0];
-
 		for (Method m : methods) {
 			Resource res = new Resource();
 			res.setId(m.getName());
