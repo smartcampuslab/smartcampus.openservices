@@ -87,6 +87,13 @@ public class Service {
 	@Lob
 	private ImplementationInfo implementation;
 
+	@Column(name = "wadl_doc_name")
+	private String wadlDocName;
+
+	@Column(name = "wadl_doc_content")
+	@Lob
+	private String wadlDocContent;
+
 	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE,
 			CascadeType.MERGE }, fetch = FetchType.EAGER)
 	// cascade = CascadeType.ALL
@@ -390,6 +397,22 @@ public class Service {
 
 	public void setLicenseType(String licenseType) {
 		this.licenseType = licenseType;
+	}
+
+	public String getWadlDocName() {
+		return wadlDocName;
+	}
+
+	public void setWadlDocName(String wadlDocName) {
+		this.wadlDocName = wadlDocName;
+	}
+
+	public String getWadlDocContent() {
+		return wadlDocContent;
+	}
+
+	public void setWadlDocContent(String wadlDocContent) {
+		this.wadlDocContent = wadlDocContent;
 	}
 
 }

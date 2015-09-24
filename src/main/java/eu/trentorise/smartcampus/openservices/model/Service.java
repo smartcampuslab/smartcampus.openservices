@@ -49,6 +49,7 @@ public class Service {
 	private AccessInformation accessInformation;
 	private ImplementationInfo implementation;
 	private List<String> tags;
+	private WADLBean wadl;
 
 	/**
 	 * New instance of {@link Service}.
@@ -89,6 +90,8 @@ public class Service {
 			}
 		}
 		setVersion(s.getVersion());
+		setWadl(new WADLBean(s.getWadlDocName(), s.getWadlDocContent()));
+
 	}
 
 	/**
@@ -390,6 +393,10 @@ public class Service {
 			}
 		}
 		s.setVersion(version);
+		if (wadl != null) {
+			s.setWadlDocName(wadl.getName());
+			s.setWadlDocContent(wadl.getBody());
+		}
 		return s;
 	}
 
@@ -455,5 +462,13 @@ public class Service {
 
 	public void setLicenseType(String licenseType) {
 		this.licenseType = licenseType;
+	}
+
+	public WADLBean getWadl() {
+		return wadl;
+	}
+
+	public void setWadl(WADLBean wadl) {
+		this.wadl = wadl;
 	}
 }

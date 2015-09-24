@@ -81,6 +81,19 @@
                 <label for="documentation">Documentation</label>
                 <input type="text" class="form-control" id="documentation" placeholder="http://yourdocs.com/doc" ng-model="service.documentation">
             </div>
+            
+             <div class="form-group">
+                <label for="documentation">WADL spec</label>
+                <input type="file" file-model='fileModel'/>
+            </div>
+           
+            <div class="form-group">
+            	<span>{{service.wadl.name}}</span>
+            	<button type="button" data-ng-show="service.wadl.name != undefined" data-ng-click="delWadl(service)" class="btn btn-danger btn-xs">
+  					<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove
+				</button>
+            </div>
+           
             <div class="form-group">
                 <label for="sourcecode">Source Code</label>
                 <input type="text" class="form-control" id="sourcecode" placeholder="http://mysource.com" ng-model="service.implementation.sourceCode">

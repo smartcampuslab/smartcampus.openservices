@@ -412,11 +412,29 @@ app
 								var idx = $scope.service.licenseType;
 								$scope.service.license = $scope.licenseTemp[idx];
 								
-								Service.create($scope.service, function() {
-									$location.path('profile/services');
-								}, function(res) {
-									$scope.errorMsg = res.data.error;
-								});
+								if( !! $scope.fileModel ) {
+									$scope.service.wadl = {};
+									var reader = new FileReader();
+									reader.readAsText($scope.fileModel);
+									
+									reader.onload = function(e) {
+										$scope.service.wadl.name = $scope.fileModel.name;
+										$scope.service.wadl.body = reader.result;
+										
+										Service.create($scope.service, function() {
+											$location.path('profile/services');
+										}, function(res) {
+											$scope.errorMsg = res.data.error;
+										});
+									};
+								} else {
+									Service.create($scope.service, function() {
+										$location.path('profile/services');
+									}, function(res) {
+										$scope.errorMsg = res.data.error;
+									});
+								}
+								
 							};
 							$scope.keep = function() {
 								$scope.service.accessInformation = $scope.accessInformation;
@@ -526,6 +544,10 @@ app
 								$scope.service.accessInformation = $scope.accessInformation;
 							};
 
+							$scope.delWadl = function(service) {
+								service.wadl = {};
+							};
+							
 							$scope.submit = function() {
 								var arr = [];
 								for ( var key in $scope.serviceFormats)
@@ -534,6 +556,8 @@ app
 								$scope.service.accessInformation.formats = arr
 										.join();
 								arr = [];
+								
+								
 								for ( var key in $scope.serviceProtocols)
 									if ($scope.serviceProtocols[key])
 										arr.push(key);
@@ -553,12 +577,30 @@ app
 								var idx = $scope.service.licenseType;
 								$scope.service.license = $scope.licenseTemp[idx];
 								
-								Service.update($scope.service, function() {
-									$location.path('profile/services/'
-											+ $routeParams.id);
-								}, function(res) {
-									$scope.errorMsg = res.data.error;
-								});
+								if( !! $scope.fileModel ) {
+									$scope.service.wadl = {};
+									var reader = new FileReader();
+									reader.readAsText($scope.fileModel);
+									
+									reader.onload = function(e) {
+										$scope.service.wadl.name = $scope.fileModel.name;
+										$scope.service.wadl.body = reader.result;
+										
+										Service.update($scope.service, function() {
+											$location.path('profile/services/'
+													+ $routeParams.id);
+										}, function(res) {
+											$scope.errorMsg = res.data.error;
+										});
+									};
+								} else {
+									Service.update($scope.service, function() {
+										$location.path('profile/services/'
+												+ $routeParams.id);
+									}, function(res) {
+										$scope.errorMsg = res.data.error;
+									});
+								}
 							};
 						} ]);
 

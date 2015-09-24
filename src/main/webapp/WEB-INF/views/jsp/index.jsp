@@ -114,6 +114,7 @@
   
   <script src="js/vendor/marked.min.js"></script>
   <script src="js/vendor/angular-marked.js"></script>
+  <script src="js/vendor/angular-file-model.js"></script>
 
   <script src="js/routingConfig.js"></script>
   <script src="js/app.js"></script>

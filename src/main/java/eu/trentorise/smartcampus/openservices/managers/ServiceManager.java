@@ -185,6 +185,8 @@ public class ServiceManager {
 			s.setVersion(service.getVersion());
 			s.setOwner(service.getOwner());
 			s.setOwnerUrl(service.getOwnerUrl());
+			s.setWadlDocName(service.getWadlDocName());
+			s.setWadlDocContent(service.getWadlDocContent());
 			serviceDao.modifyService(s);
 
 			// Add a new ServiceHistory

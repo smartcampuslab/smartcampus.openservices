@@ -19,6 +19,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,6 +30,8 @@ import eu.trentorise.smartcampus.openservices.entities.Service;
 @Component
 public class WADLGenerator {
 
+	private static final Logger logger = LoggerFactory
+			.getLogger(WADLGenerator.class);
 	@Autowired
 	private ServiceManager serviceManager;
 
@@ -74,29 +78,39 @@ public class WADLGenerator {
 	}
 
 	public String generateAsString(int serviceId) {
-		Application app = generate(serviceId);
-
+		Service s = serviceManager.getServiceById(serviceId);
 		String wadl = null;
-		try {
-			JAXBContext jaxbContext = JAXBContext
-					.newInstance(Application.class);
-			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-			jaxbContext = JAXBContext.newInstance(Application.class);
-			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-			StringWriter stringWriter = new StringWriter();
-			jaxbMarshaller.marshal(app, stringWriter);
-			wadl = stringWriter.toString();
-		} catch (JAXBException e) {
-			e.printStackTrace();
-		}
 
+		if (s.getWadlDocContent() != null) {
+			wadl = s.getWadlDocContent();
+		} else {
+			Application app = generate(serviceId);
+
+			try {
+				JAXBContext jaxbContext = JAXBContext
+						.newInstance(Application.class);
+				Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+				jaxbContext = JAXBContext.newInstance(Application.class);
+				jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,
+						true);
+				StringWriter stringWriter = new StringWriter();
+				jaxbMarshaller.marshal(app, stringWriter);
+				wadl = stringWriter.toString();
+			} catch (JAXBException e) {
+				logger.error("", e);
+			}
+		}
 		return wadl;
 	}
 
 	public Application generate(int serviceId) {
 		Service s = serviceManager.getServiceById(serviceId);
-		List<Method> methods = serviceManager
-				.getServiceMethodsByServiceId(serviceId);
+		return generate(s);
+	}
+
+	public Application generate(Service s) {
+		List<Method> methods = serviceManager.getServiceMethodsByServiceId(s
+				.getId());
 		Application app = new Application();
 		Resources resources = new Resources();
 		String[] formats = new String[0];
