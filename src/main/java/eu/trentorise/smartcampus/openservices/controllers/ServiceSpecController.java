@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import eu.trentorise.smartcampus.openservices.Constants;
+import eu.trentorise.smartcampus.openservices.entities.Service;
 import eu.trentorise.smartcampus.openservices.managers.ServiceManager;
 
 @Controller
@@ -42,6 +44,17 @@ public class ServiceSpecController {
 	@RequestMapping(value = "/{id}/spec/xwadl", method = RequestMethod.GET)
 	@ResponseBody
 	public void getXWADL(@PathVariable int id, HttpServletResponse response) {
+
+		// check if service is published
+		Service s = serviceManager.getServiceById(id);
+		if (!s.getState().equals(Constants.SERVICE_STATE.PUBLISH.toString())) {
+			try {
+				response.sendError(HttpServletResponse.SC_FORBIDDEN);
+				return;
+			} catch (IOException e) {
+				logger.error("Error sending http error response");
+			}
+		}
 
 		try {
 
