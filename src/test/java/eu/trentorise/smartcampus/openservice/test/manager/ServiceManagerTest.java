@@ -15,27 +15,20 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservice.test.manager;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
 import eu.trentorise.smartcampus.openservices.Constants;
-import eu.trentorise.smartcampus.openservices.dao.MethodDao;
+import eu.trentorise.smartcampus.openservices.Constants.ORDER;
 import eu.trentorise.smartcampus.openservices.dao.ServiceDao;
 import eu.trentorise.smartcampus.openservices.entities.AccessInformation;
 import eu.trentorise.smartcampus.openservices.entities.Category;
@@ -43,6 +36,7 @@ import eu.trentorise.smartcampus.openservices.entities.ExecutionProperties;
 import eu.trentorise.smartcampus.openservices.entities.Method;
 import eu.trentorise.smartcampus.openservices.entities.Organization;
 import eu.trentorise.smartcampus.openservices.entities.Service;
+import eu.trentorise.smartcampus.openservices.entities.User;
 import eu.trentorise.smartcampus.openservices.managers.CategoryManager;
 import eu.trentorise.smartcampus.openservices.managers.OrganizationManager;
 import eu.trentorise.smartcampus.openservices.managers.ServiceManager;
@@ -59,14 +53,10 @@ import eu.trentorise.smartcampus.openservices.managers.WADLGenerator;
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = false)
 public class ServiceManagerTest {
 
-	// Log
-	private Logger log = LoggerFactory.getLogger(ServiceManagerTest.class);
 	@Autowired
 	private ServiceManager serviceManager;
 	@Autowired
 	private ServiceDao serviceDao;
-	@Autowired
-	private MethodDao methodDao;
 
 	@Autowired
 	private UserManager userManager;
@@ -80,56 +70,53 @@ public class ServiceManagerTest {
 	@Autowired
 	private WADLGenerator wadlGen;
 
-	private String username;
 	private Service service;
 	private Method method;
 
 	private int catId;
+	private User user;
+	private Organization organization;
 
 	private static final String USERNAME = "user1";
 
 	@Before
 	public void setUp() {
-
 		createTestCats();
 		createTestUsers();
 		createTestOrgs();
-		log.info("Service Manager Test - set up");
-		username = "sara";
-		service = new Service();
-		service.setName("@TestService");
-		service.setDescription("@Test Manager");
-		service.setCategory(4);// @Test category
-		service.setVersion("0.1");
-		service.setCreatorId(1);// user sara
-		service.setOrganizationId(1);// bla organization
+	}
 
-		method = new Method();
-		method.setName("@Test Method");
-		method.setSynopsis("A test manager method");
-		method.setDocumentation("Bla bla bla");
+	@After
+	public void clean() {
+		for (Service s : serviceManager.getServices()) {
+			serviceManager.deleteService(USERNAME, s.getId());
+		}
 
-		/*
-		 * TestBoxProperties prop = new TestBoxProperties();
-		 * method.setTestboxProprieties(prop);
-		 */
+		for (Category cat : catManager.getCategories()) {
+			catManager.deleteCategory(cat.getId());
+		}
 
-		log.info("Set up - END");
+		for (Organization o : orgManager.getOrganizations(0, 1000,
+				ORDER.id.toString())) {
+			orgManager.deleteOrganization(USERNAME, o.getId());
+		}
+
 	}
 
 	private void createTestUsers() {
-		eu.trentorise.smartcampus.openservices.entities.User user1 = new eu.trentorise.smartcampus.openservices.entities.User();
-		user1.setUsername(USERNAME);
-		user1.setEmail("user1@aa.aa");
-		user1.setRole(Constants.ROLES.ROLE_NORMAL.toString());
-		userManager.createSocialUser(user1);
+		if ((user = userManager.getUserByUsername(USERNAME)) == null) {
+			eu.trentorise.smartcampus.openservices.entities.User user1 = new eu.trentorise.smartcampus.openservices.entities.User();
+			user1.setUsername(USERNAME);
+			user1.setEmail("user1@aa.aa");
+			user1.setRole(Constants.ROLES.ROLE_NORMAL.toString());
+			user = userManager.createSocialUser(user1);
+		}
 	}
 
 	private void createTestCats() {
 		Category cat = null;
 		for (int i = 1; i < 5; i++) {
 			cat = new Category();
-			// cat.setId(i);
 			cat.setName("cat" + i);
 			cat.setDescription("desc");
 			catId = catManager.addCategory(cat).getId();
@@ -139,111 +126,117 @@ public class ServiceManagerTest {
 	private void createTestOrgs() {
 		Organization org = new Organization();
 		org.setName("org1");
-		orgManager.createOrganization(USERNAME, org);
+		organization = orgManager.createOrganization(USERNAME, org);
 	}
 
 	@Test
 	public void testCreateService() {
-		log.info("TEST - Create new service ");
-		boolean result = serviceManager.createService(username, service);
-		assertEquals(true, result);
-		log.info("Service added: " + service.getName());
-		// retrieve id from database
-		Service newService = serviceDao.useService(service.getName());
-		assertNotNull("No new service", newService);
-		service.setId(newService.getId());
-		log.info("New service " + newService.getName() + " with id "
-				+ newService.getId());
+		Service service = new Service();
+		service.setName("creation");
+		service.setCategory(catId);
+		service.setVersion("1.0-FINAL");
+		service.setCreatorId(user.getId());
+		service.setOrganizationId(1);
+		int numSrv = serviceManager.getServices().size();
+		Assert.assertTrue(serviceManager.createService(USERNAME, service));
+		Assert.assertEquals(numSrv + 1, serviceManager.getServices().size());
 	}
 
 	@Test
 	public void testUpdateServiceData() {
-		log.info("TEST - Update service data");
-		// get id
-		Service newService = serviceDao.useService(service.getName());
-		service.setId(newService.getId());
-		// do test
-		service.setDescription("@Test update description");
-		boolean result = serviceManager.updateService(username, service);
-		assertEquals(true, result);
-		log.info("Service update " + service.getName());
-		// retrieve service from db
-		Service modifiedService = serviceDao.useService(service.getName());
-		assertNotNull("No modified service");
-		assertEquals(service.getId(), modifiedService.getId());
-		assertNotSame(newService.getDescription(),
-				modifiedService.getDescription());
-		log.info("Modified service " + modifiedService.getName() + " with id "
-				+ modifiedService.getId());
+		Service service = new Service();
+		service.setName("creation");
+		service.setCategory(catId);
+		service.setVersion("1.0-FINAL");
+		service.setCreatorId(user.getId());
+		service.setOrganizationId(organization.getId());
+		Assert.assertTrue(serviceManager.createService(USERNAME, service));
+		String desc = "My new description";
+		Service loaded = serviceDao.useService("creation");
+		Assert.assertNotNull(loaded);
+		loaded.setDescription(desc);
+		Assert.assertTrue(serviceManager.updateService(USERNAME, loaded));
+
+		loaded = serviceDao.useService("creation");
+		Assert.assertEquals(desc, loaded.getDescription());
 	}
 
 	@Test
 	public void testChangeServiceState() {
-		log.info("TEST - Change service stata");
-		// get id
-		Service newService = serviceDao.useService(service.getName());
-		service.setId(newService.getId());
-		// unpublish
-		// not found in get services from catalog
-		log.info("TEST Unpublish Service");
-		List<Service> publishService = serviceDao.showPublishedService(0, 5,
-				Constants.ORDER.id);
-		for (int i = 0; i < publishService.size(); i++) {
-			assertNotSame(service.getId(), publishService.get(i).getId());
-		}
-		log.info("My service is unpublished, so it is not in the list of published service");
+		Service service = new Service();
+		service.setName("creation");
+		service.setCategory(catId);
+		service.setVersion("1.0-FINAL");
+		service.setCreatorId(user.getId());
+		service.setOrganizationId(organization.getId());
+		Assert.assertTrue(serviceManager.createService(USERNAME, service));
 
-		// publish OR deprecate
-		log.info("TEST Change state: Publish Service");
-		boolean result = serviceManager.changeState(username, service.getId(),
-				Constants.SERVICE_STATE.PUBLISH.toString());
-		assertEquals(true, result);
-		// found in get services from catalog
-		publishService.clear();
-		publishService = serviceDao.showPublishedService(0, 5,
-				Constants.ORDER.name);
-		for (int i = 0; i < publishService.size(); i++) {
-			if (publishService.get(i).getId() == service.getId()) {
-				assertEquals(service.getId(), publishService.get(i).getId());
-			}
-		}
-		log.info("My service is published, so it is in the list of published service");
+		List<Service> services = serviceDao.showPublishedService(0, 1000,
+				ORDER.id);
+
+		Service loaded = serviceDao.useService("creation");
+		int numSrv = services.size();
+		Assert.assertTrue(serviceManager.changeState(USERNAME, loaded.getId(),
+				Constants.SERVICE_STATE.PUBLISH.toString()));
+
+		services = serviceDao.showPublishedService(0, 1000, ORDER.id);
+
+		Assert.assertEquals(numSrv + 1, services.size());
+
+		Assert.assertTrue(serviceManager.changeState(USERNAME, loaded.getId(),
+				Constants.SERVICE_STATE.UNPUBLISH.toString()));
+
+		services = serviceDao.showPublishedService(0, 1000, ORDER.id);
+
+		Assert.assertEquals(numSrv, services.size());
 	}
 
 	@Test
-	public void testAddMethod() {
-		log.info("TEST Add new service method");
-		// get id
-		Service newService = serviceDao.useService(service.getName());
-		method.setServiceId(newService.getId());
-		boolean result = serviceManager.addMethod(username, method);
-		assertTrue("No service method added", result == true);
-	}
+	public void testAddRemoveMethod() {
+		Service service = new Service();
+		service.setName("creation");
+		service.setCategory(catId);
+		service.setVersion("1.0-FINAL");
+		service.setCreatorId(user.getId());
+		service.setOrganizationId(organization.getId());
+		Assert.assertTrue(serviceManager.createService(USERNAME, service));
+		Service loaded = serviceDao.useService("creation");
 
-	@Test
-	public void testDeleteMethod() {
-		log.info("TEST Add new service method");
-		// get method id
-		Method newMethod = methodDao.getMethodByName(method.getName(),
-				method.getServiceId());
-		boolean result = serviceManager.deleteMethod(username,
-				newMethod.getId());
-		assertTrue("No service method added", result == true);
+		int numMethods = serviceManager.getServiceMethodsByServiceId(
+				loaded.getId()).size();
+
+		Method newOne = new Method();
+		newOne.setName("method ONE");
+		newOne.setServiceId(loaded.getId());
+
+		Assert.assertTrue(serviceManager.addMethod(USERNAME, newOne));
+
+		List<Method> methods = serviceManager
+				.getServiceMethodsByServiceId(loaded.getId());
+		Assert.assertEquals(numMethods + 1, methods.size());
+
+		Assert.assertTrue(serviceManager.deleteMethod(USERNAME, methods.get(0)
+				.getId()));
+
+		Assert.assertEquals(numMethods, serviceManager
+				.getServiceMethodsByServiceId(loaded.getId()).size());
+
 	}
 
 	@Test
 	public void testDeleteService() {
-		log.info("TEST - Delete service");
-		// get id
-		Service newService = serviceDao.useService(service.getName());
-		service.setId(newService.getId());
-		boolean result = serviceManager
-				.deleteService(username, service.getId());
-		assertEquals(true, result);
-		// find my service
-		assertNull("Error: Your service exists",
-				serviceManager.getServiceById(service.getId()));
-		log.info("Service is deleted");
+		Service service = new Service();
+		service.setName("creation");
+		service.setCategory(catId);
+		service.setVersion("1.0-FINAL");
+		service.setCreatorId(user.getId());
+		service.setOrganizationId(organization.getId());
+		Assert.assertTrue(serviceManager.createService(USERNAME, service));
+		Service loaded = serviceDao.useService("creation");
+		Assert.assertNotNull(loaded);
+		Assert.assertTrue(serviceManager.deleteService(USERNAME, loaded.getId()));
+		Assert.assertNull(serviceDao.useService("creation"));
+
 	}
 
 	@Test
@@ -253,8 +246,8 @@ public class ServiceManagerTest {
 		service.setDescription("@Test Manager");
 		service.setCategory(catId);
 		service.setVersion("0.1");
-		service.setCreatorId(1);// user sara
-		service.setOrganizationId(1);// bla organization
+		service.setCreatorId(user.getId());
+		service.setOrganizationId(organization.getId());
 		AccessInformation accessInfo = new AccessInformation();
 		accessInfo
 				.setEndpoint("https://os.smartcommunitylab.it/core.mobility/");
