@@ -36,6 +36,7 @@ import eu.trentorise.smartcampus.openservices.entities.Method;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.entities.TestInfo;
 import eu.trentorise.smartcampus.openservices.managers.ServiceManager;
+import eu.trentorise.smartcampus.openservices.managers.WADLGenerator;
 import eu.trentorise.smartcampus.openservices.model.Service;
 
 /**
@@ -57,6 +58,9 @@ public class ServiceController {
 	 */
 	@Autowired
 	private ServiceManager serviceManager;
+
+	@Autowired
+	private WADLGenerator wadlGenerator;
 
 	// User - Access my data: service
 	/**
@@ -174,8 +178,17 @@ public class ServiceController {
 		logger.debug("Create new service entry");
 		String username = SecurityContextHolder.getContext()
 				.getAuthentication().getName();
-		// check structure for required field
+
 		ResponseObject responseObject = new ResponseObject();
+		if (service.getWadl().getBody() != null
+				&& !wadlGenerator.isValidWADL(service.getWadl().getBody())) {
+			responseObject.setError("Invalid WADL.");
+			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return responseObject;
+		}
+
+		// check structure for required field
 		if (service.getName() != null && service.getVersion() != null
 				&& service.getOrganizationId() != 0) {
 			try {
@@ -234,6 +247,14 @@ public class ServiceController {
 		String username = SecurityContextHolder.getContext()
 				.getAuthentication().getName();
 		ResponseObject responseObject = new ResponseObject();
+		if (service.getWadl().getBody() != null
+				&& !wadlGenerator.isValidWADL(service.getWadl().getBody())) {
+			responseObject.setError("Invalid WADL.");
+			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return responseObject;
+		}
+
 		try {
 			boolean result = serviceManager.updateService(username,
 					service.toServiceEntity());

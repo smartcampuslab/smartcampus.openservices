@@ -8,6 +8,7 @@ import it.smartcommunitylab.openservices.wadl.Request;
 import it.smartcommunitylab.openservices.wadl.Resource;
 import it.smartcommunitylab.openservices.wadl.Resources;
 
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.regex.Pattern;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -150,5 +152,20 @@ public class WADLGenerator {
 			}
 		}
 		return app;
+	}
+
+	public boolean isValidWADL(String wadl) {
+		JAXBContext jaxbContext;
+		try {
+			jaxbContext = JAXBContext.newInstance(Application.class);
+			Unmarshaller unmarshal = jaxbContext.createUnmarshaller();
+			StringReader stringReader = new StringReader(wadl);
+
+			return unmarshal.unmarshal(stringReader) != null;
+
+		} catch (JAXBException e) {
+			return false;
+		}
+
 	}
 }
