@@ -6,7 +6,7 @@
 	<artifactId>openservice</artifactId>
 	<name>OpenService</name>
 	<packaging>war</packaging>
-	<version>0.3</version>
+	<version>0.4</version>
 	<properties>
 		<java-version>1.6</java-version>
 		<org.springframework-version>3.1.1.RELEASE</org.springframework-version>
