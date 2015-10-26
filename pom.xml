@@ -409,7 +409,8 @@
 				<configuration>
 					The working directory
 					to create the generated java source files.
-					<outputDirectory>${basedir}/src/main/java</outputDirectory>
+					<schemaDirectory>${basedir}/src/main/resources/wadl</schemaDirectory>
+					<!-- <generateDirectory>${basedir}/src/main/java</generateDirectory> -->
 				</configuration>
 			</plugin>
 
@@ -418,10 +419,6 @@
 				<artifactId>jena-maven-tools</artifactId>
 				<version>0.8</version>
 				<configuration>
-					<commandlineArgs>
-						--inference \
-						--rdfs
-					</commandlineArgs>
 					<includes>
 						<include>src/main/resources/usdl/*.rdf</include>
 					</includes>
@@ -436,10 +433,26 @@
 				<executions>
 					<execution>
 						<id>schemagen</id>
-						<phase>compile</phase>
 						<goals>
 							<goal>translate</goal>
 						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>add-source</id>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>${project.build.directory}/generated-sources</source>
+							</sources>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
