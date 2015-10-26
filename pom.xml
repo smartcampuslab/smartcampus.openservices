@@ -232,9 +232,12 @@
 			<version>1.0.3.RELEASE</version>
 		</dependency>
 
-		<!-- WADL -->
-		<!-- <dependency> <groupId>org.jvnet.ws.wadl</groupId> <artifactId>wadl-core</artifactId> 
-			<version>1.1.6</version> </dependency> -->
+		<!-- RDF management -->
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-core</artifactId>
+			<version>2.11.2</version>
+		</dependency>
 
 		<!-- For test JUnit -->
 		<dependency>
@@ -289,12 +292,8 @@
 		</dependency>
 
 		<!-- Driver for embedded database -->
-		<!-- <dependency>
-			<groupId>org.hsqldb</groupId>
-			<artifactId>hsqldb</artifactId>
-			<version>2.2.8</version>
-			<scope>test</scope>
-		</dependency> -->
+		<!-- <dependency> <groupId>org.hsqldb</groupId> <artifactId>hsqldb</artifactId> 
+			<version>2.2.8</version> <scope>test</scope> </dependency> -->
 
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -341,7 +340,14 @@
 			<version>1.4.7</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.4</version>
+		</dependency>
+
 	</dependencies>
+
 	<build>
 
 		<plugins>
@@ -407,13 +413,36 @@
 				</configuration>
 			</plugin>
 
-			<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>jaxb2-maven-plugin</artifactId> 
-				<version>1.6</version> <executions> <execution> <id>Open311</id> <configuration> 
-				<outputDirectory>src/main/generated-sources</outputDirectory> <clearOutputDir>false</clearOutputDir> 
-				<arguments>-Xvalue-constructor</arguments> <locale>en</locale> <encoding>${file.encoding}</encoding> 
-				</configuration> <goals> <goal>xjc</goal> </goals> </execution> </executions> 
-				<dependencies> <dependency> <groupId>org.jvnet.jaxb2_commons</groupId> <artifactId>jaxb2-value-constructor</artifactId> 
-				<version>3.0</version> </dependency> </dependencies> </plugin> -->
+			<plugin>
+				<groupId>org.apache.jena</groupId>
+				<artifactId>jena-maven-tools</artifactId>
+				<version>0.8</version>
+				<configuration>
+					<commandlineArgs>
+						--inference \
+						--rdfs
+					</commandlineArgs>
+					<includes>
+						<include>src/main/resources/usdl/*.rdf</include>
+					</includes>
+					<fileOptions>
+						<source>
+							<input>default</input>
+							<package-name>it.smartcommunitylab.openservices.usdl</package-name>
+						</source>
+
+					</fileOptions>
+				</configuration>
+				<executions>
+					<execution>
+						<id>schemagen</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>translate</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 
 		</plugins>
 		<finalName>openservice</finalName>

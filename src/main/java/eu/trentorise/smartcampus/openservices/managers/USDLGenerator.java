@@ -1,0 +1,125 @@
+package eu.trentorise.smartcampus.openservices.managers;
+
+import it.smartcommunitylab.openservice.usdl.ExtWeliveCore;
+import it.smartcommunitylab.openservices.usdl.Foaf;
+import it.smartcommunitylab.openservices.usdl.WeliveCore;
+import it.smartcommunitylab.openservices.usdl.WeliveSecurity;
+
+import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.PostConstruct;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
+
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.vocabulary.DCTerms;
+
+import eu.trentorise.smartcampus.openservices.entities.Service;
+import eu.trentorise.smartcampus.openservices.entities.Tag;
+
+@Component
+public class USDLGenerator {
+	private static final Logger logger = LoggerFactory
+			.getLogger(WADLGenerator.class);
+	@Autowired
+	private ServiceManager serviceManager;
+
+	@Autowired
+	Environment env;
+
+	private static final String OS_NS = "http://platform.smartcommunitylab.it/openservice/services#";
+	private static final Map<String, String> welivePrefixes = new HashMap<String, String>();
+
+	@PostConstruct
+	@SuppressWarnings("unused")
+	private void init() {
+		welivePrefixes.put("welive-core", WeliveCore.NS);
+		welivePrefixes.put("dc", DCTerms.NS);
+		welivePrefixes.put("foaf", Foaf.NS);
+		welivePrefixes.put("welive-sec", WeliveSecurity.NS);
+	}
+
+	public String generate(int serviceId) {
+		// create missing resources (described in rdf schema as Description tag)
+		Service s = serviceManager.getServiceById(serviceId);
+		Model m = ModelFactory.createDefaultModel();
+		m.setNsPrefixes(welivePrefixes);
+		Resource buildingBlock = m.createResource(OS_NS
+				+ s.getName().replaceAll(" ", "-"), WeliveCore.BuildingBlock);
+		buildingBlock.addProperty(DCTerms.title, s.getName());
+		buildingBlock.addProperty(DCTerms.description, s.getDescription());
+		buildingBlock.addProperty(DCTerms.abstract_, s.getDescription());
+
+		// res.addProperty(DCTerms.created)
+		buildingBlock.addProperty(Foaf.page, env.getProperty("application.url")
+				+ "service/" + s.getId());
+
+		// tags
+		for (Tag t : s.getTags()) {
+			buildingBlock.addProperty(WeliveCore.tag, t.getName());
+		}
+
+		// owner
+		String[] owners = s.getOwner().split(",");
+		for (String o : owners) {
+			if (!StringUtils.isBlank(o)) {
+				Resource r = m.createResource(
+						buildingBlock.getURI() + o.trim().replaceAll(" ", "-"),
+						WeliveCore.Entity).addProperty(DCTerms.title, o.trim());
+				r.addProperty(WeliveCore.businessRole, ExtWeliveCore.Owner);
+				buildingBlock.addProperty(WeliveCore.hasBusinessRole, r);
+			}
+		}
+
+		// license
+		if (!StringUtils.isBlank(s.getLicense())) {
+			Resource r = m.createResource(buildingBlock.getURI() + "license",
+					WeliveCore.StandardLicense).addProperty(DCTerms.title,
+					s.getLicense());
+			buildingBlock.addProperty(WeliveCore.hasLegalCondition, r);
+		}
+
+		// endpoint
+		if (s.getAccessInformation() != null) {
+			if (s.getAccessInformation().getProtocols() != null) {
+				boolean isRest = s.getAccessInformation().supportRESTProtocol();
+
+				Resource protocol = isRest ? WeliveCore.RESTWebServiceIP
+						: WeliveCore.SOAPWebServiceIP;
+				Resource r = m.createResource(
+						buildingBlock.getURI() + "endpoint", protocol)
+						.addProperty(WeliveCore.url,
+								s.getAccessInformation().getEndpoint());
+				if (isRest) {
+					r.addProperty(WeliveCore.wadl,
+							env.getProperty("application.url")
+									+ "service/public/" + s.getId()
+									+ "/spec/xwadl");
+				}
+				buildingBlock.addProperty(WeliveCore.hasLegalCondition, r);
+			}
+			if (s.getAccessInformation().getAuthentication() != null
+					&& !s.getAccessInformation().getAuthentication()
+							.getAccessProtocol().equalsIgnoreCase("Public")) {
+				Resource r = m.createResource(buildingBlock.getURI()
+						+ "Communication", WeliveSecurity.CommunicationMeasure);
+				r.addProperty(WeliveSecurity.protocol, s.getAccessInformation()
+						.getAuthentication().getAccessProtocol());
+				buildingBlock.addProperty(WeliveSecurity.hasSecurityMeasure, r);
+			}
+		}
+
+		StringWriter sw = new StringWriter();
+		m.write(sw);
+		return sw.toString();
+	}
+}

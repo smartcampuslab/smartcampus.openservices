@@ -103,6 +103,9 @@ public class ServiceManager {
 	@Autowired
 	private WADLGenerator wadlGenerator;
 
+	@Autowired
+	private USDLGenerator usdlGen;
+
 	/**
 	 * Add a new service in database.
 	 * 
@@ -662,5 +665,9 @@ public class ServiceManager {
 
 	public String getWADL(int serviceId) {
 		return wadlGenerator.generateAsString(serviceId);
+	}
+
+	public String getUSDL(int serviceId) {
+		return usdlGen.generate(serviceId);
 	}
 }

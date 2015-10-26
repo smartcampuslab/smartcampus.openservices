@@ -15,6 +15,7 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservice.test.manager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.After;
@@ -31,11 +32,13 @@ import eu.trentorise.smartcampus.openservices.Constants;
 import eu.trentorise.smartcampus.openservices.Constants.ORDER;
 import eu.trentorise.smartcampus.openservices.dao.ServiceDao;
 import eu.trentorise.smartcampus.openservices.entities.AccessInformation;
+import eu.trentorise.smartcampus.openservices.entities.Authentication;
 import eu.trentorise.smartcampus.openservices.entities.Category;
 import eu.trentorise.smartcampus.openservices.entities.ExecutionProperties;
 import eu.trentorise.smartcampus.openservices.entities.Method;
 import eu.trentorise.smartcampus.openservices.entities.Organization;
 import eu.trentorise.smartcampus.openservices.entities.Service;
+import eu.trentorise.smartcampus.openservices.entities.Tag;
 import eu.trentorise.smartcampus.openservices.entities.User;
 import eu.trentorise.smartcampus.openservices.managers.CategoryManager;
 import eu.trentorise.smartcampus.openservices.managers.OrganizationManager;
@@ -240,20 +243,33 @@ public class ServiceManagerTest {
 	}
 
 	@Test
-	public void testWADL() {
+	public void testExportation() {
 		service = new Service();
 		service.setName("@TestService");
 		service.setDescription("@Test Manager");
 		service.setCategory(catId);
 		service.setVersion("0.1");
 		service.setCreatorId(user.getId());
+		service.setOwner("Smartcommunity, comune di trento, rovereto");
+		service.setOwnerUrl("http://smartnation.it");
+		service.setLicense("MIT");
 		service.setOrganizationId(organization.getId());
+		List<Tag> tags = new ArrayList<Tag>();
+		Tag t = new Tag();
+		t.setName("dev");
+		tags.add(t);
+		t = new Tag();
+		t.setName("test");
+		tags.add(t);
+		service.setTags(tags);
 		AccessInformation accessInfo = new AccessInformation();
 		accessInfo
 				.setEndpoint("https://os.smartcommunitylab.it/core.mobility/");
 		accessInfo.setFormats("JSON,XML");
 		accessInfo.setProtocols("REST,SOAP");
-
+		Authentication auth = new Authentication();
+		auth.setAccessProtocol("Oauth");
+		accessInfo.setAuthentication(auth);
 		service.setAccessInformation(accessInfo);
 
 		serviceManager.createService(USERNAME, service);
@@ -293,6 +309,7 @@ public class ServiceManagerTest {
 		serviceManager.addMethod(USERNAME, method);
 
 		System.out.println(serviceManager.getWADL(service.getId()));
+		System.out.println(serviceManager.getUSDL(service.getId()));
 	}
 
 	@Test

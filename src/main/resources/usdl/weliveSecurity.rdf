@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xmlns:dc="http://purl.org/dc/terms/"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:ns0="http://purl.org/vocab/vann/"
+         xmlns:foaf="http://xmlns.com/foaf/0.1/"
+         xmlns:ns1="http://www.welive.eu/ns/welive-security#"
+         xmlns:ns2="http://www.welive.eu/ns/welive-core#">
+
+  <owl:Ontology rdf:about="http://www.welive.eu/ns/welive-security">
+    <dc:created rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2015-10-01</dc:created>
+    <dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2015-10-01</dc:issued>
+    <rdfs:label xml:lang="en">WeLive BB Security</rdfs:label>
+    <dc:title xml:lang="en">WeLive BB Security</dc:title>
+    <dc:description xml:lang="en">This specification provides the Security module of WeLive Building Block metamodel. </dc:description>
+    <ns0:preferredNamespaceUri>http://www.welive.eu/ns/welive-security#</ns0:preferredNamespaceUri>
+    <ns0:preferredNamespacePrefix>welive-sec</ns0:preferredNamespacePrefix>
+    <foaf:page rdf:resource="http://www.welive.eu/ns/welive-security.html"/>
+    <owl:versionInfo>1.1</owl:versionInfo>
+  </owl:Ontology>
+
+  <rdf:Property rdf:about="http://www.welive.eu/ns/welive-security#hasSecurityMeasure">
+    <rdfs:subPropertyOf rdf:resource="http://purl.org/dc/terms/subject"/>
+    <rdfs:isDefinedBy rdf:resource="http://www.welive.eu/ns/welive-security"/>
+    <rdfs:label xml:lang="en">has security measure</rdfs:label>
+    <rdfs:comment xml:lang="en">Indicates relations between artifacts and security measures applied to it.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.welive.eu/ns/welive-core#Artifact"/>
+    <rdfs:range>
+      <rdfs:Class rdf:about="http://www.welive.eu/ns/welive-security#SecurityMeasure">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+        <rdfs:isDefinedBy rdf:resource="http://www.welive.eu/ns/welive-security"/>
+        <rdfs:label xml:lang="en">SecurityMeasure</rdfs:label>
+        <rdfs:comment xml:lang="en">The SecurityMeasure class is an abstraction of various security constraints applicable to the building blocks and their properties.</rdfs:comment>
+      </rdfs:Class>
+    </rdfs:range>
+
+  </rdf:Property>
+
+  <rdfs:Class rdf:about="http://www.welive.eu/ns/welive-security#CommunicationMeasure">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:isDefinedBy rdf:resource="http://www.welive.eu/ns/welive-security"/>
+    <rdfs:label xml:lang="en">CommunicationMeasure</rdfs:label>
+    <rdfs:comment xml:lang="en">The class is a representation of communication channel security constraints (call origin restrictions, protocols, etc).</rdfs:comment>
+  </rdfs:Class>
+
+  <rdf:Description rdf:about="http://www.w3.org/2000/01/rdf-schema#subClassOf">
+    <ns1:SecurityMeasure rdf:datatype="http://www.w3.org/2001/XMLSchema#integer"></ns1:SecurityMeasure>
+    <ns2:TechnicalConstraint rdf:datatype="http://www.w3.org/2001/XMLSchema#integer"></ns2:TechnicalConstraint>
+    <ns1:AuthorizationMeasure rdf:datatype="http://www.w3.org/2001/XMLSchema#integer"></ns1:AuthorizationMeasure>
+  </rdf:Description>
+
+  <rdf:Property rdf:about="http://www.welive.eu/ns/welive-security#withOrigin">
+    <rdfs:subPropertyOf rdf:resource="http://purl.org/dc/terms/subject"/>
+    <rdfs:isDefinedBy rdf:resource="http://www.welive.eu/ns/welive-security"/>
+    <rdfs:label xml:lang="en">with origin</rdfs:label>
+    <rdfs:comment xml:lang="en">Defines the references to the origin constraint for the communication measure.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.welive.eu/ns/welive-core#CommunicationMeasure"/>
+    <rdfs:range>
+      <rdfs:Class rdf:about="http://www.welive.eu/ns/welive-security#OriginConstraint">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+        <rdfs:isDefinedBy rdf:resource="http://www.welive.eu/ns/welive-security"/>
+        <rdfs:label xml:lang="en">OriginConstraint</rdfs:label>
+        <rdfs:comment xml:lang="en">Representation of the caller entity origin constraints (domain, signature, IP white list, etc).</rdfs:comment>
+      </rdfs:Class>
+    </rdfs:range>
+
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://www.welive.eu/ns/welive-security#withProtocol">
+    <rdfs:subPropertyOf rdf:resource="http://purl.org/dc/terms/subject"/>
+    <rdfs:isDefinedBy rdf:resource="http://www.welive.eu/ns/welive-security"/>
+    <rdfs:label xml:lang="en">with protocol</rdfs:label>
+    <rdfs:comment xml:lang="en">Defines the references to the protocol constraint for the communication measure.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.welive.eu/ns/welive-core#CommunicationMeasure"/>
+    <rdfs:range>
+      <rdfs:Class rdf:about="http://www.welive.eu/ns/welive-security#ProtocolConstraint">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+        <rdfs:isDefinedBy rdf:resource="http://www.welive.eu/ns/welive-security"/>
+        <rdfs:label xml:lang="en">ProtocolConstraint</rdfs:label>
+        <rdfs:comment xml:lang="en">Representation of the communication protocol constraints (e.g., use HTTPS only).</rdfs:comment>
+      </rdfs:Class>
+    </rdfs:range>
+
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://www.welive.eu/ns/welive-security#origin">
+    <rdfs:isDefinedBy rdf:resource="http://www.welive.eu/ns/welive-security"/>
+    <rdfs:label xml:lang="en">origin</rdfs:label>
+    <rdfs:comment xml:lang="en">Defines origin restriction.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Literal"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://www.welive.eu/ns/welive-security#protocol">
+    <rdfs:isDefinedBy rdf:resource="http://www.welive.eu/ns/welive-security"/>
+    <rdfs:label xml:lang="en">protocol</rdfs:label>
+    <rdfs:comment xml:lang="en">Defines security channel protocol.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Literal"/>
+  </rdf:Property>
+
+  <rdfs:Class rdf:about="http://www.welive.eu/ns/welive-security#AuthorizationMeasure">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:isDefinedBy rdf:resource="http://www.welive.eu/ns/welive-security"/>
+    <rdfs:label xml:lang="en">AuthorizationMeasure</rdfs:label>
+    <rdfs:comment xml:lang="en">The class is a representation of authorization security constraints.</rdfs:comment>
+  </rdfs:Class>
+
+  <rdfs:Class rdf:about="http://www.welive.eu/ns/welive-security#PermissionAuthorization">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:isDefinedBy rdf:resource="http://www.welive.eu/ns/welive-security"/>
+    <rdfs:label xml:lang="en">AuthorizationMeasure</rdfs:label>
+    <rdfs:comment xml:lang="en">The class is a representation of permission-based authorization constraints.</rdfs:comment>
+  </rdfs:Class>
+
+  <rdf:Property rdf:about="http://www.welive.eu/ns/welive-security#requires">
+    <rdfs:subPropertyOf rdf:resource="http://purl.org/dc/terms/subject"/>
+    <rdfs:isDefinedBy rdf:resource="http://www.welive.eu/ns/welive-security"/>
+    <rdfs:label xml:lang="en">requires</rdfs:label>
+    <rdfs:comment xml:lang="en">Defines the references to the permissions.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.welive.eu/ns/welive-core#PermissionAuthorization"/>
+    <rdfs:range>
+      <rdfs:Class rdf:about="http://www.welive.eu/ns/welive-security#Permission">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+        <rdfs:isDefinedBy rdf:resource="http://www.welive.eu/ns/welive-security"/>
+        <rdfs:label xml:lang="en">Permission</rdfs:label>
+        <rdfs:comment xml:lang="en">Representation of the access permission definition.</rdfs:comment>
+      </rdfs:Class>
+    </rdfs:range>
+
+  </rdf:Property>
+
+  <rdfs:Class rdf:about="http://www.welive.eu/ns/welive-security#AuthenticationMeasure">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:isDefinedBy rdf:resource="http://www.welive.eu/ns/welive-security"/>
+    <rdfs:label xml:lang="en">AuthenticationMeasure</rdfs:label>
+    <rdfs:comment xml:lang="en">The class is a representation of authentication security constraints.</rdfs:comment>
+  </rdfs:Class>
+
+  <rdf:Property rdf:about="http://www.welive.eu/ns/welive-security#protocolType">
+    <rdfs:subPropertyOf rdf:resource="http://purl.org/dc/terms/subject"/>
+    <rdfs:isDefinedBy rdf:resource="http://www.welive.eu/ns/welive-security"/>
+    <rdfs:label xml:lang="en">protocol type</rdfs:label>
+    <rdfs:comment xml:lang="en">Defines the references to the authentication protocol.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.welive.eu/ns/welive-core#AuthenticationMeasure"/>
+    <rdfs:range rdf:resource="http://www.welive.eu/ns/welive-security#ProtocolType"/>
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://www.welive.eu/ns/welive-security#withIdentityProvider">
+    <rdfs:subPropertyOf rdf:resource="http://purl.org/dc/terms/subject"/>
+    <rdfs:isDefinedBy rdf:resource="http://www.welive.eu/ns/welive-security"/>
+    <rdfs:label xml:lang="en">with identity provider</rdfs:label>
+    <rdfs:comment xml:lang="en">Defines the references to the identity providers.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.welive.eu/ns/welive-core#AuthenticationMeasure"/>
+    <rdfs:range>
+      <rdfs:Class rdf:about="http://www.welive.eu/ns/welive-security#IdentityProvider">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+        <rdfs:isDefinedBy rdf:resource="http://www.welive.eu/ns/welive-security"/>
+        <rdfs:label xml:lang="en">Identity provider</rdfs:label>
+        <rdfs:comment xml:lang="en">Representation of the authentication identity provider. Each provider should have a unique identifier for non-ambigous resolution. </rdfs:comment>
+      </rdfs:Class>
+    </rdfs:range>
+
+  </rdf:Property>
+
+  <rdf:Property rdf:about="http://www.welive.eu/ns/welive-security#accessType">
+    <rdfs:subPropertyOf rdf:resource="http://purl.org/dc/terms/subject"/>
+    <rdfs:isDefinedBy rdf:resource="http://www.welive.eu/ns/welive-security"/>
+    <rdfs:label xml:lang="en">access type</rdfs:label>
+    <rdfs:comment xml:lang="en">Defines the access type for this authentication measure (client, user, or both).</rdfs:comment>
+    <rdfs:domain rdf:resource="http://www.welive.eu/ns/welive-core#AuthenticationMeasure"/>
+    <rdfs:range rdf:resource="http://www.welive.eu/ns/welive-security#AccessType"/>
+  </rdf:Property>
+
+  <rdf:Description rdf:about="http://www.welive.eu/ns/welive-security#AccessType">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <rdfs:isDefinedBy rdf:resource="http://www.welive.eu/ns/welive-security"/>
+    <rdfs:label xml:lang="en">Access type.</rdfs:label>
+    <rdfs:comment xml:lang="en">Authentication access type: User, Client.</rdfs:comment>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.welive.eu/ns/welive-security#UserAccess">
+    <rdfs:subClassOf rdf:resource="http://www.welive.eu/ns/welive-security#AccessType"/>
+    <rdfs:isDefinedBy rdf:resource="http://www.welive.eu/ns/welive-security"/>
+    <rdfs:label xml:lang="en">User access</rdfs:label>
+    <rdfs:comment xml:lang="en">User access authentication.</rdfs:comment>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.welive.eu/ns/welive-security#ClientAccess">
+    <rdfs:subClassOf rdf:resource="http://www.welive.eu/ns/welive-security#AccessType"/>
+    <rdfs:isDefinedBy rdf:resource="http://www.welive.eu/ns/welive-security"/>
+    <rdfs:label xml:lang="en">Client access</rdfs:label>
+    <rdfs:comment xml:lang="en">Client access authentication.</rdfs:comment>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.welive.eu/ns/welive-security#ProtocolType">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <rdfs:isDefinedBy rdf:resource="http://www.welive.eu/ns/welive-security"/>
+    <rdfs:label xml:lang="en">Protocol type.</rdfs:label>
+    <rdfs:comment xml:lang="en">Authentication protocol type (OAuth2, CAS, OpenID, etc).</rdfs:comment>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.welive.eu/ns/welive-security#OAuth2">
+    <rdfs:subClassOf rdf:resource="http://www.welive.eu/ns/welive-security#ProtocolType"/>
+    <rdfs:isDefinedBy rdf:resource="http://www.welive.eu/ns/welive-security"/>
+    <rdfs:label xml:lang="en">OAuth2 protocol</rdfs:label>
+    <rdfs:comment xml:lang="en">OAuth2.0 authentication protocol.</rdfs:comment>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.welive.eu/ns/welive-security#OpenID">
+    <rdfs:subClassOf rdf:resource="http://www.welive.eu/ns/welive-security#ProtocolType"/>
+    <rdfs:isDefinedBy rdf:resource="http://www.welive.eu/ns/welive-security"/>
+    <rdfs:label xml:lang="en">OpenID protocol</rdfs:label>
+    <rdfs:comment xml:lang="en">OpenID authentication protocol.</rdfs:comment>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.welive.eu/ns/welive-security#CAS">
+    <rdfs:subClassOf rdf:resource="http://www.welive.eu/ns/welive-security#ProtocolType"/>
+    <rdfs:isDefinedBy rdf:resource="http://www.welive.eu/ns/welive-security"/>
+    <rdfs:label xml:lang="en">CAS protocol</rdfs:label>
+    <rdfs:comment xml:lang="en">CAS authentication protocol.</rdfs:comment>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.welive.eu/ns/welive-security#Shibboleth">
+    <rdfs:subClassOf rdf:resource="http://www.welive.eu/ns/welive-security#ProtocolType"/>
+    <rdfs:isDefinedBy rdf:resource="http://www.welive.eu/ns/welive-security"/>
+    <rdfs:label xml:lang="en">Shibboleth protocol</rdfs:label>
+    <rdfs:comment xml:lang="en">Shibboleth authentication protocol.</rdfs:comment>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://www.welive.eu/ns/welive-security#BasicAuth">
+    <rdfs:subClassOf rdf:resource="http://www.welive.eu/ns/welive-security#ProtocolType"/>
+    <rdfs:isDefinedBy rdf:resource="http://www.welive.eu/ns/welive-security"/>
+    <rdfs:label xml:lang="en">BasicAuth protocol</rdfs:label>
+    <rdfs:comment xml:lang="en">BasicAuth authentication protocol.</rdfs:comment>
+  </rdf:Description>
+
+</rdf:RDF>

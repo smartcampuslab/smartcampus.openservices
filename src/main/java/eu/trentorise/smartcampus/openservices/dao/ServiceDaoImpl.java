@@ -117,14 +117,14 @@ public class ServiceDaoImpl implements ServiceDao {
 			throws DataAccessException {
 		Query q = getEntityManager().createQuery(
 				"FROM Service S " + "WHERE S.creatorId = ("
-						+ "SELECT U.id FROM User U WHERE U.username=:username "
+						+ "SELECT USDLTest.id FROM User USDLTest WHERE USDLTest.username=:username "
 						+ ")").setParameter("username", username);
 
 		/*
 		 * Query q = getEntityManager().createQuery("SELECT S FROM Service S " +
 		 * "WHERE S.organization_id IN " +
 		 * "(SELECT Ur.id_org FROM UserRole UR WHERE UR.role=:role AND UR.id_user = "
-		 * + "(SELECT U.id FROM User U WHERE U.username=:username ) " + ")")
+		 * + "(SELECT USDLTest.id FROM User USDLTest WHERE USDLTest.username=:username ) " + ")")
 		 * .setParameter("username",username) .setParameter("role",
 		 * ROLES.ROLE_ORGOWNER.toString());
 		 */
