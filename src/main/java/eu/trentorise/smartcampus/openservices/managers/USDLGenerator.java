@@ -107,6 +107,8 @@ public class USDLGenerator {
 				}
 				buildingBlock.addProperty(WeliveCore.hasLegalCondition, r);
 			}
+
+			// authentication protocol
 			if (s.getAccessInformation().getAuthentication() != null
 					&& !s.getAccessInformation().getAuthentication()
 							.getAccessProtocol().equalsIgnoreCase("Public")) {
