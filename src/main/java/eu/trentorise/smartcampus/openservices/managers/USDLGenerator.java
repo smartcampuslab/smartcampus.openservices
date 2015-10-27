@@ -69,7 +69,8 @@ public class USDLGenerator {
 		}
 
 		// owner
-		String[] owners = s.getOwner().split(",");
+		String[] owners = s.getOwner() != null ? s.getOwner().split(",")
+				: new String[0];
 		for (String o : owners) {
 			if (!StringUtils.isBlank(o)) {
 				Resource r = m.createResource(

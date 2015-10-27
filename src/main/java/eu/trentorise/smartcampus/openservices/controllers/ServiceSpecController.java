@@ -2,7 +2,7 @@ package eu.trentorise.smartcampus.openservices.controllers;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -29,24 +29,46 @@ public class ServiceSpecController {
 	@Autowired
 	private ServiceManager serviceManager;
 
+	private static final List<String> specs = Arrays.asList("xwadl", "usdl");
+
 	@RequestMapping(value = "/{id}/spec/list", method = RequestMethod.GET)
 	@ResponseBody
 	public List<String> getSpecList(@PathVariable int id,
 			HttpServletResponse response) {
 
-		List<String> spec = new ArrayList<String>();
-		spec.add("xwadl");
-		spec.add("udsl");
-
-		return spec;
+		return specs;
 	}
 
-	@RequestMapping(value = "/{id}/spec/xwadl", method = RequestMethod.GET)
+	@RequestMapping(value = "/{id}/spec/{spec}", method = RequestMethod.GET)
 	@ResponseBody
-	public void getXWADL(@PathVariable int id, HttpServletResponse response) {
+	public void getXWADL(@PathVariable int id, @PathVariable String spec,
+			HttpServletResponse response) {
 
+		// check if spec is supported
+
+		boolean isSpecValid = spec != null && specs.contains(spec);
+
+		if (!isSpecValid) {
+			try {
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+						"Service specification requested is not supported: "
+								+ spec);
+				return;
+			} catch (IOException e) {
+				logger.error("Error sending http error response");
+			}
+		}
 		// check if service is published
 		Service s = serviceManager.getServiceById(id);
+		if (s == null) {
+			try {
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+						"Service not exist");
+				return;
+			} catch (IOException e) {
+				logger.error("Error sending http error response");
+			}
+		}
 		if (!s.getState().equals(Constants.SERVICE_STATE.PUBLISH.toString())) {
 			try {
 				response.sendError(HttpServletResponse.SC_FORBIDDEN);
@@ -56,28 +78,27 @@ public class ServiceSpecController {
 			}
 		}
 
+		String contentType = null;
+		String doc = null;
+
+		if (spec.equals("xwadl")) {
+			doc = serviceManager.getWADL(id);
+			contentType = "application/xml";
+		} else if (spec.equals("usdl")) {
+			doc = serviceManager.getUSDL(id);
+			contentType = "application/rdf+xml";
+		}
+
 		try {
-
-			String wadl = serviceManager.getWADL(id);
-
+			response.setContentType(contentType);
+			Writer w = response.getWriter();
+			w.write(doc);
+			w.flush();
+		} catch (IOException e) {
 			try {
-				response.setContentType("application/xml");
-				Writer w = response.getWriter();
-				w.write(wadl);
-				w.flush();
-			} catch (IOException e) {
-				try {
-					response.sendError(
-							HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-							"Something has gone bad");
-				} catch (IOException e1) {
-					logger.error("Error sending http error response");
-				}
-			}
-		} catch (NullPointerException e) {
-			try {
-				response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-						"Service not exist");
+				response.sendError(
+						HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+						"Something has gone bad");
 			} catch (IOException e1) {
 				logger.error("Error sending http error response");
 			}
