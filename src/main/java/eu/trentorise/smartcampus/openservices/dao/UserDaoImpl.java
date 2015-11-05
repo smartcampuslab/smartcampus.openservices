@@ -26,21 +26,20 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import eu.trentorise.smartcampus.openservices.entities.*;
+import eu.trentorise.smartcampus.openservices.entities.User;
 
 /**
- * User Dao Implementation
- * Retrieve, add, modify and delete User data
+ * User Dao Implementation Retrieve, add, modify and delete User data
  * 
  * @author Giulia Canobbio
- *
+ * 
  */
 @Repository
-public class UserDaoImpl implements UserDao{
+public class UserDaoImpl implements UserDao {
 	/**
 	 * Instance of {@link EntityManager}
 	 */
-	@PersistenceContext(unitName="JpaPersistenceUnit")
+	@PersistenceContext(unitName = "JpaPersistenceUnit")
 	protected EntityManager entityManager;
 
 	/**
@@ -56,13 +55,13 @@ public class UserDaoImpl implements UserDao{
 	 */
 	@Transactional
 	@Override
-	public List<User> getUsers() throws DataAccessException{
+	public List<User> getUsers() throws DataAccessException {
 		Query q = getEntityManager().createQuery("FROM User");
 		List<User> users = q.getResultList();
-		if(users.size()==0){
+		if (users.size() == 0) {
 			return null;
-		}
-		else return users;
+		} else
+			return users;
 	}
 
 	/**
@@ -70,7 +69,7 @@ public class UserDaoImpl implements UserDao{
 	 */
 	@Transactional
 	@Override
-	public User getUserById(int id) throws DataAccessException{
+	public User getUserById(int id) throws DataAccessException {
 		return getEntityManager().find(User.class, id);
 	}
 
@@ -79,14 +78,15 @@ public class UserDaoImpl implements UserDao{
 	 */
 	@Transactional
 	@Override
-	public User getUserByUsername(String username) throws DataAccessException{
-		Query q = getEntityManager().createQuery("FROM User WHERE username=:username")
-				.setParameter("username", username);
+	public User getUserByUsername(String username) throws DataAccessException {
+		Query q = getEntityManager().createQuery(
+				"FROM User WHERE username=:username").setParameter("username",
+				username);
 		List<User> users = q.getResultList();
-		if(users.size()==0){
+		if (users.size() == 0) {
 			return null;
-		}
-		else return users.get(0);
+		} else
+			return users.get(0);
 	}
 
 	/**
@@ -94,8 +94,8 @@ public class UserDaoImpl implements UserDao{
 	 */
 	@Transactional
 	@Override
-	public void modifyUser(int user_id, User user) throws DataAccessException{
-		User oldUser = getUserById(user_id);
+	public void modifyUser(int userId, User user) throws DataAccessException {
+		User oldUser = getUserById(userId);
 		oldUser.setProfile(user.getProfile());
 		oldUser.setEmail(user.getEmail());
 		getEntityManager().merge(oldUser);
@@ -106,11 +106,12 @@ public class UserDaoImpl implements UserDao{
 	 */
 	@Transactional
 	@Override
-	public void addUser(User user) throws DataAccessException{
+	public void addUser(User user) throws DataAccessException {
 		String passw = user.getPassword();
-		if(passw!=null){
-			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); 
-			String encodedPassword = ((BCryptPasswordEncoder) passwordEncoder).encode(passw);
+		if (passw != null) {
+			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+			String encodedPassword = ((BCryptPasswordEncoder) passwordEncoder)
+					.encode(passw);
 			user.setPassword(encodedPassword);
 		}
 		getEntityManager().persist(user);
@@ -121,20 +122,20 @@ public class UserDaoImpl implements UserDao{
 	 */
 	@Transactional
 	@Override
-	public void disableUser(int user_id) throws DataAccessException{
-		User oldUser = getUserById(user_id);
+	public void disableUser(int userId) throws DataAccessException {
+		User oldUser = getUserById(userId);
 		oldUser.setEnabled(0);
 		getEntityManager().merge(oldUser);
-		
+
 	}
-	
+
 	/**
 	 * This method changes user's status to enabled (one value).
 	 */
 	@Transactional
 	@Override
-	public void enableUser(int user_id) throws DataAccessException{
-		User oldUser = getUserById(user_id);
+	public void enableUser(int userId) throws DataAccessException {
+		User oldUser = getUserById(userId);
 		oldUser.setEnabled(1);
 		getEntityManager().merge(oldUser);
 	}
@@ -145,9 +146,11 @@ public class UserDaoImpl implements UserDao{
 	@Transactional
 	@Override
 	public boolean isEmailAlreadyUse(String email) throws DataAccessException {
-		Query q = getEntityManager().createQuery("FROM User WHERE email=:email")
-				.setParameter("email", email);
-		if(q.getResultList().size()>0 && (User)q.getResultList().get(0) != null){
+		Query q = getEntityManager()
+				.createQuery("FROM User WHERE email=:email").setParameter(
+						"email", email);
+		if (q.getResultList().size() > 0
+				&& (User) q.getResultList().get(0) != null) {
 			return true;
 		}
 		return false;
@@ -159,13 +162,14 @@ public class UserDaoImpl implements UserDao{
 	@Transactional
 	@Override
 	public User getUserByEmail(String email) throws DataAccessException {
-		Query q = getEntityManager().createQuery("FROM User WHERE email=:email")
-				.setParameter("email", email);
+		Query q = getEntityManager()
+				.createQuery("FROM User WHERE email=:email").setParameter(
+						"email", email);
 		List<User> users = q.getResultList();
-		if(users.size()==0){
+		if (users.size() == 0) {
 			return null;
-		}
-		else return users.get(0);
+		} else
+			return users.get(0);
 	}
 
 	/**
@@ -173,13 +177,14 @@ public class UserDaoImpl implements UserDao{
 	 */
 	@Transactional
 	@Override
-	public boolean modifyPassword(String username, String newPassw) throws DataAccessException {
+	public boolean modifyPassword(String username, String newPassw)
+			throws DataAccessException {
 		User user = getUserByUsername(username);
-		//new password
-		if(newPassw!=null && !newPassw.equalsIgnoreCase("")){
+		// new password
+		if (newPassw != null && !newPassw.equalsIgnoreCase("")) {
 			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 			String encodedPassword = ((BCryptPasswordEncoder) passwordEncoder)
-							.encode(newPassw);
+					.encode(newPassw);
 			user.setPassword(encodedPassword);
 			getEntityManager().merge(user);
 			return true;
