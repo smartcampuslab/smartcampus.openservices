@@ -25,14 +25,15 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.web.SignInAdapter;
 import org.springframework.web.context.request.NativeWebRequest;
+
 /**
- * Sign in class
- * This class search user data in database.
- * If user is found, then he/she is logged in.
+ * Sign in class This class search user data in database. If user is found, then
+ * he/she is logged in.
+ * 
  * @author Giulia Canobbio
- *
+ * 
  */
-public class SocialSignInAdapter implements SignInAdapter{
+public class SocialSignInAdapter implements SignInAdapter {
 
 	/**
 	 * Instance of {@link UserDetailsService}
@@ -41,28 +42,29 @@ public class SocialSignInAdapter implements SignInAdapter{
 	private UserDetailsService manager;
 
 	/**
-	 * Signin function that authenticates user in spring security,
-	 * after find him/her in db.
+	 * Signin function that authenticates user in spring security, after find
+	 * him/her in db.
 	 */
 	@Override
 	public String signIn(String arg0, Connection<?> arg1, NativeWebRequest arg2) {
-		System.out.println("Sign in Adapter......");
-		System.out.println("String arg0: "+arg0);
-		
+
 		String username;
-		if(arg0.contains("@facebook")){
+		if (arg0.contains("@facebook")) {
 			username = arg0;
-		}else{
-			username = arg0+"@facebook";
+		} else {
+			username = arg0 + "@facebook";
 		}
-		
+
 		UserDetails userDetails = manager.loadUserByUsername(username);
-		
-		Authentication auth = new UsernamePasswordAuthenticationToken(userDetails,userDetails.getPassword(), userDetails.getAuthorities());
+
+		Authentication auth = new UsernamePasswordAuthenticationToken(
+				userDetails, userDetails.getPassword(),
+				userDetails.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(auth);
-		arg2.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext(),0);
-		
-		System.out.println("Sign in Adapter ending......");
+		arg2.setAttribute(
+				HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+				SecurityContextHolder.getContext(), 0);
+
 		return null;
 	}
 

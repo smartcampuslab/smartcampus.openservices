@@ -125,7 +125,6 @@ public class OrganizationController {
 	@RequestMapping(value = "/my", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public ResponseObject orgUser(HttpServletResponse response) {
-		logger.info("-- View my organization --");
 		String username = SecurityContextHolder.getContext()
 				.getAuthentication().getName();
 		List<Organization> orgs = organizationManager
@@ -159,7 +158,6 @@ public class OrganizationController {
 	@ResponseBody
 	public ResponseObject getOrgActivityHistory(@PathVariable int org_id,
 			HttpServletResponse response) {
-		logger.info("-- View organization activity history --");
 		List<ServiceHistory> history = organizationManager.getHistory(org_id);
 		ResponseObject responseObject = new ResponseObject();
 		if (history == null || history.size() == 0) {
@@ -206,8 +204,6 @@ public class OrganizationController {
 					.setError("This organization name is already in use, change it");
 			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			// response.setHeader("Error",
-			// "Wrong fields value or duplicate entries");
 		}
 		return responseObject;
 	}
@@ -232,7 +228,6 @@ public class OrganizationController {
 	@ResponseBody
 	public ResponseObject deleteOrganization(@PathVariable int id,
 			HttpServletResponse response) {
-		logger.info("-- Delete organization --");
 		// get user data
 		String username = SecurityContextHolder.getContext()
 				.getAuthentication().getName();
@@ -330,10 +325,8 @@ public class OrganizationController {
 	@ResponseBody
 	public ResponseObject orgManageOwnerData(@RequestBody UserInvitation data,
 			HttpServletRequest req, HttpServletResponse response) {
-		logger.info("-- Manage Organization Owner --");
 		String email = data.getEmail();
 		int org_id = data.getOrg_id();
-		logger.info("Data: " + email + ", " + org_id);
 
 		ResponseObject responseObject = new ResponseObject();
 
@@ -411,7 +404,6 @@ public class OrganizationController {
 	@ResponseBody
 	public ResponseObject orgManageAddOwnerData(@PathVariable String key,
 			HttpServletResponse response) {
-		logger.info("-- Add organization members by key --");
 		String username = SecurityContextHolder.getContext()
 				.getAuthentication().getName();
 		ResponseObject responseObject = new ResponseObject();
@@ -454,7 +446,6 @@ public class OrganizationController {
 	@ResponseBody
 	public ResponseObject orgManageDeleteOwnerData(
 			@RequestBody UserInvitation data, HttpServletResponse response) {
-		logger.info("-- Delete organization members --");
 		int org_id = data.getOrg_id();
 		int user_id = data.getUser_id();
 
@@ -511,7 +502,6 @@ public class OrganizationController {
 	@ResponseBody
 	public ResponseObject orgMembers(@PathVariable int organization_id,
 			HttpServletResponse response) {
-		logger.info("-- Retrieve organization members --");
 		ResponseObject responseObject = new ResponseObject();
 		List<Members> members = organizationManager
 				.organizationMembers(organization_id);

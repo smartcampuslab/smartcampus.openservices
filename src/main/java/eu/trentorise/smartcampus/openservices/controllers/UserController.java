@@ -91,7 +91,6 @@ public class UserController {
 	@ResponseBody
 	public ResponseObject getUserById(@PathVariable int id,
 			HttpServletResponse response) {
-		logger.info("-- User Data by Id --");
 		User user = User.fromUserEntity(userManager.getUserById(id));
 		ResponseObject responseObject = new ResponseObject();
 		if (user == null) {
@@ -119,7 +118,6 @@ public class UserController {
 	@RequestMapping(value = "/my", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public ResponseObject getUserByUsername(HttpServletResponse response) {
-		logger.info("-- My User Data--");
 		String username = SecurityContextHolder.getContext()
 				.getAuthentication().getName();
 		User user = User
@@ -161,7 +159,6 @@ public class UserController {
 		logger.debug("Create user");
 		boolean isRegEnabled = env.getProperty("registration.enable",
 				Boolean.class, true);
-		logger.info("User Registration settings: {}", isRegEnabled);
 		ResponseObject responseObject = new ResponseObject();
 		if (isRegEnabled) {
 			// Check username
@@ -245,7 +242,6 @@ public class UserController {
 	@ResponseBody
 	public ResponseObject verifyEmail(@RequestBody User user,
 			HttpServletRequest req, HttpServletResponse response) {
-		logger.info("-- User verify email --");
 		ResponseObject responseObject = new ResponseObject();
 		try {
 			String s = userManager.addKeyVerifyEmail(user.getUsername());
@@ -296,7 +292,6 @@ public class UserController {
 	@ResponseBody
 	public ResponseObject enableUser(@PathVariable String key,
 			HttpServletResponse response) {
-		logger.info("-- User enable --");
 		ResponseObject responseObject = new ResponseObject();
 		try {
 			User enabledUser = User.fromUserEntity(userManager
@@ -338,7 +333,6 @@ public class UserController {
 	public ResponseObject modifyUserData(
 			@RequestBody eu.trentorise.smartcampus.openservices.entities.User user,
 			HttpServletResponse response) {
-		logger.info("-- User modify --");
 		String username = SecurityContextHolder.getContext()
 				.getAuthentication().getName();
 		User modifiedUser = User.fromUserEntity(userManager.modifyUserData(
@@ -374,7 +368,6 @@ public class UserController {
 	@ResponseBody
 	public ResponseObject disabledUser(@PathVariable String username,
 			HttpServletResponse response) {
-		logger.info("-- User disable --");
 		User user = User.fromUserEntity(userManager.disabledUser(username));
 		ResponseObject responseObject = new ResponseObject();
 		if (user != null) {
@@ -405,9 +398,6 @@ public class UserController {
 	@ResponseBody
 	public ResponseObject modifyUserPassword(@RequestBody Password passw,
 			HttpServletResponse response) {
-		logger.info("-- Modify User password --");
-		logger.info("-- OldP-- " + passw.getOldP());
-		logger.info("-- NewP-- " + passw.getNewP());
 		String username = SecurityContextHolder.getContext()
 				.getAuthentication().getName();
 		ResponseObject responseObject = new ResponseObject();
@@ -448,7 +438,6 @@ public class UserController {
 	@ResponseBody
 	public ResponseObject resetUserPassword(@RequestBody String email,
 			HttpServletResponse response) {
-		logger.info("-- Reset User password --");
 		ResponseObject responseObject = new ResponseObject();
 		// Check email
 		EmailValidator ev = new EmailValidator();

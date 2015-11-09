@@ -76,7 +76,6 @@ public class ServiceController {
 	@RequestMapping(value = "/my", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public ResponseObject myServices(HttpServletResponse response) {
-		logger.info("-- User: Access my data service --");
 		String username = SecurityContextHolder.getContext()
 				.getAuthentication().getName();
 		List<Service> services = Service.fromServiceEntities(serviceManager
@@ -142,7 +141,6 @@ public class ServiceController {
 	@ResponseBody
 	public ResponseObject viewServiceMethod(@PathVariable int service_id,
 			HttpServletResponse response) {
-		logger.info("-- View service method --");
 		List<Method> m = serviceManager
 				.getServiceMethodsByServiceId(service_id);
 		ResponseObject responseObject = new ResponseObject();
@@ -300,7 +298,6 @@ public class ServiceController {
 	@ResponseBody
 	public ResponseObject publishService(@PathVariable int id,
 			HttpServletResponse response) {
-		logger.info("-- Publish service --");
 		String username = SecurityContextHolder.getContext()
 				.getAuthentication().getName();
 		ResponseObject responseObject = new ResponseObject();
@@ -344,7 +341,6 @@ public class ServiceController {
 	@ResponseBody
 	public ResponseObject unpublishService(@PathVariable int id,
 			HttpServletResponse response) {
-		logger.info("-- Unpublish service --");
 		String username = SecurityContextHolder.getContext()
 				.getAuthentication().getName();
 		ResponseObject responseObject = new ResponseObject();
@@ -388,7 +384,6 @@ public class ServiceController {
 	@ResponseBody
 	public ResponseObject deprecateService(@PathVariable int id,
 			HttpServletResponse response) {
-		logger.info("-- Deprecate service --");
 		String username = SecurityContextHolder.getContext()
 				.getAuthentication().getName();
 		ResponseObject responseObject = new ResponseObject();
@@ -432,7 +427,6 @@ public class ServiceController {
 	@ResponseBody
 	public ResponseObject deleteService(@PathVariable int id,
 			HttpServletResponse response) {
-		logger.info("-- Delete service --");
 		String username = SecurityContextHolder.getContext()
 				.getAuthentication().getName();
 		ResponseObject responseObject = new ResponseObject();
@@ -475,7 +469,6 @@ public class ServiceController {
 	@ResponseBody
 	public ResponseObject createMethod(@RequestBody Method method,
 			HttpServletResponse response) {
-		logger.info("-- Create new service method --");
 		String username = SecurityContextHolder.getContext()
 				.getAuthentication().getName();
 		ResponseObject responseObject = new ResponseObject();
@@ -524,7 +517,6 @@ public class ServiceController {
 	@ResponseBody
 	public ResponseObject modifyMethod(@RequestBody Method method,
 			HttpServletResponse response) {
-		logger.info("-- Modify a service method --");
 		String username = SecurityContextHolder.getContext()
 				.getAuthentication().getName();
 		ResponseObject responseObject = new ResponseObject();
@@ -601,7 +593,6 @@ public class ServiceController {
 	@ResponseBody
 	public ResponseObject deleteMethod(@PathVariable int id,
 			HttpServletResponse response) {
-		logger.info("-- Delete a service method --");
 		String username = SecurityContextHolder.getContext()
 				.getAuthentication().getName();
 		ResponseObject responseObject = new ResponseObject();
@@ -644,7 +635,6 @@ public class ServiceController {
 	@ResponseBody
 	public ResponseObject createTest(@RequestBody TestInfo testinfo,
 			@PathVariable int id, HttpServletResponse response) {
-		logger.info("-- Create new method test --");
 		String username = SecurityContextHolder.getContext()
 				.getAuthentication().getName();
 		ResponseObject responseObject = new ResponseObject();
@@ -695,7 +685,6 @@ public class ServiceController {
 	public ResponseObject updateTest(@RequestBody TestInfo testinfo,
 			@PathVariable int id, @PathVariable int pos,
 			HttpServletResponse response) {
-		logger.info("-- Update method test --");
 		String username = SecurityContextHolder.getContext()
 				.getAuthentication().getName();
 		ResponseObject responseObject = new ResponseObject();
@@ -744,7 +733,6 @@ public class ServiceController {
 	@ResponseBody
 	public ResponseObject deleteTest(@PathVariable int id,
 			@PathVariable int pos, HttpServletResponse response) {
-		logger.info("-- Delete method test --");
 		String username = SecurityContextHolder.getContext()
 				.getAuthentication().getName();
 		ResponseObject responseObject = new ResponseObject();

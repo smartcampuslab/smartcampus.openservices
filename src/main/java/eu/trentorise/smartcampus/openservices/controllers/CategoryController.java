@@ -46,7 +46,8 @@ import eu.trentorise.smartcampus.openservices.managers.CategoryManager;
 @RequestMapping(value = "/api/category")
 public class CategoryController {
 
-	private static final Logger logger = LoggerFactory.getLogger(CategoryController.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(CategoryController.class);
 
 	/**
 	 * Instance of {@link CategoryManager} to retrieve data using Dao classes.
@@ -61,14 +62,14 @@ public class CategoryController {
 	 *            : int, category id
 	 * @param response
 	 *            : {@link HttpServletResponse} which returns status of response
-	 *               OK or NOT FOUND
+	 *            OK or NOT FOUND
 	 * @return {@link ResponseObject} with category data, status (OK or NOT
 	 *         FOUND) and error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/{category}", method = RequestMethod.GET)
 	public @ResponseBody
-	ResponseObject getCategoryById(@PathVariable int category, HttpServletResponse response) {
-		logger.info("-- Cateogry by id --");
+	ResponseObject getCategoryById(@PathVariable int category,
+			HttpServletResponse response) {
 		ResponseObject responseObject = new ResponseObject();
 		Category cat = categoryManager.getCategoryById(category);
 		if (cat != null) {
@@ -86,7 +87,7 @@ public class CategoryController {
 	 * Retrieve all categories data.
 	 * 
 	 * @param response
-	 *          : {@link HttpServletResponse} which returns status of response
+	 *            : {@link HttpServletResponse} which returns status of response
 	 *            OK or NOT FOUND
 	 * @return {@link ResponseObject} with category data, status (OK or NOT
 	 *         FOUND) and error message (if status is NOT FOUND).
@@ -94,7 +95,6 @@ public class CategoryController {
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody
 	ResponseObject getCategories(HttpServletResponse response) {
-		logger.info("-- Cateogry List --");
 		ResponseObject responseObject = new ResponseObject();
 		List<Category> cat = categoryManager.getCategories();
 		if (cat != null) {
@@ -112,17 +112,17 @@ public class CategoryController {
 	 * Add a new category to database.
 	 * 
 	 * @param category
-	 *          : {@link Category} object
+	 *            : {@link Category} object
 	 * @param response
-	 *          : {@link HttpServletResponse} which returns status of response
+	 *            : {@link HttpServletResponse} which returns status of response
 	 *            OK or NOT FOUND
 	 * @return {@link ResponseObject} with new added category data, status (OK
 	 *         or NOT FOUND) and error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody
-	ResponseObject createCategory(@RequestBody Category category, HttpServletResponse response) {
-		logger.info("-- New Cateogry --");
+	ResponseObject createCategory(@RequestBody Category category,
+			HttpServletResponse response) {
 		ResponseObject responseObject = new ResponseObject();
 		try {
 			Category cat = categoryManager.addCategory(category);
@@ -146,17 +146,17 @@ public class CategoryController {
 	 * Modify a category.
 	 * 
 	 * @param category
-	 *          : {@link Category} object
+	 *            : {@link Category} object
 	 * @param response
-	 *          : {@link HttpServletResponse} which returns status of response
+	 *            : {@link HttpServletResponse} which returns status of response
 	 *            OK or NOT FOUND
 	 * @return {@link ResponseObject} with modified category data, status (OK or
 	 *         NOT FOUND) and error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/modify", method = RequestMethod.PUT, consumes = "application/json")
 	public @ResponseBody
-	ResponseObject modifyCategory(@RequestBody Category category, HttpServletResponse response) {
-		logger.info("-- Modify Category --");
+	ResponseObject modifyCategory(@RequestBody Category category,
+			HttpServletResponse response) {
 		ResponseObject responseObject = new ResponseObject();
 		try {
 			Category cat = categoryManager.modifyCategory(category);
@@ -180,9 +180,9 @@ public class CategoryController {
 	 * Delete a category by its id.
 	 * 
 	 * @param id
-	 *          : int category id
+	 *            : int category id
 	 * @param response
-	 *          : {@link HttpServletResponse} which returns status of response
+	 *            : {@link HttpServletResponse} which returns status of response
 	 *            OK or NOT FOUND
 	 * @return {@link ResponseObject} with true/false value result of delete
 	 *         operation, status (OK or NOT FOUND) and error message (if status
@@ -190,8 +190,8 @@ public class CategoryController {
 	 */
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
 	public @ResponseBody
-	ResponseObject deleteCategory(@PathVariable int id, HttpServletResponse response) {
-		logger.info("-- Delete Cateogry by id --");
+	ResponseObject deleteCategory(@PathVariable int id,
+			HttpServletResponse response) {
 		ResponseObject responseObject = new ResponseObject();
 		try {
 			boolean cat = categoryManager.deleteCategory(id);
@@ -204,7 +204,8 @@ public class CategoryController {
 				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			}
 		} catch (EntityExistsException e) {
-			responseObject.setError("You cannot delete a category used in service and/or organization");
+			responseObject
+					.setError("You cannot delete a category used in service and/or organization");
 			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}

@@ -1,5 +1,6 @@
 package eu.trentorise.smartcampus.openservices.controllers;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
@@ -34,6 +35,9 @@ public class OauthController {
 	@Autowired
 	private Environment env;
 
+	private static final Logger logger = org.slf4j.LoggerFactory
+			.getLogger(OauthController.class);
+
 	@RequestMapping(method = RequestMethod.GET, value = "/oauthcheck")
 	public ModelAndView oauthChecker(@RequestParam String code) {
 
@@ -52,9 +56,11 @@ public class OauthController {
 			u.setEmail(profile.getUserId());
 			userManager.createOauthUser(u);
 		} catch (SecurityException e) {
+			logger.error("Error in oauth controller", e);
 		} catch (AACException e) {
+			logger.error("Error in oauth controller", e);
 		} catch (ProfileServiceException e) {
-			e.printStackTrace();
+			logger.error("Error in oauth controller", e);
 		}
 
 		return new ModelAndView("redirect: /");

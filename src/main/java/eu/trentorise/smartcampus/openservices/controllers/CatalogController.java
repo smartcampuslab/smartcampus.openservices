@@ -81,10 +81,8 @@ public class CatalogController {
 	@RequestMapping(value = "/servicecount", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public ResponseObject catalogServicesCount(HttpServletResponse response) {
-		logger.info("-- Service Catalog Services counter --");
 		ResponseObject responseObject = new ResponseObject();
 		try {
-			logger.info("-- Services count --");
 			Long count = catalogManager.countService();
 			if (count == null) {
 				responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -132,12 +130,10 @@ public class CatalogController {
 			@RequestParam(value = "order", required = false, defaultValue = "name") String param_order,
 			@RequestParam(required = false) String tag,
 			HttpServletResponse response) {
-		logger.info("-- Service Catalog --");
 		ResponseObject responseObject = new ResponseObject();
 		List<Service> services = new ArrayList<Service>();
 		try {
 			if (token == null && tag == null) {
-				logger.info("-- List of service --");
 				services = Service.fromServiceEntities(catalogManager
 						.catalogServices(firstResult, maxResult, param_order));
 				if (services == null || services.size() == 0) {
@@ -151,7 +147,6 @@ public class CatalogController {
 							.setTotalNumber(catalogManager.countService());
 				}
 			} else if (token != null && tag == null) {
-				logger.info("-- Simple Search --");
 				services = Service.fromServiceEntities(catalogManager
 						.catalogServiceSimpleSearch(token, firstResult,
 								maxResult, param_order));
@@ -167,7 +162,6 @@ public class CatalogController {
 							.countServiceSimpleSearch(token, null));
 				}
 			} else if (token == null && tag != null) {
-				logger.info("-- Simple Search by tags: {} --", tag);
 				List<Service> s = Service.fromServiceEntities(catalogManager
 						.catalogServiceBrowseByTags(tag, firstResult,
 								maxResult, param_order));
@@ -208,7 +202,6 @@ public class CatalogController {
 	@ResponseBody
 	public ResponseObject catalogServiceById(@PathVariable int serviceId,
 			HttpServletResponse response) {
-		logger.info("-- Service Catalog Service By Id--");
 		Service service = Service.fromServiceEntity(catalogManager
 				.catalogServiceById(serviceId));
 		ResponseObject responseObject = new ResponseObject();
@@ -239,7 +232,6 @@ public class CatalogController {
 	@ResponseBody
 	public ResponseObject catalogServiceMethods(@PathVariable int serviceId,
 			HttpServletResponse response) {
-		logger.info("-- Service Catalog Show Methods --");
 		List<Method> methods = catalogManager.catalogServiceMethods(serviceId);
 		ResponseObject responseObject = new ResponseObject();
 		if (methods == null || methods.size() == 0) {
@@ -268,7 +260,6 @@ public class CatalogController {
 	@ResponseBody
 	public ResponseObject catalogServiceHistory(@PathVariable int serviceId,
 			HttpServletResponse response) {
-		logger.info("-- Service Catalog Show Methods --");
 		List<ServiceHistory> history = catalogManager
 				.catalogServiceHistory(serviceId);
 		ResponseObject responseObject = new ResponseObject();
@@ -310,7 +301,6 @@ public class CatalogController {
 			@RequestParam(value = "last", required = false, defaultValue = "0") Integer maxResult,
 			@RequestParam(value = "order", required = false, defaultValue = "name") String param_order,
 			HttpServletResponse response) {
-		logger.info("-- Service Catalog browse (category) --");
 		List<Service> services = Service.fromServiceEntities(catalogManager
 				.catalogServiceBrowseByCategory(categoryId, firstResult,
 						maxResult, param_order));
@@ -540,7 +530,6 @@ public class CatalogController {
 			@RequestParam(value = "last", required = false, defaultValue = "0") Integer maxResult,
 			@RequestParam(value = "order", required = false, defaultValue = "name") String param_order,
 			HttpServletResponse response) {
-		logger.info("-- Organization Catalog browse --");
 
 		ResponseObject responseObject = new ResponseObject();
 		try {
@@ -646,7 +635,6 @@ public class CatalogController {
 	@RequestMapping(value = "/category/services", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
 	public ResponseObject catalogCategoryServices(HttpServletResponse response) {
-		logger.info("-- Category Catalog browse --");
 		CategoryServices cat = catalogManager.getCategoryServices();
 		ResponseObject responseObject = new ResponseObject();
 		if (cat == null) {
@@ -676,7 +664,6 @@ public class CatalogController {
 	@ResponseBody
 	public ResponseObject catalogNews(@RequestParam int n,
 			HttpServletResponse response) {
-		logger.info("-- Category Catalog browse --");
 		List<News> news = catalogManager.getNews(n);
 		ResponseObject responseObject = new ResponseObject();
 		if (news == null || news.size() == 0) {
@@ -712,8 +699,6 @@ public class CatalogController {
 			@RequestParam(value = "group", required = false, defaultValue = "tag") String group,
 			@RequestParam(value = "order", required = false, defaultValue = "ASC") String order,
 			HttpServletResponse response) {
-		logger.info("-- Tag counter -- Param group: {} -- Param order: {}",
-				group, order);
 		ResponseObject responseObject = new ResponseObject();
 		if ((group.equalsIgnoreCase(OrderBy.tag.toString()) || group
 				.equalsIgnoreCase(OrderBy.counter.toString()))

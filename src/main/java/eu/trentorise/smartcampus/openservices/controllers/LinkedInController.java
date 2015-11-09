@@ -167,8 +167,7 @@ public class LinkedInController {
 	@RequestMapping(value = "/callback", method = RequestMethod.GET, produces = "application/json")
 	public String callbackTwitter(HttpServletRequest request,
 			HttpServletResponse response) {
-		logger.info("LinkedIn Callback.. Starting ..");
-		// ResponseObject responseObj = new ResponseObject();
+		logger.debug("LinkedIn Callback.. Starting ..");
 
 		// request token
 		OAuthService service = linServiceProvider.getService();
@@ -179,7 +178,6 @@ public class LinkedInController {
 		logger.info("String access token from request as parameter {}",
 				oauthVerifier);
 		Verifier verifier = new Verifier(oauthVerifier);
-		logger.info("Verifier: {}", verifier);
 		Token accessToken = service.getAccessToken(requestToken, verifier);
 		// store access token in session
 		request.getSession().setAttribute(OAUTH_ACCESS_TOKEN, accessToken);
@@ -191,7 +189,7 @@ public class LinkedInController {
 		service.signRequest(accessToken, oauthRequest);
 		Response oauthResponse = oauthRequest.send();
 		String responseData = oauthResponse.getBody();
-		logger.info("Response .. {}", responseData);
+		logger.debug("Response .. {}", responseData);
 
 		// Unmarshalling data
 		XStream xstream = new XStream();
@@ -201,17 +199,16 @@ public class LinkedInController {
 		xstream.aliasField("email-address", LinkedInUser.class, "email_address");
 		LinkedInUser lInUser = (LinkedInUser) xstream.fromXML(responseData);
 
-		logger.info("- User -");
-		logger.info(" id:  {},", lInUser.getId());
-		logger.info(" name {}, ", lInUser.getFirst_name());
-		logger.info(" surname {}", lInUser.getLast_name());
+		logger.debug("- User -");
+		logger.debug(" id:  {},", lInUser.getId());
+		logger.debug(" name {}, ", lInUser.getFirst_name());
+		logger.debug(" surname {}", lInUser.getLast_name());
 
 		String username = lInUser.getId() + "@linkedIn";
 
 		// save user data in db
 		User userDb = userManager.getUserByUsername(username);
 		if (userDb == null) {
-			logger.info("Save user data");
 			// add to db
 			User user = new User();
 			user.setEmail(lInUser.getEmail_address());
@@ -226,17 +223,13 @@ public class LinkedInController {
 			try {
 				userManager.createSocialUser(user);
 			} catch (SecurityException s) {
-				logger.info("Error: Already exists a register user with this email address. Please try to login with correct provider.");
-				// different email, same username
-				// responseObj.setError("Already exists a register user with this email address. Please try to login with correct provider.");
-				// responseObj.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				logger.error("Error: Already exists a register user with this email address. Please try to login with correct provider.");
 				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 				return "redirect:/";
 			}
 		}
 
 		// authenticate in spring security
-		logger.info("Set authentication security context holder");
 		UserDetails userDetails = manager.loadUserByUsername(username);
 		Authentication auth = new UsernamePasswordAuthenticationToken(
 				userDetails, userDetails.getPassword(),

@@ -128,7 +128,6 @@ public class ServiceHistoryDaoImpl implements ServiceHistoryDao {
 		Query q = getEntityManager().createQuery(
 				"FROM ServiceHistory S Order BY S.id DESC");
 		List<ServiceHistory> news = q.setMaxResults(n).getResultList();
-		System.out.println("News size: " + news.size());
 		return news;
 	}
 

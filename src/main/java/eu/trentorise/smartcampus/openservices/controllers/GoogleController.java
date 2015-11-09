@@ -126,9 +126,7 @@ public class GoogleController {
 	@RequestMapping(value = "/callback", method = RequestMethod.GET, produces = "application/json")
 	public String confirmStateToken(HttpServletRequest request,
 			HttpServletResponse response) {
-		// ResponseObject responseObj = new ResponseObject();
 
-		logger.info("****** Google callback ******");
 		String code = request.getParameter("code");
 		String token = request.getParameter("state");
 		String session_token = "";
@@ -137,31 +135,22 @@ public class GoogleController {
 					.toString();
 		}
 
-		logger.info("request code: " + code);
-		logger.info("request token: " + token);
-		logger.info("request session token: " + session_token);
-
 		// compare state token in session and state token in response of google
 		// if equals return to home
 		// if not error page
 		if ((code == null || token == null) && (!token.equals(session_token))) {
-			logger.info("Error: You have to sign in!");
-			// responseObj.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			// responseObj.setError("You have to sign in!");
+			logger.error("Error: You have to sign in!");
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		} else {
 			try {
 				GoogleUser userInfo = auth.getUserInfoJson(code);
-				logger.info("User Info: " + userInfo);
-				// responseObj.setData(userInfo);
-				// responseObj.setStatus(HttpServletResponse.SC_OK);
+				logger.debug("User Info: " + userInfo);
 				response.setStatus(HttpServletResponse.SC_OK);
-				logger.info("Check user data");
+				logger.debug("Check user data");
 
 				// check if user is already in
 				User userDb = userManager.getUserByUsername(userInfo.getId());
 				if (userDb == null) {
-					logger.info("Save user data");
 					// add to db
 					User user = new User();
 					user.setEmail(userInfo.getEmail());
@@ -176,15 +165,13 @@ public class GoogleController {
 					try {
 						userManager.createSocialUser(user);
 					} catch (SecurityException s) {
-						logger.info("Error: Already exists a register user with this email address. Please try to login with correct provider.");
-						// responseObj.setError("Already exists a register user with this email address. Please try to login with correct provider.");
-						// responseObj.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+						logger.error("Error: Already exists a register user with this email address. Please try to login with correct provider.");
 						response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 						return "redirect:/";
 					}
 				}
 				// authenticate in spring security
-				logger.info("Set authentication security context holder");
+				logger.debug("Set authentication security context holder");
 				UserDetails userDetails = manager.loadUserByUsername(userInfo
 						.getId());
 				Authentication auth = new UsernamePasswordAuthenticationToken(
@@ -220,10 +207,7 @@ public class GoogleController {
 				response.addCookie(userCookie);
 
 			} catch (IOException e) {
-				logger.info("IOException .. Problem in reading user data.");
-				e.printStackTrace();
-				// responseObj.setError("Problem in reading user data");
-				// responseObj.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				logger.error("IOException .. Problem in reading user data.", e);
 				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			}
 		}

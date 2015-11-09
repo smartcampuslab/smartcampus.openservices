@@ -23,39 +23,40 @@ import org.springframework.social.connect.UserProfile;
 import eu.trentorise.smartcampus.openservices.dao.UserDao;
 import eu.trentorise.smartcampus.openservices.entities.Profile;
 import eu.trentorise.smartcampus.openservices.entities.User;
+
 /**
- * Sign up
- * If user does not exist in UserConnection table, then this class is called.
- * First user data is saved in UserConnection then it is saved in User table.
+ * Sign up If user does not exist in UserConnection table, then this class is
+ * called. First user data is saved in UserConnection then it is saved in User
+ * table.
+ * 
  * @author Giulia Canobbio
- *
+ * 
  */
-public class AccountConnectionSignUp implements ConnectionSignUp{
+public class AccountConnectionSignUp implements ConnectionSignUp {
 	/**
 	 * Instance of {@link UserDao}
 	 */
 	@Autowired
 	private UserDao userDao;
-	
+
 	/**
-	 * Retrieve user data and save it in db.
-	 * This method returns username string.
+	 * Retrieve user data and save it in db. This method returns username
+	 * string.
 	 */
 	@Override
 	public String execute(Connection<?> arg0) {
-		System.out.println("Connection Sign Up......");
 		UserProfile profile = arg0.fetchUserProfile();
 
 		User user = new User();
-		
+
 		String username;
 
 		if (profile.getUsername() == null) {
-			username = profile.getName()+"@facebook";
-			//user.setUsername(profile.getName());
+			username = profile.getName() + "@facebook";
+			// user.setUsername(profile.getName());
 		} else {
-			username = profile.getUsername()+"@facebook";
-			//user.setUsername(profile.getUsername());
+			username = profile.getUsername() + "@facebook";
+			// user.setUsername(profile.getUsername());
 		}
 		user.setUsername(username);
 		user.setEmail(profile.getEmail());
@@ -66,9 +67,7 @@ public class AccountConnectionSignUp implements ConnectionSignUp{
 		p.setSurname(profile.getLastName());
 		user.setProfile(p);
 		userDao.addUser(user);
-		
-		System.out.println("Connection Sign Up ending...");
-		
+
 		return username;
 	}
 

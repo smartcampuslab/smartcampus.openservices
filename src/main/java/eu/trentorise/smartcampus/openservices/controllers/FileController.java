@@ -18,7 +18,6 @@ package eu.trentorise.smartcampus.openservices.controllers;
 import java.io.File;
 import java.io.IOException;
 
-import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -36,7 +35,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
-import eu.trentorise.smartcampus.openservices.managers.OrganizationManager;
 
 /**
  * Retrieve a Multipart file from a form and then save it in an organization
@@ -49,12 +47,8 @@ import eu.trentorise.smartcampus.openservices.managers.OrganizationManager;
 @PropertySource("classpath:openservice.properties")
 public class FileController {
 
-	private static final Logger logger = LoggerFactory.getLogger(FileController.class);
-	/**
-	 * Instance of {@link OrganizationManager}
-	 */
-	@Autowired
-	private OrganizationManager orgManager;
+	private static final Logger logger = LoggerFactory
+			.getLogger(FileController.class);
 
 	/**
 	 * Instance of {@link Environment} to get all variables in properties file
@@ -79,52 +73,47 @@ public class FileController {
 	 */
 	@RequestMapping(value = "upload/{organizationId}", method = RequestMethod.POST)
 	public @ResponseBody
-	ResponseObject uploadFile(@PathVariable int organizationId, @RequestParam("file") MultipartFile file,
+	ResponseObject uploadFile(@PathVariable int organizationId,
+			@RequestParam("file") MultipartFile file,
 			HttpServletRequest request, HttpServletResponse response) {
-		logger.info("-- FILE -- Uploading file ...");
 
 		String dirFile = env.getProperty("filedir");
 
-		logger.info("Multipart file content type: " + file.getContentType());
-
 		ResponseObject responseObject = new ResponseObject();
-		String realPath = request.getSession().getServletContext().getRealPath("/images");
-		logger.info("Request Real Path: " + realPath);
+		String realPath = request.getSession().getServletContext()
+				.getRealPath("/images");
+		logger.debug("Request Real Path: " + realPath);
 		if (!file.isEmpty() && file != null) {
 			try {
-				File f = new File(dirFile + "/" + organizationId + "/" + file.getOriginalFilename());
-				logger.info("Absolute path: " + f.getAbsolutePath());
+				File f = new File(dirFile + "/" + organizationId + "/"
+						+ file.getOriginalFilename());
+				logger.debug("Absolute path: " + f.getAbsolutePath());
 				// check if this exists
 				if (!f.exists()) {
-					logger.info("Directory does not exist, then creating...");
+					logger.debug("Directory does not exist, then creating...");
 					if (f.mkdirs()) {
-						logger.info("Directory created successfully");
+						logger.debug("Directory created successfully");
 					}
 				}
 				file.transferTo(f);
 				responseObject.setData(file.getOriginalFilename());
 				responseObject.setStatus(HttpServletResponse.SC_OK);
-				logger.info("-- File uploaded correctly --");
-
-				String format = new MimetypesFileTypeMap().getContentType(f);
-				logger.info(".. Checking image format... " + format);
+				logger.debug("File uploaded correctly");
 
 			} catch (IllegalStateException e) {
-				logger.info("-- Error in uploading file, server error --");
-				e.printStackTrace();
+				logger.error("Error in uploading file, server error", e);
 				responseObject.setError("Problem in uploading the file.");
 				responseObject.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
 				response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
 
 			} catch (IOException e) {
-				logger.info("-- Error in uploading file, problem in reading --");
-				e.printStackTrace();
+				logger.error("Error in uploading file, problem in reading", e);
 				responseObject.setError("Error: Cannot read file.");
 				responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			}
 		} else {
-			logger.info("-- Error in uploading file, file not found --");
+			logger.info("Error in uploading file, file not found");
 			responseObject.setError("File not found");
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
