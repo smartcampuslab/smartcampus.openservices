@@ -28,7 +28,7 @@ app
 									'responseError' : function(response) {
 										if (response.status === 401) {
 											console.log("Error 401 found");
-											$location.path('signin');
+											$location.path('/');
 											return $q.reject(response);
 										} else {
 											console.log("HTTP Error: " + response.status);
@@ -263,19 +263,7 @@ app
 
 						} ])
 		.run(function($rootScope, $location, Auth, $route, $routeParams, $cookieStore) {
-			var original = $location.path;
-			/*
-		    $location.path = function (path, reload) {
-		        if (reload === false) {
-		            var lastRoute = $route.current;
-		            var un = $rootScope.$on('$locationChangeSuccess', function () {
-		                $route.current = lastRoute;
-		                un();
-		            });
-		        }
-		        return original.apply($location, [path]);
-		    };
-		    */
+			
 			var history = [];
 			var value = $cookieStore.get('value');
 			if (value === false) {
@@ -289,7 +277,7 @@ app
 				$rootScope.loc.splice(0, 1);
 				if (!Auth.authorize(next.access)) {
 					if (!Auth.isLoggedIn() || value === false) {
-						$location.path('/signin');
+						$location.path('/');
 					}
 				}
 
