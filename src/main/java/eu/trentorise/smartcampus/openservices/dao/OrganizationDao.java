@@ -19,7 +19,7 @@ import java.util.List;
 
 import org.springframework.dao.DataAccessException;
 
-import eu.trentorise.smartcampus.openservices.Constants.ORDER;
+import eu.trentorise.smartcampus.openservices.OrderBy;
 import eu.trentorise.smartcampus.openservices.entities.Organization;
 
 /**
@@ -38,7 +38,7 @@ public interface OrganizationDao {
 	 */
 	public List<Organization> showOrganizations(String token,
 			List<Integer> categoryIds, int firstResult, int maxResult,
-			ORDER param_order) throws DataAccessException;
+			OrderBy param_order) throws DataAccessException;
 
 	/**
 	 * Show my organizations. Using user id
@@ -149,8 +149,8 @@ public interface OrganizationDao {
 	 * @throws DataAccessException
 	 */
 	public List<Organization> browseOrganization(Integer category,
-			String geography, int firstResult, int maxResult, ORDER param_order)
-			throws DataAccessException;
+			String geography, int firstResult, int maxResult,
+			OrderBy param_order) throws DataAccessException;
 
 	/**
 	 * Browse Organization using filters: category (LIKE), geography - for now I
@@ -170,8 +170,8 @@ public interface OrganizationDao {
 	 * @throws DataAccessException
 	 */
 	public List<Organization> browseOrganization(int[] category,
-			String geography, int firstResult, int maxResult, ORDER param_order)
-			throws DataAccessException;
+			String geography, int firstResult, int maxResult,
+			OrderBy param_order) throws DataAccessException;
 
 	/**
 	 * Get list of Organization by category id.

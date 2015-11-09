@@ -38,7 +38,7 @@ import org.springframework.web.client.RestTemplate;
 import com.google.gson.Gson;
 
 import eu.trentorise.smartcampus.aac.AACService;
-import eu.trentorise.smartcampus.openservices.Constants;
+import eu.trentorise.smartcampus.openservices.UserRoles;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.entities.User;
 import eu.trentorise.smartcampus.openservices.managers.UserManager;
@@ -152,7 +152,7 @@ public class HomeController {
 			if (!fUser) {
 				CookieUser cu = new CookieUser();
 				cu.setUsername(username);
-				cu.setRole(Constants.ROLES.ROLE_NORMAL.toString());
+				cu.setRole(UserRoles.ROLE_NORMAL.toString());
 
 				Gson gson = new Gson();
 				String obj = gson.toJson(cu);
@@ -384,7 +384,7 @@ public class HomeController {
 		// set cookie user
 		CookieUser cu = new CookieUser();
 		cu.setUsername(username);
-		cu.setRole(Constants.ROLES.ROLE_NORMAL.toString());
+		cu.setRole(UserRoles.ROLE_NORMAL.toString());
 
 		Gson gson = new Gson();
 		String obj = gson.toJson(cu);

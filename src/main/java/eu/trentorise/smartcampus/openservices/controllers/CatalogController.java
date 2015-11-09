@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import eu.trentorise.smartcampus.openservices.Constants;
+import eu.trentorise.smartcampus.openservices.OrderBy;
 import eu.trentorise.smartcampus.openservices.entities.Method;
 import eu.trentorise.smartcampus.openservices.entities.Organization;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
@@ -63,6 +63,10 @@ public class CatalogController {
 	 */
 	@Autowired
 	private CatalogManager catalogManager;
+
+	private static enum ORDER {
+		ASC, DESC
+	};
 
 	/**
 	 * Retrieve services count
@@ -711,10 +715,10 @@ public class CatalogController {
 		logger.info("-- Tag counter -- Param group: {} -- Param order: {}",
 				group, order);
 		ResponseObject responseObject = new ResponseObject();
-		if ((group.equalsIgnoreCase(Constants.ORDER.tag.toString()) || group
-				.equalsIgnoreCase(Constants.ORDER.counter.toString()))
-				&& (order.equalsIgnoreCase(Constants.ASCDESC.ASC.toString()) || order
-						.equalsIgnoreCase(Constants.ASCDESC.DESC.toString()))) {
+		if ((group.equalsIgnoreCase(OrderBy.tag.toString()) || group
+				.equalsIgnoreCase(OrderBy.counter.toString()))
+				&& (order.equalsIgnoreCase(ORDER.ASC.toString()) || order
+						.equalsIgnoreCase(ORDER.DESC.toString()))) {
 			try {
 				List<TagCounter> tglist = catalogManager
 						.getTagsServicesCounter(group, order);

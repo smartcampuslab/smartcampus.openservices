@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 
-import eu.trentorise.smartcampus.openservices.Constants;
+import eu.trentorise.smartcampus.openservices.UserRoles;
 import eu.trentorise.smartcampus.openservices.entities.Profile;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.entities.User;
@@ -50,13 +50,14 @@ import eu.trentorise.smartcampus.openservices.support.CookieUser;
  * Google controller connects to google and retrieve user data.
  * 
  * @author Giulia Canobbio
- *
+ * 
  */
 @Controller
 @RequestMapping(value = "/api/oauth/google")
 public class GoogleController {
-	
-	private static final Logger logger = LoggerFactory.getLogger(GoogleController.class);
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(GoogleController.class);
 	/**
 	 * Instance of {@link GoogleAuthHelper} for oauth google
 	 */
@@ -68,93 +69,100 @@ public class GoogleController {
 	@Autowired
 	private UserManager userManager;
 	/**
-	 * Instance of {@link UserDetailsService} to authenticate user in spring security
+	 * Instance of {@link UserDetailsService} to authenticate user in spring
+	 * security
 	 */
 	@Autowired
 	private UserDetailsService manager;
-	
+
 	/**
-	 * This rest web services sends an authentication request to Google.
-	 * First it creates state token and then it builds login url for Google.
-	 * After that state token is saved in current session.
+	 * This rest web services sends an authentication request to Google. First
+	 * it creates state token and then it builds login url for Google. After
+	 * that state token is saved in current session.
 	 * 
-	 * @param response 
-	 * 			: instance of {@link HttpServletResponse}
+	 * @param response
+	 *            : instance of {@link HttpServletResponse}
 	 * @param request
-	 * 			: instance of {@link HttpServletRequest}
-	 * @return {@link ResponseObject} with redirect google login url, status (OK)
+	 *            : instance of {@link HttpServletRequest}
+	 * @return {@link ResponseObject} with redirect google login url, status
+	 *         (OK)
 	 */
 	@RequestMapping(value = "/auth", method = RequestMethod.GET, produces = "application/json")
 	@ResponseBody
-	public ResponseObject socialGooglePlus(HttpServletResponse response, HttpServletRequest request) {
+	public ResponseObject socialGooglePlus(HttpServletResponse response,
+			HttpServletRequest request) {
 		logger.info("****** Google auth ******");
 		ResponseObject responseObject = new ResponseObject();
-		
+
 		String token = auth.getStateToken();
-		
+
 		responseObject.setData(auth.buildLoginUrl());
 		responseObject.setStatus(HttpServletResponse.SC_OK);
-		//save in session
-		request.getSession().setAttribute("state",token);
+		// save in session
+		request.getSession().setAttribute("state", token);
 		response.setStatus(HttpServletResponse.SC_OK);
-		
+
 		return responseObject;
 	}
-	
+
 	/**
-	 * This rest web service is the one that google called after login (callback url).
-	 * First it retrieve code and token that google sends back. 
-	 * It checks if code and token are not null, then if token is the same that was saved in session.
-	 * If it is not response status is UNAUTHORIZED, otherwise it retrieves user data.
-	 * If user is not already saved in db, then user is added in db, iff email is not already used, otherwise
-	 * it sends an UNAUTHORIZED status and redirect user to home page without authenticating him/her.
-	 * If it is all ok, then it authenticates user in spring security and create cookie user.
-	 * Then redirects authenticated user to home page where user can access protected resources.
+	 * This rest web service is the one that google called after login (callback
+	 * url). First it retrieve code and token that google sends back. It checks
+	 * if code and token are not null, then if token is the same that was saved
+	 * in session. If it is not response status is UNAUTHORIZED, otherwise it
+	 * retrieves user data. If user is not already saved in db, then user is
+	 * added in db, iff email is not already used, otherwise it sends an
+	 * UNAUTHORIZED status and redirect user to home page without authenticating
+	 * him/her. If it is all ok, then it authenticates user in spring security
+	 * and create cookie user. Then redirects authenticated user to home page
+	 * where user can access protected resources.
 	 * 
 	 * @param request
-	 * 			: instance of {@link HttpServletRequest}
-	 * @param response 
-	 * 			: instance of {@link HttpServletResponse}
+	 *            : instance of {@link HttpServletRequest}
+	 * @param response
+	 *            : instance of {@link HttpServletResponse}
 	 * @return redirect to home page
 	 */
 	@RequestMapping(value = "/callback", method = RequestMethod.GET, produces = "application/json")
-	public String confirmStateToken(HttpServletRequest request, HttpServletResponse response){
-		//ResponseObject responseObj = new ResponseObject();
-		
+	public String confirmStateToken(HttpServletRequest request,
+			HttpServletResponse response) {
+		// ResponseObject responseObj = new ResponseObject();
+
 		logger.info("****** Google callback ******");
 		String code = request.getParameter("code");
 		String token = request.getParameter("state");
 		String session_token = "";
-		if(request.getSession().getAttribute("state")!=null){
-			session_token = request.getSession().getAttribute("state").toString();
+		if (request.getSession().getAttribute("state") != null) {
+			session_token = request.getSession().getAttribute("state")
+					.toString();
 		}
-		
-		logger.info("request code: "+code);
-		logger.info("request token: "+token);
-		logger.info("request session token: "+session_token);
-		
-		//compare state token in session and state token in response of google
-		//if equals return to home
-		//if not error page
-		if( (code==null || token==null) && (!token.equals(session_token))){
+
+		logger.info("request code: " + code);
+		logger.info("request token: " + token);
+		logger.info("request session token: " + session_token);
+
+		// compare state token in session and state token in response of google
+		// if equals return to home
+		// if not error page
+		if ((code == null || token == null) && (!token.equals(session_token))) {
 			logger.info("Error: You have to sign in!");
-			//responseObj.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			//responseObj.setError("You have to sign in!");
+			// responseObj.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			// responseObj.setError("You have to sign in!");
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-		}else{
+		} else {
 			try {
 				GoogleUser userInfo = auth.getUserInfoJson(code);
-				logger.info("User Info: "+userInfo);
-				//responseObj.setData(userInfo);
-				//responseObj.setStatus(HttpServletResponse.SC_OK);
+				logger.info("User Info: " + userInfo);
+				// responseObj.setData(userInfo);
+				// responseObj.setStatus(HttpServletResponse.SC_OK);
 				response.setStatus(HttpServletResponse.SC_OK);
 				logger.info("Check user data");
-				
-				//check if user is already in
+
+				// check if user is already in
 				User userDb = userManager.getUserByUsername(userInfo.getId());
-				if(userDb==null){
+				if (userDb == null) {
 					logger.info("Save user data");
-					//add to db
+					// add to db
 					User user = new User();
 					user.setEmail(userInfo.getEmail());
 					user.setEnabled(1);
@@ -163,58 +171,63 @@ public class GoogleController {
 					p.setSurname(userInfo.getFamily_name());
 					p.setImgAvatar(userInfo.getPicture());
 					user.setProfile(p);
-					user.setRole(Constants.ROLES.ROLE_NORMAL.toString());
+					user.setRole(UserRoles.ROLE_NORMAL.toString());
 					user.setUsername(userInfo.getId());
-					try{
+					try {
 						userManager.createSocialUser(user);
-					}catch(SecurityException s){
+					} catch (SecurityException s) {
 						logger.info("Error: Already exists a register user with this email address. Please try to login with correct provider.");
-						//responseObj.setError("Already exists a register user with this email address. Please try to login with correct provider.");
-						//responseObj.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+						// responseObj.setError("Already exists a register user with this email address. Please try to login with correct provider.");
+						// responseObj.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 						response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 						return "redirect:/";
 					}
 				}
 				// authenticate in spring security
 				logger.info("Set authentication security context holder");
-				UserDetails userDetails = manager.loadUserByUsername(userInfo.getId());
-				Authentication auth = new UsernamePasswordAuthenticationToken(userDetails,userDetails.getPassword(), userDetails.getAuthorities());
-					SecurityContextHolder.getContext().setAuthentication(auth);
-					request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
-					
-					//check value and set it to true
-					Cookie[] cookies = request.getCookies();
-					if (cookies != null) {
-						for (int i = 0; i < cookies.length; i++) {
-							if (cookies[i].getName().equalsIgnoreCase("value")) {
-								cookies[i].setValue("true");
-								cookies[i].setPath(request.getContextPath()+"/");
-								response.addCookie(cookies[i]);
-							}
+				UserDetails userDetails = manager.loadUserByUsername(userInfo
+						.getId());
+				Authentication auth = new UsernamePasswordAuthenticationToken(
+						userDetails, userDetails.getPassword(),
+						userDetails.getAuthorities());
+				SecurityContextHolder.getContext().setAuthentication(auth);
+				request.getSession()
+						.setAttribute(
+								HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+								SecurityContextHolder.getContext());
+
+				// check value and set it to true
+				Cookie[] cookies = request.getCookies();
+				if (cookies != null) {
+					for (int i = 0; i < cookies.length; i++) {
+						if (cookies[i].getName().equalsIgnoreCase("value")) {
+							cookies[i].setValue("true");
+							cookies[i].setPath(request.getContextPath() + "/");
+							response.addCookie(cookies[i]);
 						}
 					}
-					//user cookie
-					CookieUser cu = new CookieUser();
-					cu.setUsername(userInfo.getId());
-					cu.setRole(Constants.ROLES.ROLE_NORMAL.toString());
-					
-					Gson gson = new Gson();
-					String obj = gson.toJson(cu);
-					
-					Cookie userCookie = new Cookie("user", obj);
-					userCookie.setPath(request.getContextPath()+"/");
-					response.addCookie(userCookie);
-					
-				
+				}
+				// user cookie
+				CookieUser cu = new CookieUser();
+				cu.setUsername(userInfo.getId());
+				cu.setRole(UserRoles.ROLE_NORMAL.toString());
+
+				Gson gson = new Gson();
+				String obj = gson.toJson(cu);
+
+				Cookie userCookie = new Cookie("user", obj);
+				userCookie.setPath(request.getContextPath() + "/");
+				response.addCookie(userCookie);
+
 			} catch (IOException e) {
 				logger.info("IOException .. Problem in reading user data.");
 				e.printStackTrace();
-				//responseObj.setError("Problem in reading user data");
-				//responseObj.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				// responseObj.setError("Problem in reading user data");
+				// responseObj.setStatus(HttpServletResponse.SC_NOT_FOUND);
 				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			}
 		}
-		
+
 		return "redirect:/";
 	}
 }

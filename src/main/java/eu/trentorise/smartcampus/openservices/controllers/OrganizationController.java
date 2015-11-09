@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import eu.trentorise.smartcampus.openservices.Constants.ROLES;
+import eu.trentorise.smartcampus.openservices.UserRoles;
 import eu.trentorise.smartcampus.openservices.Utils;
 import eu.trentorise.smartcampus.openservices.entities.Organization;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
@@ -346,7 +346,7 @@ public class OrganizationController {
 			if (ev.validate(email)) {
 				try {
 					String s = organizationManager.createInvitation(username,
-							org_id, ROLES.ROLE_ORGOWNER.toString(), email);
+							org_id, UserRoles.ROLE_ORGOWNER.toString(), email);
 					// return link
 					String host = Utils.getAppURL(req); // env.getProperty("host");
 					String link = host + "org/enable/" + s;// api/org/manage/owner/add/

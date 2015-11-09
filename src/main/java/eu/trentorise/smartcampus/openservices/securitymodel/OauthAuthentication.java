@@ -7,7 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import eu.trentorise.smartcampus.openservices.Constants;
+import eu.trentorise.smartcampus.openservices.UserRoles;
 
 public class OauthAuthentication implements Authentication {
 
@@ -27,8 +27,8 @@ public class OauthAuthentication implements Authentication {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return Arrays.asList(new SimpleGrantedAuthority(
-				Constants.ROLES.ROLE_OAUTH.toString()));
+		return Arrays.asList(new SimpleGrantedAuthority(UserRoles.ROLE_OAUTH
+				.toString()));
 	}
 
 	@Override

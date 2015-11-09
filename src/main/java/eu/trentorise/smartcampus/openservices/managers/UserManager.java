@@ -30,8 +30,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import eu.trentorise.smartcampus.openservices.Constants;
-import eu.trentorise.smartcampus.openservices.Constants.ROLES;
+import eu.trentorise.smartcampus.openservices.UserRoles;
 import eu.trentorise.smartcampus.openservices.beans.EmailMessage;
 import eu.trentorise.smartcampus.openservices.dao.TemporaryLinkDao;
 import eu.trentorise.smartcampus.openservices.dao.UserDao;
@@ -118,7 +117,7 @@ public class UserManager {
 			admin.setUsername(adminUsername);
 			admin.setPassword(adminPwd);
 			admin.setEnabled(1);
-			admin.setRole(Constants.ROLES.ROLE_ADMIN.toString());
+			admin.setRole(UserRoles.ROLE_ADMIN.toString());
 			userDao.addUser(admin);
 			logger.info("Default admin account created!");
 		} else {
@@ -146,7 +145,7 @@ public class UserManager {
 			emailMsg = new EmailMessage(from, subject, msg);
 		}
 		try {
-			return createUser(user, false, ROLES.ROLE_NORMAL, emailMsg);
+			return createUser(user, false, UserRoles.ROLE_NORMAL, emailMsg);
 		} catch (Exception e) {
 			logger.error("Error creating user: {}", e.getMessage());
 			return null;
@@ -155,7 +154,7 @@ public class UserManager {
 
 	public User createOauthUser(User user) {
 		try {
-			return createUser(user, true, Constants.ROLES.ROLE_OAUTH, null);
+			return createUser(user, true, UserRoles.ROLE_OAUTH, null);
 		} catch (Exception e) {
 			logger.error("Error creating local oauth user: {}", e.getMessage());
 			return null;
@@ -184,7 +183,7 @@ public class UserManager {
 		}
 	}
 
-	private User createUser(User user, boolean enabled, Constants.ROLES role,
+	private User createUser(User user, boolean enabled, UserRoles role,
 			EmailMessage activationEmail) throws Exception {
 		if (user != null) {
 			if (userDao.isEmailAlreadyUse(user.getEmail())

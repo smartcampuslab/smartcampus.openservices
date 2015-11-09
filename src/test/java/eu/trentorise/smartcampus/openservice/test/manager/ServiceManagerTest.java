@@ -28,8 +28,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
-import eu.trentorise.smartcampus.openservices.Constants;
-import eu.trentorise.smartcampus.openservices.Constants.ORDER;
+import eu.trentorise.smartcampus.openservices.OrderBy;
+import eu.trentorise.smartcampus.openservices.ServiceState;
+import eu.trentorise.smartcampus.openservices.UserRoles;
 import eu.trentorise.smartcampus.openservices.dao.ServiceDao;
 import eu.trentorise.smartcampus.openservices.entities.AccessInformation;
 import eu.trentorise.smartcampus.openservices.entities.Authentication;
@@ -100,7 +101,7 @@ public class ServiceManagerTest {
 		}
 
 		for (Organization o : orgManager.getOrganizations(0, 1000,
-				ORDER.id.toString())) {
+				OrderBy.id.toString())) {
 			orgManager.deleteOrganization(USERNAME, o.getId());
 		}
 
@@ -111,7 +112,7 @@ public class ServiceManagerTest {
 			eu.trentorise.smartcampus.openservices.entities.User user1 = new eu.trentorise.smartcampus.openservices.entities.User();
 			user1.setUsername(USERNAME);
 			user1.setEmail("user1@aa.aa");
-			user1.setRole(Constants.ROLES.ROLE_NORMAL.toString());
+			user1.setRole(UserRoles.ROLE_NORMAL.toString());
 			user = userManager.createSocialUser(user1);
 		}
 	}
@@ -175,21 +176,21 @@ public class ServiceManagerTest {
 		Assert.assertTrue(serviceManager.createService(USERNAME, service));
 
 		List<Service> services = serviceDao.showPublishedService(0, 1000,
-				ORDER.id);
+				OrderBy.id);
 
 		Service loaded = serviceDao.useService("creation");
 		int numSrv = services.size();
 		Assert.assertTrue(serviceManager.changeState(USERNAME, loaded.getId(),
-				Constants.SERVICE_STATE.PUBLISH.toString()));
+				ServiceState.PUBLISH.toString()));
 
-		services = serviceDao.showPublishedService(0, 1000, ORDER.id);
+		services = serviceDao.showPublishedService(0, 1000, OrderBy.id);
 
 		Assert.assertEquals(numSrv + 1, services.size());
 
 		Assert.assertTrue(serviceManager.changeState(USERNAME, loaded.getId(),
-				Constants.SERVICE_STATE.UNPUBLISH.toString()));
+				ServiceState.UNPUBLISH.toString()));
 
-		services = serviceDao.showPublishedService(0, 1000, ORDER.id);
+		services = serviceDao.showPublishedService(0, 1000, OrderBy.id);
 
 		Assert.assertEquals(numSrv, services.size());
 	}

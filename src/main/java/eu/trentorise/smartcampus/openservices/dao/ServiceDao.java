@@ -20,7 +20,7 @@ import java.util.Map;
 
 import org.springframework.dao.DataAccessException;
 
-import eu.trentorise.smartcampus.openservices.Constants.ORDER;
+import eu.trentorise.smartcampus.openservices.OrderBy;
 import eu.trentorise.smartcampus.openservices.entities.Organization;
 import eu.trentorise.smartcampus.openservices.entities.Service;
 import eu.trentorise.smartcampus.openservices.entities.User;
@@ -48,7 +48,7 @@ public interface ServiceDao {
 	 * @throws DataAccessException
 	 */
 	public List<Service> showPublishedService(int firstResult, int maxResult,
-			ORDER param_order) throws DataAccessException;
+			OrderBy param_order) throws DataAccessException;
 
 	/**
 	 * Show all service of a given user.
@@ -177,7 +177,7 @@ public interface ServiceDao {
 	 * @throws DataAccessException
 	 */
 	public List<Service> searchService(String token, int firstResult,
-			int maxResult, ORDER param_order) throws DataAccessException;
+			int maxResult, OrderBy param_order) throws DataAccessException;
 
 	/**
 	 * Browse services having input category and tags.
@@ -194,7 +194,7 @@ public interface ServiceDao {
 	 * @throws DataAccessException
 	 */
 	public List<Service> browseService(Integer category, int firstResult,
-			int maxResult, ORDER param_order) throws DataAccessException;
+			int maxResult, OrderBy param_order) throws DataAccessException;
 
 	/**
 	 * Browse services having input categories and tags.
@@ -211,7 +211,7 @@ public interface ServiceDao {
 	 * @throws DataAccessException
 	 */
 	public List<Service> browseService(String token, List<Integer> categories,
-			int firstResult, int maxResult, ORDER param_order)
+			int firstResult, int maxResult, OrderBy param_order)
 			throws DataAccessException;
 
 	/**
@@ -229,7 +229,7 @@ public interface ServiceDao {
 	 * @throws DataAccessException
 	 */
 	public List<Service> getServiceByTag(String tag, int firstResult,
-			int maxResult, ORDER param_order) throws DataAccessException;
+			int maxResult, OrderBy param_order) throws DataAccessException;
 
 	/**
 	 * Finds category by id.

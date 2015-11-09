@@ -28,20 +28,20 @@ import org.springframework.transaction.annotation.Transactional;
 import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
 
 /**
- * Service History Dao Implementation
- * Retrieve, Add, Modify and Delete service history from database
+ * Service History Dao Implementation Retrieve, Add, Modify and Delete service
+ * history from database
  * 
  * @author Giulia Canobbio
- *
+ * 
  */
 @Repository
-public class ServiceHistoryDaoImpl implements ServiceHistoryDao{
+public class ServiceHistoryDaoImpl implements ServiceHistoryDao {
 	/**
 	 * Instance of {@link EntityManager}
 	 */
-	@PersistenceContext(unitName="JpaPersistenceUnit")
+	@PersistenceContext(unitName = "JpaPersistenceUnit")
 	protected EntityManager entityManager;
-	
+
 	/**
 	 * 
 	 * @return entity manager
@@ -67,7 +67,8 @@ public class ServiceHistoryDaoImpl implements ServiceHistoryDao{
 	@Override
 	public List<ServiceHistory> getServiceHistoryByServiceId(int service_id)
 			throws DataAccessException {
-		Query q = getEntityManager().createQuery("FROM ServiceHistory SH WHERE SH.id_service=:id_service")
+		Query q = getEntityManager().createQuery(
+				"FROM ServiceHistory SH WHERE SH.id_service=:id_service")
 				.setParameter("id_service", service_id);
 		List<ServiceHistory> sh = q.getResultList();
 		return sh;
@@ -80,7 +81,7 @@ public class ServiceHistoryDaoImpl implements ServiceHistoryDao{
 	@Override
 	public void addServiceHistory(ServiceHistory serviceHistory)
 			throws DataAccessException {
-		getEntityManager().persist(serviceHistory);		
+		getEntityManager().persist(serviceHistory);
 	}
 
 	/**
@@ -110,10 +111,12 @@ public class ServiceHistoryDaoImpl implements ServiceHistoryDao{
 	@Override
 	public List<ServiceHistory> getServiceHistoryByOrgId(int org_id)
 			throws DataAccessException {
-		Query q = getEntityManager().createQuery("FROM ServiceHistory SH WHERE SH.id_service IN (" +
-				"SELECT S.id FROM Service S WHERE S.organizationId=:organization_id )")
+		Query q = getEntityManager()
+				.createQuery(
+						"FROM ServiceHistory SH WHERE SH.id_service IN ("
+								+ "SELECT S.id FROM Service S WHERE S.organizationId=:organization_id )")
 				.setParameter("organization_id", org_id);
-		return (List<ServiceHistory>)q.getResultList();
+		return (List<ServiceHistory>) q.getResultList();
 	}
 
 	/**
@@ -121,27 +124,11 @@ public class ServiceHistoryDaoImpl implements ServiceHistoryDao{
 	 */
 	@Transactional
 	@Override
-	public List<ServiceHistory> getNews(int n) throws DataAccessException{
-		/*Date now = new Date();
-		System.out.println("Now + 1 days: "+now);
-		
-		Date start = now;
-		start.setTime(start.getTime() - (5 * 1000L * 60L * 60L * 24L ));
-		System.out.println("Start - 6 days: "+start);
-				
-		//query select news with interval of 5 days
-		Query q = getEntityManager().createQuery("FROM ServiceHistory S WHERE S.date BETWEEN :start AND " +
-				"NOW() " +
-				"AND S.id = ( SELECT MAX(S1.id) FROM ServiceHistory S1 WHERE S1.operation = S.operation " +
-				"AND S1.id_service = S.id_service AND S1.id_serviceMethod = S.id_serviceMethod " +
-				"AND S1.date BETWEEN :start AND " +
-				"NOW() )")
-				.setParameter("start", start)
-				;//.setParameter("end", now);
-		*/
-		Query q = getEntityManager().createQuery("FROM ServiceHistory S ORDER BY S.id DESC");
+	public List<ServiceHistory> getNews(int n) throws DataAccessException {
+		Query q = getEntityManager().createQuery(
+				"FROM ServiceHistory S Order BY S.id DESC");
 		List<ServiceHistory> news = q.setMaxResults(n).getResultList();
-		System.out.println("News size: "+news.size());
+		System.out.println("News size: " + news.size());
 		return news;
 	}
 

@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import eu.trentorise.smartcampus.openservices.Constants.SERVICE_STATE;
+import eu.trentorise.smartcampus.openservices.ServiceState;
 import eu.trentorise.smartcampus.openservices.entities.Method;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.entities.TestInfo;
@@ -306,7 +306,7 @@ public class ServiceController {
 		ResponseObject responseObject = new ResponseObject();
 		try {
 			boolean result = serviceManager.changeState(username, id,
-					SERVICE_STATE.PUBLISH.toString());
+					ServiceState.PUBLISH.toString());
 			if (result) {
 				responseObject.setStatus(HttpServletResponse.SC_OK);
 				response.setStatus(HttpServletResponse.SC_OK);
@@ -350,7 +350,7 @@ public class ServiceController {
 		ResponseObject responseObject = new ResponseObject();
 		try {
 			boolean result = serviceManager.changeState(username, id,
-					SERVICE_STATE.UNPUBLISH.toString());
+					ServiceState.UNPUBLISH.toString());
 			if (result) {
 				responseObject.setStatus(HttpServletResponse.SC_OK);
 				response.setStatus(HttpServletResponse.SC_OK);
@@ -394,7 +394,7 @@ public class ServiceController {
 		ResponseObject responseObject = new ResponseObject();
 		try {
 			boolean result = serviceManager.changeState(username, id,
-					SERVICE_STATE.DEPRECATE.toString());
+					ServiceState.DEPRECATE.toString());
 			if (result) {
 				responseObject.setStatus(HttpServletResponse.SC_OK);
 				response.setStatus(HttpServletResponse.SC_OK);

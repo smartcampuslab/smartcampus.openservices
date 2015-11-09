@@ -29,11 +29,9 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import eu.trentorise.smartcampus.openservices.Constants;
-import eu.trentorise.smartcampus.openservices.Constants.OPERATION;
-import eu.trentorise.smartcampus.openservices.Constants.ORDER;
-import eu.trentorise.smartcampus.openservices.Constants.ROLES;
-import eu.trentorise.smartcampus.openservices.Constants.SERVICE_STATE;
+import eu.trentorise.smartcampus.openservices.OrderBy;
+import eu.trentorise.smartcampus.openservices.ServiceState;
+import eu.trentorise.smartcampus.openservices.UserRoles;
 import eu.trentorise.smartcampus.openservices.dao.MethodDao;
 import eu.trentorise.smartcampus.openservices.dao.OrganizationDao;
 import eu.trentorise.smartcampus.openservices.dao.ServiceDao;
@@ -106,6 +104,10 @@ public class ServiceManager {
 	@Autowired
 	private USDLGenerator usdlGen;
 
+	private static enum OPERATION {
+		ADD, MODIFY, DELETE
+	};
+
 	/**
 	 * Add a new service in database.
 	 * 
@@ -131,7 +133,7 @@ public class ServiceManager {
 			if (ur == null)
 				throw new SecurityException();
 			service.setCreatorId(user.getId());
-			service.setState(SERVICE_STATE.UNPUBLISH.toString());
+			service.setState(ServiceState.UNPUBLISH.toString());
 			serviceDao.createService(service);
 
 			// check if service is created
@@ -193,7 +195,7 @@ public class ServiceManager {
 			serviceDao.modifyService(s);
 
 			// Add a new ServiceHistory
-			if (s.getState().equals(Constants.SERVICE_STATE.PUBLISH.toString())) {
+			if (s.getState().equals(ServiceState.PUBLISH.toString())) {
 				ServiceHistory sh = new ServiceHistory();
 				sh.setOperation(OPERATION.MODIFY.toString());
 				sh.setId_service(s.getId());
@@ -269,8 +271,7 @@ public class ServiceManager {
 				throw new SecurityException();
 			serviceDao.deleteService(service);
 			// add service history
-			if (service.getState().equals(
-					Constants.SERVICE_STATE.PUBLISH.toString())) {
+			if (service.getState().equals(ServiceState.PUBLISH.toString())) {
 				ServiceHistory sh = new ServiceHistory();
 				sh.setOperation(OPERATION.DELETE.toString());
 				sh.setId_service(service.getId());
@@ -314,10 +315,10 @@ public class ServiceManager {
 			List<Service> result = new ArrayList<Service>();
 			User u = userDao.getUserByUsername(username);
 			List<UserRole> roles = urDao.getUserRoleByIdRole(u.getId(),
-					ROLES.ROLE_ORGOWNER.toString());
+					UserRoles.ROLE_ORGOWNER.toString());
 			for (UserRole r : roles) {
 				List<Service> sl = serviceDao.getServiceByIdOrg(r.getId_org(),
-						0, 0, ORDER.name.toString());
+						0, 0, OrderBy.name.toString());
 				result.addAll(sl);
 			}
 			// my service
@@ -421,7 +422,7 @@ public class ServiceManager {
 				result = true;
 			}
 			// Add history
-			if (s.getState().equals(Constants.SERVICE_STATE.PUBLISH.toString())) {
+			if (s.getState().equals(ServiceState.PUBLISH.toString())) {
 				ServiceHistory sh = new ServiceHistory();
 				sh.setOperation(OPERATION.ADD.toString());
 				sh.setId_service(method.getServiceId());
@@ -475,7 +476,7 @@ public class ServiceManager {
 			m.setExecutionProperties(method.getExecutionProperties());
 			methodDao.modifyMethod(m);
 			// Add history
-			if (s.getState().equals(Constants.SERVICE_STATE.PUBLISH.toString())) {
+			if (s.getState().equals(ServiceState.PUBLISH.toString())) {
 				ServiceHistory sh = new ServiceHistory();
 				sh.setOperation(OPERATION.MODIFY.toString());
 				sh.setId_service(method.getServiceId());
@@ -513,7 +514,7 @@ public class ServiceManager {
 				throw new SecurityException();
 			methodDao.deleteMethod(m);
 			// Add history
-			if (s.getState().equals(Constants.SERVICE_STATE.PUBLISH.toString())) {
+			if (s.getState().equals(ServiceState.PUBLISH.toString())) {
 				ServiceHistory sh = new ServiceHistory();
 				sh.setOperation("Delete");
 				sh.setId_service(m.getServiceId());

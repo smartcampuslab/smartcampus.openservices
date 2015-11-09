@@ -25,8 +25,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import eu.trentorise.smartcampus.openservices.Constants.ORDER;
-import eu.trentorise.smartcampus.openservices.Constants.ROLES;
+import eu.trentorise.smartcampus.openservices.OrderBy;
+import eu.trentorise.smartcampus.openservices.UserRoles;
 import eu.trentorise.smartcampus.openservices.entities.Organization;
 
 /**
@@ -59,9 +59,9 @@ public class OrganizationDaoImpl implements OrganizationDao {
 	@Override
 	public List<Organization> showOrganizations(String token,
 			List<Integer> categoryIds, int firstResult, int maxResult,
-			ORDER param_order) throws DataAccessException {
+			OrderBy param_order) throws DataAccessException {
 		String order = param_order.toString();
-		if (ORDER.namedesc.equals(param_order)) {
+		if (OrderBy.namedesc.equals(param_order)) {
 			order = "name DESC";
 		}
 
@@ -72,7 +72,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
 		if (categoryIds != null) {
 			query += " AND category IN :cats";
 		}
-		Query q = getEntityManager().createQuery(query + " ORDER BY " + order);
+		Query q = getEntityManager().createQuery(query + " Order BY " + order);
 
 		if (token != null) {
 			q.setParameter("name", "%" + token + "%");
@@ -95,7 +95,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
 		Query q = getEntityManager()
 				.createQuery(
 						"FROM Organization O WHERE O.id IN "
-								+ "( SELECT UR.id_org FROM UserRole UR WHERE UR.id_user=:id_user) ORDER BY name")
+								+ "( SELECT UR.id_org FROM UserRole UR WHERE UR.id_user=:id_user) Order BY name")
 				.setParameter("id_user", id_user);
 		List<Organization> os = q.getResultList();
 		return os;
@@ -172,7 +172,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
 								+ "( SELECT Ur.id_org FROM UserRole Ur "
 								+ "WHERE Ur.id_user=:id_user AND Ur.role=':role')")
 				.setParameter("id_user", owner_id)
-				.setParameter("role", ROLES.ROLE_ORGOWNER);
+				.setParameter("role", UserRoles.ROLE_ORGOWNER);
 		List<Organization> orgs = q.getResultList();
 		return orgs;
 	}
@@ -187,7 +187,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
 			int maxResult, String param_order) throws DataAccessException {
 		Query q = getEntityManager().createQuery(
 				"FROM Organization Org WHERE Org.name LIKE :token "
-						+ "OR Org.description LIKE :token ORDER BY "
+						+ "OR Org.description LIKE :token Order BY "
 						+ param_order).setParameter("token", "%" + token + "%")
 		/* .setParameter("order", param_order) */;
 		List<Organization> orgs = q.setFirstResult(firstResult)
@@ -201,21 +201,21 @@ public class OrganizationDaoImpl implements OrganizationDao {
 	@Transactional
 	@Override
 	public List<Organization> browseOrganization(Integer category,
-			String geography, int firstResult, int maxResult, ORDER param_order)
-			throws DataAccessException {
+			String geography, int firstResult, int maxResult,
+			OrderBy param_order) throws DataAccessException {
 		// TODO check what geography is
 		Query q = null;
 		if (category != null && geography == null) {
 			q = getEntityManager().createQuery(
 					"FROM Organization Org WHERE Org.category=:category"
-							+ " ORDER BY Org." + param_order.toString())
+							+ " Order BY Org." + param_order.toString())
 					.setParameter("category", category);
 		} else if (category == null && geography != null) {
 			// TODO
 		} else if (category != null && geography != null) {
 			q = getEntityManager().createQuery(
 					"FROM Organization Org WHERE Org.category=:category"
-							+ " ORDER BY Org." + param_order.toString())
+							+ " Order BY Org." + param_order.toString())
 					.setParameter("category", category);
 		}
 		List<Organization> orgs = q.setFirstResult(firstResult)
@@ -229,8 +229,8 @@ public class OrganizationDaoImpl implements OrganizationDao {
 	@Transactional
 	@Override
 	public List<Organization> browseOrganization(int[] categories,
-			String geography, int firstResult, int maxResult, ORDER param_order)
-			throws DataAccessException {
+			String geography, int firstResult, int maxResult,
+			OrderBy param_order) throws DataAccessException {
 		// TODO check what geography is
 
 		String categoriesQuery = "(";
@@ -240,7 +240,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
 		}
 
 		String order = param_order.toString();
-		if (ORDER.namedesc.equals(param_order)) {
+		if (OrderBy.namedesc.equals(param_order)) {
 			order = "name DESC";
 		}
 
@@ -248,11 +248,11 @@ public class OrganizationDaoImpl implements OrganizationDao {
 		if (categories != null && geography == null) {
 			q = getEntityManager().createQuery(
 					"FROM Organization Org WHERE Org.category in "
-							+ categoriesQuery + " ORDER BY " + order);
+							+ categoriesQuery + " Order BY " + order);
 		} else if (categories != null && geography != null) {
 			q = getEntityManager().createQuery(
 					"FROM Organization Org WHERE Org.category in "
-							+ categoriesQuery + " ORDER BY " + order);
+							+ categoriesQuery + " Order BY " + order);
 		}
 		List<Organization> orgs = q.setFirstResult(firstResult)
 				.setMaxResults(maxResult).getResultList();

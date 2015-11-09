@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import eu.trentorise.smartcampus.openservices.Constants;
+import eu.trentorise.smartcampus.openservices.ServiceState;
 import eu.trentorise.smartcampus.openservices.entities.Service;
 import eu.trentorise.smartcampus.openservices.managers.ServiceManager;
 
@@ -69,7 +69,7 @@ public class ServiceSpecController {
 				logger.error("Error sending http error response");
 			}
 		}
-		if (!s.getState().equals(Constants.SERVICE_STATE.PUBLISH.toString())) {
+		if (!s.getState().equals(ServiceState.PUBLISH.toString())) {
 			try {
 				response.sendError(HttpServletResponse.SC_FORBIDDEN);
 				return;

@@ -28,8 +28,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import eu.trentorise.smartcampus.openservices.Constants.ORDER;
-import eu.trentorise.smartcampus.openservices.Constants.ROLES;
+import eu.trentorise.smartcampus.openservices.OrderBy;
+import eu.trentorise.smartcampus.openservices.UserRoles;
 import eu.trentorise.smartcampus.openservices.dao.OrganizationDao;
 import eu.trentorise.smartcampus.openservices.dao.ServiceDao;
 import eu.trentorise.smartcampus.openservices.dao.ServiceHistoryDao;
@@ -108,7 +108,7 @@ public class OrganizationManager {
 			UserRole ur = urDao.getRoleOfUser(user.getId(), orgId);
 			if (ur != null
 					&& ur.getRole().equalsIgnoreCase(
-							ROLES.ROLE_ORGOWNER.toString())) {
+							UserRoles.ROLE_ORGOWNER.toString())) {
 				// check that published services do not exist
 				List<Service> slist = serviceDao.getServiceByIdOrg(orgId, 0, 0,
 						"id");
@@ -176,7 +176,7 @@ public class OrganizationManager {
 				org = orgDao.createOrganization(org);
 				// add UserRole
 				urDao.createUserRole(org.getCreatorId(), org.getId(),
-						ROLES.ROLE_ORGOWNER.toString());
+						UserRoles.ROLE_ORGOWNER.toString());
 				return org;
 			}
 		} catch (DataAccessException d) {
@@ -210,7 +210,7 @@ public class OrganizationManager {
 			UserRole ur = urDao.getRoleOfUser(user.getId(), org.getId());
 			if (ur != null
 					&& ur.getRole().equalsIgnoreCase(
-							ROLES.ROLE_ORGOWNER.toString())) {
+							UserRoles.ROLE_ORGOWNER.toString())) {
 				// TODO which values can be modified by user?
 				o.setDescription(org.getDescription());
 				o.setActivityArea(org.getActivityArea());
@@ -272,7 +272,7 @@ public class OrganizationManager {
 			UserRole ur = urDao.getRoleOfUser(user.getId(), org.getId());
 			if (ur != null
 					&& ur.getRole().equalsIgnoreCase(
-							ROLES.ROLE_ORGOWNER.toString())) {
+							UserRoles.ROLE_ORGOWNER.toString())) {
 
 				// Generate a key
 				String s = UUID.randomUUID().toString();
@@ -326,12 +326,12 @@ public class OrganizationManager {
 	public List<Organization> getOrganizations(int firstResult, int maxResult,
 			String param_order) {
 		try {
-			if (param_order.equalsIgnoreCase(ORDER.id.toString())) {
+			if (param_order.equalsIgnoreCase(OrderBy.id.toString())) {
 				return orgDao.showOrganizations(null, null, firstResult,
-						maxResult, ORDER.id);
-			} else if (param_order.equalsIgnoreCase(ORDER.name.toString())) {
+						maxResult, OrderBy.id);
+			} else if (param_order.equalsIgnoreCase(OrderBy.name.toString())) {
 				return orgDao.showOrganizations(null, null, firstResult,
-						maxResult, ORDER.name);
+						maxResult, OrderBy.name);
 			}
 			throw new SecurityException();
 		} catch (DataAccessException d) {
@@ -413,7 +413,7 @@ public class OrganizationManager {
 			User user = userDao.getUserByUsername(username);
 			UserRole userRole = urDao.getRoleOfUser(user.getId(), org_id);
 			if (userRole.getRole().equalsIgnoreCase(
-					ROLES.ROLE_ORGOWNER.toString())) {
+					UserRoles.ROLE_ORGOWNER.toString())) {
 				// no auto-delete
 				if (user.getId() != user_id) {
 					urDao.deleteUserRole(urDao.getRoleOfUser(user_id, org_id));
