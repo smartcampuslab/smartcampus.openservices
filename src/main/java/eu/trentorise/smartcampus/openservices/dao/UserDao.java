@@ -73,9 +73,10 @@ public interface UserDao {
 	 * 
 	 * @param user
 	 *            : a {@link User} instance
+	 * @return a {@link User} instance
 	 * @throws DataAccessException
 	 */
-	public void addUser(User user) throws DataAccessException;
+	public User addUser(User user) throws DataAccessException;
 
 	/**
 	 * Disable a user.

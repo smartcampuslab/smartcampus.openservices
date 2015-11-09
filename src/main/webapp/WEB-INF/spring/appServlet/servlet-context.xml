@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+<b:beans xmlns="http://www.springframework.org/schema/mvc"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:b="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
   xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
@@ -10,10 +10,10 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
-	<beans:bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<beans:property name="prefix" value="/WEB-INF/views/jsp/" />
-		<beans:property name="suffix" value=".jsp" />
-	</beans:bean>
+	<b:bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<b:property name="prefix" value="/WEB-INF/views/jsp/" />
+		<b:property name="suffix" value=".jsp" />
+	</b:bean>
 	
 	<context:component-scan base-package="eu.trentorise.smartcampus.openservices.controllers,eu.trentorise.smartcampus.openservices.managers" />
 	<context:property-placeholder location="classpath:openservice.properties" />
@@ -36,28 +36,38 @@
   <tx:annotation-driven transaction-manager="transactionManager" />
   
   <!-- For social provider - Login is /signin/{provederId} -->
-    <beans:bean class="org.springframework.social.connect.web.ProviderSignInController">
-        <beans:property name="signInUrl" value="/login" />
-        <beans:property name="postSignInUrl" value="${application.url}" />
-    </beans:bean>
+    <b:bean class="org.springframework.social.connect.web.ProviderSignInController">
+        <b:property name="signInUrl" value="/login" />
+        <b:property name="postSignInUrl" value="${application.url}" />
+    </b:bean>
 	
 	<!-- Scribe config - LinkedIn -->
-	<beans:bean id="linkedInSC" class="eu.trentorise.smartcampus.openservices.scribe.OAuthServiceConfig">
-		<beans:constructor-arg value="${linkedin.consumerKey}" />
-		<beans:constructor-arg value="${linkedin.consumerSecret}"/>
-		<beans:constructor-arg value="${linkedin.callback_uri}"/>
-		<beans:constructor-arg value="org.scribe.builder.api.LinkedInApi"/>
-	</beans:bean>
+	<b:bean id="linkedInSC" class="eu.trentorise.smartcampus.openservices.scribe.OAuthServiceConfig">
+		<b:constructor-arg value="${linkedin.consumerKey}" />
+		<b:constructor-arg value="${linkedin.consumerSecret}"/>
+		<b:constructor-arg value="${linkedin.callback_uri}"/>
+		<b:constructor-arg value="org.scribe.builder.api.LinkedInApi"/>
+	</b:bean>
  
-	<beans:bean id="linkedInSProvider" class="eu.trentorise.smartcampus.openservices.scribe.OAuthServiceProvider">
-		<beans:constructor-arg name="config" ref="linkedInSC" />
-	</beans:bean>
+	<b:bean id="linkedInSProvider" class="eu.trentorise.smartcampus.openservices.scribe.OAuthServiceProvider">
+		<b:constructor-arg name="config" ref="linkedInSC" />
+	</b:bean>
 	
 	<!-- Google Helper -->
-	<beans:bean id="googleHelper" class="eu.trentorise.smartcampus.openservices.social.GoogleAuthHelper">
-		<beans:constructor-arg value="${google.consumerKey}" />
-		<beans:constructor-arg value="${google.consumerSecret}" />
-		<beans:constructor-arg value="${google.callback_uri}" />
-	</beans:bean>
+	<b:bean id="googleHelper" class="eu.trentorise.smartcampus.openservices.social.GoogleAuthHelper">
+		<b:constructor-arg value="${google.consumerKey}" />
+		<b:constructor-arg value="${google.consumerSecret}" />
+		<b:constructor-arg value="${google.callback_uri}" />
+	</b:bean>
 	
-</beans:beans>
+	<b:bean id="oauthClient" class="eu.trentorise.smartcampus.aac.AACService">
+	    <b:constructor-arg value="${oauth.endpoint}"></b:constructor-arg>
+	    <b:constructor-arg value="${oauth.client_id}"></b:constructor-arg>
+	    <b:constructor-arg value="${oauth.client_secret}"></b:constructor-arg>
+	</b:bean>
+	
+	<b:bean id="profileService" class="eu.trentorise.smartcampus.profileservice.BasicProfileService">
+	    <b:constructor-arg value="${profileservice.endpoint}"></b:constructor-arg>
+	</b:bean>
+	
+</b:beans>

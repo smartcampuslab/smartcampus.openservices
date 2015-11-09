@@ -39,6 +39,8 @@ public class ApplicationMailer {
 	@Autowired
 	private Environment env;
 
+	private static final String DEFAULT_FROM_ADDRESS = "openservice";
+
 	/**
 	 * Set mail sender.
 	 * 
@@ -65,7 +67,8 @@ public class ApplicationMailer {
 
 		SimpleMailMessage message = new SimpleMailMessage();
 
-		message.setFrom(from);
+		message.setFrom(from != null ? from : env.getProperty("email.username",
+				DEFAULT_FROM_ADDRESS));
 		message.setTo(to);
 		message.setSubject(subject);
 		message.setText(msg);
@@ -88,7 +91,7 @@ public class ApplicationMailer {
 
 		SimpleMailMessage message = new SimpleMailMessage();
 
-		message.setFrom(env.getProperty("email.username", "openservice"));
+		message.setFrom(env.getProperty("email.username", DEFAULT_FROM_ADDRESS));
 		message.setTo(to);
 		message.setSubject(subject);
 		message.setText(msg);

@@ -9,7 +9,8 @@
     roles: [
       'public',
       'ROLE_NORMAL',
-      'ROLE_ADMIN'
+      'ROLE_ADMIN',
+      'ROLE_OAUTH'
     ],
 
     /*
@@ -20,7 +21,8 @@
       'public': "*",
       'anon': ['public'],
       'ROLE_NORMAL': ['ROLE_NORMAL', 'ROLE_ADMIN'],
-      'ROLE_ADMIN': ['ROLE_ADMIN']
+      'ROLE_ADMIN': ['ROLE_ADMIN'],
+      'ROLE_OAUTH': ['ROLE_OAUTH']
     }
 
   };

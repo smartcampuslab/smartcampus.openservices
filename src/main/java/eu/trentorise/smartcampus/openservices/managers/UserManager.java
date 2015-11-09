@@ -32,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import eu.trentorise.smartcampus.openservices.Constants;
 import eu.trentorise.smartcampus.openservices.Constants.ROLES;
+import eu.trentorise.smartcampus.openservices.beans.EmailMessage;
 import eu.trentorise.smartcampus.openservices.dao.TemporaryLinkDao;
 import eu.trentorise.smartcampus.openservices.dao.UserDao;
 import eu.trentorise.smartcampus.openservices.entities.TemporaryLink;
@@ -135,26 +136,29 @@ public class UserManager {
 	 */
 	public User createUser(User user, String host, String from, String object,
 			String message) throws ConnectException {
-		if (!userDao.isEmailAlreadyUse(user.getEmail())) {
-			user.setEnabled(0);
-			user.setRole(ROLES.ROLE_NORMAL.toString());
-			try {
-				userDao.addUser(user);
-				// key + send via email
-				String s = addKeyVerifyEmail(user.getUsername());
-				if (s != null) {
-					// return link
-					String link = host + "enable/" + s;
-					mailer.sendMail(from, user.getEmail(),
-							object + "" + user.getUsername(), message + " "
-									+ link);
-				}
-				return userDao.getUserByUsername(user.getUsername());
-			} catch (DataAccessException d) {
-				return null;
-			}
-		} else {
-			throw new SecurityException();
+		EmailMessage emailMsg = null;
+		String s = addKeyVerifyEmail(user.getUsername());
+		if (s != null) {
+			// return link
+			String link = host + "enable/" + s;
+			String subject = object + "" + user.getUsername();
+			String msg = message + " " + link;
+			emailMsg = new EmailMessage(from, subject, msg);
+		}
+		try {
+			return createUser(user, false, ROLES.ROLE_NORMAL, emailMsg);
+		} catch (Exception e) {
+			logger.error("Error creating user: {}", e.getMessage());
+			return null;
+		}
+	}
+
+	public User createOauthUser(User user) {
+		try {
+			return createUser(user, true, Constants.ROLES.ROLE_OAUTH, null);
+		} catch (Exception e) {
+			logger.error("Error creating local oauth user: {}", e.getMessage());
+			return null;
 		}
 	}
 
@@ -178,6 +182,27 @@ public class UserManager {
 		} else {
 			throw new SecurityException();
 		}
+	}
+
+	private User createUser(User user, boolean enabled, Constants.ROLES role,
+			EmailMessage activationEmail) throws Exception {
+		if (user != null) {
+			if (userDao.isEmailAlreadyUse(user.getEmail())
+					|| userDao.getUserByUsername(user.getUsername()) != null) {
+				return null;
+			}
+			user.setEnabled(enabled ? 1 : 0);
+			user.setRole(role.toString());
+			user = userDao.addUser(user);
+
+			if (activationEmail != null) {
+				mailer.sendMail(activationEmail.getFrom(), user.getEmail(),
+						activationEmail.getSubject(),
+						activationEmail.getMessage());
+			}
+		}
+
+		return user;
 	}
 
 	/**

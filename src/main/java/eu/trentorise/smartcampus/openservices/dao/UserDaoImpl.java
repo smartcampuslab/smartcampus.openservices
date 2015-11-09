@@ -106,7 +106,7 @@ public class UserDaoImpl implements UserDao {
 	 */
 	@Transactional
 	@Override
-	public void addUser(User user) throws DataAccessException {
+	public User addUser(User user) throws DataAccessException {
 		String passw = user.getPassword();
 		if (passw != null) {
 			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -115,6 +115,7 @@ public class UserDaoImpl implements UserDao {
 			user.setPassword(encodedPassword);
 		}
 		getEntityManager().persist(user);
+		return user;
 	}
 
 	/**

@@ -37,6 +37,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.google.gson.Gson;
 
+import eu.trentorise.smartcampus.aac.AACService;
 import eu.trentorise.smartcampus.openservices.Constants;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.entities.User;
@@ -53,7 +54,8 @@ import eu.trentorise.smartcampus.openservices.support.CookieUser;
 @PropertySource("classpath:openservice.properties")
 public class HomeController {
 
-	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(HomeController.class);
 
 	/**
 	 * Instance of {@link UserManager} to retrieve data using Dao classes.
@@ -66,49 +68,53 @@ public class HomeController {
 	@Inject
 	private Environment env;
 
+	@Autowired
+	private AACService oauthClient;
+
 	/**
-	 * Home service that returns user to home page.
-	 * It checks if user is authenticated and changes cookie value accordingly.
-	 * If cookie value is true then user is authenticated, otherwise it is false.
-	 * Due to social login, it checks if cookie user already exists if user is 
-	 * authenticated. If this cookie does not exists and cookie value is true, then
-	 * it creates it.
+	 * Home service that returns user to home page. It checks if user is
+	 * authenticated and changes cookie value accordingly. If cookie value is
+	 * true then user is authenticated, otherwise it is false. Due to social
+	 * login, it checks if cookie user already exists if user is authenticated.
+	 * If this cookie does not exists and cookie value is true, then it creates
+	 * it.
 	 * 
 	 * @param request
-	 *          : {@link HttpServletRequest} which is needed to find out if a
+	 *            : {@link HttpServletRequest} which is needed to find out if a
 	 *            specific cookie exists.
 	 * @param response
-	 *          : {@link HttpServletResponse} which returns a new cookie or if
+	 *            : {@link HttpServletResponse} which returns a new cookie or if
 	 *            it already exists, modified it.
 	 * @return home jsp
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(HttpServletRequest request, HttpServletResponse response) {
-		
-		logger.info("Context Path: {}", request.getContextPath());
-		
-		
-		logger.info("-- Welcome home! --");
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		String username = SecurityContextHolder.getContext()
+				.getAuthentication().getName();
 		response.setHeader("User", username);
-		logger.info("-- Welcome home! User: " + username + " --");
-		String roles = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString();
+		String roles = SecurityContextHolder.getContext().getAuthentication()
+				.getAuthorities().toString();
 		response.setHeader("Roles", roles);
-		logger.info("-- Welcome home! Roles: " + roles + " --");
 
 		// Principal and credentials
-		logger.info("-- Principal: " + SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString() + " --"
-				+ "Credentials: " + SecurityContextHolder.getContext().getAuthentication().getCredentials() + " --");
+		logger.debug("-- Principal: "
+				+ SecurityContextHolder.getContext().getAuthentication()
+						.getPrincipal().toString()
+				+ " --"
+				+ "Credentials: "
+				+ SecurityContextHolder.getContext().getAuthentication()
+						.getCredentials() + " --");
 
 		// return cookie not Http Only with value true if user is authenticated
 		// o.w. false
 		String value = "false";
 		if (!username.equalsIgnoreCase("anonymousUser")) {
-			value = SecurityContextHolder.getContext().getAuthentication().isAuthenticated() + "";
+			value = SecurityContextHolder.getContext().getAuthentication()
+					.isAuthenticated()
+					+ "";
 		}
-		logger.info("-- Welcome home! Authenticated: " + value + " --");
 		Cookie cookie = new Cookie("value", value);
-		cookie.setPath(request.getContextPath()+"/");
+		cookie.setPath(request.getContextPath() + "/");
 
 		boolean found = false;
 		Cookie[] cookies = request.getCookies();
@@ -116,44 +122,43 @@ public class HomeController {
 		if (cookies != null) {
 			for (int i = 0; i < cookies.length; i++) {
 				name = cookies[i].getName();
-				System.out.println("Found cookies: " + i + ", name: " + name);
+				logger.debug("Found cookies: " + i + ", name: " + name);
 				if (name.equalsIgnoreCase("value")) {
 					cookies[i].setValue(value);
-					cookies[i].setPath(request.getContextPath()+"/");
-					// cookies[i].setMaxAge(0);
+					cookies[i].setPath(request.getContextPath() + "/");
 					found = true;
 					response.addCookie(cookies[i]);
 				}
 			}
 		} else {
-			System.out.println("No cookie in response");
+			logger.debug("No cookie in response");
 			response.addCookie(cookie);
 		}
 		if (cookies != null && !found) {
-			System.out.println("No cookie value in this request");
+			logger.debug("No cookie value in this request");
 			response.addCookie(cookie);
 		}
-		
-		//check if cookie user exists ow. create it if user is authenticated
+
+		// check if cookie user exists ow. create it if user is authenticated
 		boolean fUser = false;
-		if(value.equalsIgnoreCase("true")){
+		if (value.equalsIgnoreCase("true")) {
 			for (int i = 0; i < cookies.length; i++) {
 				name = cookies[i].getName();
-				System.out.println("Found cookies: " + i + ", name: " + name);
+				logger.debug("Found cookies: " + i + ", name: " + name);
 				if (name.equalsIgnoreCase("user")) {
 					fUser = true;
 				}
 			}
-			if(!fUser){
+			if (!fUser) {
 				CookieUser cu = new CookieUser();
 				cu.setUsername(username);
 				cu.setRole(Constants.ROLES.ROLE_NORMAL.toString());
-				
+
 				Gson gson = new Gson();
 				String obj = gson.toJson(cu);
-				
+
 				Cookie userCookie = new Cookie("user", obj);
-				userCookie.setPath(request.getContextPath()+"/");
+				userCookie.setPath(request.getContextPath() + "/");
 				response.addCookie(userCookie);
 			}
 		}
@@ -162,23 +167,24 @@ public class HomeController {
 	}
 
 	/**
-	 * Welcome rest service retrieves user data and it is called after login in. 
+	 * Welcome rest service retrieves user data and it is called after login in.
 	 * It returns user data and sets cookie value to true.
 	 * 
 	 * @param request
-	 *          : {@link HttpServletRequest} which is needed to find out if a
+	 *            : {@link HttpServletRequest} which is needed to find out if a
 	 *            specific cookie exists.
 	 * @param response
-	 *          : {@link HttpServletResponse} which returns a new cookie or if
+	 *            : {@link HttpServletResponse} which returns a new cookie or if
 	 *            it already exists, modified it.
 	 * @return {@link ResponseObject} with user data, status (OK or NOT FOUND)
 	 *         and error message (if status is NOT FOUND).
 	 */
 	@RequestMapping(value = "/welcome", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseObject printWelcome(HttpServletRequest request, HttpServletResponse response) {
-		logger.info("-- Welcome after login --");
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+	public ResponseObject printWelcome(HttpServletRequest request,
+			HttpServletResponse response) {
+		String username = SecurityContextHolder.getContext()
+				.getAuthentication().getName();
 		User user = userManager.getUserByUsername(username);
 		ResponseObject responseObject = new ResponseObject();
 		if (user != null) {
@@ -189,10 +195,11 @@ public class HomeController {
 			responseObject.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			responseObject.setError("User does not exist or database problem");
 		}
-		logger.info("-- User " + username + " --");
 
 		// check if cookie value exists and set it
-		String value = SecurityContextHolder.getContext().getAuthentication().isAuthenticated() + "";
+		String value = SecurityContextHolder.getContext().getAuthentication()
+				.isAuthenticated()
+				+ "";
 		Cookie[] cookies = request.getCookies();
 		String name;
 		if (cookies != null) {
@@ -200,7 +207,7 @@ public class HomeController {
 				name = cookies[i].getName();
 				if (name.equalsIgnoreCase("value")) {
 					cookies[i].setValue(value + "");
-					cookies[i].setPath(request.getContextPath()+"/");
+					cookies[i].setPath(request.getContextPath() + "/");
 					response.addCookie(cookies[i]);
 				}
 
@@ -211,32 +218,35 @@ public class HomeController {
 	}
 
 	/**
-	 * Error rest service returns to home jsp with response status NOT FOUND. It is called when
-	 * user do wrong requests.
+	 * Error rest service returns to home jsp with response status NOT FOUND. It
+	 * is called when user do wrong requests.
 	 * 
 	 * @param value
-	 *          : {@link Cookie} object, it contains value cookie set to false
+	 *            : {@link Cookie} object, it contains value cookie set to false
 	 *            or true.
 	 * @param user
-	 *          : {@link Cookie} object, it contains user data such as username
-	 *            and roles.
+	 *            : {@link Cookie} object, it contains user data such as
+	 *            username and roles.
 	 * @param request
-	 *          : {@link HttpServletRequest} DO NOTHING NOW
+	 *            : {@link HttpServletRequest} DO NOTHING NOW
 	 * @param response
-	 *           : {@link HttpServletResponse} which returns an error response (404, NOT FOUND).
+	 *            : {@link HttpServletResponse} which returns an error response
+	 *            (404, NOT FOUND).
 	 * @return home jsp
 	 */
 
 	@RequestMapping()
-	public String error(@CookieValue(value = "value", required = false) String value,
-			@CookieValue(value = "user", required = false) String user, HttpServletRequest request, HttpServletResponse response){
-		logger.info("-- Error mapping! --");
+	public String error(
+			@CookieValue(value = "value", required = false) String value,
+			@CookieValue(value = "user", required = false) String user,
+			HttpServletRequest request, HttpServletResponse response) {
 		response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		return home(request, response);
 	}
 
 	/**
-	 * Login rest checks if cookie value already exists and change its value to false.
+	 * Login rest checks if cookie value already exists and change its value to
+	 * false.
 	 * 
 	 * @param request
 	 *            : instance of {@link HttpServletRequest}
@@ -246,18 +256,16 @@ public class HomeController {
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login(HttpServletRequest request, HttpServletResponse response) {
-		logger.info("-- Perform Login --");
-
 		// Check if cookies exist and change them
 		Cookie[] cookies = request.getCookies();
-		String name;
+		String name = null;
 		if (cookies != null) {
 			for (int i = 0; i < cookies.length; i++) {
 				name = cookies[i].getName();
-				System.out.println("Found cookies: " + i + ", name: " + name);
+				logger.debug("Found cookies: " + i + ", name: " + name);
 				if (name.equalsIgnoreCase("value")) {
 					cookies[i].setValue("false");
-					cookies[i].setPath(request.getContextPath()+"/");
+					cookies[i].setPath(request.getContextPath() + "/");
 					response.addCookie(cookies[i]);
 				}
 				if (name.equalsIgnoreCase("user")) {
@@ -276,7 +284,7 @@ public class HomeController {
 	 * insert wrong credentials.
 	 * 
 	 * @param response
-	 *          : {@link HttpServletResponse} which returns an error response
+	 *            : {@link HttpServletResponse} which returns an error response
 	 *            (404, NOT FOUND).
 	 * @return {@link ResponseObject} with status (401, UNAUTHORIZED) and error
 	 *         message.
@@ -284,7 +292,6 @@ public class HomeController {
 	@RequestMapping(value = "/loginfailed", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseObject loginfailed(HttpServletResponse response) {
-		logger.info("-- Login failed --");
 		ResponseObject responseObject = new ResponseObject();
 		responseObject.setStatus(401);
 		responseObject.setError("Invalid username or password");
@@ -293,28 +300,34 @@ public class HomeController {
 	}
 
 	/**
-	 * Logout rest sets authentication to false and cookie value to false.
-	 * It redirects users to home page.
+	 * Logout rest sets authentication to false and cookie value to false. It
+	 * redirects users to home page.
 	 * 
 	 * @param request
-	 *          : {@link HttpServletRequest} which is needed to find out if a
+	 *            : {@link HttpServletRequest} which is needed to find out if a
 	 *            specific cookie exists.
 	 * @param response
-	 *         :  {@link HttpServletResponse} which returns a new cookie or if
+	 *            : {@link HttpServletResponse} which returns a new cookie or if
 	 *            it already exists, modified it.
 	 * @return home jsp
 	 */
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logout(HttpServletRequest request, HttpServletResponse response) {
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		logger.info("-- Logout " + username + " --" + SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
-		/*String sessionId = ((WebAuthenticationDetails) SecurityContextHolder.getContext().getAuthentication().getDetails())
-				.getSessionId();*/
-		//logger.info("-- JSessionID: --" + sessionId);
-		SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
+	public String logout(HttpServletRequest request,
+			HttpServletResponse response) {
+		String username = SecurityContextHolder.getContext()
+				.getAuthentication().getName();
+		logger.debug("-- Logout "
+				+ username
+				+ " --"
+				+ SecurityContextHolder.getContext().getAuthentication()
+						.isAuthenticated());
+		SecurityContextHolder.getContext().getAuthentication()
+				.setAuthenticated(false);
 
 		// check if cookie value exists and set it
-		String value = SecurityContextHolder.getContext().getAuthentication().isAuthenticated() + "";
+		String value = SecurityContextHolder.getContext().getAuthentication()
+				.isAuthenticated()
+				+ "";
 		Cookie[] cookies = request.getCookies();
 		String name;
 		if (cookies != null) {
@@ -322,7 +335,7 @@ public class HomeController {
 				name = cookies[i].getName();
 				if (name.equalsIgnoreCase("value")) {
 					cookies[i].setValue(value + "");
-					cookies[i].setPath(request.getContextPath()+"/");
+					cookies[i].setPath(request.getContextPath() + "/");
 					response.addCookie(cookies[i]);
 				}
 
@@ -330,61 +343,78 @@ public class HomeController {
 		}
 		return "index";
 	}
-	
+
+	@RequestMapping(value = "/signin", method = RequestMethod.GET)
+	public @ResponseBody
+	String signin(HttpServletRequest request, HttpServletResponse response) {
+
+		boolean oauthAuth = env.getProperty("oauth.active", Boolean.class,
+				false);
+
+		String loginPageURL = "";
+		if (oauthAuth) {
+			loginPageURL = oauthClient.generateAuthorizationURIForCodeFlow(
+					env.getProperty("oauth.callback_uri"), null, null, null);
+		}
+
+		return loginPageURL;
+	}
+
 	/**
 	 * Callback api manager service with username.
 	 * 
-	 * @param request 
-	 * 				: instance of {@link HttpServletRequest}
-	 * @param response 
-	 * 				: instance of {@link HttpServletResponse}
-	 * @return instance of {@link ResponseObject} with status (200 or 400) and error
-	 *         message.
+	 * @param request
+	 *            : instance of {@link HttpServletRequest}
+	 * @param response
+	 *            : instance of {@link HttpServletResponse}
+	 * @return instance of {@link ResponseObject} with status (200 or 400) and
+	 *         error message.
 	 */
 	@RequestMapping(value = "/apimanager/callback", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseObject apimanagercallback(HttpServletRequest request, HttpServletResponse response) {
-		logger.info("Welcome after redirection from apiManager!");
-		
-		//set value cookie like welcome
+	public ResponseObject apimanagercallback(HttpServletRequest request,
+			HttpServletResponse response) {
+		// set value cookie like welcome
 		ResponseObject welcome = printWelcome(request, response);
 		logger.info("After login: {}", welcome);
-		//then callback api manager
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		
-		//set cookie user
+		// then callback api manager
+		String username = SecurityContextHolder.getContext()
+				.getAuthentication().getName();
+
+		// set cookie user
 		CookieUser cu = new CookieUser();
 		cu.setUsername(username);
 		cu.setRole(Constants.ROLES.ROLE_NORMAL.toString());
-		
+
 		Gson gson = new Gson();
 		String obj = gson.toJson(cu);
-		
+
 		Cookie userCookie = new Cookie("user", obj);
-		userCookie.setPath(request.getContextPath()+"/");
+		userCookie.setPath(request.getContextPath() + "/");
 		response.addCookie(userCookie);
-		
-		
-		//POST request to apimanager
+
+		// POST request to apimanager
 		RestTemplate restTemplate = new RestTemplate();
-		
+
 		ResponseEntity<String> respEnt = restTemplate.postForEntity(
-				env.getProperty("apimanager.callback_uri"), username ,String.class);
-		
+				env.getProperty("apimanager.callback_uri"), username,
+				String.class);
+
 		logger.info("Headers {}", respEnt.getHeaders());
 		logger.info("Body {}", respEnt.getBody());
 		logger.info("Status Code {}", respEnt.getStatusCode());
-		
+
 		ResponseObject responseObject = new ResponseObject();
-		if(respEnt.getStatusCode()==HttpStatus.OK){
+		if (respEnt.getStatusCode() == HttpStatus.OK) {
 			responseObject.setData(respEnt.getBody());
 			responseObject.setStatus(HttpServletResponse.SC_OK);
-		}else{
+		} else {
 			responseObject.setStatus(400);
-			responseObject.setError("Invalid Request. Need username parameter.");
+			responseObject
+					.setError("Invalid Request. Need username parameter.");
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
-		
+
 		return responseObject;
 	}
 }

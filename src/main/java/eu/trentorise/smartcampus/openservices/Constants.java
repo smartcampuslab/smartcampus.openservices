@@ -39,7 +39,7 @@ public class Constants {
 	 * Roles enum
 	 */
 	public enum ROLES {
-		ROLE_ADMIN, ROLE_ORGOWNER, ROLE_NORMAL, ROLE_SERVICEOWNER
+		ROLE_ADMIN, ROLE_ORGOWNER, ROLE_NORMAL, ROLE_SERVICEOWNER, ROLE_OAUTH
 	};
 
 	/**

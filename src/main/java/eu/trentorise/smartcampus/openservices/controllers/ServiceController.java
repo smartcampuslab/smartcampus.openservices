@@ -180,7 +180,7 @@ public class ServiceController {
 				.getAuthentication().getName();
 
 		ResponseObject responseObject = new ResponseObject();
-		if (service.getWadl().getBody() != null
+		if (service.getWadl() != null && service.getWadl().getBody() != null
 				&& !wadlGenerator.isValidWADL(service.getWadl().getBody())) {
 			responseObject.setError("Invalid WADL.");
 			responseObject.setStatus(HttpServletResponse.SC_BAD_REQUEST);

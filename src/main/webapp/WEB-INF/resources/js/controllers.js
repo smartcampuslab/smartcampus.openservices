@@ -56,6 +56,11 @@ app.controller('navCtrl', [ '$scope', 'Auth', '$location', '$rootScope',
 				$rootScope.navtemplate = 'partials/nav/_menu.html';
 			}
 
+			
+			$scope.getLoginPageURL = function() {
+				Auth.getLoginURL();
+			};
+			
 			$scope.logout = function() {
 				Auth.logout(function() {
 					$rootScope.navtemplate = 'partials/nav/_signin.html';
