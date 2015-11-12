@@ -3,7 +3,6 @@ package eu.trentorise.smartcampus.openservices.controllers;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +34,9 @@ public class OauthController {
 	@Autowired
 	private Environment env;
 
+	@Autowired
+	private OauthAuthentication oauth;
+
 	private static final Logger logger = org.slf4j.LoggerFactory
 			.getLogger(OauthController.class);
 
@@ -45,9 +47,9 @@ public class OauthController {
 			String userToken = oauthClient.exchngeCodeForToken(code,
 					env.getProperty("oauth.callback_uri")).getAccess_token();
 			BasicProfile profile = profileService.getBasicProfile(userToken);
-			Authentication auth = new OauthAuthentication(profile.getUserId());
-			auth.setAuthenticated(true);
-			SecurityContextHolder.getContext().setAuthentication(auth);
+			oauth.setName(profile.getUserId());
+			oauth.setAuthenticated(true);
+			SecurityContextHolder.getContext().setAuthentication(oauth);
 
 			// save user in local db
 			User u = new User();

@@ -3,12 +3,16 @@ package eu.trentorise.smartcampus.openservices.securitymodel;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.stereotype.Component;
 
 import eu.trentorise.smartcampus.openservices.UserRoles;
 
+@Component
 public class OauthAuthentication implements Authentication {
 
 	private static final long serialVersionUID = 2811105035816583809L;
@@ -16,7 +20,13 @@ public class OauthAuthentication implements Authentication {
 	private boolean authenticated;
 	private String username;
 
-	public OauthAuthentication(String username) {
+	@Autowired
+	Environment env;
+
+	public OauthAuthentication() {
+	}
+
+	public void setName(String username) {
 		this.username = username;
 	}
 
@@ -27,8 +37,11 @@ public class OauthAuthentication implements Authentication {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return Arrays.asList(new SimpleGrantedAuthority(UserRoles.ROLE_OAUTH
-				.toString()));
+		String role = UserRoles.ROLE_OAUTH.toString();
+		if (username.equals(env.getProperty("admin.username"))) {
+			role = UserRoles.ROLE_ADMIN.toString();
+		}
+		return Arrays.asList(new SimpleGrantedAuthority(role));
 	}
 
 	@Override

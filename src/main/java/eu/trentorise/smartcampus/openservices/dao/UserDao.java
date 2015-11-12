@@ -19,6 +19,7 @@ import java.util.List;
 
 import org.springframework.dao.DataAccessException;
 
+import eu.trentorise.smartcampus.openservices.UserRoles;
 import eu.trentorise.smartcampus.openservices.entities.User;
 
 /**
@@ -67,6 +68,8 @@ public interface UserDao {
 	 * @throws DataAccessException
 	 */
 	public void modifyUser(int userId, User user) throws DataAccessException;
+
+	public User changeRole(String username, UserRoles role);
 
 	/**
 	 * Add a new user.

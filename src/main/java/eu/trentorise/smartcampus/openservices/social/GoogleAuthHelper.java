@@ -15,6 +15,17 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.social;
 
+import java.io.IOException;
+import java.security.SecureRandom;
+import java.util.Arrays;
+import java.util.Collection;
+
+import org.codehaus.jackson.map.DeserializationConfig;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.introspect.NopAnnotationIntrospector;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Service;
+
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeRequestUrl;
@@ -27,26 +38,13 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson.JacksonFactory;
 
-
-
-import java.io.IOException;
-import java.security.SecureRandom;
-import java.util.Arrays;
-import java.util.Collection;
-
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.introspect.NopAnnotationIntrospector;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Service;
-
 /**
  * A helper class for Google's OAuth2 authentication API.
  * 
  * @version 20130224
  * @author Matyas Danter
  * 
- * Modified by Giulia Canobbio.
+ *         Modified by Giulia Canobbio.
  */
 @Service("googleHelper")
 @PropertySource("classpath:openservice.properties")
@@ -72,24 +70,22 @@ public final class GoogleAuthHelper {
 	 * ID, SECRET, and SCOPE.
 	 * 
 	 * @param client_id
-	 * 				: String
+	 *            : String
 	 * @param client_secret
-	 * 				: String
+	 *            : String
 	 * @param callback_uri
-	 * 				: String
+	 *            : String
 	 */
-	public GoogleAuthHelper(String client_id, String client_secret, String callback_uri) {
-		
-		CLIENT_ID=client_id;
-		CLIENT_SECRET=client_secret;
-		CALLBACK_URI=callback_uri;
-		
-		System.out.println("CLIENT ID: "+CLIENT_ID);
-		System.out.println("CLIENT SECRET: "+CLIENT_SECRET);
-		System.out.println("CALLBACK: "+CALLBACK_URI);
-		
+	public GoogleAuthHelper(String client_id, String client_secret,
+			String callback_uri) {
+
+		CLIENT_ID = client_id;
+		CLIENT_SECRET = client_secret;
+		CALLBACK_URI = callback_uri;
+
 		flow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT,
-				JSON_FACTORY, CLIENT_ID, CLIENT_SECRET, (Collection<String>) SCOPE).build();
+				JSON_FACTORY, CLIENT_ID, CLIENT_SECRET,
+				(Collection<String>) SCOPE).build();
 
 		generateStateToken();
 
@@ -129,7 +125,7 @@ public final class GoogleAuthHelper {
 	 * the user's profile information.
 	 * 
 	 * @param authCode
-	 * 			: String, authentication code provided by google
+	 *            : String, authentication code provided by google
 	 * @return {@link GoogleUser} formatted user profile information
 	 * @throws IOException
 	 */
@@ -146,10 +142,11 @@ public final class GoogleAuthHelper {
 		final HttpRequest request = requestFactory.buildGetRequest(url);
 		request.getHeaders().setContentType("application/json");
 		final String jsonIdentity = request.execute().parseAsString();
-		
+
 		ObjectMapper obMapper = new ObjectMapper();
-		obMapper.setAnnotationIntrospector(NopAnnotationIntrospector.nopInstance());
-	    obMapper.disable(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES);
+		obMapper.setAnnotationIntrospector(NopAnnotationIntrospector
+				.nopInstance());
+		obMapper.disable(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES);
 
 		GoogleUser user = obMapper.readValue(jsonIdentity, GoogleUser.class);
 

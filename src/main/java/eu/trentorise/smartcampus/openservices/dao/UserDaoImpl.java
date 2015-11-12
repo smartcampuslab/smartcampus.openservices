@@ -26,6 +26,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import eu.trentorise.smartcampus.openservices.UserRoles;
 import eu.trentorise.smartcampus.openservices.entities.User;
 
 /**
@@ -191,6 +192,17 @@ public class UserDaoImpl implements UserDao {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public User changeRole(String username, UserRoles role) {
+		User user = getUserByUsername(username);
+		if (user != null) {
+			user.setRole(role.toString());
+			user = getEntityManager().merge(user);
+		}
+
+		return user;
 	}
 
 }

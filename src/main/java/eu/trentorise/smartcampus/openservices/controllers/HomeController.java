@@ -152,7 +152,11 @@ public class HomeController {
 			if (!fUser) {
 				CookieUser cu = new CookieUser();
 				cu.setUsername(username);
-				cu.setRole(UserRoles.ROLE_NORMAL.toString());
+				String role = UserRoles.ROLE_NORMAL.toString();
+				if (username.equals(env.getProperty("admin.username"))) {
+					role = UserRoles.ROLE_ADMIN.toString();
+				}
+				cu.setRole(role);
 
 				Gson gson = new Gson();
 				String obj = gson.toJson(cu);

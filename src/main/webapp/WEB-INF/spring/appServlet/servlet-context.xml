@@ -70,4 +70,6 @@
 	    <b:constructor-arg value="${profileservice.endpoint}"></b:constructor-arg>
 	</b:bean>
 	
+	<b:bean id="oauth" class="eu.trentorise.smartcampus.openservices.securitymodel.OauthAuthentication" />
+	
 </b:beans>

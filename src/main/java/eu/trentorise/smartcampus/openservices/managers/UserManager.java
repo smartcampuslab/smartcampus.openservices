@@ -77,6 +77,9 @@ public class UserManager {
 	@Value("${admin.email}")
 	private String adminEmail;
 
+	@Value("${oauth.active}")
+	private boolean isOauthActive;
+
 	/**
 	 * Get user data by id.
 	 * 
@@ -110,7 +113,7 @@ public class UserManager {
 	@PostConstruct
 	@SuppressWarnings("unused")
 	private void initAdminAccount() {
-		if (userDao.getUserByUsername(adminUsername) == null) {
+		if (userDao.getUserByUsername(adminUsername) == null && !isOauthActive) {
 			logger.info("Admin account not found...init with default account");
 			User admin = new User();
 			admin.setEmail(adminEmail);
@@ -154,7 +157,13 @@ public class UserManager {
 
 	public User createOauthUser(User user) {
 		try {
-			return createUser(user, true, UserRoles.ROLE_OAUTH, null);
+			UserRoles role = user.getUsername().equals(adminUsername) ? UserRoles.ROLE_ADMIN
+					: UserRoles.ROLE_OAUTH;
+			user = userDao.changeRole(user.getUsername(), role);
+			if (user == null) {
+				user = createUser(user, true, role, null);
+			}
+			return user;
 		} catch (Exception e) {
 			logger.error("Error creating local oauth user: {}", e.getMessage());
 			return null;
