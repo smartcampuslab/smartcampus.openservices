@@ -362,7 +362,18 @@
 	</dependencies>
 
 	<build>
-
+		<filters>
+			<filter>src/main/runtime.properties</filter>
+		</filters>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>openservice.properties</include>
+				</includes>
+			</resource>
+		</resources>
 		<plugins>
 
 			<plugin>

@@ -6,3 +6,4 @@
 /LICENSE-2.0.html
 /bin
 /.externalToolBuilders
+src/main/runtime.properties
