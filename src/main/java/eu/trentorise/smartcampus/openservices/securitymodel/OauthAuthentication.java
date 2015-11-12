@@ -37,7 +37,7 @@ public class OauthAuthentication implements Authentication {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		String role = UserRoles.ROLE_OAUTH.toString();
+		String role = UserRoles.ROLE_USER.toString();
 		if (username.equals(env.getProperty("admin.username"))) {
 			role = UserRoles.ROLE_ADMIN.toString();
 		}

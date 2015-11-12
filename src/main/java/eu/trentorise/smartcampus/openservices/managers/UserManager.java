@@ -158,7 +158,7 @@ public class UserManager {
 	public User createOauthUser(User user) {
 		try {
 			UserRoles role = user.getUsername().equals(adminUsername) ? UserRoles.ROLE_ADMIN
-					: UserRoles.ROLE_OAUTH;
+					: UserRoles.ROLE_USER;
 			user = userDao.changeRole(user.getUsername(), role);
 			if (user == null) {
 				user = createUser(user, true, role, null);
