@@ -11,6 +11,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import eu.trentorise.smartcampus.openservices.UserRoles;
+import eu.trentorise.smartcampus.openservices.entities.User;
+import eu.trentorise.smartcampus.openservices.managers.UserManager;
 
 @Component
 public class OauthAuthentication implements Authentication {
@@ -20,8 +22,13 @@ public class OauthAuthentication implements Authentication {
 	private boolean authenticated;
 	private String username;
 
+	private Collection<? extends GrantedAuthority> auths;
+
 	@Autowired
-	Environment env;
+	private Environment env;
+
+	@Autowired
+	private UserManager userManager;
 
 	public OauthAuthentication() {
 	}
@@ -37,11 +44,25 @@ public class OauthAuthentication implements Authentication {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		String role = UserRoles.ROLE_USER.toString();
-		if (username.equals(env.getProperty("admin.username"))) {
-			role = UserRoles.ROLE_ADMIN.toString();
+		if (auths == null) {
+			User u = userManager.getUserByUsername(username);
+			String role = null;
+			if (u == null) {
+				if (username.equals(env.getProperty("admin.username", "admin"))) {
+					role = UserRoles.ROLE_ADMIN.toString();
+				} else {
+					role = env.getProperty("oauth.usermode.restricted",
+							Boolean.class, true) ? UserRoles.ROLE_USER
+							.toString() : UserRoles.ROLE_NORMAL.toString();
+				}
+			} else {
+				role = u.getRole();
+			}
+			auths = Arrays.asList(new SimpleGrantedAuthority(role));
+
 		}
-		return Arrays.asList(new SimpleGrantedAuthority(role));
+
+		return auths;
 	}
 
 	@Override

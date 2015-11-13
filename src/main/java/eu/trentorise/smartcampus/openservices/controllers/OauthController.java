@@ -1,5 +1,9 @@
 package eu.trentorise.smartcampus.openservices.controllers;
 
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -41,30 +45,50 @@ public class OauthController {
 			.getLogger(OauthController.class);
 
 	@RequestMapping(method = RequestMethod.GET, value = "/oauthcheck")
-	public ModelAndView oauthChecker(@RequestParam String code) {
+	public ModelAndView oauthChecker(
+			@RequestParam(required = false) String code,
+			@RequestParam(required = false) String error,
+			@RequestParam(value = "error_description", required = false) String errorDesc,
+			HttpServletResponse resp) throws IOException {
 
-		try {
-			String userToken = oauthClient.exchngeCodeForToken(code,
-					env.getProperty("oauth.callback_uri")).getAccess_token();
-			BasicProfile profile = profileService.getBasicProfile(userToken);
-			oauth.setName(profile.getUserId());
-			oauth.setAuthenticated(true);
-			SecurityContextHolder.getContext().setAuthentication(oauth);
-
-			// save user in local db
-			User u = new User();
-			u.setUsername(profile.getUserId());
-			// email cannot be null
-			u.setEmail(profile.getUserId());
-			userManager.createOauthUser(u);
-		} catch (SecurityException e) {
-			logger.error("Error in oauth controller", e);
-		} catch (AACException e) {
-			logger.error("Error in oauth controller", e);
-		} catch (ProfileServiceException e) {
-			logger.error("Error in oauth controller", e);
+		if ("access_denied".equals(error)) {
+			resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, errorDesc);
+			return null;
 		}
+		if (code != null) {
+			try {
+				String userToken = oauthClient.exchngeCodeForToken(code,
+						env.getProperty("oauth.callback_uri"))
+						.getAccess_token();
+				BasicProfile profile = profileService
+						.getBasicProfile(userToken);
+				oauth.setName(profile.getUserId());
+				oauth.setAuthenticated(true);
+				SecurityContextHolder.getContext().setAuthentication(oauth);
+				// if authentication true
+				// search in local db for roles
+				// otherwise create new user with role based on restricted
+				// save user in local db
+				if (userManager.getUserByUsername(profile.getUserId()) == null) {
+					User u = new User();
+					u.setUsername(profile.getUserId());
+					// email cannot be null
+					u.setEmail(profile.getUserId());
+					userManager.createOauthUser(u);
+				}
+			} catch (SecurityException e) {
+				logger.error("Error in oauth controller", e);
+			} catch (AACException e) {
+				logger.error("Error in oauth controller", e);
+			} catch (ProfileServiceException e) {
+				logger.error("Error in oauth controller", e);
+			}
 
-		return new ModelAndView("redirect: /");
+			return new ModelAndView("redirect: /");
+		} else {
+			resp.sendError(HttpServletResponse.SC_BAD_REQUEST,
+					"request without either code and error");
+			return null;
+		}
 	}
 }

@@ -53,7 +53,7 @@ services
 									}
 									return user
 											&& user.role
-											&& (user.role.title === userRoles.ROLE_NORMAL.title || user.role.title === userRoles.ROLE_ADMIN.title);
+											&& (user.role.title === userRoles.ROLE_USER.title || user.role.title === userRoles.ROLE_NORMAL.title || user.role.title === userRoles.ROLE_ADMIN.title);
 								},
 								register : function(user, success, error) {
 									$http.post('/register', user).success(function(res) {

@@ -80,6 +80,9 @@ public class UserManager {
 	@Value("${oauth.active}")
 	private boolean isOauthActive;
 
+	@Value("${oauth.usermode.restricted}")
+	private boolean restrictedMode;
+
 	/**
 	 * Get user data by id.
 	 * 
@@ -157,13 +160,14 @@ public class UserManager {
 
 	public User createOauthUser(User user) {
 		try {
-			UserRoles role = user.getUsername().equals(adminUsername) ? UserRoles.ROLE_ADMIN
-					: UserRoles.ROLE_USER;
-			user = userDao.changeRole(user.getUsername(), role);
-			if (user == null) {
-				user = createUser(user, true, role, null);
+			UserRoles role = null;
+			if (user.getUsername().equals(adminUsername)) {
+				role = UserRoles.ROLE_ADMIN;
+			} else {
+				role = restrictedMode ? UserRoles.ROLE_USER
+						: UserRoles.ROLE_NORMAL;
 			}
-			return user;
+			return createUser(user, true, role, null);
 		} catch (Exception e) {
 			logger.error("Error creating local oauth user: {}", e.getMessage());
 			return null;
