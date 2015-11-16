@@ -1,6 +1,6 @@
 package eu.trentorise.smartcampus.openservices.managers;
 
-import it.smartcommunitylab.openservice.usdl.ExtWeliveCore;
+import it.smartcommunitylab.openservices.usdl.ExtWeliveCore;
 import it.smartcommunitylab.openservices.usdl.Foaf;
 import it.smartcommunitylab.openservices.usdl.WeliveCore;
 import it.smartcommunitylab.openservices.usdl.WeliveSecurity;

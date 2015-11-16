@@ -1,4 +1,4 @@
-package it.smartcommunitylab.openservice.usdl;
+package it.smartcommunitylab.openservices.usdl;
 
 import it.smartcommunitylab.openservices.usdl.WeliveCore;
 
