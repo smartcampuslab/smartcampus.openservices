@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import eu.trentorise.smartcampus.openservices.UserRoles;
 import eu.trentorise.smartcampus.openservices.entities.User;
 import eu.trentorise.smartcampus.openservices.managers.UserManager;
+import eu.trentorise.smartcampus.profileservice.model.AccountProfile;
 
 @Component
 public class OauthAuthentication implements Authentication {
@@ -21,8 +22,7 @@ public class OauthAuthentication implements Authentication {
 
 	private boolean authenticated;
 	private String username;
-
-	private Collection<? extends GrantedAuthority> auths;
+	private AccountProfile account;
 
 	@Autowired
 	private Environment env;
@@ -44,25 +44,22 @@ public class OauthAuthentication implements Authentication {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		if (auths == null) {
-			User u = userManager.getUserByUsername(username);
-			String role = null;
-			if (u == null) {
-				if (username.equals(env.getProperty("admin.username", "admin"))) {
-					role = UserRoles.ROLE_ADMIN.toString();
-				} else {
-					role = env.getProperty("oauth.usermode.restricted",
-							Boolean.class, true) ? UserRoles.ROLE_USER
-							.toString() : UserRoles.ROLE_NORMAL.toString();
-				}
-			} else {
-				role = u.getRole();
-			}
-			auths = Arrays.asList(new SimpleGrantedAuthority(role));
+		User u = userManager.getUserByUsername(username);
+		String role = null;
 
+		if (u == null) {
+			if (userManager.isOauthAdmin(account)) {
+				role = UserRoles.ROLE_ADMIN.toString();
+			} else {
+				role = env.getProperty("oauth.usermode.restricted",
+						Boolean.class, true) ? UserRoles.ROLE_USER.toString()
+						: UserRoles.ROLE_NORMAL.toString();
+			}
+		} else {
+			role = u.getRole();
 		}
 
-		return auths;
+		return Arrays.asList(new SimpleGrantedAuthority(role));
 	}
 
 	@Override
@@ -89,6 +86,14 @@ public class OauthAuthentication implements Authentication {
 	public void setAuthenticated(boolean isAuthenticated)
 			throws IllegalArgumentException {
 		authenticated = isAuthenticated;
+	}
+
+	public AccountProfile getAccount() {
+		return account;
+	}
+
+	public void setAccount(AccountProfile account) {
+		this.account = account;
 	}
 
 }

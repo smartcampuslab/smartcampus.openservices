@@ -16,15 +16,18 @@
 package eu.trentorise.smartcampus.openservices.managers;
 
 import java.net.ConnectException;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityNotFoundException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -37,6 +40,7 @@ import eu.trentorise.smartcampus.openservices.dao.UserDao;
 import eu.trentorise.smartcampus.openservices.entities.TemporaryLink;
 import eu.trentorise.smartcampus.openservices.entities.User;
 import eu.trentorise.smartcampus.openservices.support.ApplicationMailer;
+import eu.trentorise.smartcampus.profileservice.model.AccountProfile;
 
 /**
  * Manager that retrieves, adds, modifies and deletes user data calling dao
@@ -82,6 +86,9 @@ public class UserManager {
 
 	@Value("${oauth.usermode.restricted}")
 	private boolean restrictedMode;
+
+	@Autowired
+	Environment env;
 
 	/**
 	 * Get user data by id.
@@ -158,10 +165,10 @@ public class UserManager {
 		}
 	}
 
-	public User createOauthUser(User user) {
+	public User createOauthUser(User user, AccountProfile profile) {
 		try {
 			UserRoles role = null;
-			if (user.getUsername().equals(adminUsername)) {
+			if (isOauthAdmin(profile)) {
 				role = UserRoles.ROLE_ADMIN;
 			} else {
 				role = restrictedMode ? UserRoles.ROLE_USER
@@ -172,6 +179,17 @@ public class UserManager {
 			logger.error("Error creating local oauth user: {}", e.getMessage());
 			return null;
 		}
+	}
+
+	public boolean isOauthAdmin(AccountProfile profile) {
+		String adminPattern = env.getProperty("oauth.admin", ";;");
+		String[] adminP = adminPattern.split(";");
+		Map<String, String> attrs = profile.getAttributes().get(adminP[0]);
+		if (attrs != null) {
+			String value = attrs.get(adminP[1]);
+			return StringUtils.equals(value, adminP[2]);
+		}
+		return false;
 	}
 
 	/**

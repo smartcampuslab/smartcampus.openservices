@@ -21,6 +21,7 @@ import eu.trentorise.smartcampus.openservices.managers.UserManager;
 import eu.trentorise.smartcampus.openservices.securitymodel.OauthAuthentication;
 import eu.trentorise.smartcampus.profileservice.BasicProfileService;
 import eu.trentorise.smartcampus.profileservice.ProfileServiceException;
+import eu.trentorise.smartcampus.profileservice.model.AccountProfile;
 import eu.trentorise.smartcampus.profileservice.model.BasicProfile;
 
 @Controller
@@ -62,7 +63,10 @@ public class OauthController {
 						.getAccess_token();
 				BasicProfile profile = profileService
 						.getBasicProfile(userToken);
+				AccountProfile account = profileService
+						.getAccountProfile(userToken);
 				oauth.setName(profile.getUserId());
+				oauth.setAccount(account);
 				oauth.setAuthenticated(true);
 				SecurityContextHolder.getContext().setAuthentication(oauth);
 				// if authentication true
@@ -74,7 +78,7 @@ public class OauthController {
 					u.setUsername(profile.getUserId());
 					// email cannot be null
 					u.setEmail(profile.getUserId());
-					userManager.createOauthUser(u);
+					userManager.createOauthUser(u, account);
 				}
 			} catch (SecurityException e) {
 				logger.error("Error in oauth controller", e);

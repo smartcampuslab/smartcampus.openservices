@@ -152,11 +152,6 @@ public class HomeController {
 			if (!fUser) {
 				CookieUser cu = new CookieUser();
 				cu.setUsername(username);
-				// String role = UserRoles.ROLE_NORMAL.toString();
-				// if (username.equals(env.getProperty("admin.username",
-				// "admin"))) {
-				// role = UserRoles.ROLE_ADMIN.toString();
-				// }
 				String role = SecurityContextHolder.getContext()
 						.getAuthentication().getAuthorities().iterator().next()
 						.getAuthority();
