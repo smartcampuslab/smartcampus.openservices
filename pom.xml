@@ -428,10 +428,8 @@
 					</execution>
 				</executions>
 				<configuration>
-					The working directory
-					to create the generated java source files.
-					<schemaDirectory>${basedir}/src/main/resources/wadl</schemaDirectory>
-					<!-- <generateDirectory>${basedir}/src/main/java</generateDirectory> -->
+					<schemaDirectory>${basedir}/src/main/schemas/wadl</schemaDirectory>
+					<!-- <generateDirectory>${basedir}/src/main/generated-sources</generateDirectory> -->
 				</configuration>
 			</plugin>
 
@@ -441,14 +439,13 @@
 				<version>0.8</version>
 				<configuration>
 					<includes>
-						<include>src/main/resources/usdl/*.rdf</include>
+						<include>src/main/schemas/usdl/*.rdf</include>
 					</includes>
 					<fileOptions>
 						<source>
 							<input>default</input>
 							<package-name>it.smartcommunitylab.openservices.usdl</package-name>
 						</source>
-
 					</fileOptions>
 				</configuration>
 				<executions>
