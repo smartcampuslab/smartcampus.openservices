@@ -23,6 +23,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 
+import eu.trentorise.smartcampus.openservices.AuthProtocol;
 import eu.trentorise.smartcampus.openservices.entities.Service;
 import eu.trentorise.smartcampus.openservices.entities.Tag;
 
@@ -112,7 +113,8 @@ public class USDLGenerator {
 			// authentication protocol
 			if (s.getAccessInformation().getAuthentication() != null
 					&& !s.getAccessInformation().getAuthentication()
-							.getAccessProtocol().equalsIgnoreCase("Public")) {
+							.getAccessProtocol()
+							.equalsIgnoreCase(AuthProtocol.Public.toString())) {
 				Resource r = m.createResource(buildingBlock.getURI()
 						+ "Communication", WeliveSecurity.CommunicationMeasure);
 				r.addProperty(WeliveSecurity.protocol, s.getAccessInformation()

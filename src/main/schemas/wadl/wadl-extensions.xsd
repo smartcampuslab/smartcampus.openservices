@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="wadl-extensions" xmlns:xml="http://www.w3.org/XML/1998/namespace"
+	xmlns:wadlx="wadl-extensions" xmlns:wadl="http://wadl.dev.java.net/2009/02"
+	xmlns='http://www.w3.org/1999/XMLSchema' elementFormDefault="qualified">
+
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace"
+		schemaLocation="http://www.w3.org/2001/xml.xsd" />
+
+	<xs:import namespace="http://wadl.dev.java.net/2009/02"
+		schemaLocation="wadl.xsd" />
+
+	<xs:element name="tag">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute type="xs:string" name="primary" use="optional" />
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="tags">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="wadlx:tag" maxOccurs="unbounded"
+					minOccurs="1" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="authentication">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute type="xs:string" name="required" />
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="exampleType">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute type="xs:string" name="url" />
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+
+	<xs:simpleType name="methodDisplayAttType">
+		<xs:restriction base="xs:string" />
+	</xs:simpleType>
+
+	<xs:simpleType name="paramNameAttType">
+		<xs:restriction base="xs:string" />
+	</xs:simpleType>
+
+	<xs:complexType name="choiceType">
+		<xs:sequence>
+			<xs:element ref="wadl:param" minOccurs="2" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="required" type="xs:boolean"></xs:attribute>
+		<xs:attribute name="countMin" type="xs:integer"></xs:attribute>
+		<xs:attribute name="countMax" type="xs:integer"></xs:attribute>
+	</xs:complexType>
+
+	<xs:complexType name="payloadType">
+		<xs:sequence>
+			<xs:element ref="wadl:doc" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="content" type="xs:string" minOccurs="0"
+				maxOccurs="1" />
+		</xs:sequence>
+		<xs:attribute name="required" type="xs:boolean" use="optional" />
+	</xs:complexType>
+
+	<xs:complexType name="attachmentsType">
+		<xs:sequence>
+			<xs:element name="attachment" type="wadlx:attachment"
+				maxOccurs="unbounded" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="attachment">
+		<xs:sequence>
+			<xs:element ref="wadl:doc" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" />
+		<xs:attribute name="href" type="xs:anyURI" use="optional" />
+		<xs:attribute name="required" type="xs:boolean" use="optional" />
+		<xs:attribute name="contentType" type="xs:string" use="optional" />
+		<xs:attribute name="contentDisposition" type="xs:string"
+			default="form-data" use="optional" />
+	</xs:complexType>
+
+
+
+	<xs:element name="payload" type="wadlx:payloadType" />
+
+	<xs:element name="choice" type="wadlx:choiceType" />
+
+	<xs:attribute name="url" type="xs:string" />
+
+	<xs:attribute name="displayName" type="wadlx:methodDisplayAttType" />
+
+	<xs:attribute name="paramName" type="wadlx:paramNameAttType" />
+
+	<xs:element name="example" type="wadlx:exampleType" />
+
+	<xs:element name="attachments" type="wadlx:attachmentsType" />
+
+</xs:schema>

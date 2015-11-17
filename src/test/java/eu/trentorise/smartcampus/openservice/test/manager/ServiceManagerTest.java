@@ -28,6 +28,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
+import eu.trentorise.smartcampus.openservices.AuthProtocol;
 import eu.trentorise.smartcampus.openservices.OrderBy;
 import eu.trentorise.smartcampus.openservices.ServiceState;
 import eu.trentorise.smartcampus.openservices.UserRoles;
@@ -269,7 +270,7 @@ public class ServiceManagerTest {
 		accessInfo.setFormats("JSON,XML");
 		accessInfo.setProtocols("REST,SOAP");
 		Authentication auth = new Authentication();
-		auth.setAccessProtocol("Oauth");
+		auth.setAccessProtocol(AuthProtocol.OAuth2.toString());
 		accessInfo.setAuthentication(auth);
 		service.setAccessInformation(accessInfo);
 
@@ -310,7 +311,7 @@ public class ServiceManagerTest {
 		serviceManager.addMethod(USERNAME, method);
 
 		System.out.println(serviceManager.getWADL(service.getId()));
-		System.out.println(serviceManager.getUSDL(service.getId()));
+		// System.out.println(serviceManager.getUSDL(service.getId()));
 	}
 
 	@Test

@@ -7,6 +7,7 @@ import it.smartcommunitylab.openservices.wadl.Representation;
 import it.smartcommunitylab.openservices.wadl.Request;
 import it.smartcommunitylab.openservices.wadl.Resource;
 import it.smartcommunitylab.openservices.wadl.Resources;
+import it.smartcommunitylab.openservices.wadl.ext.Tags;
 
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -26,8 +27,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import eu.trentorise.smartcampus.openservices.AuthProtocol;
+import eu.trentorise.smartcampus.openservices.entities.Authentication;
 import eu.trentorise.smartcampus.openservices.entities.Method;
 import eu.trentorise.smartcampus.openservices.entities.Service;
+import eu.trentorise.smartcampus.openservices.entities.Tag;
 
 @Component
 public class WADLGenerator {
@@ -90,11 +94,17 @@ public class WADLGenerator {
 
 			try {
 				JAXBContext jaxbContext = JAXBContext
-						.newInstance(Application.class);
+						.newInstance(
+								Application.class,
+								it.smartcommunitylab.openservices.wadl.ext.Authentication.class,
+								Tags.class);
 				Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 				jaxbContext = JAXBContext.newInstance(Application.class);
 				jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,
 						true);
+				jaxbMarshaller.setProperty(
+						"com.sun.xml.internal.bind.namespacePrefixMapper",
+						new WadlNamespacePrefixMapper());
 				StringWriter stringWriter = new StringWriter();
 				jaxbMarshaller.marshal(app, stringWriter);
 				wadl = stringWriter.toString();
@@ -116,17 +126,49 @@ public class WADLGenerator {
 		Application app = new Application();
 		Resources resources = new Resources();
 		String[] formats = new String[0];
+		it.smartcommunitylab.openservices.wadl.ext.Authentication authWadlTag = null;
 
 		if (s.getAccessInformation() != null) {
 			resources.setBase(s.getAccessInformation().getEndpoint());
 			if (s.getAccessInformation().getFormats() != null) {
 				formats = s.getAccessInformation().getFormats().split(",");
 			}
+
+			// set authentication fields
+			Authentication auth = s.getAccessInformation().getAuthentication();
+			if (auth != null) {
+				authWadlTag = new it.smartcommunitylab.openservices.wadl.ext.Authentication();
+				if (auth.getAccessProtocol().equalsIgnoreCase(
+						AuthProtocol.Public.toString())) {
+					authWadlTag.setRequired("false");
+				} else {
+					authWadlTag.setRequired("true");
+					authWadlTag.setValue(auth.getAccessProtocol());
+				}
+			}
 		}
 		app.getResources().add(resources);
+
+		// tags
+		Tags t = null;
+		if (s.getTags() != null) {
+			t = new Tags();
+			for (Tag tag : s.getTags()) {
+				it.smartcommunitylab.openservices.wadl.ext.Tag wadlTag = new it.smartcommunitylab.openservices.wadl.ext.Tag();
+				wadlTag.setValue(tag.getName());
+				t.getTag().add(wadlTag);
+			}
+
+		}
 		for (Method m : methods) {
 			Resource res = new Resource();
 			res.setId(m.getName());
+			if (t != null) {
+				res.getAny().add(t);
+			}
+			if (authWadlTag != null) {
+				res.getAny().add(authWadlTag);
+			}
 			if (m.getExecutionProperties() != null) {
 				String path = m.getExecutionProperties()
 						.getRequestPathTemplate();
@@ -165,6 +207,30 @@ public class WADLGenerator {
 
 		} catch (JAXBException e) {
 			return false;
+		}
+	}
+
+	@SuppressWarnings("restriction")
+	private class WadlNamespacePrefixMapper extends
+			com.sun.xml.internal.bind.marshaller.NamespacePrefixMapper {
+
+		private static final String WADL_PREFIX = ""; // DEFAULT NAMESPACE
+		private static final String WADL_URI = "http://wadl.dev.java.net/2009/02";
+
+		private static final String EXT_WADL_PREFIX = "xwadl";
+		private static final String EXT_WADL_URI = "wadl-extensions";
+
+		@Override
+		public String getPreferredPrefix(String namespaceUri,
+				String suggestion, boolean requirePrefix) {
+			if (WADL_URI.equals(namespaceUri)) {
+				return WADL_PREFIX;
+			} else if (EXT_WADL_URI.equals(namespaceUri)) {
+				return EXT_WADL_PREFIX;
+			} else {
+				return suggestion;
+			}
+
 		}
 
 	}

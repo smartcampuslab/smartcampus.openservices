@@ -5,4 +5,9 @@
       <package name="it.smartcommunitylab.openservices.wadl"/>
     </schemaBindings>
   </bindings>
+   <bindings schemaLocation="wadl-extensions.xsd">
+    <schemaBindings>
+      <package name="it.smartcommunitylab.openservices.wadl.ext"/>
+    </schemaBindings>
+  </bindings>
 </bindings>
