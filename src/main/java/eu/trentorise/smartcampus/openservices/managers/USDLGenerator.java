@@ -2,6 +2,7 @@ package eu.trentorise.smartcampus.openservices.managers;
 
 import it.smartcommunitylab.openservices.usdl.ExtWeliveCore;
 import it.smartcommunitylab.openservices.usdl.Foaf;
+import it.smartcommunitylab.openservices.usdl.Tags;
 import it.smartcommunitylab.openservices.usdl.WeliveCore;
 import it.smartcommunitylab.openservices.usdl.WeliveSecurity;
 
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 
@@ -38,7 +40,14 @@ public class USDLGenerator {
 	Environment env;
 
 	private static final String OS_NS = "http://platform.smartcommunitylab.it/openservice/services#";
+	private static final String SCHEMA_NS = "http://schema.org/";
+
 	private static final Map<String, String> welivePrefixes = new HashMap<String, String>();
+
+	// extra tags
+
+	private static final Property schemaUrlProp = ModelFactory
+			.createDefaultModel().createProperty(SCHEMA_NS + "url");
 
 	@PostConstruct
 	@SuppressWarnings("unused")
@@ -47,6 +56,8 @@ public class USDLGenerator {
 		welivePrefixes.put("dc", DCTerms.NS);
 		welivePrefixes.put("foaf", Foaf.NS);
 		welivePrefixes.put("welive-sec", WeliveSecurity.NS);
+		welivePrefixes.put("tags", Tags.NS);
+		welivePrefixes.put("schema", SCHEMA_NS);
 	}
 
 	public String generate(int serviceId) {
@@ -59,14 +70,13 @@ public class USDLGenerator {
 		buildingBlock.addProperty(DCTerms.title, s.getName());
 		buildingBlock.addProperty(DCTerms.description, s.getDescription());
 		buildingBlock.addProperty(DCTerms.abstract_, s.getDescription());
-
 		// res.addProperty(DCTerms.created)
 		buildingBlock.addProperty(Foaf.page, env.getProperty("application.url")
 				+ "service/" + s.getId());
 
 		// tags
 		for (Tag t : s.getTags()) {
-			buildingBlock.addProperty(WeliveCore.tag, t.getName());
+			buildingBlock.addProperty(Tags.tag, t.getName());
 		}
 
 		// owner
@@ -99,7 +109,7 @@ public class USDLGenerator {
 						: WeliveCore.SOAPWebServiceIP;
 				Resource r = m.createResource(
 						buildingBlock.getURI() + "endpoint", protocol)
-						.addProperty(WeliveCore.url,
+						.addProperty(schemaUrlProp,
 								s.getAccessInformation().getEndpoint());
 				if (isRest) {
 					r.addProperty(WeliveCore.wadl,

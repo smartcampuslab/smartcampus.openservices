@@ -311,7 +311,7 @@ public class ServiceManagerTest {
 		serviceManager.addMethod(USERNAME, method);
 
 		System.out.println(serviceManager.getWADL(service.getId()));
-		// System.out.println(serviceManager.getUSDL(service.getId()));
+		System.out.println(serviceManager.getUSDL(service.getId()));
 	}
 
 	@Test
