@@ -210,9 +210,8 @@ public class WADLGenerator {
 		}
 	}
 
-	@SuppressWarnings("restriction")
 	private class WadlNamespacePrefixMapper extends
-			com.sun.xml.internal.bind.marshaller.NamespacePrefixMapper {
+			com.sun.xml.bind.marshaller.NamespacePrefixMapper {
 
 		private static final String WADL_PREFIX = ""; // DEFAULT NAMESPACE
 		private static final String WADL_URI = "http://wadl.dev.java.net/2009/02";

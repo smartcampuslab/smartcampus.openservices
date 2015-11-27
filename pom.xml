@@ -358,6 +358,14 @@
 			<type>jar</type>
 		</dependency>
 
+		<!-- USED to JAXB PrefixMapper in WADLGenerator -->
+		<dependency>
+			<groupId>com.sun.xml.ws</groupId>
+			<artifactId>jaxws-rt</artifactId>
+			<version>2.1.4</version>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>
@@ -393,9 +401,8 @@
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
-					<compilerArgument>-Xlint:all</compilerArgument>
-					<showWarnings>true</showWarnings>
-					<showDeprecation>true</showDeprecation>
+					<!-- <compilerArgument>-Xlint:all</compilerArgument> <showWarnings>true</showWarnings> 
+						<showDeprecation>true</showDeprecation> -->
 				</configuration>
 			</plugin>
 			<plugin>
@@ -459,6 +466,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.10</version>
 				<executions>
 					<execution>
 						<id>add-source</id>
