@@ -103,7 +103,7 @@ public class WADLGenerator {
 				jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,
 						true);
 				jaxbMarshaller.setProperty(
-						"com.sun.xml.internal.bind.namespacePrefixMapper",
+						"com.sun.xml.bind.namespacePrefixMapper",
 						new WadlNamespacePrefixMapper());
 				StringWriter stringWriter = new StringWriter();
 				jaxbMarshaller.marshal(app, stringWriter);
