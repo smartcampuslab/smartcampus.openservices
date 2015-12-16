@@ -72,7 +72,7 @@ public class USDLGenerator {
 		buildingBlock.addProperty(DCTerms.abstract_, s.getDescription());
 		// res.addProperty(DCTerms.created)
 		buildingBlock.addProperty(Foaf.page, env.getProperty("application.url")
-				+ "service/" + s.getId());
+				+ "services/" + s.getId());
 
 		// tags
 		for (Tag t : s.getTags()) {
