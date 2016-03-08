@@ -70,6 +70,8 @@ public class USDLGenerator {
 		buildingBlock.addProperty(DCTerms.title, s.getName());
 		buildingBlock.addProperty(DCTerms.description, s.getDescription());
 		buildingBlock.addProperty(DCTerms.abstract_, s.getDescription());
+		buildingBlock.addProperty(WeliveCore.pilot, "Trento");
+		
 		// res.addProperty(DCTerms.created)
 		buildingBlock.addProperty(Foaf.page, env.getProperty("application.url")
 				+ "service/" + s.getId());
