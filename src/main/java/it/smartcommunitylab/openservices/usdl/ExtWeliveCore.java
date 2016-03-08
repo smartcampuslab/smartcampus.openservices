@@ -12,4 +12,7 @@ public class ExtWeliveCore extends WeliveCore {
 	public static final Resource Owner = m_model.createResource(NS + "Owner");
 	public static final Resource Provider = m_model.createResource(NS
 			+ "Provider");
+	
+	public static final Resource WebService = m_model.createResource(NS + "WebService");
+
 }

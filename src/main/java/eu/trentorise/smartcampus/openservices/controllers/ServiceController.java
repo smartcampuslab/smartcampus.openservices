@@ -756,4 +756,31 @@ public class ServiceController {
 		return responseObject;
 	}
 
+
+	@RequestMapping(value = "/welive/pulblish/{service_id}", method = RequestMethod.GET, produces = "application/json")
+	@ResponseBody 
+	public ResponseObject welivePublish(@PathVariable int service_id, HttpServletResponse response) {
+		String username = SecurityContextHolder.getContext()
+				.getAuthentication().getName();
+		ResponseObject responseObject = new ResponseObject();
+		try {
+//			boolean result = serviceManager.deleteTest(username, id, pos);
+//			if (result) {
+//				responseObject.setStatus(HttpServletResponse.SC_OK);
+//				response.setStatus(HttpServletResponse.SC_OK);
+//			} else {
+//				responseObject.setError("Connection problem with database");
+//				responseObject
+//						.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+//				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+//			}
+		} catch (SecurityException s) {
+			responseObject
+					.setError("User must be part of this organization before publishing this service");
+			responseObject.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		}
+		return responseObject;
+	}
+
 }

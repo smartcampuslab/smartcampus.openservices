@@ -71,6 +71,7 @@ public class USDLGenerator {
 		buildingBlock.addProperty(DCTerms.description, s.getDescription());
 		buildingBlock.addProperty(DCTerms.abstract_, s.getDescription());
 		buildingBlock.addProperty(WeliveCore.pilot, "Trento");
+		buildingBlock.addProperty(WeliveCore.type, ExtWeliveCore.WebService);
 		
 		// res.addProperty(DCTerms.created)
 		buildingBlock.addProperty(Foaf.page, env.getProperty("application.url")
@@ -119,7 +120,7 @@ public class USDLGenerator {
 									+ "service/public/" + s.getId()
 									+ "/spec/xwadl");
 				}
-				buildingBlock.addProperty(WeliveCore.hasLegalCondition, r);
+				buildingBlock.addProperty(WeliveCore.hasInteractionPoint, r);
 			}
 
 			// authentication protocol
