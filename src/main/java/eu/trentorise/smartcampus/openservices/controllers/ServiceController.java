@@ -45,7 +45,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import eu.trentorise.smartcampus.network.RemoteConnector;
 import eu.trentorise.smartcampus.openservices.ServiceState;
 import eu.trentorise.smartcampus.openservices.controllers.exec.TestBoxException;
 import eu.trentorise.smartcampus.openservices.entities.Method;
@@ -828,9 +827,9 @@ public class ServiceController {
 		HttpResponse resp = null;
 		final HttpPost post = new HttpPost(url);
 		post.setHeader("Authorization", authorization);
+		post.setHeader("Content-Type", "application/json");
 
 		try {
-			System.err.println(new ObjectMapper().writeValueAsString(body));
 			StringEntity input = new StringEntity(new ObjectMapper().writeValueAsString(body), DEFAULT_CHARSET);
 			post.setEntity(input);
 
