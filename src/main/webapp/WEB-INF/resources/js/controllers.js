@@ -268,6 +268,14 @@ app
 									$location.path('profile/services');
 								});
 							};
+							$scope.weliveService = function(i) {
+								Service.welive({
+									id : $scope.services[i].id
+								}, {}, function() {
+									alert('Successfully published!');
+									$location.path('profile/services');
+								});
+							};
 							$scope.publishService = function(i) {
 								Service.publish({
 									id : $scope.services[i].id

@@ -15,14 +15,28 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.openservices.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.params.ConnManagerParams;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.util.EntityUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,10 +45,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import eu.trentorise.smartcampus.network.RemoteConnector;
 import eu.trentorise.smartcampus.openservices.ServiceState;
+import eu.trentorise.smartcampus.openservices.controllers.exec.TestBoxException;
 import eu.trentorise.smartcampus.openservices.entities.Method;
 import eu.trentorise.smartcampus.openservices.entities.ResponseObject;
 import eu.trentorise.smartcampus.openservices.entities.TestInfo;
+import eu.trentorise.smartcampus.openservices.managers.OrganizationManager;
 import eu.trentorise.smartcampus.openservices.managers.ServiceManager;
 import eu.trentorise.smartcampus.openservices.managers.WADLGenerator;
 import eu.trentorise.smartcampus.openservices.model.Service;
@@ -58,10 +75,22 @@ public class ServiceController {
 	 */
 	@Autowired
 	private ServiceManager serviceManager;
-
+	@Autowired
+	private OrganizationManager orgManager;
+	
+	
 	@Autowired
 	private WADLGenerator wadlGenerator;
 
+	@Value("${welive.userid}")
+	private String weliveUser;
+	@Value("${welive.endpoint}")
+	private String weliveEndpoint;
+	@Value("${welive.auth}")
+	private String weliveAuth;
+	@Value("${application.url}")
+	private String appUrl;
+	
 	// User - Access my data: service
 	/**
 	 * Logged user retrieves his/her list of service data. Service can be
@@ -757,23 +786,28 @@ public class ServiceController {
 	}
 
 
-	@RequestMapping(value = "/welive/pulblish/{service_id}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/welive/publish/{service_id}", method = RequestMethod.PUT)
 	@ResponseBody 
 	public ResponseObject welivePublish(@PathVariable int service_id, HttpServletResponse response) {
-		String username = SecurityContextHolder.getContext()
-				.getAuthentication().getName();
 		ResponseObject responseObject = new ResponseObject();
 		try {
-//			boolean result = serviceManager.deleteTest(username, id, pos);
-//			if (result) {
-//				responseObject.setStatus(HttpServletResponse.SC_OK);
-//				response.setStatus(HttpServletResponse.SC_OK);
-//			} else {
-//				responseObject.setError("Connection problem with database");
-//				responseObject
-//						.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
-//				response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
-//			}
+			Service service = Service.fromServiceEntity(serviceManager.getServiceById(service_id));
+			Map<String,Object> data = new HashMap<String, Object>();
+			data.put("title", service.getName());
+			data.put("description", service.getDescription());
+			data.put("resourceRdf", appUrl+"service/public/"+service_id+"/spec/usdl");
+			data.put("endpoint", appUrl+"service/public/"+service_id+"/spec/xwadl");
+			data.put("category", "REST");
+			orgManager.getOrganizationById(service.getOrganizationId());
+			data.put("providerName", orgManager.getOrganizationById(service.getOrganizationId()).getName());
+			data.put("ccUserId", weliveUser);
+			
+			postJSON(weliveEndpoint, data, "Basic "+weliveAuth);
+		} catch (TestBoxException s) {
+			responseObject
+					.setError(s.getMessage());
+			responseObject.setStatus(s.getStatus());
+			response.setStatus(s.getStatus());
 		} catch (SecurityException s) {
 			responseObject
 					.setError("User must be part of this organization before publishing this service");
@@ -781,6 +815,46 @@ public class ServiceController {
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		}
 		return responseObject;
+	}
+
+	
+	/** Timeout (in ms) we specify for each http request */
+    public static final int HTTP_REQUEST_TIMEOUT_MS = 30 * 1000;
+    /** Default charset */
+	private static final String DEFAULT_CHARSET = "UTF-8";
+
+	protected static final String postJSON(String url, Object body, String authorization) throws TestBoxException {
+
+		HttpResponse resp = null;
+		final HttpPost post = new HttpPost(url);
+		post.setHeader("Authorization", authorization);
+
+		try {
+			System.err.println(new ObjectMapper().writeValueAsString(body));
+			StringEntity input = new StringEntity(new ObjectMapper().writeValueAsString(body), DEFAULT_CHARSET);
+			post.setEntity(input);
+
+			resp = getHttpClient().execute(post);
+			String response = EntityUtils.toString(resp.getEntity(),DEFAULT_CHARSET);
+			if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+				return response;
+			} else {
+				throw new TestBoxException(resp.getStatusLine().getStatusCode(), resp.getStatusLine().getReasonPhrase());
+			}
+
+		} catch (Exception e) {
+			if (e instanceof TestBoxException) throw (TestBoxException)e;
+			throw new TestBoxException(e.getMessage(), e);
+		}
+	}
+	
+	protected static final HttpClient getHttpClient() {
+		HttpClient httpClient = new DefaultHttpClient();
+		final HttpParams params = httpClient.getParams();
+		HttpConnectionParams.setConnectionTimeout(params, HTTP_REQUEST_TIMEOUT_MS);
+		HttpConnectionParams.setSoTimeout(params, HTTP_REQUEST_TIMEOUT_MS);
+		ConnManagerParams.setTimeout(params, HTTP_REQUEST_TIMEOUT_MS);
+		return httpClient;
 	}
 
 }

@@ -56,4 +56,20 @@ public class TestBoxException extends Exception {
 		super(string);
 		status = i;
 	}
+
+	/**
+	 * @return the status
+	 */
+	public int getStatus() {
+		return status;
+	}
+
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	
+	
 }

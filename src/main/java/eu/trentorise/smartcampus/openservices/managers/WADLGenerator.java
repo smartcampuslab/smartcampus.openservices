@@ -1,6 +1,7 @@
 package eu.trentorise.smartcampus.openservices.managers;
 
 import it.smartcommunitylab.openservices.wadl.Application;
+import it.smartcommunitylab.openservices.wadl.Doc;
 import it.smartcommunitylab.openservices.wadl.Param;
 import it.smartcommunitylab.openservices.wadl.ParamStyle;
 import it.smartcommunitylab.openservices.wadl.Representation;
@@ -163,9 +164,6 @@ public class WADLGenerator {
 		for (Method m : methods) {
 			Resource res = new Resource();
 			res.setId(m.getName());
-			if (t != null) {
-				res.getAny().add(t);
-			}
 			if (authWadlTag != null) {
 				res.getAny().add(authWadlTag);
 			}
@@ -178,6 +176,16 @@ public class WADLGenerator {
 				res = appendWADLNodes(res, path);
 				it.smartcommunitylab.openservices.wadl.Method method = new it.smartcommunitylab.openservices.wadl.Method();
 				method.setName(m.getExecutionProperties().getHttpMethod());
+				method.setId(m.getName());
+				Doc doc = new Doc();
+				doc.getContent().add(m.getDocumentation());
+				if (m.getDocumentation() != null) {
+					method.getDoc().add(doc);
+				}
+				if (t != null) {
+					method.getAny().add(t);
+				}
+
 				res.getMethodOrResource().add(method);
 				Request req = new Request();
 				it.smartcommunitylab.openservices.wadl.Response resp = new it.smartcommunitylab.openservices.wadl.Response();

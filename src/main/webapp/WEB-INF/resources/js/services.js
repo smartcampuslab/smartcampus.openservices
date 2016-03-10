@@ -310,6 +310,10 @@ services.factory('Service', [ '$resource', function($resource) {
 			method : 'PUT',
 			url : 'api/service/deprecate/:id',
 		},
+		welive : {
+			method : 'PUT',
+			url : 'api/service/welive/publish/:id',
+		},
 		remove : {
 			method : 'DELETE',
 			url : 'api/service/delete/:id',
