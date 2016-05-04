@@ -95,6 +95,7 @@ public class USDLGenerator {
 		buildingBlock.addProperty(WeliveCore.pilot, "Trento");
 		buildingBlock.addProperty(DCTerms.created, DATE_FORMATTER.format(creation));
 		buildingBlock.addProperty(WeliveCore.type, ExtWeliveCore.WebService);
+		buildingBlock.addProperty(DCTerms.type, WeliveCore.BuildingBlock);
 		
 		// res.addProperty(DCTerms.created)
 		buildingBlock.addProperty(Foaf.page, env.getProperty("application.url")
