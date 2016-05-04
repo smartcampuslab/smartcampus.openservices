@@ -7,7 +7,11 @@ import it.smartcommunitylab.openservices.usdl.WeliveCore;
 import it.smartcommunitylab.openservices.usdl.WeliveSecurity;
 
 import java.io.StringWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -26,7 +30,10 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.DCTerms;
 
 import eu.trentorise.smartcampus.openservices.AuthProtocol;
+import eu.trentorise.smartcampus.openservices.ServiceState;
+import eu.trentorise.smartcampus.openservices.entities.Organization;
 import eu.trentorise.smartcampus.openservices.entities.Service;
+import eu.trentorise.smartcampus.openservices.entities.ServiceHistory;
 import eu.trentorise.smartcampus.openservices.entities.Tag;
 
 @Component
@@ -35,6 +42,8 @@ public class USDLGenerator {
 			.getLogger(WADLGenerator.class);
 	@Autowired
 	private ServiceManager serviceManager;
+	@Autowired
+	private OrganizationManager orgManager;
 
 	@Autowired
 	Environment env;
@@ -48,6 +57,7 @@ public class USDLGenerator {
 
 	private static final Property schemaUrlProp = ModelFactory
 			.createDefaultModel().createProperty(SCHEMA_NS + "url");
+	private static final DateFormat DATE_FORMATTER = new SimpleDateFormat("dd/MM/yyyy");
 
 	@PostConstruct
 	@SuppressWarnings("unused")
@@ -63,6 +73,18 @@ public class USDLGenerator {
 	public String generate(int serviceId) {
 		// create missing resources (described in rdf schema as Description tag)
 		Service s = serviceManager.getServiceById(serviceId);
+		List<ServiceHistory> history = serviceManager.getServiceHistoryByServiceId(serviceId);
+		Date creation = new Date();
+		if (history != null) {
+			String op = ServiceState.PUBLISH.toString();
+			for (ServiceHistory h : history) {
+				if (op.equalsIgnoreCase(h.getOperation())) {
+					creation = h.getDate();
+					break;
+				}
+			}
+		}
+		
 		Model m = ModelFactory.createDefaultModel();
 		m.setNsPrefixes(welivePrefixes);
 		Resource buildingBlock = m.createResource(OS_NS
@@ -71,6 +93,7 @@ public class USDLGenerator {
 		buildingBlock.addProperty(DCTerms.description, s.getDescription());
 		buildingBlock.addProperty(DCTerms.abstract_, s.getDescription());
 		buildingBlock.addProperty(WeliveCore.pilot, "Trento");
+		buildingBlock.addProperty(DCTerms.created, DATE_FORMATTER.format(creation));
 		buildingBlock.addProperty(WeliveCore.type, ExtWeliveCore.WebService);
 		
 		// res.addProperty(DCTerms.created)
@@ -85,14 +108,31 @@ public class USDLGenerator {
 		// owner
 		String[] owners = s.getOwner() != null ? s.getOwner().split(",")
 				: new String[0];
-		for (String o : owners) {
+		String[] ownerUrls = s.getOwnerUrl() != null ? s.getOwnerUrl().split(",") : new String[0];
+		for (int i = 0; i < owners.length; i++) {
+			String o = owners[i];
 			if (!StringUtils.isBlank(o)) {
 				Resource r = m.createResource(
 						buildingBlock.getURI() + o.trim().replaceAll(" ", "-"),
 						WeliveCore.Entity).addProperty(DCTerms.title, o.trim());
-				r.addProperty(WeliveCore.businessRole, ExtWeliveCore.Owner);
+				if (i < ownerUrls.length) {
+					r.addProperty(Foaf.page, ownerUrls[i]);
+				}
 				buildingBlock.addProperty(WeliveCore.hasBusinessRole, r);
 			}
+		}
+
+		// publisher
+		Organization org = orgManager.getOrganizationById(s.getOrganizationId());
+		if (org != null) {
+			Resource r = m.createResource(
+					buildingBlock.getURI() + org.getName().trim().replaceAll(" ", "-"),
+					WeliveCore.Entity).addProperty(DCTerms.title, org.getName().trim());
+			r.addProperty(WeliveCore.businessRole, ExtWeliveCore.Provider);
+			if (org.getContacts() != null && org.getContacts().containsKey("web")) {
+				r.addProperty(Foaf.page, org.getContacts().get("web"));
+			}
+			buildingBlock.addProperty(WeliveCore.hasBusinessRole, r);
 		}
 
 		// license
@@ -119,6 +159,7 @@ public class USDLGenerator {
 							env.getProperty("application.url")
 									+ "service/public/" + s.getId()
 									+ "/spec/xwadl");
+					r.addProperty(DCTerms.title, s.getName());
 				}
 				buildingBlock.addProperty(WeliveCore.hasInteractionPoint, r);
 			}
