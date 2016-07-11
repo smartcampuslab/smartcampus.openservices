@@ -176,7 +176,7 @@ public class WADLGenerator {
 				res = appendWADLNodes(res, path);
 				it.smartcommunitylab.openservices.wadl.Method method = new it.smartcommunitylab.openservices.wadl.Method();
 				method.setName(m.getExecutionProperties().getHttpMethod());
-				method.setId(m.getName());
+				method.setId(method.getName() + "_"+ m.getName());
 				Doc doc = new Doc();
 				doc.getContent().add(m.getDocumentation());
 				if (m.getDocumentation() != null) {
