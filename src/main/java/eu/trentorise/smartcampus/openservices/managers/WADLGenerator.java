@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import eu.trentorise.smartcampus.openservices.AuthProtocol;
 import eu.trentorise.smartcampus.openservices.entities.Authentication;
@@ -163,7 +164,8 @@ public class WADLGenerator {
 		}
 		for (Method m : methods) {
 			Resource res = new Resource();
-			res.setId(m.getName());
+			String id = m.getName().trim().replace(' ', '_');
+			res.setId(id);
 			if (authWadlTag != null) {
 				res.getAny().add(authWadlTag);
 			}
@@ -176,7 +178,7 @@ public class WADLGenerator {
 				res = appendWADLNodes(res, path);
 				it.smartcommunitylab.openservices.wadl.Method method = new it.smartcommunitylab.openservices.wadl.Method();
 				method.setName(m.getExecutionProperties().getHttpMethod());
-				method.setId(method.getName() + "_"+ m.getName());
+				method.setId(method.getName() + "_"+ id);
 				Doc doc = new Doc();
 				doc.getContent().add(m.getDocumentation());
 				if (m.getDocumentation() != null) {
