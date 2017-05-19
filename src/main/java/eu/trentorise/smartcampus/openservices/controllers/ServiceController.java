@@ -796,6 +796,7 @@ public class ServiceController {
 			data.put("description", service.getDescription());
 			data.put("resourceRdf", appUrl+"service/public/"+service_id+"/spec/usdl");
 			data.put("endpoint", appUrl+"service/public/"+service_id+"/spec/xwadl");
+			data.put("webpage", appUrl+"services/"+service_id);
 			data.put("category", "REST");
 			orgManager.getOrganizationById(service.getOrganizationId());
 			data.put("providerName", orgManager.getOrganizationById(service.getOrganizationId()).getName());
